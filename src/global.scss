@@ -12,17 +12,30 @@ body,
     grid-template: auto 1fr auto / auto 1fr auto;
 }
 
+header,
+footer,
+.left-side,
+.right-side,
+main {
+    padding: 0.5rem;
+}
+
+.left-side,
+.right-side,
+main {
+    overflow: auto;
+}
+
+main {
+    grid-column: 2 / 3;
+}
+
 header {
-    // padding: 1rem;
     grid-column: 1 / 4;
 }
 
 .left-side {
     grid-column: 1 / 2;
-}
-
-main {
-    grid-column: 2 / 3;
 }
 
 .right-side {
