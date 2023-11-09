@@ -1,5 +1,6 @@
 html,
-body {
+body,
+#app {
     height: 100%;
     width: 100%;
     margin: 0;
@@ -12,7 +13,7 @@ body {
 }
 
 header {
-    padding: 2rem;
+    // padding: 1rem;
     grid-column: 1 / 4;
 }
 
