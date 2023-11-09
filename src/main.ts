@@ -1,3 +1,5 @@
+import "./global.scss"
+import 'virtual:uno.css'
 import App from "./App.svelte";
 
 const app = new App({
