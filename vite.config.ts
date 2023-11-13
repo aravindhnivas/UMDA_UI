@@ -4,6 +4,7 @@ import UnoCSS from 'unocss/vite';
 import { presetUno } from 'unocss';
 import { presetDaisy } from 'unocss-preset-daisy';
 import extractorSvelte from '@unocss/extractor-svelte';
+import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
@@ -14,6 +15,13 @@ export default defineConfig(async () => ({
         }),
         svelte(),
     ],
+
+    resolve: {
+        alias: {
+            $lib: path.resolve('./src/lib'),
+            $utils: path.resolve('./src/utils'),
+        },
+    },
 
     // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
     //

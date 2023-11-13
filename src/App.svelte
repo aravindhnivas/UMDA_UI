@@ -1,24 +1,63 @@
-<div class="parent w-full h-full bg-gray-100">
-    <header class="section bg-red">Header</header>
-    <div class="left-side section bg-blue">Left Sidebar</div>
-    <main class="section">
-        <button class="btn w-64 rounded-full">Button</button>
-        <div class="alert alert-success">
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="stroke-current shrink-0 h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                ><path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                /></svg
-            >
-            <span>Your purchase has been confirmed!</span>
-        </div>
+<script>
+    import Main from '$lib/layouts/Main.svelte';
+    import Nav from '$lib/layouts/Nav.svelte';
+    import Footer from '$lib/layouts/Footer.svelte';
+    import { active_tab } from '$lib/utils/stores';
+</script>
+
+<div class="parent w-full h-full">
+    <header><Nav /></header>
+    <div class="left-side section border-solid border-0 border-r-1">
+        Left Sidebar
+    </div>
+    <main>
+        {$active_tab}
     </main>
-    <div class="right-side section bg-yellow">Right Sidebar</div>
-    <footer class="section bg-red">Footer</footer>
+    <div class="right-side section border-solid border-0 border-l-1">
+        Right Sidebar
+    </div>
+    <footer><Footer /></footer>
 </div>
+
+<style lang="scss">
+    .parent {
+        display: grid;
+        grid-template: auto 1fr auto / auto 1fr auto;
+        overflow-y: auto;
+    }
+
+    header,
+    footer,
+    .left-side,
+    .right-side,
+    main {
+        padding: 0.5rem;
+    }
+
+    .left-side,
+    .right-side,
+    main {
+        overflow: auto;
+    }
+
+    main {
+        grid-column: 2 / 3;
+    }
+
+    header {
+        grid-column: 1 / 4;
+    }
+
+    .left-side {
+        grid-column: 1 / 2;
+    }
+
+    .right-side {
+        grid-column: 3 / 4;
+    }
+
+    footer {
+        grid-column: 1 / 4;
+        padding: 0;
+    }
+</style>
