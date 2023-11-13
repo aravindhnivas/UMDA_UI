@@ -11,7 +11,7 @@
         Left Sidebar
     </div>
     <main>
-        {$active_tab}
+        <Main />
     </main>
     <div class="right-side section border-solid border-0 border-l-1">
         Right Sidebar

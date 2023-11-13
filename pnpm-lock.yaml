@@ -22,6 +22,9 @@ devDependencies:
   '@unocss/extractor-svelte':
     specifier: ^0.57.3
     version: 0.57.3
+  '@unocss/reset':
+    specifier: ^0.57.3
+    version: 0.57.3
   daisyui:
     specifier: ^3.9.4
     version: 3.9.4
