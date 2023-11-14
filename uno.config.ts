@@ -1,4 +1,18 @@
 // uno.config.ts
-import { defineConfig } from 'unocss';
+import { defineConfig, presetIcons, presetUno } from 'unocss';
+import { presetDaisy } from 'unocss-preset-daisy';
+import extractorSvelte from '@unocss/extractor-svelte';
 
-export default defineConfig({});
+export default defineConfig({
+    presets: [
+        presetIcons({
+            scale: 1.5,
+            extraProperties: {
+                cursor: 'pointer',
+            },
+        }),
+        presetUno(),
+        presetDaisy(),
+    ],
+    extractors: [extractorSvelte()],
+});

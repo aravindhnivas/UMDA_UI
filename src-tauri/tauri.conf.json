@@ -3,7 +3,8 @@
         "beforeDevCommand": "pnpm dev",
         "beforeBuildCommand": "pnpm build",
         "devPath": "http://localhost:1420",
-        "distDir": "../dist"
+        "distDir": "../dist",
+        "withGlobalTauri": true
     },
     "package": {
         "productName": "umda_ui",
@@ -12,9 +13,111 @@
     "tauri": {
         "allowlist": {
             "all": false,
+            "fs": {
+                "all": true,
+                "scope": [
+                    "**",
+                    "$APPLOCALDATA/**",
+                    "$RESOURCE/**"
+                ]
+            },
+            "path": {
+                "all": true
+            },
             "shell": {
+                "all": true,
+                "sidecar": true,
+                "scope": [
+                    {
+                        "name": "felionpy",
+                        "cmd": "$APPLOCALDATA/felionpy/felionpy",
+                        "args": true
+                    },
+                    {
+                        "name": "python",
+                        "cmd": "python",
+                        "args": true
+                    },
+                    {
+                        "name": "netstat-win32",
+                        "cmd": "netstat",
+                        "args": true
+                    },
+                    {
+                        "name": "netstat-darwin",
+                        "cmd": "lsof",
+                        "args": [
+                            "-i",
+                            {
+                                "validator": "\\S+"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "taskkill-win32",
+                        "cmd": "taskkill",
+                        "args": [
+                            "/PID",
+                            {
+                                "validator": "\\S+"
+                            },
+                            "/F"
+                        ]
+                    },
+                    {
+                        "name": "taskkill-darwin",
+                        "cmd": "kill",
+                        "args": [
+                            "-9",
+                            {
+                                "validator": "\\S+"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "unzip-win32",
+                        "cmd": "tar",
+                        "args": [
+                            "-xf",
+                            {
+                                "validator": "\\S+"
+                            },
+                            "-C",
+                            {
+                                "validator": "\\S+"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "unzip-darwin",
+                        "cmd": "unzip",
+                        "args": [
+                            {
+                                "validator": "\\S+"
+                            },
+                            "-d",
+                            {
+                                "validator": "\\S+"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "dialog": {
+                "all": true
+            },
+            "process": {
                 "all": false,
-                "open": true
+                "exit": false,
+                "relaunch": true,
+                "relaunchDangerousAllowSymlinkMacos": false
+            },
+            "os": {
+                "all": true
+            },
+            "window": {
+                "all": false,
+                "close": true
             }
         },
         "bundle": {

@@ -1,39 +1,37 @@
 import { defineConfig } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import UnoCSS from 'unocss/vite';
-import { presetUno, presetIcons } from 'unocss';
-import { presetDaisy } from 'unocss-preset-daisy';
-import extractorSvelte from '@unocss/extractor-svelte';
+// import { presetUno, presetIcons } from 'unocss';
+
 import path from 'path';
 import AutoImport from 'unplugin-auto-import/vite';
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
     plugins: [
-        UnoCSS({
-            presets: [
-                presetIcons({
-                    scale: 2,
-                    extraProperties: {
-                        cursor: 'pointer',
-                    },
-                }),
-                presetUno(),
-                presetDaisy(),
-            ],
-            extractors: [extractorSvelte()],
-        }),
+        UnoCSS(),
         svelte(),
         AutoImport({
-            imports: ['svelte', 'svelte/store', 'svelte/transition'],
+            imports: [
+                'svelte',
+                'svelte/store',
+                'svelte/transition',
+                {
+                    '@tauri-apps/api/os': ['platform'],
+                    '@tauri-apps/api': ['fs', 'path', 'dialog', 'shell'],
+                    'svelte-sonner': ['toast', 'Toaster'],
+                },
+            ],
             dts: './src/auto-imports.d.ts',
         }),
     ],
 
     resolve: {
         alias: {
-            $lib: path.resolve('./src/lib'),
-            $utils: path.resolve('./src/utils'),
+            $lib: path.resolve('./src/lib/'),
+            $utils: path.resolve('./src/utils/'),
+            $settings: path.resolve('./src/pages/settings/'),
+            $components: path.resolve('./src/lib/components/'),
         },
     },
 

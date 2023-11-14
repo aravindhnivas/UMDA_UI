@@ -17,7 +17,9 @@
         "isolatedModules": true,
         "paths": {
             "$lib/*": ["./src/lib/*"],
-            "$utils/*": ["./src/utils/*"]
+            "$components/*": ["./src/lib/components/*"],
+            "$utils/*": ["./src/utils/*"],
+            "$settings/*": ["./src/pages/settings/*"]
         }
     },
     "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.js", "src/**/*.svelte"],
