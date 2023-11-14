@@ -1,5 +1,5 @@
 <script>
-    import { active_tab } from '$lib/utils/stores';
+    import { active_tab } from '$utils/stores';
 </script>
 
 <div class="card w-full h-full bg-orange-300 bg-opacity-50 shadow-xl">

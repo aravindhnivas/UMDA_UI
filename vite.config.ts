@@ -1,19 +1,33 @@
 import { defineConfig } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import UnoCSS from 'unocss/vite';
-import { presetUno } from 'unocss';
+import { presetUno, presetIcons } from 'unocss';
 import { presetDaisy } from 'unocss-preset-daisy';
 import extractorSvelte from '@unocss/extractor-svelte';
 import path from 'path';
+import AutoImport from 'unplugin-auto-import/vite';
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
     plugins: [
         UnoCSS({
-            presets: [presetUno(), presetDaisy()],
+            presets: [
+                presetIcons({
+                    scale: 2,
+                    extraProperties: {
+                        cursor: 'pointer',
+                    },
+                }),
+                presetUno(),
+                presetDaisy(),
+            ],
             extractors: [extractorSvelte()],
         }),
         svelte(),
+        AutoImport({
+            imports: ['svelte', 'svelte/store', 'svelte/transition'],
+            dts: './src/auto-imports.d.ts',
+        }),
     ],
 
     resolve: {

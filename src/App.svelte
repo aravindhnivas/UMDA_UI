@@ -2,20 +2,16 @@
     import Main from '$lib/layouts/Main.svelte';
     import Nav from '$lib/layouts/Nav.svelte';
     import Footer from '$lib/layouts/Footer.svelte';
-    import { active_tab } from '$lib/utils/stores';
+    import { active_tab } from '$utils/stores';
 </script>
 
 <div class="parent w-full h-full">
     <header><Nav /></header>
-    <div class="left-side section border-solid border-0 border-r-1">
-        Left Sidebar
-    </div>
+    <div class="left-side section border-solid border-0 border-r-1">Left Sidebar</div>
     <main>
         <Main />
     </main>
-    <div class="right-side section border-solid border-0 border-l-1">
-        Right Sidebar
-    </div>
+    <div class="right-side section border-solid border-0 border-l-1">Right Sidebar</div>
     <footer><Footer /></footer>
 </div>
 
