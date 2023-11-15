@@ -17,8 +17,12 @@ export default defineConfig(async () => ({
                 'svelte/store',
                 'svelte/transition',
                 {
+                    axios: [
+                        ['default', 'axios'], // import { default as axios } from 'axios',
+                    ],
+                    '@zmotivat0r/o0': ['oO'],
                     '@tauri-apps/api/os': ['platform'],
-                    '@tauri-apps/api': ['fs', 'path', 'dialog', 'shell'],
+                    '@tauri-apps/api': ['fs', 'path', 'dialog', 'shell', 'invoke'],
                     'svelte-sonner': ['toast', 'Toaster'],
                 },
             ],

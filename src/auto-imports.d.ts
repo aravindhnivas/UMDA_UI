@@ -7,6 +7,7 @@ export {}
 declare global {
   const Toaster: typeof import('svelte-sonner')['Toaster']
   const afterUpdate: typeof import('svelte')['afterUpdate']
+  const axios: typeof import('axios')['default']
   const beforeUpdate: typeof import('svelte')['beforeUpdate']
   const blur: typeof import('svelte/transition')['blur']
   const createEventDispatcher: typeof import('svelte')['createEventDispatcher']
@@ -23,6 +24,8 @@ declare global {
   const getAllContexts: typeof import('svelte')['getAllContexts']
   const getContext: typeof import('svelte')['getContext']
   const hasContext: typeof import('svelte')['hasContext']
+  const invoke: typeof import('@tauri-apps/api')['invoke']
+  const oO: typeof import('@zmotivat0r/o0')['oO']
   const onDestroy: typeof import('svelte')['onDestroy']
   const onMount: typeof import('svelte')['onMount']
   const path: typeof import('@tauri-apps/api')['path']
