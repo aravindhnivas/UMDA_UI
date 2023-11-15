@@ -1,5 +1,5 @@
 <script>
-    import { Toaster, toast } from 'svelte-sonner';
+    import { Toaster } from 'svelte-sonner';
     import Home from './pages/Home.svelte';
     import Settings from './pages/settings';
     import Nav from '$lib/layouts/Nav.svelte';

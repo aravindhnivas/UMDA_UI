@@ -140,8 +140,10 @@
                 "fullscreen": false,
                 "resizable": true,
                 "title": "UMDA UI",
-                "width": 800,
-                "height": 600
+                "width": 1200,
+                "height": 900,
+                "minWidth": 800,
+                "minHeight": 600
             }
         ]
     }

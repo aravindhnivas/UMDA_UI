@@ -8,6 +8,7 @@
 
 html,
 body {
+    font-size: 18px;
     height: 100%;
     width: 100%;
     margin: 0;
@@ -26,4 +27,28 @@ body {
     height: 100%;
 }
 
-@import './splitpane.theme.scss';
+button.btn {
+    background-color: transparent;
+    color: black;
+    border: solid 1px;
+    height: 2rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    min-height: 2rem;
+    font-size: 0.875rem;
+    &:hover {
+        background-color: black;
+        color: white;
+        border: solid 1px black;
+    }
+
+    &.btn-error {
+        background-color: rgba(202, 27, 27, 0.964);
+        color: white;
+        border: none;
+    }
+}
+
+.mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
+    color: black;
+}

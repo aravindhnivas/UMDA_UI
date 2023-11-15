@@ -1,7 +1,8 @@
 <script lang="ts">
+    import Textfield from '@smui/textfield';
     export let value: string = '';
     export let lock: boolean = false;
-    export let placeholder: string = '';
+    export let label: string = '';
     export let filetype: string = '';
     export let dir: boolean = true;
 
@@ -28,8 +29,8 @@
 </script>
 
 <div class="row">
-    <button disabled={lock ?? false} class="btn btn-primary btn-sm" on:click={browse_folder}>Browse</button>
-    <input bind:value disabled={lock ?? false} type="text" {placeholder} class="input input-bordered input-sm" />
+    <button disabled={lock ?? false} class="btn" on:click={browse_folder}>Browse</button>
+    <Textfield bind:value disabled={lock ?? false} type="text" {label} />
     <!-- svelte-ignore missing-declaration -->
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -58,5 +59,6 @@
         display: grid;
         grid-template-columns: auto 1fr auto auto;
         gap: 0.5em;
+        align-items: center;
     }
 </style>
