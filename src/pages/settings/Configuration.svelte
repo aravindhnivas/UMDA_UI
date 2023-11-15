@@ -3,9 +3,13 @@
     import { BrowseBtn, Checkbox } from '$components/index';
     import Textfield from '@smui/textfield';
     import Layout from './comp/Layout.svelte';
+    import { invoke } from '@tauri-apps/api';
 
-    const fetch_port = () => {
-        if (port_lock) return toast.warning('Port is locked');
+    const fetch_port = async () => {
+        if ($port_lock) return toast.warning('Port is locked');
+        const port = await invoke<number>('get_tcp_port');
+        if (port) $server.port = port;
+        else toast.error('Failed to fetch port');
     };
 </script>
 
