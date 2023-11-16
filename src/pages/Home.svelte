@@ -1,6 +1,7 @@
 <script>
     import Page from '$lib/layouts/Page.svelte';
     import { Pane } from 'svelte-splitpanes';
+    console.log('Home page');
 </script>
 
 <Page id="Home">

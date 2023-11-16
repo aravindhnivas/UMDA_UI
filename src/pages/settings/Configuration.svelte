@@ -1,5 +1,13 @@
 <script lang="ts">
-    import { developer_mode, port_lock, server } from './stores';
+    import {
+        developerMode,
+        port_lock,
+        pyServerPORT,
+        serverCurrentStatus,
+        serverDebug,
+        pythonpath,
+        pythonscript,
+    } from '$lib/pyserver/stores';
     import { BrowseBtn, Checkbox } from '$components/index';
     import Textfield from '@smui/textfield';
     import Layout from './comp/Layout.svelte';
@@ -7,7 +15,7 @@
     const fetch_port = async () => {
         if ($port_lock) return toast.warning('Port is locked');
         const port = await invoke<number>('get_tcp_port');
-        if (port) $server.port = port;
+        if (port) $pyServerPORT = port;
         else toast.error('Failed to fetch port');
     };
 
@@ -25,16 +33,16 @@
 <Layout id="Configuration">
     <div class="flex gap-1">
         <div class="badge badge-error">Invalid python</div>
-        <div class="badge badge-{$server.status}">Server running</div>
-        <Checkbox class="ml-auto" bind:value={$developer_mode} label="Developer mode" />
+        <div class="badge badge-{$serverCurrentStatus.type}">{$serverCurrentStatus.value}</div>
+        <Checkbox class="ml-auto" bind:value={$developerMode} label="Developer mode" />
     </div>
 
     <div class="flex items-center gap-1">
         <button class="btn">get PyVersion</button>
     </div>
 
-    <BrowseBtn value="python" dir={false} label="Enter python location or python keyword" />
-    <BrowseBtn value="" dir={true} label="Python source file" />
+    <BrowseBtn bind:value={$pythonpath} dir={false} label="Enter python location or python keyword" />
+    <BrowseBtn bind:value={$pythonscript} dir={true} label="Python source file" />
 
     <div class="flex gap-1">
         <button class="btn" on:click={get_local_dir}>APP Local data <i class="i-mdi-open-in-new" /></button>
@@ -45,7 +53,7 @@
         <!-- svelte-ignore a11y-no-static-element-interactions -->
         <i on:click={fetch_port} class="i-material-symbols-refresh"></i>
 
-        <Textfield disabled={$port_lock} type="number" bind:value={$server.port} label="ServerPORT" />
+        <Textfield disabled={$port_lock} type="number" bind:value={$pyServerPORT} label="ServerPORT" />
 
         {#if $port_lock}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -59,6 +67,8 @@
 
         <button class="btn">Start Server</button>
         <button class="btn btn-error">Stop Server</button>
+
+        <Checkbox class="ml-auto" bind:value={$serverDebug} label="debug" />
     </div>
 
     <div class="flex gap-1 items-center">

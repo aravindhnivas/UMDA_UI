@@ -1,4 +1,5 @@
 <script>
+    // import '$lib/utils/initialise';
     import { Toaster } from 'svelte-sonner';
     import Home from './pages/Home.svelte';
     import Settings from './pages/settings';

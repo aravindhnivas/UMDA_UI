@@ -123,7 +123,7 @@
         "bundle": {
             "active": true,
             "targets": "all",
-            "identifier": "com.umdaui.dev",
+            "identifier": "com.umdaui.app",
             "icon": [
                 "icons/32x32.png",
                 "icons/128x128.png",
