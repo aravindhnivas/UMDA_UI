@@ -59,9 +59,10 @@
     <div class="flex items-center gap-1">
         <button class="btn" on:click={async () => await getPyVersion()}>get PyVersion</button>
     </div>
-
-    <BrowseBtn bind:value={$pythonpath} dir={false} label="Enter python location or python keyword" />
-    <BrowseBtn bind:value={$pythonscript} dir={true} label="Python source file" />
+    {#if $developerMode}
+        <BrowseBtn bind:value={$pythonpath} dir={false} label="Enter python location or python keyword" />
+        <BrowseBtn bind:value={$pythonscript} dir={true} label="Python source file" />
+    {/if}
 
     <div class="flex gap-1">
         <button class="btn" on:click={get_local_dir}>APP Local data <i class="i-mdi-open-in-new" /></button>
