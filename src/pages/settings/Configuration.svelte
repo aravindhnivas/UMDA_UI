@@ -24,6 +24,8 @@
     import { serverInfo } from './utils/stores';
     import { getPyVersion } from './utils/checkPython';
     import ConsoleBox from '$lib/components/ConsoleBox.svelte';
+    import { install_umdapy_from_zipfile } from './utils/download-assets';
+    import { check_umdapy_assets_status } from './utils/assets-status';
 
     const fetch_port = async () => {
         if ($port_lock) return toast.warning('Port is locked');
@@ -62,8 +64,22 @@
     {#if $developerMode}
         <BrowseBtn bind:value={$pythonpath} dir={false} label="Enter python location or python keyword" />
         <BrowseBtn bind:value={$pythonscript} dir={true} label="Python source file" />
-        <div class="flex gap-1">
+        <div class="flex gap-1 mt-3">
+            <button
+                class="btn"
+                on:click={async () => {
+                    await check_umdapy_assets_status({ installation_request: true });
+                }}>check-umdapy-assets</button
+            >
+
             <button class="btn" on:click={get_local_dir}>APP Local data <i class="i-mdi-open-in-new" /></button>
+
+            <button
+                class="btn ml-auto"
+                on:click={async () => {
+                    await oO(install_umdapy_from_zipfile());
+                }}>Install from ZIPfile <i class="i-material-symbols-drive-folder-upload-outline-sharp ml-1" /></button
+            >
         </div>
     {/if}
 
