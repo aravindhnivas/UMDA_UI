@@ -9,7 +9,7 @@
 
 <div
     id="Settings_{id}"
-    class="m-5 w-ful h-full content-start gap-1 {className}"
+    class="m-5 w-ful h-full content-start gap-1 animate__animated animate__fadeIn {className}"
     style="display: {$active_settings_tab === id ? display : 'none'};"
 >
     <slot />

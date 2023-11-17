@@ -27,6 +27,7 @@
         "@unocss/extractor-svelte": "^0.57.3",
         "@unocss/reset": "^0.57.3",
         "@zmotivat0r/o0": "^1.0.2",
+        "animate.css": "^4.1.1",
         "axios": "^1.6.2",
         "cooltipz-css": "^2.3.0",
         "daisyui": "^3.9.4",
