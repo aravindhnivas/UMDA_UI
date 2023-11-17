@@ -7,7 +7,10 @@ export const create_logger_store = (value: OutputBoxtype[]) => {
     };
     const add = (val: OutputBoxtype) => {
         if (!val.value) val.value = 'No output returned';
-        update(output => [val, ...output]);
+        update(output => {
+            if (output.length > 100) output = output.slice(0, -50);
+            return [val, ...output];
+        });
     };
 
     return {
