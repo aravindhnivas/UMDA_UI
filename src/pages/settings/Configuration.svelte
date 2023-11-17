@@ -46,16 +46,21 @@
 </script>
 
 <Layout id="Configuration">
-    <div class="flex gap-1">
+    <div class="flex gap-1 items-center">
         {#if $pyServerReady && $pyVersion}
-            <!-- content here -->
             <div class="badge badge-success">Python: {$pyVersion} (umdapy: {$umdapyVersion})</div>
         {:else}
-            <!-- else content here -->
             <div class="badge badge-error">Invalid python</div>
         {/if}
         <div class="badge badge-{$serverCurrentStatus.type}">{$serverCurrentStatus.value}</div>
         <Checkbox class="ml-auto" bind:value={$developerMode} label="Developer mode" />
+        <i
+            on:click={() => {
+                const modal = document.getElementById('umdaui_modal');
+                if (modal) modal.showModal();
+            }}
+            class="i-material-symbols-settings-alert-outline"
+        ></i>
     </div>
 
     <div class="flex items-center gap-1">

@@ -6,6 +6,7 @@
     import Nav from '$lib/layouts/Nav.svelte';
     import Footer from '$lib/layouts/Footer.svelte';
     import PreModal from '$utils/PreModal.svelte';
+    import Modal from '$lib/components/modal/Modal.svelte';
     // import { Alert } from '$utils/stores';
     // onMount(() => {
     //     Alert.error('Welcome to UMDAUI');
@@ -15,7 +16,7 @@
 
 <Toaster />
 <PreModal />
-
+<Modal />
 <div class="parent w-full h-full">
     <header><Nav /></header>
     <main>
