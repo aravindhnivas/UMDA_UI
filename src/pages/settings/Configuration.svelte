@@ -11,6 +11,14 @@
     import { BrowseBtn, Checkbox } from '$components/index';
     import Textfield from '@smui/textfield';
     import Layout from './comp/Layout.svelte';
+    import {
+        currentPortPID,
+        fetchServerROOT,
+        start_and_check_umdapy_with_toast,
+        stopServer,
+    } from '$lib/pyserver/umdapyServer';
+    import { checkNetstat, killPID } from './utils/network';
+    import { serverInfo } from './utils/stores';
 
     const fetch_port = async () => {
         if ($port_lock) return toast.warning('Port is locked');
@@ -65,18 +73,23 @@
             <i on:click={() => ($port_lock = true)} class="i-material-symbols-lock-open-right-outline"></i>
         {/if}
 
-        <button class="btn">Start Server</button>
-        <button class="btn btn-error">Stop Server</button>
+        <button class="btn" id="startServerButton" on:click={start_and_check_umdapy_with_toast}>Start Server</button>
+        <button class="btn btn-error" id="stopServerButton" on:click={async () => await stopServer()}
+            >Stop Server</button
+        >
 
         <Checkbox class="ml-auto" bind:value={$serverDebug} label="debug" />
     </div>
 
     <div class="flex gap-1 items-center">
-        <button class="btn">Check Server connection</button>
-        <button class="btn">Check PORT status</button>
+        <button class="btn" on:click={async () => await fetchServerROOT()}>Check Server connection</button>
+        <button class="btn" on:click={async () => await checkNetstat()}>Check PORT status</button>
 
-        <Textfield value="" label="current port PID" />
-        <button class="btn btn-error">kill PID</button>
+        <Textfield value={$currentPortPID.join(', ')} label="current port PID" />
+        <button class="btn btn-error" on:click={async () => await killPID()}>kill PID</button>
     </div>
     <!-- <div class="card shadow-xl bg-orange-300 w-full h-[100rem] overflow-auto p-5">Card</div> -->
+    {#each $serverInfo as server}
+        <div class="">{JSON.stringify(server)}</div>
+    {/each}
 </Layout>

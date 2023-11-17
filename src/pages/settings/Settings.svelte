@@ -1,5 +1,4 @@
 <script>
-    import { active_settings_tab } from './stores';
     import Page from '$lib/layouts/Page.svelte';
     import { Pane } from 'svelte-splitpanes';
     import Sidebar from './comp/Sidebar.svelte';
@@ -15,7 +14,6 @@
         </Pane>
         <Pane minSize={50} maxSize={90}>
             <Configuration />
-            <Update />
         </Pane>
     </svelte:fragment>
 </Page>

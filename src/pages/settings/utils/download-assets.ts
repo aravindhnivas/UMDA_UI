@@ -183,7 +183,7 @@ export function unZIP(installation_request = true) {
 let current_release_data = {};
 
 const get_assets_url = async () => {
-    const URL = import.meta.env.VITE_FELIONPY_URL;
+    const URL = import.meta.env.VITE_PY_URL;
 
     const [_err1, response] = await oO(axios<{ tag_name: string }>(URL));
     if (_err1) return outputbox.error(_err1);
@@ -225,7 +225,7 @@ export const check_assets_update = async ({ installation_request = true, downloa
         return;
     }
 
-    if (get(umdapyVersion) < import.meta.env.VITE_FELIONPY_MIN_VERSION) {
+    if (get(umdapyVersion) < import.meta.env.VITE_PY_MIN_VERSION) {
         await fn_asset_download_required({ installation_request, download_request });
         return;
     }

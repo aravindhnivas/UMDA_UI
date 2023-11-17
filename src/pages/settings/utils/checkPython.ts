@@ -1,30 +1,30 @@
-import { pyVersion, felionlibVersion, pyServerReady } from '$lib/pyserver/stores'
-import computePy_func from '$lib/pyserver/computePy'
-import { asset_download_required } from './stores'
+import { pyVersion, umdapy, pyServerReady } from '$lib/pyserver/stores';
+import computePy_func from '$lib/pyserver/computePy';
+import { asset_download_required } from './stores';
 
-export async function getPyVersion(e?: ButtonClickEvent) {
-    if(!get(pyServerReady)) {
-        window.createToast('start felionpy server first!', 'danger')
-        return Promise.reject('start felionpy server first!')
+export async function getPyVersion(e?: MouseEvent) {
+    if (!get(pyServerReady)) {
+        toast.error('start umdapy server first!');
+        return Promise.reject('start umdapy server first!');
     }
-    const dataFromPython = await computePy_func<{ python: string; felionlib: string }>({
+    const dataFromPython = await computePy_func<{ python: string; umdapy: string }>({
         e,
         target: e?.currentTarget,
         pyfile: 'getVersion',
         args: [''],
-    })
+    });
 
     if (!dataFromPython) {
-        window.createToast('Could not access pyfile', 'danger')
-        return Promise.reject('Could not access pyfile')
+        toast.error('Could not access pyfile');
+        return Promise.reject('Could not access pyfile');
     }
 
-    pyVersion.set(dataFromPython.python)
-    felionlibVersion.set(dataFromPython.felionlib)
+    pyVersion.set(dataFromPython.python);
+    umdapy.set(dataFromPython.umdapy);
 
-    if (get(felionlibVersion) < import.meta.env.VITE_FELIONPY_MIN_VERSION) {
-        asset_download_required.set(true)
+    if (get(umdapy) < import.meta.env.VITE_PY_MIN_VERSION) {
+        asset_download_required.set(true);
     }
 
-    return Promise.resolve(dataFromPython)
+    return Promise.resolve(dataFromPython);
 }
