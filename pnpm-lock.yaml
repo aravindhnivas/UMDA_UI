@@ -16,6 +16,9 @@ devDependencies:
   '@macfja/svelte-persistent-store':
     specifier: ^2.4.1
     version: 2.4.1(svelte@4.2.2)
+  '@smui/menu-surface':
+    specifier: 7.0.0-beta.15
+    version: 7.0.0-beta.15(svelte@4.2.2)(typescript@5.2.2)
   '@smui/textfield':
     specifier: 7.0.0-beta.15
     version: 7.0.0-beta.15(svelte@4.2.2)(typescript@5.2.2)
@@ -46,6 +49,9 @@ devDependencies:
   axios:
     specifier: ^1.6.2
     version: 1.6.2
+  cooltipz-css:
+    specifier: ^2.3.0
+    version: 2.3.0(sass@1.69.5)
   daisyui:
     specifier: ^3.9.4
     version: 3.9.4
@@ -2202,6 +2208,18 @@ packages:
   /consola@3.2.3:
     resolution: {integrity: sha512-I5qxpzLv+sJhTVEoLYNcTW+bThDCPsit0vLNKShZx6rLtpilNpmmeTPaeqJb9ZE9dV3DGaeby6Vuhrw38WjeyQ==}
     engines: {node: ^14.18.0 || >=16.10.0}
+    dev: true
+
+  /cooltipz-css@2.3.0(sass@1.69.5):
+    resolution: {integrity: sha512-lB5mN5euKmVH/G4r9W80qUFxDsHpU7lactEVQ2W+EWMrI5SYxw5AQn09IDtuGn0+h4Ou72bvUL8FUpX8jLdyyQ==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      sass: 1.x
+    peerDependenciesMeta:
+      sass:
+        optional: true
+    dependencies:
+      sass: 1.69.5
     dev: true
 
   /cross-spawn@7.0.3:

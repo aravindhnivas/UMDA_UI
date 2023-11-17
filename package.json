@@ -17,6 +17,7 @@
     "devDependencies": {
         "@iconify/json": "^2.2.142",
         "@macfja/svelte-persistent-store": "^2.4.1",
+        "@smui/menu-surface": "7.0.0-beta.15",
         "@smui/textfield": "7.0.0-beta.15",
         "@sveltejs/vite-plugin-svelte": "^2.5.0",
         "@tauri-apps/cli": "^1.5.6",
@@ -27,6 +28,7 @@
         "@unocss/reset": "^0.57.3",
         "@zmotivat0r/o0": "^1.0.2",
         "axios": "^1.6.2",
+        "cooltipz-css": "^2.3.0",
         "daisyui": "^3.9.4",
         "hover.css": "^2.3.2",
         "lodash-es": "^4.17.21",

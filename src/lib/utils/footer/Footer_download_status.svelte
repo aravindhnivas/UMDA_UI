@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { footerMsg } from './initialise';
+    import { footerMsg } from '$lib/utils/initialise';
     // $footerMsg = {
     //     status: 'done',
     //     msg: 'Installing dependencies',
@@ -7,7 +7,7 @@
 </script>
 
 {#if $footerMsg.status !== 'idle'}
-    <div class="ml-auto">
+    <div class="">
         {#if $footerMsg.status === 'running'}
             <div class="icon-footer">
                 <span>{$footerMsg.msg}</span>

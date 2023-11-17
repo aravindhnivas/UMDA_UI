@@ -3,6 +3,7 @@
     import { Pane } from 'svelte-splitpanes';
     import Sidebar from './comp/Sidebar.svelte';
     import { Configuration, Update } from './';
+    import About from './About.svelte';
 
     const partition = 20;
 </script>
@@ -14,6 +15,7 @@
         </Pane>
         <Pane minSize={50} maxSize={90}>
             <Configuration />
+            <About />
         </Pane>
     </svelte:fragment>
 </Page>
