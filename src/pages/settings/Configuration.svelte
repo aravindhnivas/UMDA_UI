@@ -104,7 +104,30 @@
         <button class="btn btn-error" on:click={async () => await killPID()}>kill PID</button>
     </div>
     <!-- <div class="card shadow-xl bg-orange-300 w-full h-[100rem] overflow-auto p-5">Card</div> -->
-    {#each $serverInfo as server}
-        <div class="">{JSON.stringify(server)}</div>
-    {/each}
+    <div class="console__box card shadow-xl bg-orange-300 p-5">
+        <button class="btn ml-auto" on:click={() => ($serverInfo = [])}>Clear</button>
+        <div class="body">
+            {#each $serverInfo as server}
+                <span class="type-{server.type}">>> {server.value}</span>
+            {/each}
+        </div>
+    </div>
 </Layout>
+
+<style lang="scss">
+    .console__box {
+        max-height: 250px;
+        .body {
+            margin-top: 1em;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            .type-error {
+                color: red;
+            }
+            .type-success {
+                color: green;
+            }
+        }
+    }
+</style>
