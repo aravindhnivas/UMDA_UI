@@ -5,9 +5,17 @@
     import Settings from './pages/settings';
     import Nav from '$lib/layouts/Nav.svelte';
     import Footer from '$lib/layouts/Footer.svelte';
+    import PreModal from '$utils/PreModal.svelte';
+    // import { Alert } from '$utils/stores';
+    // onMount(() => {
+    //     Alert.error('Welcome to UMDAUI');
+    //     console.log('mounted');
+    // });
 </script>
 
 <Toaster />
+<PreModal />
+
 <div class="parent w-full h-full">
     <header><Nav /></header>
     <main>

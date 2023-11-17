@@ -1,4 +1,5 @@
 import { persist, createLocalStorage } from '@macfja/svelte-persistent-store';
+// import { Alert } from './stores';
 // import { tempdir, platform } from '@tauri-apps/api/os';
 
 export const createPersistanceStore = <T>(value: T, key: string) => {
@@ -12,5 +13,8 @@ export const createPersistanceStore = <T>(value: T, key: string) => {
 // if (!(await fs.exists(tempdirPath))) {
 //     await fs.createDir(tempdirPath);
 // }
-
+export const toggle_loading = (node: HTMLButtonElement) => {
+    if (!node) return;
+    node.classList.contains('is-loading') ? node.classList.remove('is-loading') : node.classList.add('is-loading');
+};
 console.log('Utilities loaded');

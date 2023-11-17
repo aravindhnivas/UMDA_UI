@@ -1,0 +1,77 @@
+<script lang="ts">
+    import { onDestroy } from 'svelte';
+    import { Alert } from '$utils/stores';
+    import FlatList from 'svelte-flatlist';
+
+    let active = false;
+    function openModal() {
+        active = true;
+        $Alert.open = false;
+    }
+
+    $: if ($Alert.open) {
+        openModal();
+    }
+    // $: console.log($Alert)
+    let headerBackground = '#453b1c5c';
+    $: if (active) {
+        headerBackground = $Alert.type === 'error' ? '#f14668' : '#453b1c5c';
+    }
+
+    function handleKeydown(event: KeyboardEvent) {
+        const key = event.key.toLowerCase();
+        if (key === 'escape') {
+            active = false;
+            return;
+        }
+        const { ctrlKey, shiftKey } = event;
+        if (ctrlKey && shiftKey) {
+            if (key === 'e') {
+                active = !active;
+            }
+        }
+    }
+
+    onDestroy(() => (active = false));
+</script>
+
+<svelte:window on:keydown={handleKeydown} />
+
+{#if active}
+    <FlatList
+        on:close={() => {
+            active = false;
+        }}
+        bind:visible={active}
+        style={{
+            bgColor: '#eee',
+            handle: {
+                fgColor: 'white',
+                height: '2rem',
+                bgColor: headerBackground,
+            },
+        }}
+    >
+        <div class="contents">
+            <h1 style="text-align: center;">
+                {$Alert.type === 'error' ? 'Error occured' : 'Output'}
+            </h1>
+            <hr />
+            <div style="user-select: text; white-space: pre-wrap;">
+                {#if $Alert.content instanceof Error}
+                    {$Alert.content.stack}
+                {:else}
+                    {$Alert.content}
+                {/if}
+            </div>
+        </div>
+    </FlatList>
+{/if}
+
+<style lang="scss">
+    .contents {
+        * {
+            color: black;
+        }
+    }
+</style>

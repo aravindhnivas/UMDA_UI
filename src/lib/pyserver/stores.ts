@@ -1,7 +1,7 @@
 import { path } from '@tauri-apps/api';
 import type { Child } from '@tauri-apps/api/shell';
 import { createPersistanceStore } from '$utils/index';
-import { writable, derived, type Writable } from 'svelte/store';
+import { writable, derived } from 'svelte/store';
 
 export { get } from 'svelte/store';
 
@@ -14,7 +14,7 @@ export const pyProgram = derived([developerMode, pythonpath, umdapy], ([$develop
     return $developerMode ? $pythonpath : $umdapy;
 });
 export const pyServerReady = writable(false);
-export const port_lock = createPersistanceStore(false, 'port_locl');
+export const port_lock = createPersistanceStore(false, 'port_lock');
 
 export const pyVersion = writable('');
 export const umdapyVersion = writable('');
@@ -25,9 +25,6 @@ export const mainpyfile = derived([developerMode, pythonscript], async ([$develo
 
 // export const currentTab = createPersistanceStore('Configuration', 'settingsActiveTab');
 export const serverDebug = createPersistanceStore(false, 'serverDebug');
-export const serverCurrentStatus = createPersistanceStore<OutputBoxtype>(
-    { value: '', type: 'info' },
-    'serverCurrentStatus',
-);
+export const serverCurrentStatus = writable<OutputBoxtype>({ value: 'umdapy server not running', type: 'error' });
 
-export const pyChildProcess = writable<Child | null>(null);
+export const pyChildProcess = writable<Child>();
