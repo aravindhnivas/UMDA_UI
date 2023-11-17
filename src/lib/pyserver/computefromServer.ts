@@ -1,5 +1,6 @@
 import { pyServerPORT, get } from './stores';
 import { path, fs } from '@tauri-apps/api';
+import { get_tmpdir } from '$utils/index';
 interface Type {
     pyfile: string;
     args: Object;
@@ -14,7 +15,9 @@ export default async function <T>({ pyfile, args, target, general }: Type): Prom
         if (!general) {
             target?.classList.add('is-loading');
             const filename = pyfile.split('.').at(-1) + '_data.json';
-            const outputFile = await path.join(window.tempdirPath, filename);
+
+            const tempdirPath = await get_tmpdir();
+            const outputFile = await path.join(tempdirPath, filename);
             console.warn(await path.dirname(outputFile));
             if (await fs.exists(outputFile)) {
                 const [_err] = await oO(fs.removeFile(outputFile));

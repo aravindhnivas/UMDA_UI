@@ -3,7 +3,8 @@ import { running_processes } from '$settings/utils/stores';
 import { path, fs, shell } from '@tauri-apps/api';
 import { LOGGER } from '$settings/utils/stores';
 import { Alert } from '$utils/stores';
-import { tryF, isError } from 'ts-try';
+import { tryF } from 'ts-try';
+import { get_tmpdir } from '$utils/index';
 
 export const dispatchEvent = (target: HTMLButtonElement | null | undefined, detail: Object, eventName: string) => {
     if (!target) return console.warn('No target to dispatch event');
@@ -42,7 +43,8 @@ export default async function <T>({
 
         if (!general) {
             const filename = pyfile.split('.').at(-1) + '_data.json';
-            const outputFile = await path.join(window.tempdirPath, filename);
+            const tempdirPath = await get_tmpdir();
+            const outputFile = await path.join(tempdirPath, filename);
             if (await fs.exists(outputFile)) {
                 const [_err] = await oO(fs.removeFile(outputFile));
                 if (_err) console.error(_err);

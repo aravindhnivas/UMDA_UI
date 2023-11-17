@@ -96,13 +96,15 @@ export async function checkServerProblem() {
         return await start_and_check_umdapy_with_toast();
     }
 
-    const [err, rootpage] = await oO(axios.get<string>(`http://localhost:${get(pyServerPORT)}/`));
+    const [err, rootpage] = await oO(
+        axios.get<string>(`http://localhost:${get(pyServerPORT)}/${import.meta.env.VITE_pypackage}`),
+    );
     if (err) return serverInfo.error(`failed to fetch rootpage /`);
 
-    if (!rootpage) return;
-    if (!rootpage.data.includes('umdapy')) {
-        return await dialog.message('Change port in settings-->configuration and restart server');
-    }
+    // if (!rootpage) return;
+    // if (!rootpage.data.includes('umdapy')) {
+    //     return await dialog.message('Change port in settings-->configuration and restart server');
+    // }
 
     const [err1] = await oO(getPyVersion());
     if (!err1) return toast.success('Problem fixed');
@@ -132,8 +134,10 @@ export async function checkServerProblem() {
 export const fetchServerROOT = async (delay = 0) => {
     if (delay > 0) await sleep(delay);
 
-    const [_err, rootpage] = await oO(axios.get<{ data: string }>(`http://localhost:${get(pyServerPORT)}/`));
-    if (_err) return serverInfo.error(`failed to fetch rootpage /`);
+    const [_err, rootpage] = await oO(
+        axios.get<{ data: string }>(`http://localhost:${get(pyServerPORT)}/${import.meta.env.VITE_pypackage}`),
+    );
+    if (_err) return serverInfo.error(`failed to fetch rootpage /${import.meta.env.VITE_pypackage}`);
     if (!rootpage) return;
     pyServerReady.set(true);
 

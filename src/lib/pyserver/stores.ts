@@ -7,7 +7,7 @@ export { get } from 'svelte/store';
 
 export const pythonpath = createPersistanceStore('python', 'pythonpath');
 export const pythonscript = createPersistanceStore('', 'pythonscript');
-export const umdapy = writable(import.meta.env.VITE_python_package_ID ?? 'umdapy');
+export const umdapy = writable(import.meta.env.VITE_pypackage);
 
 export const developerMode = writable(import.meta.env.DEV);
 export const pyProgram = derived([developerMode, pythonpath, umdapy], ([$developerMode, $pythonpath, $umdapy]) => {
