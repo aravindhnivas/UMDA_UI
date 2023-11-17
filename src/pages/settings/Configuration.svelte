@@ -23,6 +23,7 @@
     import { checkNetstat, killPID } from './utils/network';
     import { serverInfo } from './utils/stores';
     import { getPyVersion } from './utils/checkPython';
+    import ConsoleBox from '$lib/components/ConsoleBox.svelte';
 
     const fetch_port = async () => {
         if ($port_lock) return toast.warning('Port is locked');
@@ -104,30 +105,5 @@
         <button class="btn btn-error" on:click={async () => await killPID()}>kill PID</button>
     </div>
     <!-- <div class="card shadow-xl bg-orange-300 w-full h-[100rem] overflow-auto p-5">Card</div> -->
-    <div class="console__box card shadow-xl bg-orange-300 p-5">
-        <button class="btn ml-auto" on:click={() => ($serverInfo = [])}>Clear</button>
-        <div class="body">
-            {#each $serverInfo as server}
-                <span class="type-{server.type}">>> {server.value}</span>
-            {/each}
-        </div>
-    </div>
+    <ConsoleBox bind:console_arr={$serverInfo} />
 </Layout>
-
-<style lang="scss">
-    .console__box {
-        max-height: 250px;
-        .body {
-            margin-top: 1em;
-            overflow: auto;
-            display: flex;
-            flex-direction: column;
-            .type-error {
-                color: red;
-            }
-            .type-success {
-                color: green;
-            }
-        }
-    }
-</style>
