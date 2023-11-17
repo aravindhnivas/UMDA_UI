@@ -38,7 +38,7 @@
             console.log(localdir);
             await shell.open(localdir);
         } catch (error) {
-            toast.error(error);
+            toast.error(error as string);
         }
     };
 </script>

@@ -16,8 +16,10 @@ import { platform } from '@tauri-apps/api/os';
 import { invoke } from '@tauri-apps/api';
 import { isEmpty, round } from 'lodash-es';
 import { start_and_check_umdapy_with_toast, stopServer } from '$lib/pyserver/umdapyServer';
-import { footerMsg } from '$src/layout/main/footer_utils/stores';
+import { footerMsg } from '$lib/utils/initialise';
 import { auto_download_and_install_assets } from './assets-status';
+import { sleep } from '$lib/utils/initialise';
+import { Alert } from '$utils/stores';
 
 let assets_downloading = false;
 let assets_installing = false;
@@ -81,7 +83,7 @@ export async function downloadZIP() {
         python_asset_ready_to_install.set(true);
     } catch (err) {
         outputbox.error(`error occured while downloading assets`);
-        outputbox.error(err);
+        outputbox.error(err as string);
     } finally {
         assets_downloading = false;
     }
@@ -130,9 +132,9 @@ export function unZIP(installation_request = true) {
             darwin: [asset_zipfile, '-d', localdir],
             linux: [asset_zipfile, '-d', localdir],
         };
-        const currentplatform = await platform();
+        const currentplatform = (await platform()) as 'darwin' | 'win32' | 'linux';
         const command = currentplatform === 'win32' ? `unzip-${await platform()}` : 'unzip-darwin';
-        const cmd = new shell.Command(command, args[await platform()]);
+        const cmd = new shell.Command(command, args[currentplatform]);
 
         let err: string;
         const child = await cmd.spawn();
@@ -183,10 +185,11 @@ export function unZIP(installation_request = true) {
 let current_release_data = {};
 
 const get_assets_url = async () => {
-    const URL = import.meta.env.VITE_PY_URL;
+    const URL = import.meta.env.VITE_UMDAPY_URL;
 
     const [_err1, response] = await oO(axios<{ tag_name: string }>(URL));
     if (_err1) return outputbox.error(_err1);
+    if (!response) return;
 
     if (response.status !== 200) return outputbox.error('Could not download the assets');
 
@@ -197,7 +200,13 @@ const get_assets_url = async () => {
     return true;
 };
 
-const fn_asset_download_required = async ({ installation_request, download_request }) => {
+const fn_asset_download_required = async ({
+    installation_request,
+    download_request,
+}: {
+    installation_request: boolean;
+    download_request: boolean;
+}) => {
     outputbox.warn(`Download required`);
     asset_download_required.set(true);
     await auto_download_and_install_assets({ installation_request, download_request });
@@ -285,6 +294,6 @@ export const install_umdapy_from_zipfile = async () => {
         python_asset_ready_to_install.set(true);
         await oO(unZIP(false));
     } catch (error) {
-        if (error instanceof Error) window.handleError(error);
+        if (error instanceof Error) Alert.error(error);
     }
 };

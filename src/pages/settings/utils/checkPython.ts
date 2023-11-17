@@ -9,7 +9,7 @@ export async function getPyVersion(e?: MouseEvent) {
     }
     const dataFromPython = await computePy_func<{ python: string; umdapy: string }>({
         e,
-        target: e?.currentTarget,
+        target: e?.currentTarget as HTMLButtonElement,
         pyfile: 'getVersion',
         args: [''],
     });
