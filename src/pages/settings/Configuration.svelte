@@ -62,11 +62,10 @@
     {#if $developerMode}
         <BrowseBtn bind:value={$pythonpath} dir={false} label="Enter python location or python keyword" />
         <BrowseBtn bind:value={$pythonscript} dir={true} label="Python source file" />
+        <div class="flex gap-1">
+            <button class="btn" on:click={get_local_dir}>APP Local data <i class="i-mdi-open-in-new" /></button>
+        </div>
     {/if}
-
-    <div class="flex gap-1">
-        <button class="btn" on:click={get_local_dir}>APP Local data <i class="i-mdi-open-in-new" /></button>
-    </div>
 
     <div class="flex items-center gap-1">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
