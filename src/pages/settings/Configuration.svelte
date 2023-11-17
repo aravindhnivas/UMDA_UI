@@ -7,6 +7,9 @@
         serverDebug,
         pythonpath,
         pythonscript,
+        pyServerReady,
+        pyVersion,
+        umdapyVersion,
     } from '$lib/pyserver/stores';
     import { BrowseBtn, Checkbox } from '$components/index';
     import Textfield from '@smui/textfield';
@@ -19,6 +22,7 @@
     } from '$lib/pyserver/umdapyServer';
     import { checkNetstat, killPID } from './utils/network';
     import { serverInfo } from './utils/stores';
+    import { getPyVersion } from './utils/checkPython';
 
     const fetch_port = async () => {
         if ($port_lock) return toast.warning('Port is locked');
@@ -40,13 +44,19 @@
 
 <Layout id="Configuration">
     <div class="flex gap-1">
-        <div class="badge badge-error">Invalid python</div>
+        {#if $pyServerReady && $pyVersion}
+            <!-- content here -->
+            <div class="badge badge-success">Python: {$pyVersion} (umdapy: {$umdapyVersion})</div>
+        {:else}
+            <!-- else content here -->
+            <div class="badge badge-error">Invalid python</div>
+        {/if}
         <div class="badge badge-{$serverCurrentStatus.type}">{$serverCurrentStatus.value}</div>
         <Checkbox class="ml-auto" bind:value={$developerMode} label="Developer mode" />
     </div>
 
     <div class="flex items-center gap-1">
-        <button class="btn">get PyVersion</button>
+        <button class="btn" on:click={async () => await getPyVersion()}>get PyVersion</button>
     </div>
 
     <BrowseBtn bind:value={$pythonpath} dir={false} label="Enter python location or python keyword" />
@@ -73,7 +83,12 @@
             <i on:click={() => ($port_lock = true)} class="i-material-symbols-lock-open-right-outline"></i>
         {/if}
 
-        <button class="btn" id="startServerButton" on:click={start_and_check_umdapy_with_toast}>Start Server</button>
+        <button
+            disabled={$pyServerReady}
+            class="btn"
+            id="startServerButton"
+            on:click={start_and_check_umdapy_with_toast}>Start Server</button
+        >
         <button class="btn btn-error" id="stopServerButton" on:click={async () => await stopServer()}
             >Stop Server</button
         >

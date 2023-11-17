@@ -1,4 +1,4 @@
-import { pyVersion, umdapy, pyServerReady } from '$lib/pyserver/stores';
+import { pyVersion, pyServerReady, umdapyVersion } from '$lib/pyserver/stores';
 import computePy_func from '$lib/pyserver/computePy';
 import { asset_download_required } from './stores';
 
@@ -20,9 +20,9 @@ export async function getPyVersion(e?: MouseEvent) {
     }
 
     pyVersion.set(dataFromPython.python);
-    umdapy.set(dataFromPython.umdapy);
+    umdapyVersion.set(dataFromPython.umdapy);
 
-    if (get(umdapy) < import.meta.env.VITE_PY_MIN_VERSION) {
+    if (get(umdapyVersion) < import.meta.env.VITE_PY_MIN_VERSION) {
         asset_download_required.set(true);
     }
 

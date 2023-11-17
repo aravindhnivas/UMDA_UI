@@ -9,6 +9,8 @@ export const createPersistanceStore = <T>(value: T, key: string) => {
 
 export const toggle_loading = (node: HTMLButtonElement) => {
     if (!node) return;
+    console.log(node);
+
     node.classList.contains('is-loading') ? node.classList.remove('is-loading') : node.classList.add('is-loading');
 };
 
