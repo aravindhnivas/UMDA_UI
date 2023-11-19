@@ -141,7 +141,7 @@
                 "resizable": true,
                 "title": "UMDA UI",
                 "width": 1200,
-                "height": 900,
+                "height": 800,
                 "minWidth": 800,
                 "minHeight": 600
             }
