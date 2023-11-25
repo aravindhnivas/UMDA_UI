@@ -51,7 +51,7 @@
                 <h3>Python libraries</h3>
                 {#each py_modules as module}
                     {#if module}
-                        <li><span class="badge badge-info">{module}</span></li>
+                        <li>{module}</li>
                     {/if}
                 {/each}
             {/if}
