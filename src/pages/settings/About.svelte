@@ -2,11 +2,14 @@
     import { pyVersion, umdapyVersion } from '$lib/pyserver/stores';
     import { getVersion, getTauriVersion } from '@tauri-apps/api/app';
     import Layout from './comp/Layout.svelte';
+    import { git_url } from '$lib/utils/index';
 
     let py_modules: string[] = [];
 
     onMount(async () => {
-        const result = await axios(import.meta.env.VITE_FELIONPY_RAW_URL + 'src/requirements.txt');
+        console.log('About page mounted');
+        const [err, result] = await oO(axios(`${git_url.usercontent()}/src/requirements.txt`));
+        if (err) return toast.error(err);
         py_modules = result?.data.split('\n') ?? '';
     });
 </script>

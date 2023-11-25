@@ -20,6 +20,7 @@ import { footerMsg } from '$lib/utils/initialise';
 import { auto_download_and_install_assets } from './assets-status';
 import { sleep } from '$lib/utils/initialise';
 import { Alert } from '$utils/stores';
+import { git_url} from '$lib/utils';
 
 let assets_downloading = false;
 let assets_installing = false;
@@ -185,9 +186,7 @@ export function unZIP(installation_request = true) {
 let current_release_data = {};
 
 const get_assets_url = async () => {
-    const URL = import.meta.env.VITE_UMDAPY_URL;
-
-    const [_err1, response] = await oO(axios<{ tag_name: string }>(URL));
+    const [_err1, response] = await oO(axios<{ tag_name: string }>(git_url.latest()));
     if (_err1) return outputbox.error(_err1);
     if (!response) return;
 
