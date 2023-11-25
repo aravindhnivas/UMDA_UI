@@ -13,6 +13,9 @@ devDependencies:
   '@iconify/json':
     specifier: ^2.2.146
     version: 2.2.146
+  '@loadingio/loading.css':
+    specifier: ^3.2.0
+    version: 3.2.0
   '@macfja/svelte-persistent-store':
     specifier: ^2.4.1
     version: 2.4.1(svelte@4.2.7)
@@ -64,6 +67,9 @@ devDependencies:
   hover.css:
     specifier: ^2.3.2
     version: 2.3.2
+  ldbutton:
+    specifier: ^2.0.2
+    version: 2.0.2
   lodash-es:
     specifier: ^4.17.21
     version: 4.17.21
@@ -711,6 +717,11 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
+    dev: true
+
+  /@loadingio/loading.css@3.2.0:
+    resolution: {integrity: sha512-T7T5qOPlq+UCyQyYdjvpr4P9RolshoEghgwhLNypj2v0KlzRDTFhXzpAl878jSfwemVtFGbpcH79MbYemw8wIw==}
+    engines: {node: '>=10.14.1', npm: '>=6.4.1'}
     dev: true
 
   /@macfja/serializer@1.1.2:
@@ -3131,6 +3142,11 @@ packages:
 
   /kolorist@1.8.0:
     resolution: {integrity: sha512-Y+60/zizpJ3HRH8DCss+q95yr6145JXZo46OTpFvDZWLfRCE4qChOyk1b26nMaNpfHHgxagk9dXT5OP0Tfe+dQ==}
+    dev: true
+
+  /ldbutton@2.0.2:
+    resolution: {integrity: sha512-924UoWBrMIyWU8GNH4Xc+nnGvt7GCXFmyqmTG5PuNnFhpmqCblfjKofJpdKey62wFks3KGvu5KZmprHY7P+WAQ==}
+    engines: {node: '>=0.12.6', npm: '>=1.2.2'}
     dev: true
 
   /lilconfig@2.1.0:

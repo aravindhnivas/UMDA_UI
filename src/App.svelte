@@ -1,17 +1,10 @@
 <script>
-    // import '$lib/utils/initialise';
     import { Toaster } from 'svelte-sonner';
-    import Home from './pages/Home.svelte';
-    import Settings from './pages/settings';
+    import * as pages from './pages';
     import Nav from '$lib/layouts/Nav.svelte';
     import Footer from '$lib/layouts/Footer.svelte';
     import PreModal from '$utils/PreModal.svelte';
     import Modal from '$lib/components/modal/Modal.svelte';
-    // import { Alert } from '$utils/stores';
-    // onMount(() => {
-    //     Alert.error('Welcome to UMDAUI');
-    //     console.log('mounted');
-    // });
 </script>
 
 <Toaster />
@@ -20,8 +13,9 @@
 <div class="parent w-full h-full">
     <header><Nav /></header>
     <main>
-        <Home />
-        <Settings />
+        {#each Object.keys(pages) as name}
+            <svelte:component this={pages[name]} />
+        {/each}
     </main>
     <footer><Footer /></footer>
 </div>
@@ -30,7 +24,6 @@
     .parent {
         display: grid;
         grid-template-rows: auto 1fr auto;
-        // overflow-y: auto;
     }
 
     header,

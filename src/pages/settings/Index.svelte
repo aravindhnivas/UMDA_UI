@@ -2,7 +2,7 @@
     import Page from '$lib/layouts/Page.svelte';
     import { Pane } from 'svelte-splitpanes';
     import Sidebar from './comp/Sidebar.svelte';
-    import { Configuration, Console, About, Update } from './';
+    import { Configuration, Console, About, Update } from '.';
 
     const partition = 20;
 </script>
