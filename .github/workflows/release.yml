@@ -12,7 +12,8 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                platform: [macos-latest, macos-latest-xlarge, ubuntu-latest, windows-latest]
+                # large = intel; xlarge = M1  (apple silicon)
+                platform: [macos-latest-large, macos-latest-xlarge, ubuntu-latest, windows-latest]
 
         runs-on: ${{ matrix.platform }}
         steps:
