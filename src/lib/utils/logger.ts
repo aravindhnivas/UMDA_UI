@@ -25,20 +25,28 @@ export class LOGGER {
             throw new Error('No node provided!');
         }
     }
+    
+    handle_logs (msg: string | Object) {
+        if (typeof msg === 'string') {
+            return msg;
+        } else {
+            return JSON.stringify(msg, null, 2);
+        }
+    }
 
     info(message: string) {
-        this.term.writeln(`$ ${message}`);
+        this.term.writeln(`$ ${this.handle_logs(message)}`);
     }
 
     warn(message: string) {
-        this.term.writeln(`\x1b[33m$ ${message}\x1b[0m`);
+        this.term.writeln(`\x1b[33m$ ${this.handle_logs(message)}\x1b[0m`);
     }
 
     error(message: string) {
-        this.term.writeln(`\x1b[31m$ ${message}\x1b[0m`);
+        this.term.writeln(`\x1b[31m$ ${this.handle_logs(message)}\x1b[0m`);
     }
 
     success(message: string) {
-        this.term.writeln(`\x1b[32m$ ${message}\x1b[0m`);
+        this.term.writeln(`\x1b[32m$ ${this.handle_logs(message)}\x1b[0m`);
     }
 }
