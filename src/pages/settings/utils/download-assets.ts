@@ -221,13 +221,13 @@ export const check_assets_update = async ({ installation_request = true, downloa
 
     if (!(await get_assets_url())) return;
 
-    outputbox.info(`Available version: ${get(assets_version_available)}`);
+    outputbox.info(`Python assets available version: ${get(assets_version_available)}`);
 
     if (!get(umdapyVersion)) {
-        outputbox.error('Current version not determined yet.');
+        outputbox.error('Python assets current version not determined yet.');
         return;
     }
-    outputbox.info(`Current version: v${get(umdapyVersion)}`);
+    outputbox.info(`Python assets current version: v${get(umdapyVersion)}`);
 
     if (`v${get(umdapyVersion)}` < get(assets_version_available)) {
         await fn_asset_download_required({ installation_request, download_request });
@@ -239,7 +239,7 @@ export const check_assets_update = async ({ installation_request = true, downloa
         return;
     }
 
-    outputbox.warn(`Download not required`);
+    outputbox.warn(`Python assets download not required`);
     asset_download_required.set(false);
 };
 

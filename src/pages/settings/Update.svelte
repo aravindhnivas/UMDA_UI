@@ -143,8 +143,8 @@
     {/if}
 
     <div class="align">
-        <div class="subtitle" style="width: 100%;">
-            Current version: {currentVersion}
+        <div class="text-sm" style="width: 100%;">
+            Current version: <span class="badge text-sm">v{currentVersion}</span>
             {#if version_info}
                 <span class="badge badge-success">{version_info}</span>
             {/if}
