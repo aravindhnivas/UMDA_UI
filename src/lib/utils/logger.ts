@@ -6,7 +6,7 @@ export class LOGGER {
     constructor(node: HTMLElement, options?: ITerminalOptions & ITerminalInitOnlyOptions) {
         if (node) {
             options = {
-                cursorBlink: true,
+                // cursorBlink: true,
                 fontSize: 16,
                 theme: {
                     background: '#202B33',
@@ -27,18 +27,18 @@ export class LOGGER {
     }
 
     info(message: string) {
-        this.term.writeln(`>> ${message}`);
+        this.term.writeln(`$ ${message}`);
     }
 
     warn(message: string) {
-        this.term.writeln(`\x1b[33m>> ${message}\x1b[0m`);
+        this.term.writeln(`\x1b[33m$ ${message}\x1b[0m`);
     }
 
     error(message: string) {
-        this.term.writeln(`\x1b[31m>> ${message}\x1b[0m`);
+        this.term.writeln(`\x1b[31m$ ${message}\x1b[0m`);
     }
 
     success(message: string) {
-        this.term.writeln(`\x1b[32m>> ${message}\x1b[0m`);
+        this.term.writeln(`\x1b[32m$ ${message}\x1b[0m`);
     }
 }

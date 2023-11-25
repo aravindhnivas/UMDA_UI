@@ -1,5 +1,6 @@
 import { LOGGER } from '$lib/utils/logger';
 import { createPersistanceStore } from '$utils/index';
+import { type ITerminalInitOnlyOptions, type ITerminalOptions } from 'xterm';
 
 export const create_logger_store = (value: OutputBoxtype[]) => {
     const { set, subscribe, update } = writable(value);
@@ -30,8 +31,8 @@ export const create_logger_store = (value: OutputBoxtype[]) => {
 function xterm_logger_store() {
     const { subscribe, set } = writable<LOGGER>();
 
-    function init(node: HTMLElement) {
-        const logger = new LOGGER(node);
+    function init(node: HTMLElement, options?: ITerminalOptions & ITerminalInitOnlyOptions) {
+        const logger = new LOGGER(node, options);
         set(logger);
     }
 
