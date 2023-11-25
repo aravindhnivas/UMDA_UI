@@ -167,8 +167,11 @@ export const start_and_check_umdapy = () =>
         const startServerBtn = document.getElementById('startServerButton') as HTMLButtonElement;
         try {
             toggle_loading(startServerBtn);
-            if (!get(developerMode) && !get(python_asset_ready))
-                return serverInfo.error('umdapy is not installed. Maybe check-umdapy-assets?');
+            if (!get(developerMode) && !get(python_asset_ready)) {
+                serverInfo.error('umdapy is not installed. Maybe check-umdapy-assets?');
+                return reject('umdapy is not installed. Maybe check-umdapy-assets?');
+            }
+                
             const out = await startServer();
             if (out) serverInfo.info(out);
             serverInfo.info(`PID: ${JSON.stringify(get(currentPortPID))}`);
@@ -179,7 +182,10 @@ export const start_and_check_umdapy = () =>
             }
             resolve(get(pyServerReady));
         } catch (error) {
-            reject(error);
+            if (error instanceof Error) {
+                reject(error);
+                serverInfo.error(error?.message ?? 'failed to start umdapy server');
+            }
         } finally {
             toggle_loading(startServerBtn);
         }
