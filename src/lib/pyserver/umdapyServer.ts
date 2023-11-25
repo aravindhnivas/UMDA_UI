@@ -137,6 +137,7 @@ export const fetchServerROOT = async (delay = 0) => {
     const URL = `http://localhost:${get(pyServerPORT)}/${import.meta.env.VITE_pypackage}`;
     // toast(`Fetching ${URL}`);
     const [_err, rootpage] = await oO(axios.get<{ data: string }>(URL));
+    
     if (_err) return serverInfo.error(`failed to fetch rootpage /${import.meta.env.VITE_pypackage}`);
     if (!rootpage) return;
     pyServerReady.set(true);

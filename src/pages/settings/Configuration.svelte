@@ -26,6 +26,7 @@
     import ConsoleBox from '$lib/components/ConsoleBox.svelte';
     import { install_umdapy_from_zipfile } from './utils/download-assets';
     import { check_umdapy_assets_status } from './utils/assets-status';
+    import TerminalBox from '$lib/components/TerminalBox.svelte';
 
     const fetch_port = async () => {
         if ($port_lock) return toast.warning('Port is locked');
@@ -43,6 +44,10 @@
             toast.error(error as string);
         }
     };
+    let terminalDiv: HTMLDivElement;
+    onMount(() => {
+        serverInfo.init(terminalDiv);
+    });
 </script>
 
 <Layout id="Configuration">
@@ -54,10 +59,13 @@
         {/if}
         <div class="badge badge-{$serverCurrentStatus.type}">{$serverCurrentStatus.value}</div>
         <Checkbox class="ml-auto" bind:value={$developerMode} label="Developer mode" />
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
         <i
             on:click={() => {
+                // console.log($serverInfo.info('settings opened'));
                 const modal = document.getElementById('umdaui_modal');
-                if (modal) modal.showModal();
+                modal?.showModal();
             }}
             class="i-material-symbols-settings-alert-outline"
         ></i>
@@ -126,5 +134,6 @@
         <button class="btn btn-error" on:click={async () => await killPID()}>kill PID</button>
     </div>
     <!-- <div class="card shadow-xl bg-orange-300 w-full h-[100rem] overflow-auto p-5">Card</div> -->
-    <ConsoleBox bind:console_arr={$serverInfo} />
+    <!-- <ConsoleBox bind:console_arr={$serverInfo} /> -->
+    <TerminalBox bind:terminalDiv bind:terminal={$serverInfo} />
 </Layout>

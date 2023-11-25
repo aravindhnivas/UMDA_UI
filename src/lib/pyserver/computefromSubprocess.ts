@@ -1,7 +1,7 @@
 import { pyProgram, pythonscript, get, pyVersion, pyServerReady, developerMode } from './stores';
 import { running_processes } from '$settings/utils/stores';
 import { path, fs, shell } from '@tauri-apps/api';
-import { LOGGER } from '$settings/utils/stores';
+import { terminal_log } from '$settings/utils/stores';
 import { Alert } from '$utils/stores';
 import { tryF } from 'ts-try';
 import { get_tmpdir } from '$utils/index';
@@ -155,7 +155,7 @@ export default async function <T>({
             }
             dispatchEvent(target, { py, pyfile, error }, 'pyEventStderr');
             console.log(`Output from python: ${errorString}`);
-            LOGGER.error(errorString);
+            terminal_log.error(errorString);
         });
 
         py.stdout.on('data', dataString => {
@@ -166,7 +166,7 @@ export default async function <T>({
             } else {
                 dataReceived += dataString;
             }
-            LOGGER.info(dataString);
+            terminal_log.info(dataString);
             console.log(dataString.trim());
             dispatchEvent(target, { py, pyfile, dataReceived, stdout: dataString }, 'pyEventData');
         });

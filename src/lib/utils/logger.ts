@@ -6,6 +6,7 @@ export class LOGGER {
     constructor(node: HTMLElement, options?: ITerminalOptions & ITerminalInitOnlyOptions) {
         if (node) {
             options = {
+                cursorBlink: true,
                 fontSize: 16,
                 theme: {
                     background: '#202B33',
@@ -19,7 +20,7 @@ export class LOGGER {
             this.term.open(node);
             fitAddon.fit();
             
-            this.term.writeln('>> Welcome to the console!');
+            // this.term.writeln('>> Welcome to the console!');
         } else {
             throw new Error('No node provided!');
         }
@@ -29,7 +30,7 @@ export class LOGGER {
         this.term.writeln(`>> ${message}`);
     }
 
-    warning(message: string) {
+    warn(message: string) {
         this.term.writeln(`\x1b[33m>> ${message}\x1b[0m`);
     }
 
