@@ -135,6 +135,20 @@
         "security": {
             "csp": null
         },
+        "updater": {
+            "active": true,
+            "endpoints": [
+                "https://umdaui-update-server.aravindhnivas.workers.dev/v1/{{target}}/{{arch}}/{{current_version}}"
+            ],
+            "dialog": false,
+            "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IENGMjlGOUNENzEwMTI5ODcKUldTSEtRRnh6Zmtwei9pallycXRudUlaalBDVzVxSlVwL2Y1T3ByaUptOFlsajNpSUVpdmxYb0oK",
+            "windows": {
+                "installMode": "passive",
+                "installerArgs": [
+                    "/S"
+                ]
+            }
+        },
         "windows": [
             {
                 "fullscreen": false,
