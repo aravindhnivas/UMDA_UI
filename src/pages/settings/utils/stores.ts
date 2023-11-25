@@ -28,33 +28,33 @@ export const create_logger_store = (value: OutputBoxtype[]) => {
 };
 
 function xterm_logger_store() {
-    const { subscribe, set } = writable<LOGGER>(null);
+    const { subscribe, set } = writable<LOGGER>();
 
     function init(node: HTMLElement) {
         const logger = new LOGGER(node);
         set(logger);
     }
 
-    function info(message) {
-        this.subscribe(logger => {
+    function info(message: string) {
+        subscribe((logger) => {
             logger?.info(message);
         })();
     }
 
-    function warn(message) {
-        this.subscribe(logger => {
+    function warn(message: string) {
+        subscribe(logger => {
             logger?.warn(message);
         })();
     }
 
-    function error(message) {
-        this.subscribe(logger => {
+    function error(message: string) {
+        subscribe(logger => {
             logger?.error(message);
         })();
     }
 
-    function success(message) {
-        this.subscribe(logger => {
+    function success(message: string) {
+        subscribe(logger => {
             logger?.success(message);
         })();
     }
