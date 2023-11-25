@@ -83,7 +83,7 @@ export const install_update_without_promt = writable(false);
 export const python_asset_ready_to_install = createPersistanceStore(false, 'python_asset_ready_to_install');
 export const assets_installation_required = createPersistanceStore(false, 'assets_installation_required');
 export const python_asset_ready = writable(false);
-export const downloadURL = createPersistanceStore<string>(import.meta.env.downloadURL, 'downloadURL');
+export const downloadURL = createPersistanceStore<string>("", 'downloadURL');
 
 export const running_processes = writable<
     {

@@ -1,16 +1,11 @@
 <script lang="ts">
     import {
-        // outputbox,
         downloadURL,
-        // downloadoverrideURL,
-        // install_dialog_active,
+        downloadoverrideURL,
         python_asset_ready_to_install,
         install_update_without_promt,
     } from '$pages/settings/utils/stores';
-    // import { currentVersion } from '$src/js/functions';
-    // import Notify from '$lib/notifier/Notify.svelte';
     import { updateError } from '$utils/stores';
-
     import { activateChangelog } from '$utils/stores';
     import { checkUpdate, installUpdate } from '@tauri-apps/api/updater';
     import { relaunch } from '@tauri-apps/api/process';
@@ -26,6 +21,7 @@
     import { getVersion } from '@tauri-apps/api/app';
     import { git_url } from '$lib/utils';
     import TerminalBox from '$lib/components/TerminalBox.svelte';
+    import { Checkbox } from '$lib/components';
 
     let install_dialog_active = false;
     export const check_for_update = async (log = false) => {
@@ -149,7 +145,9 @@
     <div class="align">
         <div class="subtitle" style="width: 100%;">
             Current version: {currentVersion}
-            <span class="badge badge-success">{version_info}</span>
+            {#if version_info}
+                <span class="badge badge-success">{version_info}</span>
+            {/if}
         </div>
 
         <div class="align">
@@ -194,21 +192,19 @@
 
         {#if download_progress}
             <div class="progress__div">
-                <span class="badge badge-info">update-progress</span>
+                <span class="badge badge-info">updating...</span>
                 <LinearProgress progress={download_progress} />
             </div>
         {/if}
 
-        <hr />
+        <h3>Python assets download</h3>
 
-        <h3>Assets download</h3>
-
-        <!-- {#if import.meta.env.DEV}
-            <div class="align">
-                <Textfield bind:value={$downloadURL } label="download-URL" style="width: 100%" />
-                <Switch bind:selected={$downloadoverrideURL} label="override URL" />
+        {#if import.meta.env.DEV}
+            <div class="flex w-full gap-2">
+                <Textfield bind:value={$downloadURL} label="download-URL" style="width: 100%" />
+                <Checkbox bind:value={$downloadoverrideURL} label="override URL" />
             </div>
-        {/if} -->
+        {/if}
 
         <div class="align">
             <button
@@ -254,8 +250,6 @@
                 <LinearProgress progress={assets_download_progress} />
             </div>
         {/if}
-
-        <!-- <OutputBox bind:output={$outputbox} heading="update info" /> -->
     </div>
     <TerminalBox bind:terminalDiv bind:terminal={$outputbox} />
 </Layout>

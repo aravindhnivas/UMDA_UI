@@ -76,7 +76,8 @@ export async function downloadZIP() {
         }
 
         outputbox.success(download_output as string);
-
+        outputbox.warn(`Downloaded to: ${fileName}`);
+        
         const duration = performance.now() - startTime;
         outputbox.warn(`Time taken to download: ${round(duration, 0)} ms`);
         outputbox.success(`assets downloaded`);
