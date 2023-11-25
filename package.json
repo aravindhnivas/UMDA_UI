@@ -17,6 +17,7 @@
     "devDependencies": {
         "@iconify/json": "^2.2.142",
         "@macfja/svelte-persistent-store": "^2.4.1",
+        "@smui/linear-progress": "7.0.0-beta.15",
         "@smui/menu-surface": "7.0.0-beta.15",
         "@smui/textfield": "7.0.0-beta.15",
         "@sveltejs/vite-plugin-svelte": "^2.5.0",

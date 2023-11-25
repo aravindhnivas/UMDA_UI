@@ -186,7 +186,7 @@ export function unZIP(installation_request = true) {
 let current_release_data = {};
 
 const get_assets_url = async () => {
-    const [_err1, response] = await oO(axios<{ tag_name: string }>(git_url.latest()));
+    const [_err1, response] = await oO(axios<{ tag_name: string }>(git_url.py.latest()));
     if (_err1) return outputbox.error(_err1);
     if (!response) return;
 

@@ -32,3 +32,8 @@ function openModalStore() {
 }
 export const Alert = openModalStore();
 export const active_tab = createPersistanceStore('Home', 'active_tab');
+
+export const updateInterval = createPersistanceStore(15, 'updateInterval')
+export const updateError = writable('')
+export const updateStatus = writable('')
+export const activateChangelog = writable(false)

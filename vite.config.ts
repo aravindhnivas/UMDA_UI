@@ -33,6 +33,7 @@ export default defineConfig(async () => ({
     resolve: {
         alias: {
             $lib: path.resolve('./src/lib/'),
+            $pages: path.resolve('./src/pages/'),
             $utils: path.resolve('./src/utils/'),
             $settings: path.resolve('./src/pages/settings/'),
             $components: path.resolve('./src/lib/components/'),

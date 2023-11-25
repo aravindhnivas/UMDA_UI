@@ -58,3 +58,12 @@ button.btn {
 .mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
     color: black;
 }
+
+.align {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    width: 100%;
+}

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { terminal_log } from '$settings/utils/stores';
-    import { git_url } from '$lib/utils/index';
+    // import { git_url } from '$lib/utils/index';
     import Layout from './comp/Layout.svelte';
     import TerminalBox from '$lib/components/TerminalBox.svelte';
 

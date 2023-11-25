@@ -71,11 +71,10 @@ function xterm_logger_store() {
     };
 }
 
-// export const loggerStore = createLoggerStore();
 export const serverInfo = xterm_logger_store();
 export const terminal_log = xterm_logger_store();
+export const outputbox = xterm_logger_store();
 
-export const outputbox = create_logger_store([]);
 export const asset_download_required = writable(false);
 export const assets_version_available = writable('');
 export const downloadoverrideURL = writable(import.meta.env.DEV);
