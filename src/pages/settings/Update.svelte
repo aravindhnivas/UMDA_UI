@@ -11,7 +11,7 @@
     import { relaunch } from '@tauri-apps/api/process';
     import { stopServer } from '$lib/pyserver/umdapyServer';
     import { listen } from '@tauri-apps/api/event';
-    import LinearProgress from '@smui/linear-progress';
+    // import LinearProgress from '@smui/linear-progress';
     import { outputbox } from '$settings/utils/stores';
     import Textfield from '@smui/textfield';
     import { footerMsg } from '$lib/utils/initialise';
@@ -193,7 +193,8 @@
         {#if download_progress}
             <div class="progress__div">
                 <span class="badge badge-info">updating...</span>
-                <LinearProgress progress={download_progress} />
+                <!-- <LinearProgress progress={download_progress} /> -->
+                <progress class="progress w-full" value={download_progress} max="1"></progress>
             </div>
         {/if}
 
@@ -247,7 +248,8 @@
         {#if assets_download_progress > 0 && assets_download_progress < 1}
             <div class="progress__div">
                 <span class="badge badge-info">update-progress</span>
-                <LinearProgress progress={assets_download_progress} />
+                <!-- <LinearProgress progress={assets_download_progress} /> -->
+                <progress class="progress w-full" value={assets_download_progress} max="1"></progress>
             </div>
         {/if}
     </div>

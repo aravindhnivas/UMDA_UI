@@ -18,7 +18,6 @@
         "@iconify/json": "^2.2.146",
         "@loadingio/loading.css": "^3.2.0",
         "@macfja/svelte-persistent-store": "^2.4.1",
-        "@smui/linear-progress": "7.0.0-beta.15",
         "@smui/menu-surface": "7.0.0-beta.15",
         "@smui/textfield": "7.0.0-beta.15",
         "@sveltejs/vite-plugin-svelte": "^3.0.1",
