@@ -7,11 +7,18 @@ export const createPersistanceStore = <T>(value: T, key: string) => {
     return persist(writable<T>(value), createLocalStorage(), key);
 };
 
-export const toggle_loading = (node: HTMLButtonElement) => {
+export const toggle_loading = (node: HTMLButtonElement, className = 'running') => {
     if (!node) return;
-    console.log(node);
+    // console.log(node);
 
-    node.classList.contains('is-loading') ? node.classList.remove('is-loading') : node.classList.add('is-loading');
+    if(node.classList.contains(className)) {
+        node.classList.remove(className)
+        node.disabled = false;
+    } else {
+        node.classList.add(className)
+        node.disabled = true;
+    }
+    // node.classList.contains('running') ? node.classList.remove('running') : node.classList.add('running');
 };
 
 export const get_tmpdir = async () => {

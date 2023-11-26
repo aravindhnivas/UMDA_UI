@@ -14,7 +14,7 @@
     // import LinearProgress from '@smui/linear-progress';
     import { outputbox } from '$settings/utils/stores';
     import Textfield from '@smui/textfield';
-    import { footerMsg } from '$lib/utils/initialise';
+    import { footerMsg, sleep } from '$lib/utils/initialise';
     import { download_assets, check_assets_update, unZIP } from '$pages/settings/utils/download-assets';
     import { updateInterval } from '$utils/stores';
     import Layout from './comp/Layout.svelte';
@@ -22,6 +22,7 @@
     import { git_url } from '$lib/utils';
     import TerminalBox from '$lib/components/TerminalBox.svelte';
     import { Checkbox } from '$lib/components';
+    import { toggle_loading } from '$utils/index';
 
     let install_dialog_active = false;
     export const check_for_update = async (log = false) => {
@@ -210,37 +211,42 @@
         <div class="align">
             <button
                 id="btn-check-asset-update"
-                class="btn"
+                class="btn ld-ext-right"
                 on:click={async ({ currentTarget }) => {
                     if (!window.navigator.onLine) return outputbox.warn('No internet connection');
-                    // toggle_loading(currentTarget);
+                    toggle_loading(currentTarget);
                     const [_err] = await oO(check_assets_update({ download_request: true }));
-                    // toggle_loading(currentTarget);
+                    toggle_loading(currentTarget);
                 }}
             >
                 Check assets update
+                <div class="ld ld-ring ld-spin"></div>
             </button>
             <button
                 id="btn-download-asset"
-                class="btn"
+                class="btn ld-ext-right"
                 on:click={async ({ currentTarget }) => {
                     if (!window.navigator.onLine) return outputbox.warn('No internet connection');
                     assets_download_progress = 0;
-                    // toggle_loading(currentTarget);
+                    toggle_loading(currentTarget);
                     const [_err] = await oO(download_assets());
-                    // toggle_loading(currentTarget);
-                }}>Download assets {$python_asset_ready_to_install ? 'again' : ''}</button
+                    toggle_loading(currentTarget);
+                }}
+                >Download assets {$python_asset_ready_to_install ? 'again' : ''}
+                <div class="ld ld-ring ld-spin"></div></button
             >
 
             {#if $python_asset_ready_to_install}
                 <button
                     id="install-asset-btn"
-                    class="btn"
+                    class="btn ld-ext-right"
                     on:click={async ({ currentTarget }) => {
-                        // toggle_loading(currentTarget);
+                        toggle_loading(currentTarget);
                         const [_err] = await oO(unZIP(false));
-                        // toggle_loading(currentTarget);
-                    }}>Install assets</button
+                        toggle_loading(currentTarget);
+                    }}
+                    >Install assets
+                    <div class="ld ld-ring ld-spin"></div></button
                 >
             {/if}
         </div>
