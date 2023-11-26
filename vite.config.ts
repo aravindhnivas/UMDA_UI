@@ -49,5 +49,15 @@ export default defineConfig(async () => ({
         port: 1420,
         strictPort: true,
     },
-    envPrefix: ['VITE_']
+    envPrefix: ['VITE_'],
+    build: {
+        chunkSizeWarningLimit: 2000,
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    'xterm': ['xterm'],
+                },
+            },
+        },
+    },
 }));
