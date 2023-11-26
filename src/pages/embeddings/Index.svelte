@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { LoadingBtn } from '$lib/components/';
+    // import { Loadingbtn } from '$lib/components/';
     import Page from '$lib/layouts/Page.svelte';
     import { Pane } from 'svelte-splitpanes';
 </script>
