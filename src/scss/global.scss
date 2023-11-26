@@ -27,20 +27,15 @@ body {
     height: 100%;
 }
 
-input.input, button.btn, .select {
-    min-height: 2rem!important;
-    height: 2rem!important;
-}
+// input.input, button.btn, .select {
+//     min-height: 2rem!important;
+//     height: 2rem!important;
+// }
 
 button.btn {
     background-color: transparent;
     color: black;
     border: solid 1px;
-    // height: 2rem;
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
-    min-height: 2rem;
-    font-size: 0.875rem;
 
     // hover when button is not disabled
     &:not([disabled]):hover {

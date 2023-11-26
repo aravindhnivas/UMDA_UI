@@ -154,7 +154,7 @@
         <div class="align">
             <div class="align">
                 <button
-                    class="btn"
+                    class="btn btn-sm"
                     class:is-warning={updateReadyToInstall}
                     id="updateCheckBtn"
                     on:click={async () => {
@@ -166,7 +166,7 @@
                 </button>
 
                 <button
-                    class="btn"
+                    class="btn btn-sm"
                     on:click={() => {
                         $activateChangelog = true;
                     }}>What's New <i class="i-mdi-open-in-new ml-2 text-xs" /></button
@@ -211,7 +211,7 @@
         <div class="align">
             <button
                 id="btn-check-asset-update"
-                class="btn ld-ext-right"
+                class="btn btn-sm ld-ext-right"
                 on:click={async ({ currentTarget }) => {
                     if (!window.navigator.onLine) return outputbox.warn('No internet connection');
                     toggle_loading(currentTarget);
@@ -224,7 +224,7 @@
             </button>
             <button
                 id="btn-download-asset"
-                class="btn ld-ext-right"
+                class="btn btn-sm ld-ext-right"
                 on:click={async ({ currentTarget }) => {
                     if (!window.navigator.onLine) return outputbox.warn('No internet connection');
                     assets_download_progress = 0;
@@ -239,7 +239,7 @@
             {#if $python_asset_ready_to_install}
                 <button
                     id="install-asset-btn"
-                    class="btn ld-ext-right"
+                    class="btn btn-sm ld-ext-right"
                     on:click={async ({ currentTarget }) => {
                         toggle_loading(currentTarget);
                         const [_err] = await oO(unZIP(false));

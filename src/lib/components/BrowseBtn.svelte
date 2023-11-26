@@ -29,7 +29,7 @@
 </script>
 
 <div class="row">
-    <button disabled={lock ?? false} class="btn" on:click={browse_folder}>Browse</button>
+    <button disabled={lock ?? false} class="btn btn-sm" on:click={browse_folder}>Browse</button>
     <Textfield bind:value disabled={lock ?? false} type="text" {label} />
     <!-- svelte-ignore missing-declaration -->
     <!-- svelte-ignore a11y-click-events-have-key-events -->

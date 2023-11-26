@@ -7,5 +7,5 @@
     export let terminalDiv: HTMLDivElement;
 </script>
 
-<button class="btn ml-auto" on:click={() => terminal?.term.clear()}>Clear</button>
+<button class="btn btn-sm ml-auto" on:click={() => terminal?.term.clear()}>Clear</button>
 <div class={className} bind:this={terminalDiv}></div>

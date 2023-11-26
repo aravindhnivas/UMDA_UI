@@ -11,7 +11,7 @@
                     <div class="max-w-md">
                         <h1 class="text-5xl font-bold">UMDA - UI</h1>
                         <p class="py-6">Unsupervised Molecule Discovery in Astrophysics - User Interface</p>
-                        <button class="btn">Get Started</button>
+                        <button class="btn btn-sm">Get Started</button>
                     </div>
                 </div>
             </div>

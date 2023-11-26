@@ -72,7 +72,7 @@
     </div>
 
     <div class="flex items-center gap-1">
-        <button class="btn" on:click={async () => await getPyVersion()}>get PyVersion</button>
+        <button class="btn btn-sm" on:click={async () => await getPyVersion()}>get PyVersion</button>
     </div>
     {#if $developerMode}
         <BrowseBtn bind:value={$pythonpath} dir={false} label="Enter python location or python keyword" />
@@ -81,16 +81,16 @@
 
     <div class="flex gap-1 mt-3">
         <button
-            class="btn"
+            class="btn btn-sm"
             on:click={async () => {
                 await check_umdapy_assets_status({ installation_request: true });
             }}>check-umdapy-assets</button
         >
 
-        <button class="btn" on:click={get_local_dir}>APP Local data <i class="i-mdi-open-in-new" /></button>
+        <button class="btn btn-sm" on:click={get_local_dir}>APP Local data <i class="i-mdi-open-in-new" /></button>
 
         <button
-            class="btn ml-auto"
+            class="btn btn-sm ml-auto"
             on:click={async () => {
                 await oO(install_umdapy_from_zipfile());
             }}>Install from ZIPfile <i class="i-material-symbols-drive-folder-upload-outline-sharp ml-1" /></button
@@ -116,11 +116,11 @@
 
         <button
             disabled={$pyServerReady}
-            class="btn"
+            class="btn btn-sm"
             id="startServerButton"
             on:click={start_and_check_umdapy_with_toast}>Start Server</button
         >
-        <button class="btn btn-error" id="stopServerButton" on:click={async () => await stopServer()}
+        <button class="btn btn-sm btn-error" id="stopServerButton" on:click={async () => await stopServer()}
             >Stop Server</button
         >
 
@@ -128,11 +128,11 @@
     </div>
 
     <div class="flex gap-1 items-center">
-        <button class="btn" on:click={async () => await fetchServerROOT()}>Check Server connection</button>
-        <button class="btn" on:click={async () => await checkNetstat()}>Check PORT status</button>
+        <button class="btn btn-sm" on:click={async () => await fetchServerROOT()}>Check Server connection</button>
+        <button class="btn btn-sm" on:click={async () => await checkNetstat()}>Check PORT status</button>
 
         <Textfield value={$currentPortPID.join(', ')} label="current port PID" />
-        <button class="btn btn-error" on:click={async () => await killPID()}>kill PID</button>
+        <button class="btn btn-sm btn-error" on:click={async () => await killPID()}>kill PID</button>
     </div>
     <!-- <div class="card shadow-xl bg-orange-300 w-full h-[100rem] overflow-auto p-5">Card</div> -->
     <!-- <ConsoleBox bind:console_arr={$serverInfo} /> -->
