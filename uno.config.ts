@@ -2,6 +2,7 @@
 import { defineConfig, presetIcons, presetUno } from 'unocss';
 import { presetDaisy } from 'unocss-preset-daisy';
 import extractorSvelte from '@unocss/extractor-svelte';
+import transformerDirectives from '@unocss/transformer-directives'
 
 export default defineConfig({
     presets: [
@@ -13,6 +14,9 @@ export default defineConfig({
         }),
         presetUno(),
         presetDaisy(),
+    ],
+    transformers: [
+        transformerDirectives(),
     ],
     extractors: [extractorSvelte()],
 });

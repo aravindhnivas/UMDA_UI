@@ -27,17 +27,17 @@ body {
     height: 100%;
 }
 
-// input.input, button.btn, .select {
-//     min-height: 2rem!important;
-//     height: 2rem!important;
-// }
+.box__div {
+    @apply card w-full h-full bg-orange-300 bg-opacity-50 shadow-xl;
+}
+
+
 
 button.btn {
     background-color: transparent;
     color: black;
     border: solid 1px;
 
-    // hover when button is not disabled
     &:not([disabled]):hover {
         background-color: black;
         color: white;
@@ -54,6 +54,7 @@ button.btn {
         }
     }
 }
+
 
 .mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
     color: black;

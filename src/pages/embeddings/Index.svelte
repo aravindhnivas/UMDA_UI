@@ -8,6 +8,7 @@
     <svelte:fragment slot="body">
         <Pane class="p-5">
             <h1 class="text-3xl font-bold">Embeddings</h1>
+            <button class="btn btn-sm">Click</button>
         </Pane>
     </svelte:fragment>
 </Page>
