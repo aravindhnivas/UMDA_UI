@@ -9,7 +9,7 @@
     horizontal={false}
     {id}
     style="display: {$active_tab === id ? 'flex' : 'none'};"
-    class="box__div animate__animated animate__fadeIn"
+    class="box__div animate__animated animate__fadeIn h-full w-full overflow-hidden"
 >
     <slot name="body" />
 </Splitpanes>

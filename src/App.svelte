@@ -24,28 +24,13 @@
     .parent {
         display: grid;
         grid-template-rows: auto 1fr auto;
-    }
-
-    header,
-    footer,
-    main {
-        padding: 0.5rem;
+        grid-template-columns: 1fr;
+        gap: 0.5em;
     }
 
     main {
         display: grid;
         overflow: auto;
-    }
-
-    main {
-        grid-column: 1 / 4;
-    }
-
-    header {
-        grid-column: 1 / 4;
-    }
-    footer {
-        grid-column: 1 / 4;
-        padding: 0;
+        height: 100%;
     }
 </style>

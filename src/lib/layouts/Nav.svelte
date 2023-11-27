@@ -1,9 +1,9 @@
 <script lang="ts">
     import { active_tab } from '$utils/stores';
-    let tabs = ['Home', 'Embeddings', 'Settings'];
+    let tabs = ['Home', 'Training', 'Settings'];
 </script>
 
-<div class="tabs tabs-boxed bg-orange-300 bg-opacity-50 shadow-xl">
+<div class="tabs tabs-boxed bg-orange-300 bg-opacity-50 shadow-xl rounded-0">
     {#each tabs as tab (tab)}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->

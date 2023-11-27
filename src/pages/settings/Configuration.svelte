@@ -74,6 +74,7 @@
     <div class="flex items-center gap-1">
         <button class="btn btn-sm" on:click={async () => await getPyVersion()}>get PyVersion</button>
     </div>
+
     {#if $developerMode}
         <BrowseBtn bind:value={$pythonpath} dir={false} label="Enter python location or python keyword" />
         <BrowseBtn bind:value={$pythonscript} dir={true} label="Python source file" />
@@ -134,7 +135,5 @@
         <Textfield value={$currentPortPID.join(', ')} label="current port PID" />
         <button class="btn btn-sm btn-error" on:click={async () => await killPID()}>kill PID</button>
     </div>
-    <!-- <div class="card shadow-xl bg-orange-300 w-full h-[100rem] overflow-auto p-5">Card</div> -->
-    <!-- <ConsoleBox bind:console_arr={$serverInfo} /> -->
     <TerminalBox bind:terminalDiv bind:terminal={$serverInfo} />
 </Layout>
