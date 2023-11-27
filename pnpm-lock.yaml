@@ -19,6 +19,9 @@ devDependencies:
   '@macfja/svelte-persistent-store':
     specifier: ^2.4.1
     version: 2.4.1(svelte@4.2.7)
+  '@smui/data-table':
+    specifier: 7.0.0-beta.15
+    version: 7.0.0-beta.15(svelte@4.2.7)(typescript@5.3.2)
   '@smui/menu-surface':
     specifier: 7.0.0-beta.15
     version: 7.0.0-beta.15(svelte@4.2.7)(typescript@5.3.2)

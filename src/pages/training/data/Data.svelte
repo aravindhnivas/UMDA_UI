@@ -1,17 +1,30 @@
 <script lang="ts">
     import computePy from '$lib/pyserver/computePy';
     import { dialog } from '@tauri-apps/api';
+    import DataOutput from './DataOutput.svelte';
 
     export let id: string;
     export let display: string = 'none';
 
-    const filetypes = ['csv', 'binary', 'hdf5', 'json'];
+    const filetypes = ['csv', 'binary', 'hdf', 'json'];
 
     let filename = '';
     let filetype = 'csv';
-    let key = '';
+    let key = 'data';
+
+    let data = {};
 
     const load_data = async (e: MouseEvent) => {
+        if (!filename) {
+            toast.error('Please provide a filename');
+            return;
+        }
+
+        if (filetype === 'hdf5' && !key) {
+            toast.error('Please provide a key');
+            return;
+        }
+
         const dataFromPython = await computePy({
             e,
             pyfile: 'training.read_data',
@@ -26,7 +39,7 @@
             toast.error('Could not access pyfile');
             return Promise.reject('Could not access pyfile');
         }
-
+        data = dataFromPython;
         console.warn(dataFromPython);
     };
 </script>
@@ -52,9 +65,10 @@
             }}>Browse file</button
         >
         <input class="input input-sm input-bordered join-item w-full" placeholder="filename" bind:value={filename} />
-        {#if filename && filetype === 'hdf5'}
+        {#if filetype === 'hdf'}
             <input class="input input-sm input-bordered join-item" placeholder="key" bind:value={key} />
         {/if}
         <button class="button join-item" on:click={load_data}>load</button>
     </div>
+    <DataOutput {data} />
 </div>

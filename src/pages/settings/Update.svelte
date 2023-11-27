@@ -11,10 +11,9 @@
     import { relaunch } from '@tauri-apps/api/process';
     import { stopServer } from '$lib/pyserver/umdapyServer';
     import { listen } from '@tauri-apps/api/event';
-    // import LinearProgress from '@smui/linear-progress';
     import { outputbox } from '$settings/utils/stores';
     import Textfield from '@smui/textfield';
-    import { footerMsg, sleep } from '$lib/utils/initialise';
+    import { footerMsg } from '$lib/utils/initialise';
     import { download_assets, check_assets_update, unZIP } from '$pages/settings/utils/download-assets';
     import { updateInterval } from '$utils/stores';
     import Layout from './comp/Layout.svelte';

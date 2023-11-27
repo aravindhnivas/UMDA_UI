@@ -5,7 +5,7 @@
     import { Data, Training } from '.';
     const sidebar_items = ['Data', 'Training', 'Test'];
 
-    let active_item = 'data';
+    let active_item = sidebar_items[0];
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
