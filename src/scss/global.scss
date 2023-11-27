@@ -32,8 +32,11 @@ body {
 }
 
 
+.button.is-loading {
+    border: solid black 1px;
+}
 
-button.btn {
+button.btn, button.button {
     background-color: transparent;
     color: black;
     border: solid 1px;

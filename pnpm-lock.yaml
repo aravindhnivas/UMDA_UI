@@ -58,6 +58,9 @@ devDependencies:
   axios:
     specifier: ^1.6.2
     version: 1.6.2
+  bulma:
+    specifier: ^0.9.4
+    version: 0.9.4
   cooltipz-css:
     specifier: ^2.3.0
     version: 2.3.0(sass@1.69.5)
@@ -2578,6 +2581,10 @@ packages:
 
   /buffer-crc32@0.2.13:
     resolution: {integrity: sha512-VO9Ht/+p3SN7SKWqcrgEzjGbRSJYTx+Q1pTQC0wrWqHx0vpJraQ6GtHx8tvcg1rlK1byhU5gccxgOgj7B0TDkQ==}
+    dev: true
+
+  /bulma@0.9.4:
+    resolution: {integrity: sha512-86FlT5+1GrsgKbPLRRY7cGDg8fsJiP/jzTqXXVqiUZZ2aZT8uemEOHlU1CDU+TxklPEZ11HZNNWclRBBecP4CQ==}
     dev: true
 
   /cac@6.7.14:

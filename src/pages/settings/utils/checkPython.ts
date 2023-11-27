@@ -1,5 +1,5 @@
 import { pyVersion, pyServerReady, umdapyVersion } from '$lib/pyserver/stores';
-import computePy_func from '$lib/pyserver/computePy';
+import computePy from '$lib/pyserver/computePy';
 import { asset_download_required } from './stores';
 
 export async function getPyVersion(e?: MouseEvent) {
@@ -7,7 +7,7 @@ export async function getPyVersion(e?: MouseEvent) {
         toast.error('start umdapy server first!');
         return Promise.reject('start umdapy server first!');
     }
-    const dataFromPython = await computePy_func<{ python: string; umdapy: string }>({
+    const dataFromPython = await computePy<{ python: string; umdapy: string }>({
         e,
         target: e?.currentTarget as HTMLButtonElement,
         pyfile: 'getVersion',

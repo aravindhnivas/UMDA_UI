@@ -31,6 +31,7 @@
         "@zmotivat0r/o0": "^1.0.2",
         "animate.css": "^4.1.1",
         "axios": "^1.6.2",
+        "bulma": "^0.9.4",
         "cooltipz-css": "^2.3.0",
         "daisyui": "^3.9.4",
         "hover.css": "^2.3.2",

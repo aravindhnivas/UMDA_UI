@@ -15,7 +15,9 @@
         <Pane class="p-2" size={15} minSize={10} maxSize={20}>
             <ul class="menu rounded-box">
                 {#each sidebar_items as item}
-                    <li on:click={() => (active_item = item)}><span>{item}</span></li>
+                    <li on:click={() => (active_item = item)}>
+                        <span class:active={active_item == item}>{item}</span>
+                    </li>
                 {/each}
             </ul>
         </Pane>
