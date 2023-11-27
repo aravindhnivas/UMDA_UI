@@ -11,8 +11,8 @@ dependencies:
 
 devDependencies:
   '@iconify/json':
-    specifier: ^2.2.146
-    version: 2.2.146
+    specifier: ^2.2.147
+    version: 2.2.147
   '@loadingio/loading.css':
     specifier: ^3.2.0
     version: 3.2.0
@@ -95,8 +95,8 @@ devDependencies:
     specifier: 7.0.0-beta.15
     version: 7.0.0-beta.15(svelte@4.2.7)(typescript@5.3.2)
   svelte-sonner:
-    specifier: ^0.3.3
-    version: 0.3.3(svelte@4.2.7)
+    specifier: ^0.3.6
+    version: 0.3.6(svelte@4.2.7)
   svelte-splitpanes:
     specifier: ^0.8.0
     version: 0.8.0(svelte@4.2.7)
@@ -665,8 +665,8 @@ packages:
     dev: true
     optional: true
 
-  /@iconify/json@2.2.146:
-    resolution: {integrity: sha512-Z+kOCjsQSivgphCsaHM7Qg/vjGAzY1QXNREv2JllTh3Wn68LcDS4cie+nox2pfrnF/41B4UM6OI2CrZ00AU2Sg==}
+  /@iconify/json@2.2.147:
+    resolution: {integrity: sha512-VTW1vVivOq5RVcZu7xqCXWptGH7fo6VPsUxT5QBlbBS042859YZnK1JTXHJu4InMuTwQC/3KLP+InJJ5kawOGg==}
     dependencies:
       '@iconify/types': 2.0.0
       pathe: 1.1.1
@@ -3912,8 +3912,8 @@ packages:
       typescript: 5.3.2
     dev: true
 
-  /svelte-sonner@0.3.3(svelte@4.2.7):
-    resolution: {integrity: sha512-fUPHh5X88GctOjUBXflfXWplJxErDDm2erYh3EUjMWdfYiT9SGMpAv5NGDGbmKfZ+qUKOiTFrJ2P/iahYrTvhA==}
+  /svelte-sonner@0.3.6(svelte@4.2.7):
+    resolution: {integrity: sha512-MwVhh4nxCqTBLHYamRw+q9erZC2Y4wuL8mUa7phgq/9kq9VdTr+/6S1PX1CnALJPy2rkc7TlIECYTJavUkoWlg==}
     peerDependencies:
       svelte: '>=3 <5'
     dependencies:
