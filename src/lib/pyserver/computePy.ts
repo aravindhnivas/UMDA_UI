@@ -56,6 +56,10 @@ export default async function <T>({ e, target, pyfile, args, general }: Type) {
                 pyfile,
                 args,
             });
+
+            if ((dataFromPython as any)?.warnings) {
+                Alert.warn((dataFromPython as any).warnings);
+            }
         }
 
         return Promise.resolve(dataFromPython);

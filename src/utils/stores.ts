@@ -3,11 +3,11 @@ import { writable } from 'svelte/store';
 
 function openModalStore() {
     const defaultValues: {
-        type: 'error' | 'warning';
+        type: 'error' | 'info' | 'warn';
         content: string | Error;
         open: boolean;
     } = {
-        type: 'warning',
+        type: 'info',
         content: 'Content',
         open: false,
     };
@@ -23,8 +23,13 @@ function openModalStore() {
             update(_n => ({ content, type: 'error', open: true }));
         },
         info(content: string) {
-            update(n => {
-                return { content, type: 'warning', open: true };
+            update(_n => {
+                return { content, type: 'info', open: true };
+            });
+        },
+        warn(content: string) {
+            update(_n => {
+                return { content, type: 'warn', open: true };
             });
         },
         reset: () => set(defaultValues),

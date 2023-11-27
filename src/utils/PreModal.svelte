@@ -14,9 +14,24 @@
     }
     // $: console.log($Alert)
     let headerBackground = '#453b1c5c';
+    const background_colors: {
+        [key: string]: string;
+    } = {
+        info: '#453b1c5c',
+        error: '#f14668',
+        warn: '#f1c40f',
+    };
     $: if (active) {
-        headerBackground = $Alert.type === 'error' ? '#f14668' : '#453b1c5c';
+        headerBackground = background_colors[$Alert.type];
     }
+
+    const title: {
+        [key: string]: string;
+    } = {
+        info: 'Informations',
+        error: 'Error Occured',
+        warn: 'Caution!! Warning !!',
+    };
 
     function handleKeydown(event: KeyboardEvent) {
         const key = event.key.toLowerCase();
@@ -54,7 +69,7 @@
     >
         <div class="contents">
             <h1 style="text-align: center;">
-                {$Alert.type === 'error' ? 'Error occured' : 'Output'}
+                {title[$Alert.type]}
             </h1>
             <hr />
             <div style="user-select: text; white-space: pre-wrap;">
