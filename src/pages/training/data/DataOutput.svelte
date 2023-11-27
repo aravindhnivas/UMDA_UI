@@ -4,6 +4,9 @@
 </script>
 
 {#if data.columns && data.head}
+    <div class="alert text-sm p-1">
+        <span>Total {data.shape} rows: First 10 rows are displayed below</span>
+    </div>
     <div class="overflow-x-auto">
         <DataTable table$aria-label="User list" style="width: 100%;">
             <Head>

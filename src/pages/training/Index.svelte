@@ -13,7 +13,7 @@
 <Page id="Training">
     <svelte:fragment slot="body">
         <Pane class="p-2" size={15} minSize={10} maxSize={20}>
-            <ul class="menu rounded-box">
+            <ul class="menu rounded-box gap-1">
                 {#each sidebar_items as item}
                     <li on:click={() => (active_item = item)}>
                         <span class:active={active_item == item}>{item}</span>

@@ -31,6 +31,9 @@ body {
     @apply card w-full h-full bg-orange-300 bg-opacity-50 shadow-xl;
 }
 
+input.input, select.select {
+    background-color: antiquewhite;
+}
 
 .button.is-loading {
     border: solid black 1px;

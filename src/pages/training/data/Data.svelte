@@ -6,7 +6,7 @@
     export let id: string;
     export let display: string = 'none';
 
-    const filetypes = ['csv', 'binary', 'hdf', 'json'];
+    const filetypes = ['csv', 'hdf', 'json', 'parquet'];
 
     let filename = '';
     let filetype = 'csv';
