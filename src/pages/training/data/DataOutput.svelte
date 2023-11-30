@@ -1,9 +1,11 @@
 <script lang="ts">
+    import LinearProgress from '@smui/linear-progress';
     import DataTable, { Head, Body, Row, Cell } from '@smui/data-table';
-    export let data: any = {};
+    export let data: DataType;
+    export let loading: boolean = false;
 </script>
 
-{#if data.columns && data.head}
+{#if data?.columns && data?.head}
     <div class="alert text-sm p-1">
         <span>Total {data.shape} rows: First 10 rows are displayed below</span>
     </div>
@@ -29,12 +31,7 @@
                 {/each}
             </Body>
 
-            <!-- <LinearProgress
-    indeterminate
-    bind:closed={loaded}
-    aria-label="Data is being loaded..."
-    slot="progress"
-  /> -->
+            <LinearProgress indeterminate closed={!loading} aria-label="Data is being loaded..." slot="progress" />
         </DataTable>
     </div>
 {/if}
