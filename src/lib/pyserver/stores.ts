@@ -19,6 +19,7 @@ export const port_lock = createPersistanceStore(false, 'port_lock');
 export const pyVersion = writable('');
 export const umdapyVersion = writable('');
 export const pyServerPORT = createPersistanceStore(5051, 'pyServerPORT');
+export const pyServerURL = derived(pyServerPORT, $pyServerPORT => `http://localhost:${$pyServerPORT}`);
 export const mainpyfile = derived([developerMode, pythonscript], async ([$developerMode, $pythonscript]) => {
     return $developerMode ? await path.join($pythonscript, 'main.py') : '';
 });

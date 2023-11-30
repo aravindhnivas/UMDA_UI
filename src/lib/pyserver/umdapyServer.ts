@@ -7,6 +7,7 @@ import {
     pythonscript,
     pyChildProcess,
     serverCurrentStatus,
+    pyServerURL,
 } from '$lib/pyserver/stores';
 import { serverInfo } from '$settings/utils/stores';
 import { python_asset_ready } from '$settings/utils/stores';
@@ -97,7 +98,7 @@ export async function checkServerProblem() {
     }
 
     const [err, rootpage] = await oO(
-        axios.get<string>(`http://localhost:${get(pyServerPORT)}/${import.meta.env.VITE_pypackage}`),
+        axios.get<string>(`${get(pyServerURL)}/${import.meta.env.VITE_pypackage}`),
     );
     if (err) return serverInfo.error(`failed to fetch rootpage /`);
 
@@ -134,8 +135,9 @@ export async function checkServerProblem() {
 export const fetchServerROOT = async (delay = 0) => {
     if (delay > 0) await sleep(delay);
 
-    const URL = `http://localhost:${get(pyServerPORT)}/${import.meta.env.VITE_pypackage}`;
-    // toast(`Fetching ${URL}`);
+    const URL = `${get(pyServerURL)}/${import.meta.env.VITE_pypackage}`;
+    
+    serverInfo.info(`fetching rootpage ${URL}`);
     const [_err, rootpage] = await oO(axios.get<{ data: string }>(URL));
     
     if (_err) return serverInfo.error(`failed to fetch rootpage /${import.meta.env.VITE_pypackage}`);

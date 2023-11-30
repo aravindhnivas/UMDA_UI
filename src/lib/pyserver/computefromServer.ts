@@ -1,4 +1,4 @@
-import { pyServerPORT, get } from './stores';
+import { pyServerURL, get } from './stores';
 import { path, fs } from '@tauri-apps/api';
 import { get_tmpdir } from '$utils/index';
 import axios from 'axios';
@@ -26,9 +26,7 @@ export default async function <T>({ pyfile, args, target, general }: Type): Prom
             }
         }
 
-        const URL = `http://localhost:${get(pyServerPORT)}/`;
-
-        const response = await axios.post(URL, { pyfile, args: { ...args, general } }, {
+        const response = await axios.post(get(pyServerURL), { pyfile, args: { ...args, general } }, {
             headers: { 'Content-type': 'application/json' },
             timeout: 1000 * 60 * 5, // 5 minutes
         });
