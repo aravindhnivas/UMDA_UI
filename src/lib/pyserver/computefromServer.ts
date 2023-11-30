@@ -9,12 +9,14 @@ interface Type {
     general?: boolean;
 }
 
-export default async function <T>({ pyfile, args, target, general }: Type): Promise<T | string | undefined> {
+const loading_class = 'running';
+
+export default async function <T>({ pyfile, args, target, general}: Type): Promise<T | string | undefined> {
     try {
         console.time('Computation took');
 
         if (!general) {
-            target?.classList.add('is-loading');
+            target?.classList.add(loading_class);
             const filename = pyfile.split('.').at(-1) + '_data.json';
 
             const tempdirPath = await get_tmpdir();
@@ -28,12 +30,12 @@ export default async function <T>({ pyfile, args, target, general }: Type): Prom
 
         const response = await axios.post(get(pyServerURL), { pyfile, args: { ...args, general } }, {
             headers: { 'Content-type': 'application/json' },
-            timeout: 1000 * 60 * 5, // 5 minutes
+            timeout: 1000 * 60 * 5, // 5 minutes,
         });
         
         console.log({response});
-        if (target?.classList.contains('is-loading')) {
-            target.classList.remove('is-loading');
+        if (target?.classList.contains(loading_class)) {
+            target.classList.remove(loading_class);
         }
 
         console.timeEnd('Computation took');
@@ -56,8 +58,8 @@ export default async function <T>({ pyfile, args, target, general }: Type): Prom
 
         return Promise.resolve(dataFromPython);
     } catch (error) {
-        if (target?.classList.contains('is-loading')) {
-            target.classList.remove('is-loading');
+        if (target?.classList.contains(loading_class)) {
+            target.classList.remove(loading_class);
         }
 
         if (error instanceof Error) {

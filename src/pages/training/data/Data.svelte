@@ -2,6 +2,7 @@
     import computePy from '$lib/pyserver/computePy';
     import { dialog } from '@tauri-apps/api';
     import DataOutput from './DataOutput.svelte';
+    import Loadingbtn from '$lib/components/Loadingbtn.svelte';
 
     export let id: string;
     export let display: string = 'none';
@@ -14,7 +15,7 @@
 
     let data = {};
 
-    const load_data = async (e: MouseEvent) => {
+    const load_data = async () => {
         if (!filename) {
             toast.error('Please provide a filename');
             return;
@@ -26,7 +27,6 @@
         }
 
         const dataFromPython = await computePy({
-            e,
             pyfile: 'training.read_data',
             args: {
                 filename,
@@ -68,7 +68,8 @@
         {#if filetype === 'hdf'}
             <input class="input input-sm input-bordered join-item" placeholder="key" bind:value={key} />
         {/if}
-        <button class="button join-item" on:click={load_data}>load</button>
+        <!-- <button class="button join-item" on:click={load_data}>load</button> -->
+        <Loadingbtn class="rounded-l-0 join-item" name="load" callback={load_data} />
     </div>
     <DataOutput {data} />
 </div>
