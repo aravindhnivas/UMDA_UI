@@ -1,6 +1,7 @@
 import { pyServerPORT, get } from './stores';
 import { path, fs } from '@tauri-apps/api';
 import { get_tmpdir } from '$utils/index';
+import axios from 'axios';
 interface Type {
     pyfile: string;
     args: Object;
@@ -8,7 +9,7 @@ interface Type {
     general?: boolean;
 }
 
-export default async function <T>({ pyfile, args, target, general }: Type): Promise<T> {
+export default async function <T>({ pyfile, args, target, general }: Type): Promise<T | string | undefined> {
     try {
         console.time('Computation took');
 
@@ -27,25 +28,25 @@ export default async function <T>({ pyfile, args, target, general }: Type): Prom
 
         const URL = `http://localhost:${get(pyServerPORT)}/`;
 
-        const response = await fetch(URL, {
-            method: 'POST',
+        const response = await axios.post(URL, { pyfile, args: { ...args, general } }, {
             headers: { 'Content-type': 'application/json' },
-            body: JSON.stringify({ pyfile, args: { ...args, general } }),
+            timeout: 1000 * 60 * 5, // 5 minutes
         });
-
+        
+        console.log({response});
         if (target?.classList.contains('is-loading')) {
             target.classList.remove('is-loading');
         }
-        console.timeEnd('Computation took');
 
+        console.timeEnd('Computation took');
+        const {data: dataFromPython} = response;
+        
         console.warn(response);
-        if (!response.ok) {
-            const jsonErrorInfo = await response.json();
-            console.log({ jsonErrorInfo });
-            return Promise.reject(jsonErrorInfo?.error || jsonErrorInfo);
+        if (response.statusText !== 'OK') {
+            
+            return Promise.reject(dataFromPython);
         }
 
-        const dataFromPython = await response.json();
         if (!dataFromPython) return Promise.reject('could not get file from python. check the output json file');
         console.warn(dataFromPython);
 
