@@ -3,8 +3,7 @@
     import { dialog } from '@tauri-apps/api';
     import DataOutput from './DataOutput.svelte';
     import Embeddings from './Embeddings.svelte';
-    import Loadingbtn from '$lib/components/Loadingbtn.svelte';
-    import { Checkbox } from '$lib/components';
+    import { Checkbox, Loadingbtn } from '$lib/components';
 
     export let id: string;
     export let display: string = 'none';
