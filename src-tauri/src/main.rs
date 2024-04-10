@@ -28,15 +28,18 @@ struct Payload {
 }
 
 fn main() {
+    
+    // let devtools = devtools::init();
+
     tauri::Builder::default()
     .invoke_handler(tauri::generate_handler![get_tcp_port, download_url,])
         .plugin(tauri_plugin_window_state::Builder::default().build())
-        .plugin(tauri_plugin_sql::Builder::default().build())
         .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
             println!("{}, {argv:?}, {cwd}", app.package_info().name);
             app.emit_all("single-instance", Payload { args: argv, cwd })
                 .unwrap();
         }))
+        // .plugin(devtools)
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
