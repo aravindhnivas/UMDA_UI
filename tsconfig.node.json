@@ -1,9 +1,24 @@
 {
     "compilerOptions": {
         "composite": true,
-        "skipLibCheck": true,
+        // "skipLibCheck": true,
         "module": "ESNext",
-        "moduleResolution": "bundler"
+        // "moduleResolution": "bundler",
+        // Bundler mode
+        "moduleResolution": "bundler",
+        "allowImportingTsExtensions": true,
+        "verbatimModuleSyntax": true,
+        "noEmit": true,
+        // Best practices
+        "strict": true,
+        "skipLibCheck": true,
+        "noFallthroughCasesInSwitch": true,
+        // Some stricter flags
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noPropertyAccessFromIndexSignature": true,
     },
-    "include": ["vite.config.ts"]
+    "include": [
+        "vite.config.ts"
+    ]
 }

@@ -1,8 +1,6 @@
 import { defineConfig } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import UnoCSS from 'unocss/vite';
-// import { presetUno, presetIcons } from 'unocss';
-
 import path from 'path';
 import AutoImport from 'unplugin-auto-import/vite';
 
@@ -55,7 +53,7 @@ export default defineConfig(async () => ({
         rollupOptions: {
             output: {
                 manualChunks: {
-                    'xterm': ['xterm'],
+                    xterm: ['xterm'],
                 },
             },
         },
