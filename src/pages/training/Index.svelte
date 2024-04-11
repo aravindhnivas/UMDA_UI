@@ -21,9 +21,11 @@
                 {/each}
             </ul>
         </Pane>
-        <Pane class="p-2" minSize={80}>
-            <Data id="training_data__comp" display={active_item.toLowerCase() === 'data' ? '' : 'none'} />
-            <Training id="training_training__comp" display={active_item.toLowerCase() === 'training' ? '' : 'none'} />
+        <Pane minSize={80}>
+            <div class="p-4 overflow-auto max-h-[80vh]">
+                <Data id="training_data__comp" display={active_item.toLowerCase() === 'data' ? '' : 'none'} />
+                <!-- <Training id="training_training__comp" display={active_item.toLowerCase() === 'training' ? '' : 'none'} /> -->
+            </div>
         </Pane>
     </svelte:fragment>
 </Page>

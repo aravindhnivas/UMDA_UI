@@ -3,7 +3,7 @@
     import { dialog } from '@tauri-apps/api';
     import DataOutput from './DataOutput.svelte';
     import Embeddings from './Embeddings.svelte';
-    import { Checkbox, Loadingbtn } from '$lib/components';
+    import { Loadingbtn } from '$lib/components';
 
     export let id: string;
     export let display: string = 'none';
@@ -13,7 +13,7 @@
     let filename = '';
     let filetype = 'csv';
     let key = 'data';
-    let only_columns = true;
+    let only_columns = false;
     let data: DataType = {
         columns: ['Column 1'],
         head: [{ 'Column 1': 1, 'Column 2': 2, 'Column 3': 3 }],
@@ -51,7 +51,7 @@
     let loading = false;
 </script>
 
-<div class="h-full overflow-hidden grid content-start gap-1" {id} style:display>
+<div class="grid content-start gap-2" {id} style:display>
     <div class="join">
         <select class="select select-sm select-bordered join-item" bind:value={filetype}>
             <option disabled selected>filetype</option>
@@ -71,14 +71,15 @@
                 }
             }}>Browse file</button
         >
-        <input class="input input-sm input-bordered join-item w-full" placeholder="filename" bind:value={filename} />
+        <input
+            class="input input-sm input-bordered join-item w-full"
+            placeholder="Enter filename"
+            bind:value={filename}
+        />
         {#if filetype === 'hdf'}
-            <input class="input input-sm input-bordered join-item" placeholder="key" bind:value={key} />
+            <input class="input input-sm input-bordered join-item" placeholder="Enter key" bind:value={key} />
         {/if}
-    </div>
-    <div class="flex gap-1">
-        <Checkbox bind:value={only_columns} label="only columns" />
-        <Loadingbtn bind:loading class="" name="load file" callback={load_data} />
+        <Loadingbtn bind:loading name="load file" callback={load_data} />
     </div>
     <DataOutput {data} {loading} />
     <Embeddings columns={data?.columns || []} />

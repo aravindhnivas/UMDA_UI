@@ -1,6 +1,6 @@
-<script lang="ts">
+<script lang="ts" generics="T">
     export let name: string;
-    export let callback: () => Promise<void> = async () => {};
+    export let callback: () => Promise<T>;
     let className = '';
     export { className as class };
 
@@ -8,8 +8,10 @@
 
     const run_callback = async (e: MouseEvent) => {
         loading = true;
-        const _result = await oO(callback());
+        const [err, result] = await oO(callback());
         loading = false;
+
+        return { err, result };
     };
 </script>
 
