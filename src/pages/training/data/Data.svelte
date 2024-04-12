@@ -14,11 +14,7 @@
     let filetype = 'csv';
     let key = 'data';
     let only_columns = false;
-    let data: DataType = {
-        columns: ['Column 1'],
-        head: [{ 'Column 1': 1, 'Column 2': 2, 'Column 3': 3 }],
-        shape: 0,
-    };
+    let data: DataType;
 
     const load_data = async () => {
         if (!filename) {
@@ -81,6 +77,8 @@
         {/if}
         <Loadingbtn bind:loading name="load file" callback={load_data} />
     </div>
-    <DataOutput {data} {loading} />
+    {#if data}
+        <DataOutput {data} {loading} />
+    {/if}
     <Embeddings columns={data?.columns || []} />
 </div>

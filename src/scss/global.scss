@@ -75,6 +75,12 @@ button.btn, button.button {
     width: 100%;
 }
 
+.flex-center {
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+}
+
 // .splitpanes__pane {
 //     overflow: auto!important;
 // }
