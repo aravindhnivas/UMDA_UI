@@ -18,6 +18,8 @@
     const embeddings = ['mol2vec', 'VICGAE'];
     let embedding = embeddings[0];
 
+    $: console.log($npartitions);
+
     const embedd_data = async () => {
         if (!df_column) {
             toast.error('Please provide a column name');
@@ -37,7 +39,7 @@
                 key,
                 df_column,
                 embedding,
-                npartitions: $npartitions,
+                npartitions: $npartitions || 50,
             },
         });
 
@@ -72,7 +74,7 @@
 
     <div>
         <Textfield bind:value={$npartitions} label="npartitions" type="number">
-            <HelperText persistent slot="helper">Dask partitions</HelperText>
+            <HelperText persistent slot="helper">Dask partitions (Default: 50)</HelperText>
         </Textfield>
     </div>
     <Loadingbtn name="Compute" callback={embedd_data} />
