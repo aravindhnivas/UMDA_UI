@@ -31,10 +31,7 @@
             return;
         }
 
-        const dataFromPython = await computePy<{
-            name: string;
-            shape: string;
-        }>({
+        const dataFromPython = await computePy<EmbeddingResult>({
             pyfile: 'training.embedd_data',
             args: {
                 filename,
@@ -53,7 +50,17 @@
             return;
         }
         toast.success(`Data embedded successfully! (${dataFromPython.name})`);
+        return dataFromPython;
     };
+
+    let result: EmbeddingResult;
+    // let invalid_smiles: string[] = [];
+    // let saved_file = '';
+
+    // const post_process = async (e: CustomEvent<EmbeddingResult>) => {
+    //     saved_file = e.detail.saved_file;
+    //     invalid_smiles = e.detail.invalid_smiles;
+    // };
 </script>
 
 <h2>Embeddings</h2>
@@ -76,5 +83,32 @@
     {/if}
     <CustomSelect label="embedding" bind:value={embedding} items={embeddings} />
     <CustomTextbox label="npartitions" bind:value={$NPARTITIONS} type="number" helper="Dask partitions" />
-    <Loadingbtn name="Compute" callback={embedd_data} />
+    <Loadingbtn name="Compute" callback={embedd_data} on:result={({ detail }) => (result = detail)} />
 </div>
+
+{#if result}
+    <div class=" flex flex-col gap-1">
+        {#if result.saved_file}
+            <span class="alert alert-info">File saved to: {result.saved_file}</span>
+        {/if}
+
+        {#if result.invalid_smiles.length}
+            <h3>
+                Could not compute embeddings for the following {df_column} (total: {result.invalid_smiles.length})
+            </h3>
+            <ul class="invalid_smi_list px-4">
+                {#each result.invalid_smiles as smile}
+                    <li>{smile}</li>
+                {/each}
+            </ul>
+        {/if}
+    </div>
+{/if}
+
+<style>
+    .invalid_smi_list {
+        list-style-type: none;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+</style>

@@ -5,3 +5,10 @@ interface DataType {
     }[];
     shape: number;
 }
+
+interface EmbeddingResult {
+    name: string;
+    shape: string;
+    invalid_smiles: string[];
+    saved_file: string;
+}

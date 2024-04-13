@@ -6,12 +6,17 @@
 
     export let loading: boolean = false;
 
+    const dispatch = createEventDispatcher();
     const run_callback = async (e: MouseEvent) => {
         loading = true;
         const [err, result] = await oO(callback());
         loading = false;
 
-        return { err, result };
+        if (err) {
+            dispatch('error', err);
+        } else {
+            dispatch('result', result);
+        }
     };
 </script>
 
