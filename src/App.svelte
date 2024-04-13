@@ -1,10 +1,23 @@
-<script>
+<script lang="ts">
+    import { RAM_SIZE, CPU_COUNT, NPARTITIONS } from '$lib/stores/system';
     import { Toaster } from 'svelte-sonner';
     import * as pages from './pages';
     import Nav from '$lib/layouts/Nav.svelte';
     import Footer from '$lib/layouts/Footer.svelte';
     import PreModal from '$utils/PreModal.svelte';
     import Modal from '$lib/components/modal/Modal.svelte';
+
+    onMount(async () => {
+        const [total_memory, cpu_count] = await invoke<[number, number]>('get_sysinfo');
+        RAM_SIZE.set(total_memory / 1024 / 1024 / 1024);
+        CPU_COUNT.set(cpu_count);
+
+        const cpu_npartitions = $CPU_COUNT * 5;
+        const ram_npartitions = (($RAM_SIZE - 4) * 1024) / 200;
+        const max_npartitions = Math.max(cpu_npartitions, ram_npartitions, 50);
+
+        NPARTITIONS.set(Math.floor(max_npartitions));
+    });
 </script>
 
 <Toaster />

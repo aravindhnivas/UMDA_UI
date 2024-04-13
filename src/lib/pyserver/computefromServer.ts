@@ -45,7 +45,7 @@ export default async function <T>({ pyfile, args, target, general }: Type): Prom
         console.timeEnd('Computation took');
         const { data: dataFromPython } = response;
 
-        console.warn(response);
+        console.warn({ response, dataFromPython });
         if (response.statusText !== 'OK') {
             return Promise.reject(dataFromPython);
         }

@@ -1,11 +1,10 @@
 <script lang="ts">
-    import { npartitions } from '$lib/pyserver/stores';
+    import { NPARTITIONS } from '$lib/stores/system';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import computePy from '$lib/pyserver/computePy';
     import { writable } from '@macfja/svelte-persistent-store';
-    import Textfield from '@smui/textfield';
-    import HelperText from '@smui/textfield/helper-text';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
+    import CustomTextbox from '$lib/components/CustomTextbox.svelte';
 
     export let columns: string[] = [];
     export let filename = '';
@@ -18,7 +17,8 @@
     const embeddings = ['mol2vec', 'VICGAE'];
     let embedding = embeddings[0];
 
-    // $: console.log($npartitions);
+    let mol2vec_dim = 300;
+    let PCA_dim = 70;
 
     const embedd_data = async () => {
         if (!df_column) {
@@ -42,7 +42,9 @@
                 key,
                 df_column,
                 embedding,
-                npartitions: $npartitions || 50,
+                npartitions: $NPARTITIONS,
+                mol2vec_dim,
+                PCA_dim,
             },
         });
 
@@ -51,9 +53,6 @@
             return;
         }
         toast.success(`Data embedded successfully! (${dataFromPython.name})`);
-
-        // const data = dataFromPython;
-        // console.warn(dataFromPython);
     };
 </script>
 
@@ -76,11 +75,6 @@
         <input type="text" class="input input-sm" bind:value={df_column} placeholder="Enter column name" />
     {/if}
     <CustomSelect label="embedding" bind:value={embedding} items={embeddings} />
-
-    <div>
-        <Textfield bind:value={$npartitions} label="npartitions" type="number">
-            <HelperText persistent slot="helper">Dask partitions (Default: 50)</HelperText>
-        </Textfield>
-    </div>
+    <CustomTextbox label="npartitions" bind:value={$NPARTITIONS} type="number" helper="Dask partitions" />
     <Loadingbtn name="Compute" callback={embedd_data} />
 </div>

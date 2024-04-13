@@ -18,9 +18,6 @@ export const port_lock = createPersistanceStore(false, 'port_lock');
 
 export const pyVersion = writable('');
 export const umdapyVersion = writable('');
-export const cpu_count = writable(-1);
-export const npartitions = persist('npartitions', 50);
-// export const npartitions = derived(cpu_count, $cpu_count => ($cpu_count > 0 ? $cpu_count * 5 : 25));
 export const pyServerPORT = createPersistanceStore(5051, 'pyServerPORT');
 export const pyServerURL = derived(pyServerPORT, $pyServerPORT => `http://localhost:${$pyServerPORT}`);
 export const mainpyfile = derived([developerMode, pythonscript], async ([$developerMode, $pythonscript]) => {

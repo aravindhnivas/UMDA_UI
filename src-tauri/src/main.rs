@@ -3,6 +3,8 @@
 
 use portpicker::pick_unused_port;
 use tauri_plugin_window_state;
+
+
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
 fn get_tcp_port() -> u16 {
@@ -20,6 +22,17 @@ async fn download_url(window: tauri::Window, url: &str, file_name: &str) -> Resu
     }
 }
 
+use sysinfo::System;
+
+#[tauri::command]
+fn get_sysinfo() -> (u64, usize) {
+    let mut sys = System::new_all();
+    sys.refresh_all();
+    let total_memory = sys.total_memory();
+    let cpu_count = sys.cpus().len();
+    (total_memory, cpu_count)
+}
+
 use tauri::Manager;
 #[derive(Clone, serde::Serialize)]
 struct Payload {
@@ -32,7 +45,7 @@ fn main() {
     // let devtools = devtools::init();
 
     tauri::Builder::default()
-    .invoke_handler(tauri::generate_handler![get_tcp_port, download_url,])
+    .invoke_handler(tauri::generate_handler![get_tcp_port, download_url, get_sysinfo])
         .plugin(tauri_plugin_window_state::Builder::default().build())
         .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
             println!("{}, {argv:?}, {cwd}", app.package_info().name);

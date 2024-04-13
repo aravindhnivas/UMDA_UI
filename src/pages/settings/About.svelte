@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { RAM_SIZE, CPU_COUNT } from '$lib/stores/system';
     import { pyVersion, umdapyVersion } from '$lib/pyserver/stores';
     import { getVersion, getTauriVersion } from '@tauri-apps/api/app';
     import Layout from './comp/Layout.svelte';
@@ -27,7 +28,11 @@
     <h1>About</h1>
     <div class="content">
         <ul class="ml-0 flex flex-col gap-1">
-            <li>Platform: <span class="badge badge-info">{system_info.platform}-{system_info.arch}</span></li>
+            <li>
+                Platform: <span class="badge badge-info">{system_info.platform}-{system_info.arch}</span>
+            </li>
+            <li class="text-sm">RAM: <span class="badge badge-info">{$RAM_SIZE} GB RAM</span></li>
+            <li class="text-sm">CPU: <span class="badge badge-info">{$CPU_COUNT} core</span></li>
             <hr />
 
             {#await getVersion() then value}
