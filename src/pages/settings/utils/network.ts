@@ -26,7 +26,16 @@ export const checkNetstat_execution = async () => {
 
 export const checkNetstat = async () => {
     const [err, output] = await oO(checkNetstat_execution());
-    if (!output) return;
+    // console.log(output, output?.stdout);
+    if (output?.stdout) {
+        output.stdout.split('\n').forEach(ln => {
+            if (ln.includes('LISTEN') && ln.includes(`${get(pyServerPORT)}`)) {
+                serverInfo.warn(ln);
+            }
+        });
+        // serverInfo.warn(output.stdout)
+    }
+    if (!output) return console.error('no output');
     if (err || output.stderr) return fail(err || output.stderr);
 
     const currentplatform = (await platform()) as 'win32' | 'darwin' | 'linux';
@@ -58,7 +67,7 @@ export const killPID = async ({ update_info = true } = {}) => {
 
         const currentplatform = (await platform()) as 'win32' | 'darwin' | 'linux';
         const command = currentplatform === 'win32' ? `taskkill-${await platform()}` : 'taskkill-darwin';
-
+        // console.log(command, args[currentplatform]);
         const [_err, output] = await oO(new shell.Command(command, args[currentplatform]).execute());
 
         if (_err) return Alert.error(_err);

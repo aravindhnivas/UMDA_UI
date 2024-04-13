@@ -8,6 +8,7 @@ import {
     pyChildProcess,
     serverCurrentStatus,
     pyServerURL,
+    pyVersion,
 } from '$lib/pyserver/stores';
 import { serverInfo } from '$settings/utils/stores';
 import { python_asset_ready } from '$settings/utils/stores';
@@ -97,9 +98,7 @@ export async function checkServerProblem() {
         return await start_and_check_umdapy_with_toast();
     }
 
-    const [err, rootpage] = await oO(
-        axios.get<string>(`${get(pyServerURL)}/${import.meta.env.VITE_pypackage}`),
-    );
+    const [err, rootpage] = await oO(axios.get<string>(`${get(pyServerURL)}/${import.meta.env.VITE_pypackage}`));
     if (err) return serverInfo.error(`failed to fetch rootpage /`);
 
     // if (!rootpage) return;
@@ -136,16 +135,22 @@ export const fetchServerROOT = async (delay = 0) => {
     if (delay > 0) await sleep(delay);
 
     const URL = `${get(pyServerURL)}/${import.meta.env.VITE_pypackage}`;
-    
+
     serverInfo.info(`fetching rootpage ${URL}`);
     const [_err, rootpage] = await oO(axios.get<{ data: string }>(URL));
-    
+
     if (_err) return serverInfo.error(`failed to fetch rootpage /${import.meta.env.VITE_pypackage}`);
     if (!rootpage) return;
+
     pyServerReady.set(true);
 
     serverInfo.success(rootpage.data);
     serverCurrentStatus.set({ value: `server running: port(${get(pyServerPORT)})`, type: 'success' });
+
+    if (!get(pyVersion)) {
+        const [err] = await oO(getPyVersion());
+        if (err) return serverInfo.error(err);
+    }
 };
 
 export const updateServerInfo = async (delay = 0) => {
@@ -172,7 +177,7 @@ export const start_and_check_umdapy = () =>
                 serverInfo.error('umdapy is not installed. Maybe check-umdapy-assets?');
                 return reject('umdapy is not installed. Maybe check-umdapy-assets?');
             }
-                
+
             const out = await startServer();
             if (out) serverInfo.info(out);
             serverInfo.info(`PID: ${JSON.stringify(get(currentPortPID))}`);

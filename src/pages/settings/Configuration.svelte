@@ -23,7 +23,7 @@
     import { checkNetstat, killPID } from './utils/network';
     import { serverInfo } from './utils/stores';
     import { getPyVersion } from './utils/checkPython';
-    import ConsoleBox from '$lib/components/ConsoleBox.svelte';
+    // import ConsoleBox from '$lib/components/ConsoleBox.svelte';
     import { install_umdapy_from_zipfile } from './utils/download-assets';
     import { check_umdapy_assets_status } from './utils/assets-status';
     import TerminalBox from '$lib/components/TerminalBox.svelte';
@@ -45,8 +45,16 @@
         }
     };
     let terminalDiv: HTMLDivElement;
-    onMount(() => {
+    onMount(async () => {
         serverInfo.init(terminalDiv);
+        if (import.meta.env.DEV) {
+            if (!$pyServerReady) {
+                const [err] = await oO(fetchServerROOT());
+                if (err) {
+                    console.error(err);
+                }
+            }
+        }
     });
 </script>
 
@@ -132,7 +140,18 @@
         <button class="btn btn-sm" on:click={async () => await fetchServerROOT()}>Check Server connection</button>
         <button class="btn btn-sm" on:click={async () => await checkNetstat()}>Check PORT status</button>
 
-        <Textfield value={$currentPortPID.join(', ')} label="current port PID" />
+        <Textfield
+            value={$currentPortPID.join(', ')}
+            label="current port PID"
+            on:change={e => {
+                // console.log(e.target.value, $currentPortPID);
+
+                if ($currentPortPID.length === 0 && e.target.value) {
+                    $currentPortPID = e.target.value.split(',').map(Number);
+                }
+                // console.log($currentPortPID);
+            }}
+        />
         <button class="btn btn-sm btn-error" on:click={async () => await killPID()}>kill PID</button>
     </div>
     <TerminalBox bind:terminalDiv bind:terminal={$serverInfo} />

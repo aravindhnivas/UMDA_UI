@@ -1,6 +1,6 @@
 import computefromServer from './computefromServer';
 import computefromSubprocess from './computefromSubprocess';
-import { start_and_check_umdapy_with_toast } from './umdapyServer';
+import { fetchServerROOT, start_and_check_umdapy_with_toast } from './umdapyServer';
 import { pyServerReady, get, developerMode, pyProgram } from './stores';
 import { Alert } from '$utils/stores';
 
@@ -41,6 +41,7 @@ export default async function <T>({ e, target, pyfile, args, general }: Type) {
             });
         } else {
             if (!get(pyServerReady)) {
+                await fetchServerROOT();
                 const result = await dialog.ask('Start the server ?', {
                     type: 'error',
                     title: 'umdapy server not running',

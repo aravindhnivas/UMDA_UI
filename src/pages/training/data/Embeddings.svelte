@@ -31,7 +31,10 @@
             return;
         }
 
-        const dataFromPython = await computePy<DataType>({
+        const dataFromPython = await computePy<{
+            name: string;
+            shape: string;
+        }>({
             pyfile: 'training.embedd_data',
             args: {
                 filename,
@@ -47,8 +50,10 @@
             toast.error('Could not access pyfile');
             return;
         }
+        toast.success('Data embedded successfully!' + dataFromPython.name);
+
         // const data = dataFromPython;
-        console.warn(dataFromPython);
+        // console.warn(dataFromPython);
     };
 </script>
 
