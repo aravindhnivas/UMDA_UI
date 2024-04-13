@@ -80,5 +80,5 @@
     {#if data}
         <DataOutput {data} {loading} />
     {/if}
-    <Embeddings columns={data?.columns || []} />
+    <Embeddings columns={data?.columns || []} {...{ filename, filetype, key }} />
 </div>
