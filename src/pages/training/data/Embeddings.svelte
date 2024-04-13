@@ -1,14 +1,39 @@
 <script lang="ts">
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
+    import computePy from '$lib/pyserver/computePy';
     import { sleep } from '$lib/utils/initialise';
     import { writable } from '@macfja/svelte-persistent-store';
+
     export let columns: string[] = [];
+    export let filename = '';
+    export let filetype = 'csv';
+    export let key = 'data';
 
     const auto_fetch_columns = writable('auto_fetch_columns', false);
-    // $: console.log(auto_fetch_columns);
+
     let df_column = '';
     const embeddings = ['mol2vec', 'VICGAE'];
     let embedding = embeddings[0];
+
+    const embedd_data = async () => {
+        const dataFromPython = await computePy<DataType>({
+            pyfile: 'training.embedd_data',
+            args: {
+                filename,
+                filetype,
+                key,
+                df_column,
+                embedding,
+            },
+        });
+
+        if (!dataFromPython) {
+            toast.error('Could not access pyfile');
+            return;
+        }
+        // const data = dataFromPython;
+        console.warn(dataFromPython);
+    };
 </script>
 
 <h2>Embeddings</h2>
@@ -42,11 +67,5 @@
         {/each}
     </select>
 
-    <Loadingbtn
-        name="Compute"
-        callback={async () => {
-            await sleep(10000);
-            return true;
-        }}
-    />
+    <Loadingbtn name="Compute" callback={embedd_data} />
 </div>
