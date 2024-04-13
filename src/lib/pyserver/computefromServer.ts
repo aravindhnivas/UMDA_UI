@@ -11,7 +11,7 @@ interface Type {
 
 const loading_class = 'running';
 
-export default async function <T>({ pyfile, args, target, general}: Type): Promise<T | string | undefined> {
+export default async function <T>({ pyfile, args, target, general }: Type): Promise<T | string | undefined> {
     try {
         console.time('Computation took');
 
@@ -28,22 +28,25 @@ export default async function <T>({ pyfile, args, target, general}: Type): Promi
             }
         }
 
-        const response = await axios.post(get(pyServerURL), { pyfile, args: { ...args, general } }, {
-            headers: { 'Content-type': 'application/json' },
-            timeout: 1000 * 60 * 5, // 5 minutes,
-        });
-        
-        console.log({response});
+        const response = await axios.post(
+            get(pyServerURL),
+            { pyfile, args: { ...args, general } },
+            {
+                headers: { 'Content-type': 'application/json' },
+                timeout: 1000 * 60 * 5, // 5 minutes,
+            },
+        );
+
+        console.log({ response });
         if (target?.classList.contains(loading_class)) {
             target.classList.remove(loading_class);
         }
 
         console.timeEnd('Computation took');
-        const {data: dataFromPython} = response;
-        
+        const { data: dataFromPython } = response;
+
         console.warn(response);
         if (response.statusText !== 'OK') {
-            
             return Promise.reject(dataFromPython);
         }
 
@@ -65,7 +68,7 @@ export default async function <T>({ pyfile, args, target, general}: Type): Promi
         if (error instanceof Error) {
             const msg = error.message;
             const details = error.stack || error;
-            console.error(error);
+            // console.error(error, error.response?.data);
             return Promise.reject(new Error(`Error after receiving data from python \n${msg} \n${details}`));
         }
     }

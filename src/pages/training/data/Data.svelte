@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { writable } from '@macfja/svelte-persistent-store';
     import computePy from '$lib/pyserver/computePy';
     import { dialog } from '@tauri-apps/api';
     import DataOutput from './DataOutput.svelte';
@@ -10,14 +11,14 @@
 
     const filetypes = ['csv', 'hdf', 'json', 'parquet'];
 
-    let filename = '';
+    const filename = writable('data_filename', '');
     let filetype = 'csv';
     let key = 'data';
     let only_columns = false;
     let data: DataType;
 
     const load_data = async () => {
-        if (!filename) {
+        if (!$filename) {
             toast.error('Please provide a filename');
             return;
         }
@@ -30,7 +31,7 @@
         const dataFromPython = await computePy<DataType>({
             pyfile: 'training.read_data',
             args: {
-                filename,
+                filename: $filename,
                 filetype,
                 key,
                 only_columns,
@@ -61,16 +62,16 @@
                 const result = await dialog.open();
                 if (!result) return;
                 if (typeof result === 'string') {
-                    filename = result;
+                    $filename = result;
                 } else {
-                    filename = result[0];
+                    $filename = result[0];
                 }
             }}>Browse file</button
         >
         <input
             class="input input-sm input-bordered join-item w-full"
             placeholder="Enter filename"
-            bind:value={filename}
+            bind:value={$filename}
         />
         {#if filetype === 'hdf'}
             <input class="input input-sm input-bordered join-item" placeholder="Enter key" bind:value={key} />
@@ -80,5 +81,5 @@
     {#if data}
         <DataOutput {data} {loading} />
     {/if}
-    <Embeddings columns={data?.columns || []} {...{ filename, filetype, key }} />
+    <Embeddings columns={data?.columns || []} {...{ filename: $filename, filetype, key }} />
 </div>

@@ -14,11 +14,11 @@
 
     const auto_fetch_columns = writable('auto_fetch_columns', false);
 
-    let df_column = '';
+    let df_column = 'SMILES';
     const embeddings = ['mol2vec', 'VICGAE'];
     let embedding = embeddings[0];
 
-    $: console.log($npartitions);
+    // $: console.log($npartitions);
 
     const embedd_data = async () => {
         if (!df_column) {
@@ -50,7 +50,7 @@
             toast.error('Could not access pyfile');
             return;
         }
-        toast.success('Data embedded successfully!' + dataFromPython.name);
+        toast.success(`Data embedded successfully! (${dataFromPython.name})`);
 
         // const data = dataFromPython;
         // console.warn(dataFromPython);
@@ -71,11 +71,11 @@
 
 <div class="flex-center">
     {#if $auto_fetch_columns}
-        <CustomSelect label="column" value={df_column} items={columns} />
+        <CustomSelect label="column" bind:value={df_column} items={columns} />
     {:else}
         <input type="text" class="input input-sm" bind:value={df_column} placeholder="Enter column name" />
     {/if}
-    <CustomSelect label="embedding" value={embedding} items={embeddings} />
+    <CustomSelect label="embedding" bind:value={embedding} items={embeddings} />
 
     <div>
         <Textfield bind:value={$npartitions} label="npartitions" type="number">
