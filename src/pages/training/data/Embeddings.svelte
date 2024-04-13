@@ -1,8 +1,11 @@
 <script lang="ts">
+    import { npartitions } from '$lib/pyserver/stores';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import computePy from '$lib/pyserver/computePy';
-    import { sleep } from '$lib/utils/initialise';
     import { writable } from '@macfja/svelte-persistent-store';
+    import Textfield from '@smui/textfield';
+    import HelperText from '@smui/textfield/helper-text';
+    import CustomSelect from '$lib/components/CustomSelect.svelte';
 
     export let columns: string[] = [];
     export let filename = '';
@@ -16,6 +19,16 @@
     let embedding = embeddings[0];
 
     const embedd_data = async () => {
+        if (!df_column) {
+            toast.error('Please provide a column name');
+            return;
+        }
+
+        if (!filename) {
+            toast.error('Please select a file');
+            return;
+        }
+
         const dataFromPython = await computePy<DataType>({
             pyfile: 'training.embedd_data',
             args: {
@@ -24,6 +37,7 @@
                 key,
                 df_column,
                 embedding,
+                npartitions: $npartitions,
             },
         });
 
@@ -50,22 +64,16 @@
 
 <div class="flex-center">
     {#if $auto_fetch_columns}
-        <select class="select select-sm select-bordered" bind:value={df_column}>
-            <option disabled selected>Column</option>
-            {#each columns as column}
-                <option>{column}</option>
-            {/each}
-        </select>
+        <CustomSelect label="column" value={df_column} items={columns} />
     {:else}
         <input type="text" class="input input-sm" bind:value={df_column} placeholder="Enter column name" />
     {/if}
+    <CustomSelect label="embedding" value={embedding} items={embeddings} />
 
-    <select class="select select-sm select-bordered" bind:value={embedding}>
-        <option disabled selected>embedding</option>
-        {#each embeddings as embed}
-            <option>{embed}</option>
-        {/each}
-    </select>
-
+    <div>
+        <Textfield bind:value={$npartitions} label="npartitions" type="number">
+            <HelperText persistent slot="helper">Dask partitions</HelperText>
+        </Textfield>
+    </div>
     <Loadingbtn name="Compute" callback={embedd_data} />
 </div>
