@@ -8,7 +8,6 @@
     const mount = (node: HTMLElement) => {
         terminal = new LOGGER(node, { fontSize: 14, fontFamily: 'monospace' });
     };
-
     onDestroy(() => terminal?.term.dispose());
 </script>
 
