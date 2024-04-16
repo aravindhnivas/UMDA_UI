@@ -4,7 +4,7 @@
     export let items: string[] = [];
 </script>
 
-<div class="flex flex-col min-w-[100px]">
+<div class="flex flex-col gap-1 min-w-[100px]">
     <span class="text-xs pl-1">{label}</span>
     <select class="select select-sm select-bordered" bind:value>
         {#if !label}
@@ -14,5 +14,4 @@
             <option>{item}</option>
         {/each}
     </select>
-    <!-- <span class="text-xs pl-1">{label}</span> -->
 </div>
