@@ -42,6 +42,8 @@
                 mol2vec_dim,
                 PCA_dim,
             },
+            general: true,
+            target: e.target as HTMLButtonElement,
         });
 
         if (!dataFromPython) {

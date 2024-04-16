@@ -1,6 +1,5 @@
 import { LOGGER } from '$lib/utils/logger';
 import { createPersistanceStore } from '$utils/index';
-import { type ITerminalInitOnlyOptions, type ITerminalOptions } from 'xterm';
 
 export const create_logger_store = (value: OutputBoxtype[]) => {
     const { set, subscribe, update } = writable(value);
@@ -31,13 +30,8 @@ export const create_logger_store = (value: OutputBoxtype[]) => {
 function xterm_logger_store() {
     const { subscribe, set } = writable<LOGGER>();
 
-    function init(node: HTMLElement, options?: ITerminalOptions & ITerminalInitOnlyOptions) {
-        const logger = new LOGGER(node, options);
-        set(logger);
-    }
-
     function info(message: string) {
-        subscribe((logger) => {
+        subscribe(logger => {
             logger?.info(message);
         })();
     }
@@ -63,7 +57,6 @@ function xterm_logger_store() {
     return {
         set,
         subscribe,
-        init,
         info,
         warn,
         error,
@@ -83,7 +76,7 @@ export const install_update_without_promt = writable(false);
 export const python_asset_ready_to_install = createPersistanceStore(false, 'python_asset_ready_to_install');
 export const assets_installation_required = createPersistanceStore(false, 'assets_installation_required');
 export const python_asset_ready = writable(false);
-export const downloadURL = createPersistanceStore<string>("", 'downloadURL');
+export const downloadURL = createPersistanceStore<string>('', 'downloadURL');
 
 export const running_processes = writable<
     {

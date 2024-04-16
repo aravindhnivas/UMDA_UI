@@ -1,8 +1,9 @@
-import { Terminal, type ITerminalInitOnlyOptions, type ITerminalOptions } from 'xterm';
-import { FitAddon } from 'xterm-addon-fit';
+import { Terminal, type ITerminalInitOnlyOptions, type ITerminalOptions } from '@xterm/xterm';
+import { FitAddon } from '@xterm/addon-fit';
 
 export class LOGGER {
     term: Terminal;
+    fitAddon = new FitAddon();
     constructor(node: HTMLElement, options?: ITerminalOptions & ITerminalInitOnlyOptions) {
         if (node) {
             options = {
@@ -11,22 +12,22 @@ export class LOGGER {
                 theme: {
                     background: '#202B33',
                 },
-                ...(options || {})
+                ...(options || {}),
             };
 
-            const fitAddon = new FitAddon();
+            // const fitAddon = new FitAddon();
             this.term = new Terminal(options);
-            this.term.loadAddon(fitAddon);
+            this.term.loadAddon(this.fitAddon);
             this.term.open(node);
-            fitAddon.fit();
-            
-            // this.term.writeln('>> Welcome to the console!');
+            this.fitAddon.fit();
+
+            this.term.writeln('$ Terminal ready');
         } else {
             throw new Error('No node provided!');
         }
     }
-    
-    handle_logs (msg: string | Object) {
+
+    handle_logs(msg: string | Object) {
         if (typeof msg === 'string') {
             return msg;
         } else {

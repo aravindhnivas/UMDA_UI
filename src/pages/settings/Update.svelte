@@ -120,10 +120,8 @@
     });
 
     let currentVersion = '';
-    let terminalDiv: HTMLDivElement;
     onMount(async () => {
         currentVersion = await getVersion();
-        outputbox.init(terminalDiv);
     });
 
     onDestroy(async () => {
@@ -258,7 +256,7 @@
             </div>
         {/if}
     </div>
-    <TerminalBox bind:terminalDiv bind:terminal={$outputbox} />
+    <TerminalBox bind:terminal={$outputbox} />
 </Layout>
 
 <style lang="scss">

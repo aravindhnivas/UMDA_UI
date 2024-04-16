@@ -44,9 +44,7 @@
             toast.error(error as string);
         }
     };
-    let terminalDiv: HTMLDivElement;
     onMount(async () => {
-        serverInfo.init(terminalDiv);
         if (import.meta.env.DEV) {
             if (!$pyServerReady) {
                 const [err] = await oO(fetchServerROOT());
@@ -154,5 +152,5 @@
         />
         <button class="btn btn-sm btn-error" on:click={async () => await killPID()}>kill PID</button>
     </div>
-    <TerminalBox bind:terminalDiv bind:terminal={$serverInfo} />
+    <TerminalBox bind:terminal={$serverInfo} />
 </Layout>

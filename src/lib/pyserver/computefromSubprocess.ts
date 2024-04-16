@@ -154,8 +154,8 @@ export default async function <T>({
                 error += errorString;
             }
             dispatchEvent(target, { py, pyfile, error }, 'pyEventStderr');
-            console.log(`Output from python: ${errorString}`);
-            terminal_log.error(errorString);
+            // console.log(`Output from python: ${errorString}`);
+            terminal_log.warn(errorString);
         });
 
         py.stdout.on('data', dataString => {
