@@ -14,7 +14,7 @@ const loading_class = 'running';
 export default async function <T>({ pyfile, args, target, general }: Type): Promise<T | string | undefined> {
     try {
         console.time('Computation took');
-
+        console.warn({ pyfile, args, target, general });
         if (!general) {
             target?.classList.add(loading_class);
             const filename = pyfile.split('.').at(-1) + '_data.json';
