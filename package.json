@@ -12,7 +12,8 @@
     "format": "prettier --write  --plugin prettier-plugin-svelte ."
   },
   "dependencies": {
-    "@tauri-apps/api": "^1.5.3"
+    "@tauri-apps/api": "^1.5.3",
+    "lucide-svelte": "^0.368.0"
   },
   "devDependencies": {
     "@iconify/json": "^2.2.201",

@@ -1,6 +1,6 @@
 <script lang="ts" generics="T">
     export let name: string;
-    export let callback: () => Promise<T>;
+    export let callback: (e: MouseEvent) => Promise<T>;
     let className = '';
     export { className as class };
 
@@ -9,7 +9,7 @@
     const dispatch = createEventDispatcher();
     const run_callback = async (e: MouseEvent) => {
         loading = true;
-        const [err, result] = await oO(callback());
+        const [err, result] = await oO(callback(e));
         loading = false;
 
         if (err) {

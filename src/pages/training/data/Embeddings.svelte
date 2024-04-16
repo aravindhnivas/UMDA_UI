@@ -4,7 +4,7 @@
     import computePy from '$lib/pyserver/computePy';
     import { writable } from '@macfja/svelte-persistent-store';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
-
+    import { CheckCheck } from 'lucide-svelte';
     export let columns: string[] = [];
     export let filename = '';
     export let filetype = 'csv';
@@ -19,7 +19,7 @@
     let mol2vec_dim = 300;
     let PCA_dim = 70;
 
-    const embedd_data = async () => {
+    const embedd_data = async (e: MouseEvent) => {
         if (!df_column) {
             toast.error('Please provide a column name');
             return;
@@ -88,7 +88,12 @@
 {#if dataFromPython}
     <div class=" flex flex-col gap-1">
         {#if dataFromPython.saved_file}
-            <span class="alert alert-info">File saved to: {dataFromPython.saved_file}</span>
+            <div role="alert" class="alert alert-info p-2">
+                <CheckCheck />
+                <span class="text-sm"
+                    >(Computed in {dataFromPython.computed_time}) File saved to: {dataFromPython.saved_file}</span
+                >
+            </div>
         {/if}
 
         {#if dataFromPython.invalid_smiles?.length}

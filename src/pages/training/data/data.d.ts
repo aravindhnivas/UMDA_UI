@@ -11,4 +11,5 @@ interface EmbeddingResult {
     shape: string;
     invalid_smiles: string[];
     saved_file: string;
+    computed_time: string;
 }
