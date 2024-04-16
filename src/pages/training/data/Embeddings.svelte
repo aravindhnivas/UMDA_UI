@@ -4,7 +4,6 @@
     import computePy from '$lib/pyserver/computePy';
     import { writable } from '@macfja/svelte-persistent-store';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
-    import CustomTextbox from '$lib/components/CustomTextbox.svelte';
 
     export let columns: string[] = [];
     export let filename = '';
@@ -69,17 +68,20 @@
     {/if}
 </div>
 
-<div class="flex-center">
+<div class="flex items-end gap-1">
     {#if $auto_fetch_columns}
-        <CustomSelect label="column" bind:value={df_column} items={columns} />
+        <CustomSelect label="column name" bind:value={df_column} items={columns} />
     {:else}
         <div class="flex flex-col gap-1">
-            <span class="text-xs pl-1">column</span>
+            <span class="text-xs pl-1">column name</span>
             <input type="text" class="input input-sm" bind:value={df_column} placeholder="Enter column name" />
         </div>
     {/if}
     <CustomSelect label="embedding" bind:value={embedding} items={embeddings} />
-    <CustomTextbox label="npartitions" bind:value={$NPARTITIONS} type="number" helper="Dask partitions" />
+    <div class="flex flex-col gap-1">
+        <span class="text-xs pl-1">npartitions</span>
+        <input bind:value={$NPARTITIONS} type="number" class="input input-sm" placeholder="Enter dask npartitions" />
+    </div>
     <Loadingbtn name="Compute" callback={embedd_data} />
 </div>
 
