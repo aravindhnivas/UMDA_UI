@@ -33,7 +33,8 @@ export default async function <T>({ pyfile, args, target, general }: Type): Prom
             { pyfile, args: { ...args, general } },
             {
                 headers: { 'Content-type': 'application/json' },
-                timeout: 1000 * 60 * 5, // 5 minutes,
+                // timeout: 1000 * 60 * 5, // 5 minutes,
+                timeout: 0, // infinite timeout
             },
         );
 
