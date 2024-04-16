@@ -73,7 +73,10 @@
     {#if $auto_fetch_columns}
         <CustomSelect label="column" bind:value={df_column} items={columns} />
     {:else}
-        <input type="text" class="input input-sm" bind:value={df_column} placeholder="Enter column name" />
+        <div class="flex flex-col gap-1">
+            <span class="text-xs pl-1">column</span>
+            <input type="text" class="input input-sm" bind:value={df_column} placeholder="Enter column name" />
+        </div>
     {/if}
     <CustomSelect label="embedding" bind:value={embedding} items={embeddings} />
     <CustomTextbox label="npartitions" bind:value={$NPARTITIONS} type="number" helper="Dask partitions" />
