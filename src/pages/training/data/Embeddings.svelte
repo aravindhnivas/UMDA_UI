@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { embedding, default_pretrained_modes } from './stores';
     import { NPARTITIONS } from '$lib/stores/system';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import computePy from '$lib/pyserver/computePy';
@@ -14,7 +15,7 @@
 
     let df_column = 'SMILES';
     const embeddings = ['mol2vec', 'VICGAE'];
-    let embedding = embeddings[0];
+    // let embedding = embeddings[0];
 
     let mol2vec_dim = 300;
     let PCA_dim = 70;
@@ -37,10 +38,11 @@
                 filetype,
                 key,
                 df_column,
-                embedding,
-                npartitions: $NPARTITIONS,
                 mol2vec_dim,
                 PCA_dim,
+                embedding: $embedding,
+                npartitions: $NPARTITIONS,
+                pretrained_model_location: $pretrained_model_location,
             },
             // general: true,
             // target: e.target as HTMLButtonElement,
@@ -56,10 +58,36 @@
         return dataFromPython;
     };
     let dataFromPython: EmbeddingResult | undefined;
+    const pretrained_model_location = writable('pretrained_model_location', '');
 </script>
 
 <h2>Embeddings</h2>
 
+{#if $default_pretrained_modes[$embedding]}
+    <span class="text-sm">{$embedding}: using default pre-trained model</span>
+{:else}
+    <span class="text-sm">{$embedding}: No default pre-trained model exists.</span>
+    <h3>Pre-trained models ({$embedding})</h3>
+    <div class="join">
+        <button
+            class="btn btn-sm join-item"
+            on:click={async () => {
+                const result = await dialog.open();
+                if (!result) return;
+                if (typeof result === 'string') {
+                    $pretrained_model_location = result;
+                } else {
+                    $pretrained_model_location = result[0];
+                }
+            }}>Browse file</button
+        >
+        <input
+            class="input input-sm input-bordered join-item w-full"
+            placeholder="Enter filename"
+            bind:value={$pretrained_model_location}
+        />
+    </div>
+{/if}
 <div class="flex flex-col gap-1">
     <div class="flex-center">
         <span>Auto-fetch column name</span>
@@ -69,7 +97,6 @@
         <span class="text-sm">Load file first!</span>
     {/if}
 </div>
-
 <div class="flex items-end gap-1">
     {#if $auto_fetch_columns}
         <CustomSelect label="column name" bind:value={df_column} items={columns} />
@@ -79,7 +106,7 @@
             <input type="text" class="input input-sm" bind:value={df_column} placeholder="Enter column name" />
         </div>
     {/if}
-    <CustomSelect label="embedding" bind:value={embedding} items={embeddings} />
+    <CustomSelect label="embedding" bind:value={$embedding} items={embeddings} />
     <div class="flex flex-col gap-1">
         <span class="text-xs pl-1">npartitions</span>
         <input bind:value={$NPARTITIONS} type="number" class="input input-sm" placeholder="Enter dask npartitions" />

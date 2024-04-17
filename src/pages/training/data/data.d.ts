@@ -13,3 +13,5 @@ interface EmbeddingResult {
     saved_file: string;
     computed_time: string;
 }
+
+type Embedding = 'mol2vec' | 'VICGAE';
