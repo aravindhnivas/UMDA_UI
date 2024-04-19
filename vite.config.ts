@@ -22,6 +22,9 @@ export default defineConfig(async () => ({
                     '@tauri-apps/api/os': ['platform'],
                     '@tauri-apps/api': ['fs', 'path', 'dialog', 'shell', 'invoke'],
                     'svelte-sonner': ['toast', 'Toaster'],
+                    '@macfja/svelte-persistent-store': [
+                        ['writable', 'writable_store'], // import { writable as writable_store } from '@macfja/svelte-persistent-store';
+                    ],
                 },
             ],
             dts: './src/auto-imports.d.ts',

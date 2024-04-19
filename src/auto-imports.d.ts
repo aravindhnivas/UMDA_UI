@@ -39,4 +39,5 @@ declare global {
   const tick: typeof import('svelte')['tick']
   const toast: typeof import('svelte-sonner')['toast']
   const writable: typeof import('svelte/store')['writable']
+  const writable_store: typeof import('@macfja/svelte-persistent-store')['writable']
 }
