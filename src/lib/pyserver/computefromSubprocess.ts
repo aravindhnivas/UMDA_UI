@@ -82,9 +82,12 @@ export default async function <T>({
                         cb: async () => await pyChild.kill(),
                         style: 'background: var(--color-danger); cursor: pointer; color: var(--color-white);',
                     },
+                    progress: null,
                 },
             ]);
         }
+
+        let ind = get(running_processes).findIndex(p => p.pid === pyChild.pid);
 
         py.on('error', err => {
             Alert.error(err);
@@ -167,6 +170,18 @@ export default async function <T>({
                 dataReceived += dataString;
             }
             terminal_log.info(dataString);
+            const match = dataString.match(/(\d+)% Completed/);
+            if (match) {
+                const percentage_completed = parseInt(match[1], 10);
+                console.log(`Percentage completed: ${percentage_completed}%`);
+                running_processes.update(p => {
+                    const current = p.find(p => p.pid === pyChild.pid);
+                    if (current) {
+                        current.progress = percentage_completed;
+                    }
+                    return p;
+                });
+            }
             console.log(dataString.trim());
             dispatchEvent(target, { py, pyfile, dataReceived, stdout: dataString }, 'pyEventData');
         });

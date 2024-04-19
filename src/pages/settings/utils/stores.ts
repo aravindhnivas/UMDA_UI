@@ -87,5 +87,6 @@ export const running_processes = writable<
             cb: () => Promise<void>;
             style: string;
         };
+        progress?: number;
     }[]
 >([]);

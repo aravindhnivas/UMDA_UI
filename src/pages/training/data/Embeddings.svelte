@@ -44,7 +44,7 @@
                 npartitions: $NPARTITIONS,
                 pretrained_model_location: $pretrained_model_location[$embedding],
             },
-            // general: true,
+            general: true,
             // target: e.target as HTMLButtonElement,
         });
 

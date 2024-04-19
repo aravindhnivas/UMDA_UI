@@ -28,7 +28,7 @@
                         <tr>
                             <th>{i}</th>
                             <td>{process.pid}</td>
-                            <td>{process.pyfile}</td>
+                            <td>{process.pyfile} {process?.progress ? `(${process?.progress} %)` : ''}</td>
                             <td
                                 style={process?.close?.style}
                                 on:click={() => {
