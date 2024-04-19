@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { embedding, default_pretrained_modes } from './stores';
+    import { embedding, default_pretrained_modes, pretrained_model_location } from './stores';
     import { NPARTITIONS } from '$lib/stores/system';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import computePy from '$lib/pyserver/computePy';
@@ -42,7 +42,7 @@
                 PCA_dim,
                 embedding: $embedding,
                 npartitions: $NPARTITIONS,
-                pretrained_model_location: $pretrained_model_location,
+                pretrained_model_location: $pretrained_model_location[$embedding],
             },
             // general: true,
             // target: e.target as HTMLButtonElement,
@@ -58,7 +58,6 @@
         return dataFromPython;
     };
     let dataFromPython: EmbeddingResult | undefined;
-    const pretrained_model_location = writable('pretrained_model_location', '');
 </script>
 
 <h2>Embeddings</h2>
@@ -75,16 +74,16 @@
                 const result = await dialog.open();
                 if (!result) return;
                 if (typeof result === 'string') {
-                    $pretrained_model_location = result;
+                    $pretrained_model_location[$embedding] = result;
                 } else {
-                    $pretrained_model_location = result[0];
+                    $pretrained_model_location[$embedding] = result[0];
                 }
             }}>Browse file</button
         >
         <input
             class="input input-sm input-bordered join-item w-full"
             placeholder="Enter filename"
-            bind:value={$pretrained_model_location}
+            bind:value={$pretrained_model_location[$embedding]}
         />
     </div>
 {/if}
