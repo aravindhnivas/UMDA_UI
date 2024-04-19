@@ -62,31 +62,28 @@
 
 <h2>Embeddings</h2>
 
-{#if $default_pretrained_modes[$embedding]}
-    <span class="text-sm">{$embedding}: using default pre-trained model</span>
-{:else}
-    <span class="text-sm">{$embedding}: No default pre-trained model exists.</span>
-    <h3>Pre-trained models ({$embedding})</h3>
-    <div class="join">
-        <button
-            class="btn btn-sm join-item"
-            on:click={async () => {
-                const result = await dialog.open();
-                if (!result) return;
-                if (typeof result === 'string') {
-                    $pretrained_model_location[$embedding] = result;
-                } else {
-                    $pretrained_model_location[$embedding] = result[0];
-                }
-            }}>Browse file</button
-        >
-        <input
-            class="input input-sm input-bordered join-item w-full"
-            placeholder="Enter filename"
-            bind:value={$pretrained_model_location[$embedding]}
-        />
-    </div>
-{/if}
+<h3>Pre-trained model ({$embedding})</h3>
+
+<div class="join">
+    <button
+        class="btn btn-sm join-item"
+        on:click={async () => {
+            const result = await dialog.open();
+            if (!result) return;
+            if (typeof result === 'string') {
+                $pretrained_model_location[$embedding] = result;
+            } else {
+                $pretrained_model_location[$embedding] = result[0];
+            }
+        }}>Browse file</button
+    >
+    <input
+        class="input input-sm input-bordered join-item w-full"
+        placeholder="Enter filename"
+        bind:value={$pretrained_model_location[$embedding]}
+    />
+</div>
+
 <div class="flex flex-col gap-1">
     <div class="flex-center">
         <span>Auto-fetch column name</span>
