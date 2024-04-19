@@ -80,7 +80,7 @@ export default async function <T>({
                     close: {
                         name: 'X',
                         cb: async () => await pyChild.kill(),
-                        style: 'background: var(--color-danger); cursor: pointer; color: var(--color-white);',
+                        style: 'display:flex; justify-content: center; cursor: pointer; background-color: red;',
                     },
                     progress: null,
                 },
@@ -182,7 +182,7 @@ export default async function <T>({
                     return p;
                 });
             }
-            console.log(dataString.trim());
+            // console.log(dataString.trim());
             dispatchEvent(target, { py, pyfile, dataReceived, stdout: dataString }, 'pyEventData');
         });
 
