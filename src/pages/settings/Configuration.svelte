@@ -44,6 +44,17 @@
             toast.error(error as string);
         }
     };
+
+    const get_log_dir = async () => {
+        try {
+            const dir = await path.appLogDir();
+            console.log(dir);
+            await shell.open(dir);
+        } catch (error) {
+            toast.error(error as string);
+        }
+    };
+
     onMount(async () => {
         if (import.meta.env.DEV) {
             if (!$pyServerReady) {
@@ -95,6 +106,7 @@
         >
 
         <button class="btn btn-sm" on:click={get_local_dir}>APP Local data <i class="i-mdi-open-in-new" /></button>
+        <button class="btn btn-sm" on:click={get_log_dir}>logs folder<i class="i-mdi-open-in-new" /></button>
 
         <button
             class="btn btn-sm ml-auto"
