@@ -37,6 +37,8 @@ export default async function <T>({
         let outputFile: string;
         target ||= button || (e?.target as HTMLButtonElement);
 
+        console.log({ target });
+
         if (pyfile === 'server') {
             pyServerReady.set(false);
         }
@@ -173,7 +175,7 @@ export default async function <T>({
             const match = dataString.match(/(\d+)% Completed/);
             if (match) {
                 const percentage_completed = parseInt(match[1], 10);
-                console.log(`Percentage completed: ${percentage_completed}%`);
+                // console.log(`Percentage completed: ${percentage_completed}%`);
                 running_processes.update(p => {
                     const current = p.find(p => p.pid === pyChild.pid);
                     if (current) {

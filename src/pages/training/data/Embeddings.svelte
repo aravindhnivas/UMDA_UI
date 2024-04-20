@@ -19,6 +19,7 @@
 
     let mol2vec_dim = 300;
     let PCA_dim = 70;
+    let current_file = '';
 
     const embedd_data = async (e: MouseEvent) => {
         if (!df_column) {
@@ -45,17 +46,16 @@
                 pretrained_model_location: $pretrained_model_location[$embedding],
             },
             general: true,
-            // target: e.target as HTMLButtonElement,
+            target: e.target as HTMLButtonElement,
         });
-
-        if (!dataFromPython) {
-            toast.error('Could not access pyfile');
-            return;
-        }
+        current_file = filename;
+        // if (!dataFromPython) {
+        //     toast.error('Could not access pyfile');
+        //     return;
+        // }
         // console.log(dataFromPython, dataFromPython?.invalid_smiles);
-
-        toast.success(`Data embedded successfully! (${dataFromPython?.name})`);
-        return dataFromPython;
+        // toast.success(`Data embedded successfully! (${dataFromPython?.name})`);
+        // return dataFromPython;
     };
     let dataFromPython: EmbeddingResult | undefined;
 </script>
@@ -107,7 +107,7 @@
         <span class="text-xs pl-1">npartitions</span>
         <input bind:value={$NPARTITIONS} type="number" class="input input-sm" placeholder="Enter dask npartitions" />
     </div>
-    <Loadingbtn name="Compute" callback={embedd_data} />
+    <Loadingbtn name="Compute" callback={embedd_data} subprocess={true} />
 </div>
 
 {#if dataFromPython}
