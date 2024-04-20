@@ -4,7 +4,7 @@
     import { Pane } from 'svelte-splitpanes';
     import { Data, Mol2VecTrain } from '.';
 
-    const sidebar_items = ['Data', 'Mol2Vec'];
+    const sidebar_items = ['Mol2Vec', 'Embeddings'];
     let active_item = sidebar_items[0];
 </script>
 
@@ -23,7 +23,7 @@
         </Pane>
         <Pane minSize={80}>
             <div class="p-4 overflow-auto max-h-[80vh]">
-                <Data display={active_item.toLowerCase() === 'data' ? '' : 'none'} />
+                <Data display={active_item.toLowerCase() === 'embeddings' ? '' : 'none'} />
                 <Mol2VecTrain display={active_item.toLowerCase() === 'mol2vec' ? '' : 'none'} />
             </div>
         </Pane>
