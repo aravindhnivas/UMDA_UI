@@ -8,7 +8,7 @@
 
 <div class="flex flex-col gap-1">
     {#if label}
-        <span class="text-sm pl-1">Corpus file</span>
+        <span class="text-sm pl-1">{label}</span>
     {/if}
     <div class="join">
         <button
