@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { writable } from '@macfja/svelte-persistent-store';
+    // import { writable } from '@macfja/svelte-persistent-store';
     import computePy from '$lib/pyserver/computePy';
     import { dialog } from '@tauri-apps/api';
     import DataOutput from './DataOutput.svelte';
@@ -11,7 +11,7 @@
 
     const filetypes = ['csv', 'hdf', 'json', 'parquet'];
 
-    const filename = writable('data_filename', '');
+    const filename = writable_store('data_filename', '');
     let filetype = 'csv';
     let key = 'data';
     let only_columns = false;
