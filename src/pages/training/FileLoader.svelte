@@ -9,7 +9,7 @@
     export let key = 'data';
     export let data: DataType | null = null;
     export let filename: string;
-    const filetypes = ['csv', 'hdf', 'json', 'parquet'];
+    export let filetypes = ['csv', 'hdf', 'json', 'parquet'];
 
     // const filename = writable_store('data_filename', '');
 
