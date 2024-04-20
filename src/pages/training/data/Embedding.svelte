@@ -53,9 +53,10 @@
 </script>
 
 <div class="grid content-start gap-2" {id} style:display>
-    <FileLoader bind:filename={$filename} bind:data bind:filetype bind:key />
-
     <h2>Embeddings</h2>
+
+    <h3>Load data file</h3>
+    <FileLoader bind:filename={$filename} bind:data bind:filetype bind:key />
 
     <h3>Pre-trained model ({$embedding})</h3>
 
