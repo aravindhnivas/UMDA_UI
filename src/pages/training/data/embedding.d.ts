@@ -1,6 +1,6 @@
 interface DataType {
     columns: string[];
-    head?: {
+    head: {
         [key: string]: string | number;
     }[];
     shape: number;
