@@ -171,7 +171,7 @@ export default async function <T>({
             } else {
                 dataReceived += dataString;
             }
-            terminal_log.info(dataString);
+
             const match = dataString.match(/(\d+)% Completed/);
             if (match) {
                 const percentage_completed = parseInt(match[1], 10);
@@ -183,8 +183,9 @@ export default async function <T>({
                     }
                     return p;
                 });
+            } else {
+                terminal_log.info(dataString);
             }
-            // console.log(dataString.trim());
             dispatchEvent(target, { py, pyfile, dataReceived, stdout: dataString }, 'pyEventData');
         });
 

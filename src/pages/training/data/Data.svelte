@@ -6,7 +6,7 @@
     import Embeddings from './Embeddings.svelte';
     import { Loadingbtn } from '$lib/components';
 
-    export let id: string;
+    export let id: string = 'main-data-container';
     export let display: string = 'none';
 
     const filetypes = ['csv', 'hdf', 'json', 'parquet'];

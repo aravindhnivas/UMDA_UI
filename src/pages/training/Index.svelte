@@ -2,9 +2,9 @@
     // import { Loadingbtn } from '$lib/components/';
     import Page from '$lib/layouts/Page.svelte';
     import { Pane } from 'svelte-splitpanes';
-    import { Data, Training } from '.';
-    const sidebar_items = ['Data', 'Training', 'Test'];
+    import { Data, Mol2VecTrain } from '.';
 
+    const sidebar_items = ['Data', 'Mol2Vec'];
     let active_item = sidebar_items[0];
 </script>
 
@@ -23,8 +23,8 @@
         </Pane>
         <Pane minSize={80}>
             <div class="p-4 overflow-auto max-h-[80vh]">
-                <Data id="training_data__comp" display={active_item.toLowerCase() === 'data' ? '' : 'none'} />
-                <!-- <Training id="training_training__comp" display={active_item.toLowerCase() === 'training' ? '' : 'none'} /> -->
+                <Data display={active_item.toLowerCase() === 'data' ? '' : 'none'} />
+                <Mol2VecTrain display={active_item.toLowerCase() === 'mol2vec' ? '' : 'none'} />
             </div>
         </Pane>
     </svelte:fragment>
