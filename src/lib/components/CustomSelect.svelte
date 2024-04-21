@@ -2,6 +2,7 @@
     export let label: string = '';
     export let value: string;
     export let items: string[] = [];
+    export let helper: string = '';
 </script>
 
 <div class="flex flex-col gap-1 min-w-[100px]">
@@ -14,4 +15,7 @@
             <option>{item}</option>
         {/each}
     </select>
+    {#if helper}
+        <span class="text-xs pl-1 m-auto">{helper}</span>
+    {/if}
 </div>
