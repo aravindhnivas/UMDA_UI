@@ -8,7 +8,7 @@
 
     export let loading: boolean = false;
     export let subprocess = false;
-
+    export let btn: HTMLButtonElement | null = null;
     let process_count = 0;
 
     const dispatch = createEventDispatcher();
@@ -30,6 +30,7 @@
 </script>
 
 <button
+    bind:this={btn}
     disabled={loading && !subprocess}
     class="btn btn-sm ld-ext-right w-max {className} "
     class:running={loading}
