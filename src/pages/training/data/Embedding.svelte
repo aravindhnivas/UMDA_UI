@@ -8,13 +8,17 @@
     import { writable } from '@macfja/svelte-persistent-store';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
     import { CheckCheck } from 'lucide-svelte';
+    import BrowseFile from '$lib/components/BrowseFile.svelte';
+    import test from 'node:test';
 
     export let id: string = 'main-data-container';
     export let display: string = 'none';
     export let columns: string[] = [];
 
     const auto_fetch_columns = writable('auto_fetch_columns', false);
-
+    let test_mode = import.meta.env.DEV;
+    let test_smiles = 'CO';
+    let test_result = '';
     let df_column = 'SMILES';
     const embeddings = ['mol2vec', 'VICGAE'];
 
@@ -29,7 +33,7 @@
             return;
         }
 
-        dataFromPython = await computePy<EmbeddingResult>({
+        dataFromPython = await computePy({
             pyfile: 'training.embedd_data',
             args: {
                 filename: $filename,
@@ -39,12 +43,27 @@
                 embedding: $embedding,
                 npartitions: $NPARTITIONS,
                 pretrained_model_location: $pretrained_model_location[$embedding],
+                test_mode,
+                test_smiles,
             },
-            general: true,
+            general: true && !test_mode,
             target: e.target as HTMLButtonElement,
         });
+        console.log(dataFromPython);
+        const vec = dataFromPython?.embedded_vector[0] ?? dataFromPython?.embedded_vector;
+        if (vec) {
+            console.log(vec);
+            test_result = `Embedded vector: ${vec.length} dimensions`;
+            test_result += '\n[';
+
+            for (let i = 0; i < vec.length; i += 5) {
+                let chunk = vec.slice(i, i + 5);
+                test_result += '\n\t' + chunk.join(',\t');
+            }
+            test_result += '\n]';
+        }
     };
-    let dataFromPython: EmbeddingResult | undefined;
+    let dataFromPython;
 
     const filename = writable_store('data_filename', '');
     let data: DataType | null = null;
@@ -60,25 +79,7 @@
 
     <h3>Pre-trained model ({$embedding})</h3>
 
-    <div class="join">
-        <button
-            class="btn btn-sm join-item"
-            on:click={async () => {
-                const result = await dialog.open();
-                if (!result) return;
-                if (typeof result === 'string') {
-                    $pretrained_model_location[$embedding] = result;
-                } else {
-                    $pretrained_model_location[$embedding] = result[0];
-                }
-            }}>Browse file</button
-        >
-        <input
-            class="input input-sm input-bordered join-item w-full"
-            placeholder="Enter filename"
-            bind:value={$pretrained_model_location[$embedding]}
-        />
-    </div>
+    <BrowseFile bind:filename={$pretrained_model_location[$embedding]} />
 
     <div class="flex flex-col gap-1">
         <div class="flex-center">
@@ -110,6 +111,28 @@
         </div>
         <Loadingbtn name="Compute" callback={embedd_data} subprocess={true} />
     </div>
+
+    <div class="flex-center">
+        <span>Test mode</span>
+        <input type="checkbox" class="toggle" bind:checked={test_mode} />
+    </div>
+
+    {#if test_mode}
+        <div class="flex flex-col gap-1">
+            <span class="text-xs pl-1">Enter SMILES</span>
+            <input type="text" class="input input-sm" bind:value={test_smiles} placeholder="Enter SMILES" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <span class="text-xs pl-1">Embedded vector</span>
+            <textarea
+                class="textarea textarea-bordered h-md"
+                placeholder="Embedded vector will be shown"
+                readonly
+                value={test_result}
+            ></textarea>
+        </div>
+    {/if}
 
     {#if dataFromPython}
         <div class=" flex flex-col gap-1">
