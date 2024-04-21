@@ -144,7 +144,7 @@
             <div class="col-span-3">
                 <span class="text-sm pl-1">Embedded vector</span>
                 <textarea
-                    class="textarea textarea-bordered h-[300px] w-full"
+                    class="textarea textarea-bordered h-[300px] w-full select-text"
                     placeholder="Embedded vector will be shown"
                     readonly
                     value={test_result}
