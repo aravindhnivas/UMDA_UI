@@ -3,6 +3,8 @@
     import FileLoader from './../FileLoader.svelte';
     import BrowseFile from '$lib/components/BrowseFile.svelte';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
+    import Loadingbtn from '$lib/components/Loadingbtn.svelte';
+    import computePy from '$lib/pyserver/computePy';
     export let id: string = 'mol2vec-train-container';
     export let display: string = 'none';
 
@@ -22,6 +24,28 @@
     let radius = 1;
     let n_jobs = 32;
     let min_count = 1;
+
+    const generate_mol2vec = async (e: MouseEvent) => {
+        if (!$filename) {
+            toast.error('Please select a file');
+            return;
+        }
+
+        await computePy({
+            pyfile: 'training.mol2vec',
+            args: {
+                smi_file: $filename,
+                sentence_type,
+                radius,
+                vector_size,
+                min_count,
+                n_jobs,
+                corpus_file,
+            },
+            general: true,
+            target: e.target as HTMLButtonElement,
+        });
+    };
 </script>
 
 <div class="grid content-start gap-2" {id} style:display>
@@ -71,4 +95,5 @@
         btn_name={'Browse corpus_file'}
         label="Optional. Choose corpus file if you have one!"
     />
+    <Loadingbtn class="w-lg m-auto " name="Compute" callback={generate_mol2vec} subprocess={true} />
 </div>
