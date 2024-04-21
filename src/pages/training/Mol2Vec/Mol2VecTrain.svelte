@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { HelpCircle } from 'lucide-svelte/icons';
+    import { CPU_COUNT } from '$lib/stores/system';
     import FileLoader from './../FileLoader.svelte';
     import BrowseFile from '$lib/components/BrowseFile.svelte';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
@@ -22,12 +22,19 @@
     };
     let vector_size = 300;
     let radius = 1;
-    let n_jobs = 32;
+    // convert decimal to int
+    const max_allowed_cpu = Math.floor($CPU_COUNT * 0.9);
+    let n_jobs = Math.floor($CPU_COUNT * 0.7);
     let min_count = 1;
 
     const generate_mol2vec = async (e: MouseEvent) => {
         if (!$filename) {
             toast.error('Please select a file');
+            return;
+        }
+
+        if (n_jobs > max_allowed_cpu) {
+            toast.error('Max. allowed CPU core is ' + max_allowed_cpu);
             return;
         }
 
@@ -85,8 +92,8 @@
 
         <div class="flex flex-col gap-1">
             <span class="text-xs pl-1">n_jobs</span>
-            <input type="number" class="input input-sm" bind:value={n_jobs} />
-            <span class="text-xs pl-1 m-auto">Number of cpu cores used for calculation</span>
+            <input type="number" class="input input-sm" bind:value={n_jobs} max={max_allowed_cpu} />
+            <span class="text-xs pl-1 m-auto">Number of cpu cores</span>
         </div>
     </div>
 
