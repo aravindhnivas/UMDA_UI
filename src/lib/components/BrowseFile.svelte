@@ -12,7 +12,7 @@
     {/if}
     <div class="join">
         <button
-            class="btn btn-sm join-item rounded-0"
+            class="btn btn-sm join-item"
             on:click={async () => {
                 const result = await dialog.open();
                 if (!result) return;
