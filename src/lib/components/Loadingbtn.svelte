@@ -26,7 +26,7 @@
 
 <button
     disabled={loading && !subprocess}
-    class="btn btn-sm ld-ext-right {className}}"
+    class="btn btn-sm ld-ext-right {className}} w-max"
     class:running={loading}
     on:click={run_callback}
 >
