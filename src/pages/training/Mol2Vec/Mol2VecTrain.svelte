@@ -23,8 +23,9 @@
     let vector_size = 300;
     let radius = 1;
     // convert decimal to int
-    const max_allowed_cpu = Math.floor($CPU_COUNT * 0.9);
-    let n_jobs = Math.floor($CPU_COUNT * 0.7);
+    const max_allowed_cpu = Math.floor($CPU_COUNT * 0.4);
+    // let n_jobs = Math.floor($CPU_COUNT * 0.2);
+    ``;
     let min_count = 1;
 
     const generate_mol2vec = async (e: MouseEvent) => {
@@ -33,10 +34,10 @@
             return;
         }
 
-        if (n_jobs > max_allowed_cpu) {
-            toast.error('Max. allowed CPU core is ' + max_allowed_cpu);
-            return;
-        }
+        // if (n_jobs > max_allowed_cpu) {
+        //     toast.error('Max. allowed CPU core is ' + max_allowed_cpu);
+        //     return;
+        // }
 
         await computePy({
             pyfile: 'training.mol2vec',
@@ -46,7 +47,7 @@
                 radius,
                 vector_size,
                 min_count,
-                n_jobs,
+                // n_jobs,
                 corpus_file,
             },
             general: true,
@@ -90,11 +91,11 @@
             >
         </div>
 
-        <div class="flex flex-col gap-1">
+        <!-- <div class="flex flex-col gap-1">
             <span class="text-xs pl-1">n_jobs</span>
             <input type="number" class="input input-sm" bind:value={n_jobs} max={max_allowed_cpu} />
             <span class="text-xs pl-1 m-auto">Number of cpu cores</span>
-        </div>
+        </div> -->
     </div>
 
     <BrowseFile
