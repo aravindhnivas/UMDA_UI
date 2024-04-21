@@ -1,4 +1,6 @@
 <script lang="ts" generics="T">
+    import { pyServerReady } from '$lib/pyserver/stores';
+
     export let name: string;
     export let callback: (e: MouseEvent) => Promise<T>;
     let className = '';
@@ -6,10 +8,13 @@
 
     export let loading: boolean = false;
     export let subprocess = false;
+
     let process_count = 0;
 
     const dispatch = createEventDispatcher();
+
     const run_callback = async (e: MouseEvent) => {
+        if (!$pyServerReady) return toast.error('python server is not yet started');
         loading = true;
         if (subprocess) process_count += 1;
         const [err, result] = await oO(callback(e));
