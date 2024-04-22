@@ -110,7 +110,7 @@
             <span>Total {data.shape} rows: {data?.nrows.length} rows are displayed below</span>
         </div>
         <div class="overflow-x-auto">
-            <DataTable table$aria-label="User list" style="width: 100%; max-height: 500px;">
+            <DataTable style="width: 100%; max-height: 500px;">
                 <Head>
                     <Row>
                         <Cell></Cell>
