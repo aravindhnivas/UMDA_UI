@@ -79,8 +79,15 @@
 <div class="grid content-start gap-2" {id} style:display>
     <h2>Embeddings</h2>
 
-    <h3>Load data file</h3>
-    <FileLoader bind:filename={$filename} bind:data bind:filetype bind:key />
+    <div class="flex-center">
+        <span>Test mode</span>
+        <input type="checkbox" class="toggle" bind:checked={test_mode} />
+    </div>
+
+    {#if !test_mode}
+        <h3>Load data file</h3>
+        <FileLoader bind:filename={$filename} bind:data bind:filetype bind:key />
+    {/if}
 
     <h3>Pre-trained model ({$embedding})</h3>
 
@@ -92,44 +99,9 @@
         }}
     />
 
-    <div class="flex flex-col gap-1">
-        <div class="flex-center">
-            <span>Auto-fetch column name</span>
-            <input type="checkbox" class="toggle" bind:checked={$auto_fetch_columns} />
-        </div>
-        {#if $auto_fetch_columns && !columns.length}
-            <span class="text-sm">Load file first!</span>
-        {/if}
-    </div>
-    <div class="flex items-end gap-1">
-        {#if $auto_fetch_columns}
-            <CustomSelect label="column name" bind:value={df_column} items={columns} />
-        {:else}
-            <div class="flex flex-col gap-1">
-                <span class="text-xs pl-1">column name</span>
-                <input type="text" class="input input-sm" bind:value={df_column} placeholder="Enter column name" />
-            </div>
-        {/if}
-        <CustomSelect label="embedding" bind:value={$embedding} items={embeddings} />
-        <div class="flex flex-col gap-1">
-            <span class="text-xs pl-1">npartitions</span>
-            <input
-                bind:value={$NPARTITIONS}
-                type="number"
-                class="input input-sm"
-                placeholder="Enter dask npartitions"
-            />
-        </div>
-        <Loadingbtn name="Compute" callback={embedd_data} subprocess={true} />
-    </div>
-
-    <div class="flex-center">
-        <span>Test mode</span>
-        <input type="checkbox" class="toggle" bind:checked={test_mode} />
-    </div>
-
     {#if test_mode}
         <div class="flex items-end gap-4">
+            <CustomSelect label="embedding" bind:value={$embedding} items={embeddings} />
             <div class="flex flex-col gap-1">
                 <span class="text-xs pl-1">Enter SMILES</span>
                 <input
@@ -160,6 +132,38 @@
                     value={test_result}
                 ></textarea>
             </div>
+        </div>
+    {:else}
+        <div class="flex flex-col gap-1">
+            <div class="flex-center">
+                <span>Auto-fetch column name</span>
+                <input type="checkbox" class="toggle" bind:checked={$auto_fetch_columns} />
+            </div>
+            {#if $auto_fetch_columns && !columns.length}
+                <span class="text-sm">Load file first!</span>
+            {/if}
+        </div>
+
+        <div class="flex items-end gap-1">
+            {#if $auto_fetch_columns}
+                <CustomSelect label="column name" bind:value={df_column} items={columns} />
+            {:else}
+                <div class="flex flex-col gap-1">
+                    <span class="text-xs pl-1">column name</span>
+                    <input type="text" class="input input-sm" bind:value={df_column} placeholder="Enter column name" />
+                </div>
+            {/if}
+            <CustomSelect label="embedding" bind:value={$embedding} items={embeddings} />
+            <div class="flex flex-col gap-1">
+                <span class="text-xs pl-1">npartitions</span>
+                <input
+                    bind:value={$NPARTITIONS}
+                    type="number"
+                    class="input input-sm"
+                    placeholder="Enter dask npartitions"
+                />
+            </div>
+            <Loadingbtn name="Compute" callback={embedd_data} subprocess={true} />
         </div>
     {/if}
 
