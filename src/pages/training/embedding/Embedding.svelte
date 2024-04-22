@@ -9,7 +9,6 @@
     import CustomSelect from '$lib/components/CustomSelect.svelte';
     import { CheckCheck } from 'lucide-svelte';
     import BrowseFile from '$lib/components/BrowseFile.svelte';
-    import test from 'node:test';
     import Molecule from '$lib/components/Molecule.svelte';
 
     export let id: string = 'main-data-container';
@@ -24,6 +23,11 @@
     const embeddings = ['mol2vec', 'VICGAE'];
 
     const embedd_data = async (e: MouseEvent) => {
+        if (!$pretrained_model_location[$embedding]) {
+            toast.error('Please select a pretrained model');
+            return;
+        }
+
         if (!df_column) {
             toast.error('Please provide a column name');
             return;
@@ -64,9 +68,9 @@
             test_result += '\n]';
         }
     };
-    let dataFromPython;
-
     const filename = writable_store('data_filename', '');
+    console.log({ $pretrained_model_location });
+    let dataFromPython;
     let data: DataType | null = null;
     let filetype = 'csv';
     let key = 'data';
@@ -80,7 +84,13 @@
 
     <h3>Pre-trained model ({$embedding})</h3>
 
-    <BrowseFile bind:filename={$pretrained_model_location[$embedding]} />
+    <BrowseFile
+        filename={$pretrained_model_location[$embedding]}
+        on:file_selected={e => {
+            $pretrained_model_location[$embedding] = e.detail;
+            // console.log(e.detail, { $embedding, $pretrained_model_location });
+        }}
+    />
 
     <div class="flex flex-col gap-1">
         <div class="flex-center">
