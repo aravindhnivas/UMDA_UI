@@ -4,6 +4,8 @@
     import { Loadingbtn } from '$lib/components';
     import LinearProgress from '@smui/linear-progress';
     import DataTable, { Head, Body, Row, Cell } from '@smui/data-table';
+    import CustomInput from '$lib/components/CustomInput.svelte';
+    import CustomSelect from '$lib/components/CustomSelect.svelte';
 
     export let filetype = 'csv';
     export let key = 'data';
@@ -12,6 +14,13 @@
     export let filetypes = ['csv', 'hdf', 'json', 'parquet'];
 
     // const filename = writable_store('data_filename', '');
+    interface DataType {
+        columns: string[];
+        nrows: {
+            [key: string]: string | number;
+        }[];
+        shape: number;
+    }
 
     const load_data = async () => {
         if (!filename) {
@@ -24,12 +33,18 @@
             return;
         }
 
+        if (rows.value > rows.max) {
+            toast.error('Please provide a value less than or equal to ' + rows.max);
+            return;
+        }
+
         const dataFromPython = await computePy<DataType>({
             pyfile: 'training.read_data',
             args: {
                 filename,
                 filetype,
                 key,
+                rows,
             },
         });
 
@@ -39,9 +54,15 @@
             return;
         }
         data = dataFromPython;
-        console.warn(dataFromPython);
+        console.warn({ data, dataFromPython });
     };
     let loading = false;
+    const rows = {
+        value: 10,
+        min: 10,
+        max: 100,
+        where: 'head',
+    };
 </script>
 
 <div class="join">
@@ -67,15 +88,29 @@
     {#if filetype === 'hdf'}
         <input class="input input-sm input-bordered join-item" placeholder="Enter key" bind:value={key} />
     {/if}
+</div>
+<div class="flex gap-1 items-end">
+    <CustomSelect label="where" bind:value={rows.where} items={['head', 'tail']} />
+    <CustomInput
+        class="w-[150px]"
+        bind:value={rows.value}
+        label="# Rows"
+        type="number"
+        max={rows.max}
+        on:change={() => load_data()}
+    />
     <Loadingbtn bind:loading name="load file" callback={load_data} />
 </div>
+
+<!-- <pre>{JSON.stringify(data?.nrows, null, 2)}</pre> -->
+
 {#if data}
-    {#if data?.columns && data?.head}
+    {#if data?.columns && data?.nrows}
         <div class="alert text-sm p-1">
-            <span>Total {data.shape} rows: First 10 rows are displayed below</span>
+            <span>Total {data.shape} rows: {data?.nrows.length} rows are displayed below</span>
         </div>
         <div class="overflow-x-auto">
-            <DataTable table$aria-label="User list" style="width: 100%;">
+            <DataTable table$aria-label="User list" style="width: 100%; max-height: 500px;">
                 <Head>
                     <Row>
                         <Cell></Cell>
@@ -85,12 +120,11 @@
                     </Row>
                 </Head>
                 <Body>
-                    {#each data.head as head, index}
+                    {#each data.nrows as nrows, index}
                         <Row class="hover:bg-orange-300">
                             <Cell>{index}</Cell>
-
                             {#each data.columns as column}
-                                <Cell>{head[column]}</Cell>
+                                <Cell>{nrows[column]}</Cell>
                             {/each}
                         </Row>
                     {/each}
