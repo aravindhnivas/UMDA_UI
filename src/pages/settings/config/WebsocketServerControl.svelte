@@ -1,18 +1,27 @@
 <script lang="ts">
-    import { wsport, wsready, stop_websocket, connect_websocket } from '$lib/ws';
+    import { wsport, wsready, stop_websocket, connect_websocket, socket } from '$lib/ws';
     import ServerControl from './ServerControl.svelte';
     import { Panel, Header, Content } from '@smui-extra/accordion';
     import IconButton, { Icon } from '@smui/icon-button';
     import { ChevronDown, ChevronUp } from 'lucide-svelte/icons';
     import computePy from '$lib/pyserver/computePy';
+    import { serverInfo } from '../utils/stores';
 
     const start_websocket = async () => {
-        await computePy({
-            pyfile: 'ws',
-            args: { wsport: $wsport },
-            general: true,
-        });
-        connect_websocket();
+        try {
+            connect_websocket();
+
+            if ($socket && $socket.readyState === 3) {
+                await computePy({
+                    pyfile: 'ws',
+                    args: { wsport: $wsport, action: 'start' },
+                    general: true,
+                });
+            }
+        } catch (error) {
+            if (error instanceof Error) serverInfo.error(error.message);
+            else serverInfo.error('Failed to start websocket server');
+        }
     };
 
     let open = false;
