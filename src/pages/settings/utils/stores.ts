@@ -27,7 +27,7 @@ export const create_logger_store = (value: OutputBoxtype[]) => {
     };
 };
 
-function xterm_logger_store() {
+export function xterm_logger_store() {
     const { subscribe, set } = writable<LOGGER>();
 
     function info(message: string) {

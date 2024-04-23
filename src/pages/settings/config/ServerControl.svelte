@@ -2,16 +2,24 @@
     import Textfield from '@smui/textfield';
     import { fetchServerROOT, updateServerInfo } from '$lib/pyserver/umdapyServer';
     import { checkNetstat, killPID } from '../utils/network';
-    import TerminalBox from '$lib/components/TerminalBox.svelte';
-    import { LOGGER } from '$lib/utils/logger';
+    import { serverInfo } from '../utils/stores';
+    // import TerminalBox from '$lib/components/TerminalBox.svelte';
+    // import { LOGGER } from '$lib/utils/logger';
 
-    export let terminal: LOGGER;
+    // export let terminal: LOGGER;
     export let port: number;
     export let serverReady: boolean = false;
     export let pids: string[] = [];
     export let startServer: () => void;
     export let stopServer: () => void;
     export let connection: 'ws' | 'http' = 'http';
+
+    const killpids = async () => {
+        if (!pids.length) return serverInfo.error('No PID to kill');
+        await killPID(pids);
+        serverReady = false;
+        await updateServerInfo();
+    };
 
     let port_lock = true;
     const fetch_port = async () => {
@@ -60,14 +68,7 @@
                 // console.log(pids);
             }}
         />
-        <button
-            class="btn btn-sm btn-error"
-            on:click={async () => {
-                await killPID(pids);
-                serverReady = false;
-                await updateServerInfo();
-            }}>kill PID</button
-        >
+        <button class="btn btn-sm btn-error" on:click={killpids}>kill PID</button>
     </div>
-    <TerminalBox bind:terminal />
+    <!-- <TerminalBox bind:terminal /> -->
 </div>

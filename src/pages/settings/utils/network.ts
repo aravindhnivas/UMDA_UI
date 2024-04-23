@@ -11,7 +11,7 @@ const fail = (err: string | Object) => {
 };
 
 export const checkNetstat_execution = async (port: number) => {
-    serverInfo.warn('checking server network status...');
+    serverInfo.warn(`Checking network status for port: ${port}`);
 
     const args = {
         win32: ['-ano', '-p', 'tcp'],

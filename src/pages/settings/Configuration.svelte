@@ -7,23 +7,18 @@
         pyServerReady,
         pyVersion,
         umdapyVersion,
-        pyServerPORT,
     } from '$lib/pyserver/stores';
-    import { start_and_check_umdapy_with_toast, stopServer, currentPortPID } from '$lib/pyserver/umdapyServer';
-
     import { BrowseBtn, Checkbox } from '$components/index';
     import Layout from './comp/Layout.svelte';
     import { fetchServerROOT } from '$lib/pyserver/umdapyServer';
     import { getPyVersion } from './utils/checkPython';
     import { install_umdapy_from_zipfile } from './utils/download-assets';
     import { check_umdapy_assets_status } from './utils/assets-status';
-    import { make_ws, wsport } from '$lib/ws';
-    import computePy from '$lib/pyserver/computePy';
-    import ServerControl from './config/ServerControl.svelte';
+    import PyServerControl from './config/PyServerControl.svelte';
+    import WebsocketServerControl from './config/WebsocketServerControl.svelte';
+    import Accordion from '@smui-extra/accordion';
+    import TerminalBox from '$lib/components/TerminalBox.svelte';
     import { serverInfo } from './utils/stores';
-    import Accordion, { Panel, Header, Content } from '@smui-extra/accordion';
-    import IconButton, { Icon } from '@smui/icon-button';
-    import { ChevronDown, ChevronUp } from 'lucide-svelte/icons';
 
     const get_local_dir = async () => {
         try {
@@ -43,15 +38,6 @@
         } catch (error) {
             toast.error(error as string);
         }
-    };
-
-    const start_ws = async () => {
-        const datafromPython = await computePy({
-            pyfile: 'ws',
-            args: { wsport: $wsport },
-            general: true,
-        });
-        // serverInfo.info(datafromPython);
     };
 
     onMount(async () => {
@@ -120,26 +106,9 @@
 
     <div class="accordion-container">
         <Accordion>
-            <Panel extend bind:open={panel1Open} style="background-color: coral;">
-                <Header>
-                    Python server
-                    <IconButton slot="icon" toggle pressed={panel1Open}>
-                        <Icon on><ChevronUp /></Icon>
-                        <Icon><ChevronDown /></Icon>
-                    </IconButton>
-                </Header>
-                <Content>
-                    <ServerControl
-                        connection="http"
-                        bind:terminal={$serverInfo}
-                        bind:port={$pyServerPORT}
-                        bind:serverReady={$pyServerReady}
-                        bind:pids={$currentPortPID}
-                        startServer={start_and_check_umdapy_with_toast}
-                        {stopServer}
-                    />
-                </Content>
-            </Panel>
+            <PyServerControl />
+            <WebsocketServerControl />
         </Accordion>
     </div>
+    <TerminalBox bind:terminal={$serverInfo} />
 </Layout>
