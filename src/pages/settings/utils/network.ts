@@ -20,28 +20,28 @@ export const checkNetstat_execution = async (port: number) => {
     };
     const currentplatform = (await platform()) as 'win32' | 'darwin' | 'linux';
     console.log({ args, currentplatform });
+    serverInfo.warn(`Running netstat-${currentplatform}: ${args[currentplatform].join(' ')}`);
     return new shell.Command(`netstat-${currentplatform}`, args[currentplatform]).execute();
 };
 
 export const checkNetstat = async (port: number) => {
     const [err, output] = await oO(checkNetstat_execution(port));
-    // console.log(output, output?.stdout);
-    if (output?.stdout) {
-        output.stdout.split('\n').forEach(ln => {
-            if (ln.includes('LISTEN') && ln.includes(`${port}`)) {
-                serverInfo.warn(ln);
-            }
-        });
-        // serverInfo.warn(output.stdout)
-    }
     if (!output) return console.error('no output');
+    console.log(output?.stdout);
+
+    if (output.stdout) {
+        output.stdout.split('\n').forEach(ln => {
+            serverInfo.warn(ln);
+        });
+    }
+
     if (err || output.stderr) return fail(err || output.stderr);
 
     const currentplatform = (await platform()) as 'win32' | 'darwin' | 'linux';
     if (currentplatform !== 'win32') return true;
 
     const cond = (ln: string) => {
-        if (ln.includes('TCP') && ln.includes('LISTEN') && ln.includes(`:${port}`)) {
+        if (ln.includes('TCP') && ln.includes(`:${port}`)) {
             return ln;
         }
     };
