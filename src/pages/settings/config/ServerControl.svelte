@@ -3,6 +3,7 @@
     import { fetchServerROOT, updateServerInfo } from '$lib/pyserver/umdapyServer';
     import { checkNetstat, killPID } from '../utils/network';
     import { serverInfo } from '../utils/stores';
+    import { connect_websocket, socket } from '$lib/ws';
     // import TerminalBox from '$lib/components/TerminalBox.svelte';
     // import { LOGGER } from '$lib/utils/logger';
 
@@ -54,6 +55,8 @@
     <div class="flex gap-1 items-center">
         {#if connection === 'http'}
             <button class="btn btn-sm" on:click={async () => await fetchServerROOT()}>Check Server connection</button>
+        {:else}
+            <button class="btn btn-sm" on:click={connect_websocket}>Check ws connection</button>
         {/if}
         <button class="btn btn-sm" on:click={async () => await checkNetstat(port)}>Check PORT status</button>
 
