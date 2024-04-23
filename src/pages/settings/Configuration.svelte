@@ -19,11 +19,12 @@
     import { check_umdapy_assets_status } from './utils/assets-status';
     import { make_ws, wsport } from '$lib/ws';
     import computePy from '$lib/pyserver/computePy';
-    import PyServerStatus from './config/PyServerStatus.svelte';
+    import ServerControl from './config/ServerControl.svelte';
     import { serverInfo } from './utils/stores';
     import Accordion, { Panel, Header, Content } from '@smui-extra/accordion';
     import IconButton, { Icon } from '@smui/icon-button';
     import { ChevronDown, ChevronUp } from 'lucide-svelte/icons';
+
     const get_local_dir = async () => {
         try {
             const localdir = await path.appLocalDataDir();
@@ -128,7 +129,7 @@
                     </IconButton>
                 </Header>
                 <Content>
-                    <PyServerStatus
+                    <ServerControl
                         connection="http"
                         bind:terminal={$serverInfo}
                         bind:port={$pyServerPORT}
