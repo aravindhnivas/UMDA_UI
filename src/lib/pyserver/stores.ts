@@ -14,7 +14,7 @@ export const pyProgram = derived([developerMode, pythonpath, umdapy], ([$develop
     return $developerMode ? $pythonpath : $umdapy;
 });
 export const pyServerReady = writable(false);
-export const port_lock = createPersistanceStore(false, 'port_lock');
+// export const port_lock = createPersistanceStore(false, 'port_lock');
 
 export const pyVersion = writable('');
 export const umdapyVersion = writable('');

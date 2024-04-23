@@ -28,7 +28,10 @@ export async function startServer() {
     serverInfo.warn('starting umdapy server at port: ' + get(pyServerPORT));
 
     if (get(currentPortPID).length > 0) {
-        await killPID();
+        const killedports = await killPID(get(currentPortPID));
+        if (typeof killedports === 'object') currentPortPID.set(killedports);
+        pyServerReady.set(false);
+        await updateServerInfo();
     }
 
     pyServerReady.set(false);
@@ -78,7 +81,12 @@ export async function startServer() {
 
 export async function stopServer({ update_info = true } = {}) {
     try {
-        if (!get(pyServerReady)) return await killPID({ update_info });
+        if (!get(pyServerReady)) {
+            await killPID(get(currentPortPID));
+            pyServerReady.set(false);
+            if (update_info) await updateServerInfo();
+            return;
+        }
         if (!get(pyChildProcess)?.kill) return serverInfo.error('pyChildProcess not found');
         await get(pyChildProcess)?.kill();
 
@@ -109,7 +117,7 @@ export async function checkServerProblem() {
     const [err1] = await oO(getPyVersion());
     if (!err1) return toast.success('Problem fixed');
 
-    const [err2, output] = await oO(checkNetstat_execution());
+    const [err2, output] = await oO(checkNetstat_execution(get(pyServerPORT)));
     if (err2) {
         toast.error('failed to get netstat');
         return;
@@ -163,7 +171,7 @@ export const updateServerInfo = async (delay = 0) => {
         serverCurrentStatus.set({ value: 'server closed', type: 'error' });
         return;
     }
-    const status = await checkNetstat();
+    const status = await checkNetstat(get(pyServerPORT));
     if (!status) {
         return serverCurrentStatus.set({ value: 'server closed', type: 'error' });
     }

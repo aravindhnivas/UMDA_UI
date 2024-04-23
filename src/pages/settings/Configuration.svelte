@@ -1,10 +1,7 @@
 <script lang="ts">
     import {
         developerMode,
-        port_lock,
-        pyServerPORT,
         serverCurrentStatus,
-        serverDebug,
         pythonpath,
         pythonscript,
         pyServerReady,
@@ -12,29 +9,18 @@
         umdapyVersion,
     } from '$lib/pyserver/stores';
     import { BrowseBtn, Checkbox } from '$components/index';
-    import Textfield from '@smui/textfield';
     import Layout from './comp/Layout.svelte';
-    import {
-        currentPortPID,
-        fetchServerROOT,
-        start_and_check_umdapy_with_toast,
-        stopServer,
-    } from '$lib/pyserver/umdapyServer';
-    import { checkNetstat, killPID } from './utils/network';
-    import { serverInfo } from './utils/stores';
+    import { fetchServerROOT } from '$lib/pyserver/umdapyServer';
     import { getPyVersion } from './utils/checkPython';
-    // import ConsoleBox from '$lib/components/ConsoleBox.svelte';
     import { install_umdapy_from_zipfile } from './utils/download-assets';
     import { check_umdapy_assets_status } from './utils/assets-status';
-    import TerminalBox from '$lib/components/TerminalBox.svelte';
-
-    const fetch_port = async () => {
-        if ($port_lock) return toast.warning('Port is locked');
-        const port = await invoke<number>('get_tcp_port');
-        if (port) $pyServerPORT = port;
-        else toast.error('Failed to fetch port');
-    };
-
+    import { make_ws, wsport } from '$lib/ws';
+    import computePy from '$lib/pyserver/computePy';
+    import PyServerStatus from './config/PyServerStatus.svelte';
+    import { serverInfo } from './utils/stores';
+    import Accordion, { Panel, Header, Content } from '@smui-extra/accordion';
+    import IconButton, { Icon } from '@smui/icon-button';
+    import { ChevronDown, ChevronUp } from 'lucide-svelte/icons';
     const get_local_dir = async () => {
         try {
             const localdir = await path.appLocalDataDir();
@@ -55,7 +41,17 @@
         }
     };
 
+    const start_ws = async () => {
+        const datafromPython = await computePy({
+            pyfile: 'ws',
+            args: { wsport: $wsport },
+            general: true,
+        });
+        // serverInfo.info(datafromPython);
+    };
+
     onMount(async () => {
+        // const socket = make_ws();
         if (import.meta.env.DEV) {
             if (!$pyServerReady) {
                 const [err] = await oO(fetchServerROOT());
@@ -65,6 +61,8 @@
             }
         }
     });
+
+    let panel1Open = true;
 </script>
 
 <Layout id="Configuration">
@@ -116,53 +114,20 @@
         >
     </div>
 
-    <div class="flex items-center gap-1">
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <!-- svelte-ignore a11y-no-static-element-interactions -->
-        <i on:click={fetch_port} class="i-material-symbols-refresh"></i>
-
-        <Textfield disabled={$port_lock} type="number" bind:value={$pyServerPORT} label="ServerPORT" />
-
-        {#if $port_lock}
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <i on:click={() => ($port_lock = false)} class="i-material-symbols-lock-outline"></i>
-        {:else}
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <i on:click={() => ($port_lock = true)} class="i-material-symbols-lock-open-right-outline"></i>
-        {/if}
-
-        <button
-            disabled={$pyServerReady}
-            class="btn btn-sm"
-            id="startServerButton"
-            on:click={start_and_check_umdapy_with_toast}>Start Server</button
-        >
-        <button class="btn btn-sm btn-error" id="stopServerButton" on:click={async () => await stopServer()}
-            >Stop Server</button
-        >
-
-        <Checkbox class="ml-auto" bind:value={$serverDebug} label="debug" />
+    <div class="accordion-container">
+        <Accordion>
+            <Panel extend bind:open={panel1Open} style="background-color: coral;">
+                <Header>
+                    Python server
+                    <IconButton slot="icon" toggle pressed={panel1Open}>
+                        <Icon on><ChevronUp /></Icon>
+                        <Icon><ChevronDown /></Icon>
+                    </IconButton>
+                </Header>
+                <Content>
+                    <PyServerStatus bind:terminal={$serverInfo} />
+                </Content>
+            </Panel>
+        </Accordion>
     </div>
-
-    <div class="flex gap-1 items-center">
-        <button class="btn btn-sm" on:click={async () => await fetchServerROOT()}>Check Server connection</button>
-        <button class="btn btn-sm" on:click={async () => await checkNetstat()}>Check PORT status</button>
-
-        <Textfield
-            value={$currentPortPID.join(', ')}
-            label="current port PID"
-            on:change={e => {
-                // console.log(e.target.value, $currentPortPID);
-
-                if ($currentPortPID.length === 0 && e.target.value) {
-                    $currentPortPID = e.target.value.split(',').map(Number);
-                }
-                // console.log($currentPortPID);
-            }}
-        />
-        <button class="btn btn-sm btn-error" on:click={async () => await killPID()}>kill PID</button>
-    </div>
-    <TerminalBox bind:terminal={$serverInfo} />
 </Layout>
