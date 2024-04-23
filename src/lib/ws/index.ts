@@ -14,11 +14,11 @@ export const connect_websocket = () => {
 
     socket = new WebSocket(`ws://localhost:${get(wsport)}`);
 
-    socket.onmessage = event => {
-        console.log(`Received from Python: ${event.data}`);
-        // Send message back to Python server
-        socket.send('Hello from JavaScript!');
-    };
+    // socket.onmessage = event => {
+    //     // console.log(`Received from Python: ${event.data}`);
+    //     // Send message back to Python server
+    //     socket.send('Hello from JavaScript!');
+    // };
 
     socket.onopen = () => {
         wsready.set(true);
