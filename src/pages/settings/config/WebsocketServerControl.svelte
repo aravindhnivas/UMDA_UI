@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { pyServerReady } from '$lib/pyserver/stores';
     import { wsport, wsready, stop_websocket, connect_websocket, socket } from '$lib/ws';
     import ServerControl from './ServerControl.svelte';
     import { Panel, Header, Content } from '@smui-extra/accordion';
@@ -9,18 +10,16 @@
 
     const start_websocket = async () => {
         try {
+            if (!$pyServerReady) throw new Error('Python server is not ready');
             connect_websocket();
-
-            if ($socket && $socket.readyState === 3) {
-                await computePy({
-                    pyfile: 'ws',
-                    args: { wsport: $wsport, action: 'start' },
-                    general: true,
-                });
-            }
+            await computePy({
+                pyfile: 'ws',
+                args: { wsport: $wsport, action: 'start' },
+                general: true,
+            });
         } catch (error) {
             if (error instanceof Error) serverInfo.error(error.message);
-            else serverInfo.error('Failed to start websocket server');
+            serverInfo.error('Failed to start websocket server');
         }
     };
 
