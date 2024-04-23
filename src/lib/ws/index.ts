@@ -13,20 +13,18 @@ export const ws_readyState = {
 };
 
 export const connect_websocket = () => {
-    serverInfo.info('Connecting to Python server...');
+    if (get(socket)) serverInfo.info('ReadyState onstart: ' + ws_readyState[get(socket).readyState]);
     if (get(socket)?.readyState === 1) {
         get(socket).send('Hello from UMDA UI!');
         return serverInfo.info('Already connected to Python server!');
     }
 
     socket.set(new WebSocket(`ws://localhost:${get(wsport)}`));
-    console.log(get(socket));
+    serverInfo.info('ReadyState: ' + ws_readyState[get(socket).readyState]);
 
     get(socket).onopen = () => {
         wsready.set(true);
         serverInfo.info('Connected to Python server!');
-        // console.log('Connected to Python server!');
-        // Send initial message to Python server
         get(socket).send('Hello from UMDA UI!');
     };
 
@@ -36,13 +34,12 @@ export const connect_websocket = () => {
 
     get(socket).onerror = error => {
         serverInfo.error('Error occurred!' + JSON.stringify(error, null, 2));
-        console.error('Error occurred:', error);
     };
 
     get(socket).onclose = () => {
         wsready.set(false);
         serverInfo.warn('Disconnected from Python server!');
-        console.log('Disconnected from Python server!');
+        serverInfo.info('ReadyState onclose: ' + ws_readyState[get(socket).readyState]);
     };
 };
 
