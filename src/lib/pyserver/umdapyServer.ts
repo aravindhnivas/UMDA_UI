@@ -179,7 +179,6 @@ export const updateServerInfo = async (delay = 0) => {
 };
 export const start_and_check_umdapy = () =>
     new Promise(async (resolve, reject) => {
-        const startServerBtn = document.getElementById('startServerButton') as HTMLButtonElement;
         try {
             if (!get(developerMode) && !get(python_asset_ready)) {
                 serverInfo.error('umdapy is not installed. Maybe check-umdapy-assets?');

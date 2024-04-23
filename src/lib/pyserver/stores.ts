@@ -2,7 +2,6 @@ import { path } from '@tauri-apps/api';
 import type { Child } from '@tauri-apps/api/shell';
 import { createPersistanceStore } from '$utils/index';
 import { writable, derived } from 'svelte/store';
-import { writable as persist } from '@macfja/svelte-persistent-store';
 export { get } from 'svelte/store';
 
 export const pythonpath = createPersistanceStore('python', 'pythonpath');

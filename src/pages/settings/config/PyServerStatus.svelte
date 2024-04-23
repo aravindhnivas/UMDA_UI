@@ -1,24 +1,23 @@
 <script lang="ts">
-    import { pyServerPORT, serverDebug, pyServerReady } from '$lib/pyserver/stores';
-    import { Checkbox } from '$components/index';
     import Textfield from '@smui/textfield';
-    import {
-        currentPortPID,
-        fetchServerROOT,
-        start_and_check_umdapy_with_toast,
-        stopServer,
-        updateServerInfo,
-    } from '$lib/pyserver/umdapyServer';
+    import { fetchServerROOT, updateServerInfo } from '$lib/pyserver/umdapyServer';
     import { checkNetstat, killPID } from '../utils/network';
     import TerminalBox from '$lib/components/TerminalBox.svelte';
     import { LOGGER } from '$lib/utils/logger';
 
     export let terminal: LOGGER;
+    export let port: number;
+    export let serverReady: boolean = false;
+    export let pids: string[] = [];
+    export let startServer: () => void;
+    export let stopServer: () => void;
+    export let connection: 'ws' | 'http' = 'http';
+
     let port_lock = true;
     const fetch_port = async () => {
         if (port_lock) throw toast.warning('Port is locked');
-        const port = await invoke<number>('get_tcp_port');
-        if (port) $pyServerPORT = port;
+        const _port = await invoke<number>('get_tcp_port');
+        if (_port) port = _port;
         throw toast.error('Failed to fetch port');
     };
 </script>
@@ -29,7 +28,7 @@
         <!-- svelte-ignore a11y-no-static-element-interactions -->
         <i on:click={fetch_port} class="i-material-symbols-refresh"></i>
 
-        <Textfield disabled={port_lock} type="number" bind:value={$pyServerPORT} label="ServerPORT" />
+        <Textfield disabled={port_lock} type="number" bind:value={port} label="ServerPORT" />
 
         {#if port_lock}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -41,38 +40,31 @@
             <i on:click={() => (port_lock = true)} class="i-material-symbols-lock-open-right-outline"></i>
         {/if}
 
-        <button
-            disabled={$pyServerReady}
-            class="btn btn-sm"
-            id="startServerButton"
-            on:click={start_and_check_umdapy_with_toast}>Start Server</button
-        >
-
-        <button class="btn btn-sm btn-error" id="stopServerButton" on:click={async () => await stopServer()}
-            >Stop Server</button
-        >
-        <Checkbox class="ml-auto" bind:value={$serverDebug} label="debug" />
+        <button disabled={serverReady} class="btn btn-sm" on:click={startServer}>Start Server</button>
+        <button class="btn btn-sm btn-error" on:click={stopServer}>Stop Server</button>
     </div>
     <div class="flex gap-1 items-center">
-        <button class="btn btn-sm" on:click={async () => await fetchServerROOT()}>Check Server connection</button>
-        <button class="btn btn-sm" on:click={async () => await checkNetstat($pyServerPORT)}>Check PORT status</button>
+        {#if connection === 'http'}
+            <button class="btn btn-sm" on:click={async () => await fetchServerROOT()}>Check Server connection</button>
+        {/if}
+        <button class="btn btn-sm" on:click={async () => await checkNetstat(port)}>Check PORT status</button>
 
         <Textfield
-            value={$currentPortPID.join(', ')}
+            value={pids.join(', ')}
             label="current port PID"
             on:change={e => {
-                // console.log(e.target.value, $currentPortPID);
-                if ($currentPortPID.length === 0 && e.target.value) {
-                    $currentPortPID = e.target.value.split(',').map(Number);
+                // console.log(e.target.value, pids);
+                if (pids.length === 0 && e.target.value) {
+                    pids = e.target.value.split(',');
                 }
-                // console.log($currentPortPID);
+                // console.log(pids);
             }}
         />
         <button
             class="btn btn-sm btn-error"
             on:click={async () => {
-                await killPID($currentPortPID);
-                pyServerReady.set(false);
+                await killPID(pids);
+                serverReady = false;
                 await updateServerInfo();
             }}>kill PID</button
         >

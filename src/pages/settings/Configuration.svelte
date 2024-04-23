@@ -7,7 +7,10 @@
         pyServerReady,
         pyVersion,
         umdapyVersion,
+        pyServerPORT,
     } from '$lib/pyserver/stores';
+    import { start_and_check_umdapy_with_toast, stopServer, currentPortPID } from '$lib/pyserver/umdapyServer';
+
     import { BrowseBtn, Checkbox } from '$components/index';
     import Layout from './comp/Layout.svelte';
     import { fetchServerROOT } from '$lib/pyserver/umdapyServer';
@@ -125,7 +128,15 @@
                     </IconButton>
                 </Header>
                 <Content>
-                    <PyServerStatus bind:terminal={$serverInfo} />
+                    <PyServerStatus
+                        connection="http"
+                        bind:terminal={$serverInfo}
+                        bind:port={$pyServerPORT}
+                        bind:serverReady={$pyServerReady}
+                        bind:pids={$currentPortPID}
+                        startServer={start_and_check_umdapy_with_toast}
+                        {stopServer}
+                    />
                 </Content>
             </Panel>
         </Accordion>
