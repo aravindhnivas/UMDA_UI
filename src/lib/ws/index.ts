@@ -1,54 +1,69 @@
+import computePy from '$lib/pyserver/computePy';
 import { serverInfo } from '$pages/settings/utils/stores';
 export const wsready = writable(false);
 export const wsport = writable_store('wsport', 8765);
 
-let socket: WebSocket;
+export const socket = writable<WebSocket>();
+
+export const ws_readyState = {
+    0: 'CONNECTING',
+    1: 'OPEN',
+    2: 'CLOSING',
+    3: 'CLOSED',
+};
 
 export const connect_websocket = () => {
     serverInfo.info('Connecting to Python server...');
-    if (socket) {
-        serverInfo.warn('Closing existing connection...');
-        socket.close();
-        wsready.set(false);
+    if (get(socket)?.readyState === 1) {
+        get(socket).send('Hello from UMDA UI!');
+        return serverInfo.info('Already connected to Python server!');
     }
 
-    socket = new WebSocket(`ws://localhost:${get(wsport)}`);
+    socket.set(new WebSocket(`ws://localhost:${get(wsport)}`));
+    console.log(get(socket));
 
-    // socket.onmessage = event => {
-    //     // console.log(`Received from Python: ${event.data}`);
-    //     // Send message back to Python server
-    //     socket.send('Hello from JavaScript!');
-    // };
-
-    socket.onopen = () => {
+    get(socket).onopen = () => {
         wsready.set(true);
         serverInfo.info('Connected to Python server!');
         // console.log('Connected to Python server!');
         // Send initial message to Python server
-        socket.send('Hello from JavaScript!');
+        get(socket).send('Hello from UMDA UI!');
     };
 
-    socket.onerror = error => {
-        serverInfo.error('Error occurred!' + error);
+    get(socket).onmessage = message => {
+        serverInfo.info('Message received from Python server: ' + message.data);
+    };
+
+    get(socket).onerror = error => {
+        serverInfo.error('Error occurred!' + JSON.stringify(error, null, 2));
         console.error('Error occurred:', error);
     };
 
-    socket.onclose = () => {
+    get(socket).onclose = () => {
         wsready.set(false);
         serverInfo.warn('Disconnected from Python server!');
         console.log('Disconnected from Python server!');
     };
-
-    return socket;
 };
 
-export const stop_websocket = () => {
+export const stop_websocket = async () => {
     serverInfo.info('Closing connection...');
-    if (!socket) {
+    if (!get(socket)) {
         serverInfo.info('No connection to close!');
         return;
     }
-    socket.close();
+    get(socket).close();
     wsready.set(false);
     serverInfo.info('Connection closed!');
+
+    try {
+        await computePy({
+            pyfile: 'ws',
+            args: { wsport: get(wsport), action: 'stop' },
+            general: true,
+        });
+        serverInfo.info('Python server stopped!');
+    } catch (error) {
+        serverInfo.error('Error stopping Python server!' + error);
+    }
 };
