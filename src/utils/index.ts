@@ -11,11 +11,11 @@ export const toggle_loading = (node: HTMLButtonElement, className = 'running') =
     if (!node) return;
     // console.log(node);
 
-    if(node.classList.contains(className)) {
-        node.classList.remove(className)
+    if (node.classList.contains(className)) {
+        node.classList.remove(className);
         node.disabled = false;
     } else {
-        node.classList.add(className)
+        node.classList.add(className);
         node.disabled = true;
     }
     // node.classList.contains('running') ? node.classList.remove('running') : node.classList.add('running');
@@ -28,5 +28,4 @@ export const get_tmpdir = async () => {
     }
     return tempdirPath;
 };
-
 console.log('Utilities loaded');
