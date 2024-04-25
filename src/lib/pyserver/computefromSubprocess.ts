@@ -37,7 +37,7 @@ export default async function <T>({
         let outputFile: string;
         target ||= button || (e?.target as HTMLButtonElement);
 
-        console.log({ target });
+        // console.log({ target });
 
         if (pyfile === 'server') {
             pyServerReady.set(false);
@@ -54,7 +54,6 @@ export default async function <T>({
             target?.classList.toggle('is-loading');
         }
 
-        // pyVersion.set(localStorage.getItem('pyVersion'))
         if (!get(pyVersion)) {
             Alert.error('Python is not valid. Fix it in Settings --> Configuration');
             return;
@@ -66,9 +65,7 @@ export default async function <T>({
         const sendArgs = [pyfile, JSON.stringify(args)];
         const mainPyFile = await path.join(get(pythonscript), computepyfile + '.py');
 
-        // const command_suffix = get(developerMode) ? '-dev' : ''
         const pyArgs = get(developerMode) ? [mainPyFile, ...sendArgs] : sendArgs;
-        // const cmd = `umdapy${command_suffix}`
         console.log(get(pyProgram), pyArgs);
         const py = new shell.Command(get(pyProgram), pyArgs);
         const pyChild = await py.spawn();
@@ -89,8 +86,6 @@ export default async function <T>({
             ]);
         }
 
-        let ind = get(running_processes).findIndex(p => p.pid === pyChild.pid);
-
         py.on('error', err => {
             Alert.error(err);
 
@@ -110,19 +105,16 @@ export default async function <T>({
             }
 
             dispatchEvent(target, { py, pyfile, dataReceived, error }, 'pyEventClosed');
+            // console.log({ pyfile, dataReceived, error });
             if (pyfile !== 'server') {
                 running_processes.update(p => p.filter(p => p.pid !== pyChild.pid));
             }
 
             if (error) {
                 resolve(undefined);
-                // loginfo.write(`\n\n[ERROR OCCURED]\n${error}\n`)
-                // loginfo.end()
-
                 if (error.includes('Traceback')) {
                     return Alert.error(error);
                 }
-                return console.error(error);
             }
 
             if (general) {
