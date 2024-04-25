@@ -1,32 +1,6 @@
 import { LOGGER } from '$lib/utils/logger';
 import { createPersistanceStore } from '$utils/index';
 
-export const create_logger_store = (value: OutputBoxtype[]) => {
-    const { set, subscribe, update } = writable(value);
-    const setVal = (log: string | Object) => {
-        return typeof log === 'string' ? log.trim() : JSON.stringify(log, null, 2);
-    };
-    const add = (val: OutputBoxtype) => {
-        if (!val.value) val.value = 'No output returned';
-        update(output => {
-            if (output.length > 100) output = output.slice(0, -50);
-            return [val, ...output];
-        });
-    };
-
-    return {
-        set,
-        subscribe,
-        update,
-        add,
-        warn: (log: string | Object) => add({ value: setVal(log), type: 'warning' }),
-        error: (log: string | Object) => add({ value: setVal(log), type: 'error' }),
-        info: (log: string | Object) => add({ value: setVal(log), type: 'info' }),
-        success: (log: string | Object) => add({ value: setVal(log), type: 'success' }),
-        clear: () => set([]),
-    };
-};
-
 export function xterm_logger_store() {
     const { subscribe, set } = writable<LOGGER>();
 
@@ -78,15 +52,93 @@ export const assets_installation_required = createPersistanceStore(false, 'asset
 export const python_asset_ready = writable(false);
 export const downloadURL = createPersistanceStore<string>('', 'downloadURL');
 
-export const running_processes = writable<
-    {
-        pid: number | undefined;
-        pyfile: string;
-        close?: {
-            name: string;
-            cb: () => Promise<void>;
-            style: string;
-        };
-        progress?: number;
-    }[]
->([]);
+interface RunningProcess {
+    pyfile: string;
+    close?: {
+        name: string;
+        cb: () => Promise<void>;
+        style: string;
+    };
+    progress?: number;
+    completed?: boolean;
+    aborted?: boolean;
+    logs?: string;
+}
+
+export const create_running_processes_store = () => {
+    const { set, subscribe, update } = writable<{
+        [key: string]: RunningProcess;
+    }>({});
+
+    const add = (pid: number, obj: RunningProcess) => {
+        update(p => {
+            p[pid] = obj;
+
+            if (Object.keys(p).length > 5) {
+                delete p[Object.keys(p)[0]];
+            }
+            return p;
+        });
+    };
+
+    const remove = (pid: number) => {
+        update(p => {
+            delete p[pid];
+            return p;
+        });
+    };
+
+    const mark_aborted = (pid: number) => {
+        update(p => {
+            p[pid].aborted = true;
+            return p;
+        });
+    };
+
+    const mark_completed = (pid: number) => {
+        update(p => {
+            p[pid].completed = true;
+            return p;
+        });
+    };
+
+    const update_progress = (pid: number, progress: number) => {
+        update(p => {
+            p[pid].progress = progress;
+            return p;
+        });
+    };
+
+    const add_logs = (pid: number, log: string) => {
+        update(p => {
+            p[pid].logs = log;
+            return p;
+        });
+    };
+
+    return {
+        set,
+        subscribe,
+        update,
+        add,
+        remove,
+        mark_completed,
+        update_progress,
+        mark_aborted,
+        add_logs,
+    };
+};
+
+export const running_processes = create_running_processes_store();
+
+export const running_processes_pids = derived(running_processes, $running_processes => {
+    return $running_processes ? Object.keys($running_processes).map(Number) : [];
+});
+
+export const running_processes_count = derived(running_processes, $running_processes => {
+    const total = Object.keys($running_processes).length;
+    const completed = Object.values($running_processes).filter(p => p.completed && !p.aborted).length;
+    const aborted = Object.values($running_processes).filter(p => p.aborted).length;
+    const running = total - completed - aborted;
+    return { total, completed, aborted, running };
+});

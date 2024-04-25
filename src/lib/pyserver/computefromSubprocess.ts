@@ -32,7 +32,7 @@ export default async function <T>({
     pyfile,
     args,
     computepyfile = 'main',
-}: Type): Promise<T> {
+}: Type): Promise<T | string | undefined> {
     return new Promise(async resolve => {
         let outputFile: string;
         target ||= button || (e?.target as HTMLButtonElement);
@@ -71,28 +71,21 @@ export default async function <T>({
         const pyChild = await py.spawn();
 
         if (pyfile !== 'server') {
-            running_processes.update(p => [
-                ...p,
-                {
-                    pid: pyChild.pid,
-                    pyfile,
-                    close: {
-                        name: 'X',
-                        cb: async () => await pyChild.kill(),
-                        style: 'display:flex; justify-content: center; cursor: pointer; background-color: red;',
-                    },
-                    progress: null,
+            const current_process = {
+                pyfile,
+                close: {
+                    name: 'X',
+                    cb: async () => await pyChild.kill(),
+                    style: 'display:flex; justify-content: center; cursor: pointer; background-color: red;',
                 },
-            ]);
+            };
+            running_processes.add(pyChild.pid, current_process);
         }
 
         py.on('error', err => {
             Alert.error(err);
-
-            if (pyfile !== 'server') {
-                running_processes.update(p => p.filter(p => p.pid !== pyChild.pid));
-            }
-            return;
+            if (pyfile === 'server') return;
+            running_processes.mark_aborted(pyChild.pid);
         });
 
         let error = '';
@@ -105,16 +98,18 @@ export default async function <T>({
             }
 
             dispatchEvent(target, { py, pyfile, dataReceived, error }, 'pyEventClosed');
-            // console.log({ pyfile, dataReceived, error });
             if (pyfile !== 'server') {
-                running_processes.update(p => p.filter(p => p.pid !== pyChild.pid));
+                running_processes.mark_completed(pyChild.pid);
             }
 
             if (error) {
                 resolve(undefined);
                 if (error.includes('Traceback')) {
+                    running_processes.mark_aborted(pyChild.pid);
+                    running_processes.add_logs(pyChild.pid, error);
                     return Alert.error(error);
                 }
+                running_processes.add_logs(pyChild.pid, error + '\n\n' + dataReceived); // error also contains warnings and stderrs
             }
 
             if (general) {
@@ -130,7 +125,7 @@ export default async function <T>({
             const [_err, output] = await oO(fs.readTextFile(outputFile));
             if (_err) return Alert.error(_err);
 
-            const dataFromPython = tryF(() => JSON.parse(output));
+            const dataFromPython = tryF(() => JSON.parse(output ?? ''));
             if (dataFromPython instanceof Error) {
                 resolve(undefined);
                 return Alert.error(dataFromPython);
@@ -144,20 +139,16 @@ export default async function <T>({
         });
 
         py.stderr.on('data', errorString => {
-            // const errorString = `${String.fromCharCode.apply(null, err)}\n`
             if (pyfile === 'server') {
                 error = errorString;
             } else {
                 error += errorString;
             }
             dispatchEvent(target, { py, pyfile, error }, 'pyEventStderr');
-            // console.log(`Output from python: ${errorString}`);
             terminal_log.warn(errorString);
         });
 
         py.stdout.on('data', dataString => {
-            // loginfo.write(dataString)
-            // const dataString = `${String.fromCharCode.apply(null, data)}\n`
             if (pyfile === 'server') {
                 dataReceived = dataString;
             } else {
@@ -167,14 +158,7 @@ export default async function <T>({
             const match = dataString.match(/(\d+)% Completed/);
             if (match) {
                 const percentage_completed = parseInt(match[1], 10);
-                // console.log(`Percentage completed: ${percentage_completed}%`);
-                running_processes.update(p => {
-                    const current = p.find(p => p.pid === pyChild.pid);
-                    if (current) {
-                        current.progress = percentage_completed;
-                    }
-                    return p;
-                });
+                running_processes.update_progress(pyChild.pid, percentage_completed);
             } else {
                 terminal_log.info(dataString);
             }
