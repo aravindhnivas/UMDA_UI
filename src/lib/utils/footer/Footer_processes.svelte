@@ -81,7 +81,7 @@
     <div
         transition:fade
         role="presentation"
-        class="navbar-item"
+        class="flex navbar-item gap-2 items-center text-xs"
         style="cursor: pointer;"
         on:click={() => {
             surface.setOpen(true);
