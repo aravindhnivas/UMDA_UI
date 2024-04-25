@@ -74,8 +74,12 @@ export const create_running_processes_store = () => {
         update(p => {
             p[pid] = obj;
 
-            if (Object.keys(p).length > 5) {
-                delete p[Object.keys(p)[0]];
+            if (Object.keys(p).length > 100) {
+                // delete the first 50 keys
+                const keys = Object.keys(p).slice(0, 50);
+                for (const key of keys) {
+                    delete p[key];
+                }
             }
             return p;
         });
