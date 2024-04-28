@@ -77,11 +77,12 @@
 </script>
 
 <div class="grid content-start gap-2" {id} style:display>
-    <h2>Embeddings</h2>
-
-    <div class="flex-center">
-        <span>Test mode</span>
-        <input type="checkbox" class="toggle" bind:checked={test_mode} />
+    <div class="flex justify-between">
+        <h2>Embeddings</h2>
+        <div class="flex-center text-sm">
+            <input type="checkbox" class="toggle" bind:checked={test_mode} />
+            <span>Test mode</span>
+        </div>
     </div>
 
     {#if !test_mode}
