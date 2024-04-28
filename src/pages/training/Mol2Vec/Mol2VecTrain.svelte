@@ -90,12 +90,6 @@
                 Number of occurrences a word should have to be considered in training</span
             >
         </div>
-
-        <!-- <div class="flex flex-col gap-1">
-            <span class="text-xs pl-1">n_jobs</span>
-            <input type="number" class="input input-sm" bind:value={n_jobs} max={max_allowed_cpu} />
-            <span class="text-xs pl-1 m-auto">Number of cpu cores</span>
-        </div> -->
     </div>
 
     <BrowseFile

@@ -12,6 +12,9 @@
         RAM_SIZE.set(total_memory / 1024 / 1024 / 1024);
         CPU_COUNT.set(cpu_count);
 
+        console.log('RAM_SIZE', $RAM_SIZE);
+        console.log('CPU_COUNT', $CPU_COUNT);
+
         const cpu_npartitions = $CPU_COUNT * 5;
         const ram_npartitions = (($RAM_SIZE - 4) * 1024) / 200;
         const max_npartitions = Math.max(cpu_npartitions, ram_npartitions, 50);
