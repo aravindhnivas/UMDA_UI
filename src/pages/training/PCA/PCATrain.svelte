@@ -16,6 +16,7 @@
     let radius = 1;
     let pca_dim = 70;
     let n_clusters = 20;
+    let use_embedding_pipeline = false;
 
     const generate_pca = async (e: MouseEvent) => {
         if (!$model_file) {
@@ -33,6 +34,13 @@
             return;
         }
 
+        if (use_embedding_pipeline) {
+            if (!$embedding_pipeline_loc) {
+                toast.error('Please select a embedding pipeline location');
+                return;
+            }
+        }
+
         await computePy({
             pyfile: 'training.pca',
             args: {
@@ -40,7 +48,7 @@
                 n_clusters,
                 radius,
                 embeddings_save_loc: $embeddings_save_loc,
-                embedding_pipeline_loc: $embedding_pipeline_loc,
+                embedding_pipeline_loc: use_embedding_pipeline ? $embedding_pipeline_loc : null,
                 model_file: $model_file,
                 npy_file: $npy_file,
             },
@@ -75,8 +83,22 @@
             <span class="text-xs pl-1 m-auto">KMeans Cluster</span>
         </div>
     </div>
-
-    <BrowseFile bind:filename={$embedding_pipeline_loc} btn_name={'Browse pipeline'} label="Optional" />
+    <div class="grid grid-cols-4 justify-start">
+        <div class="grid">
+            <span>use saved pipeline</span>
+            <input type="checkbox" class="toggle" bind:checked={use_embedding_pipeline} />
+        </div>
+        <div class="col-span-3">
+            <BrowseFile
+                bind:filename={$embedding_pipeline_loc}
+                btn_name={'Browse pipeline'}
+                label="Optional. If not provided, the pipeline will be used to generate the final embedder function."
+                on:file_selected={() => {
+                    use_embedding_pipeline = true;
+                }}
+            />
+        </div>
+    </div>
     <BrowseFile directory={true} bind:filename={$embeddings_save_loc} btn_name={'Browse Save location'} />
     <Loadingbtn class="w-lg m-auto " name="Compute" callback={generate_pca} subprocess={true} />
 </div>
