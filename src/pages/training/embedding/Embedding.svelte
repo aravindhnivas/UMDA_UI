@@ -1,7 +1,6 @@
 <script lang="ts">
     import FileLoader from '../FileLoader.svelte';
-
-    import { embedding, pretrained_model_location } from './stores';
+    import { embedding, pretrained_model_location, embeddings } from './stores';
     import { NPARTITIONS } from '$lib/stores/system';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import computePy from '$lib/pyserver/computePy';
@@ -20,7 +19,6 @@
     const test_smiles = writable_store('test_smiles', 'CCO');
     let test_result = '';
     let df_column = 'SMILES';
-    const embeddings = ['mol2vec', 'VICGAE'];
 
     const embedd_data = async (e: MouseEvent) => {
         if (!$pretrained_model_location[$embedding]) {
