@@ -1,8 +1,9 @@
 <script lang="ts">
-    import { default_cpu_count, MAX_CPU } from '$lib/stores/system';
     import BrowseFile from '$lib/components/BrowseFile.svelte';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import computePy from '$lib/pyserver/computePy';
+    import CustomSelect from '$lib/components/CustomSelect.svelte';
+    import { models } from '../embedding/stores';
 
     export let id: string = 'pca-train-container';
     export let display: string = 'none';
@@ -17,6 +18,8 @@
     let pca_dim = 70;
     let n_clusters = 20;
     let use_embedding_pipeline = false;
+    let compute_kmeans = true;
+    let original_model = models[0];
 
     const generate_pca = async (e: MouseEvent) => {
         if (!$model_file) {
@@ -51,6 +54,8 @@
                 embedding_pipeline_loc: use_embedding_pipeline ? $embedding_pipeline_loc : null,
                 model_file: $model_file,
                 npy_file: $npy_file,
+                compute_kmeans,
+                original_model,
             },
             general: true,
             target: e.target as HTMLButtonElement,
@@ -59,10 +64,19 @@
 </script>
 
 <div class="grid content-start gap-2" {id} style:display>
-    <h2>PCA - embedder</h2>
+    <div class="grid">
+        <h2>Principal component analysis</h2>
+        <span class="text-sm">A linear dimensionality reduction technique</span>
+    </div>
 
+    <CustomSelect class="w-max" label="Choose model" bind:value={original_model} items={models} />
     <BrowseFile bind:filename={$model_file} btn_name={'Browse model (.pkl)'} />
     <BrowseFile bind:filename={$npy_file} btn_name={'Browse vectors (.npy)'} />
+
+    <div class="flex-center">
+        <span>Compute KMeans clustering</span>
+        <input type="checkbox" class="toggle" bind:checked={compute_kmeans} />
+    </div>
 
     <div class="flex gap-1">
         <div class="flex flex-col gap-1">
@@ -77,11 +91,13 @@
             <span class="text-xs pl-1 m-auto">PCA dimensions</span>
         </div>
 
-        <div class="flex flex-col gap-1">
-            <span class="text-xs pl-1">n_clusters</span>
-            <input type="number" class="input input-sm" bind:value={n_clusters} />
-            <span class="text-xs pl-1 m-auto">KMeans Cluster</span>
-        </div>
+        {#if compute_kmeans}
+            <div class="flex flex-col gap-1">
+                <span class="text-xs pl-1">n_clusters</span>
+                <input type="number" class="input input-sm" bind:value={n_clusters} />
+                <span class="text-xs pl-1 m-auto">KMeans Cluster</span>
+            </div>
+        {/if}
     </div>
     <div class="grid grid-cols-4 justify-start">
         <div class="grid">
