@@ -52,8 +52,14 @@
             general: true && !test_mode,
             target: e.target as HTMLButtonElement,
         });
+
         console.log(dataFromPython);
-        const vec = dataFromPython?.embedded_vector[0] ?? dataFromPython?.embedded_vector;
+        let vec = dataFromPython?.embedded_vector[0] ?? dataFromPython?.embedded_vector;
+
+        if ($embedding === 'mol2vec_PCA') {
+            vec = dataFromPython?.embedded_vector;
+        }
+
         if (vec) {
             console.log(vec);
             test_result = `Embedded vector: ${vec.length} dimensions`;

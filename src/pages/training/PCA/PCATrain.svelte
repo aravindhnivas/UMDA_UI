@@ -9,20 +9,15 @@
 
     const model_file = writable_store('pca_model_file', '');
     const npy_file = writable_store('pca_npy_file', '');
+
     const embeddings_save_loc = writable_store('pca_embeddings_save_loc', '');
+    const embedding_pipeline_loc = writable_store('pca_embedding_pipeline_loc', '');
 
     let radius = 1;
     let pca_dim = 70;
     let n_clusters = 20;
-    // let n_workers = $default_cpu_count;
-    // let threads_per_worker = 2;
 
     const generate_pca = async (e: MouseEvent) => {
-        // if (n_workers > $MAX_CPU) {
-        //     toast.error('Max. allowed CPU core is ' + $MAX_CPU);
-        //     return;
-        // }
-
         if (!$model_file) {
             toast.error('Please select a model_file');
             return;
@@ -43,10 +38,9 @@
             args: {
                 pca_dim,
                 n_clusters,
-                // threads_per_worker,
-                // n_workers,
                 radius,
                 embeddings_save_loc: $embeddings_save_loc,
+                embedding_pipeline_loc: $embedding_pipeline_loc,
                 model_file: $model_file,
                 npy_file: $npy_file,
             },
@@ -80,18 +74,9 @@
             <input type="number" class="input input-sm" bind:value={n_clusters} />
             <span class="text-xs pl-1 m-auto">KMeans Cluster</span>
         </div>
-        <!-- <div class="flex flex-col gap-1">
-            <span class="text-xs pl-1">n_workers</span>
-            <input type="number" class="input input-sm" bind:value={n_workers} />
-            <span class="text-xs pl-1 m-auto"># CPUs</span>
-        </div>
-        <div class="flex flex-col gap-1">
-            <span class="text-xs pl-1">threads_per_worker</span>
-            <input type="number" class="input input-sm" bind:value={threads_per_worker} />
-            <span class="text-xs pl-1 m-auto"># threads per CPU</span>
-        </div> -->
     </div>
 
+    <BrowseFile bind:filename={$embedding_pipeline_loc} btn_name={'Browse pipeline'} label="Optional" />
     <BrowseFile directory={true} bind:filename={$embeddings_save_loc} btn_name={'Browse Save location'} />
     <Loadingbtn class="w-lg m-auto " name="Compute" callback={generate_pca} subprocess={true} />
 </div>
