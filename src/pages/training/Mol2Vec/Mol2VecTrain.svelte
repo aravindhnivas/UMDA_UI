@@ -57,7 +57,7 @@
 </script>
 
 <div class="grid content-start gap-2" {id} style:display>
-    <h2>Mol2Vec - create embedder</h2>
+    <h2>Mol2Vec - embedder</h2>
 
     <h3>Load data file</h3>
     <FileLoader bind:filename={$filename} bind:data bind:filetype bind:key filetypes={['csv']} />

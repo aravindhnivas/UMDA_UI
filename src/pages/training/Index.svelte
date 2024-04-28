@@ -2,9 +2,9 @@
     // import { Loadingbtn } from '$lib/components/';
     import Page from '$lib/layouts/Page.svelte';
     import { Pane } from 'svelte-splitpanes';
-    import { Embedding, Mol2VecTrain } from '.';
+    import { Embedding, Mol2VecTrain, PCATrain } from '.';
 
-    const sidebar_items = ['Mol2Vec', 'Embedding'];
+    const sidebar_items = ['Mol2Vec', 'PCA', 'Embedding'];
     let active_item = sidebar_items[0];
 </script>
 
@@ -25,6 +25,7 @@
             <div class="p-4 overflow-auto max-h-[80vh]">
                 <Embedding display={active_item.toLowerCase() === 'embedding' ? '' : 'none'} />
                 <Mol2VecTrain display={active_item.toLowerCase() === 'mol2vec' ? '' : 'none'} />
+                <PCATrain display={active_item.toLowerCase() === 'pca' ? '' : 'none'} />
             </div>
         </Pane>
     </svelte:fragment>
