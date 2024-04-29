@@ -99,7 +99,7 @@
     <h3>Pre-trained model ({$embedding})</h3>
 
     <BrowseFile
-        filename={$pretrained_model_location[$embedding]}
+        bind:filename={$pretrained_model_location[$embedding]}
         on:file_selected={e => {
             $pretrained_model_location[$embedding] = e.detail;
         }}
