@@ -1,6 +1,7 @@
-export const embeddings = ['mol2vec', 'mol2vec_PCA', 'VICGAE'];
+export const embeddings = ['mol2vec', 'VICGAE'];
 export const models = ['mol2vec', 'VICGAE'];
 export const embedding = writable<Embedding>('mol2vec');
+
 export const default_pretrained_modes = writable<{ [key: string]: boolean }>({
     mol2vec: false,
     mol2vec_PCA: false,
@@ -9,5 +10,10 @@ export const default_pretrained_modes = writable<{ [key: string]: boolean }>({
 
 export const pretrained_model_location = writable_store<Record<Embedding, string>>(
     'pretrained_model_location',
+    {} as Record<Embedding, string>,
+);
+
+export const PCA_pipeline_location = writable_store<Record<Embedding, string>>(
+    'PCA_pipeline_location',
     {} as Record<Embedding, string>,
 );

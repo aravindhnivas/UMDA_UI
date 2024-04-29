@@ -12,12 +12,12 @@
     const npy_file = writable_store('pca_npy_file', '');
 
     const embeddings_save_loc = writable_store('pca_embeddings_save_loc', '');
-    const embedding_pipeline_loc = writable_store('pca_embedding_pipeline_loc', '');
+    // const embedding_pipeline_loc = writable_store('pca_embedding_pipeline_loc', '');
 
     let radius = 1;
     let pca_dim = 70;
     let n_clusters = 20;
-    let use_embedding_pipeline = false;
+    // let use_embedding_pipeline = false;
     let compute_kmeans = true;
     let original_model = models[0];
 
@@ -37,12 +37,12 @@
             return;
         }
 
-        if (use_embedding_pipeline) {
-            if (!$embedding_pipeline_loc) {
-                toast.error('Please select a embedding pipeline location');
-                return;
-            }
-        }
+        // if (use_embedding_pipeline) {
+        //     if (!$embedding_pipeline_loc) {
+        //         toast.error('Please select a embedding pipeline location');
+        //         return;
+        //     }
+        // }
 
         await computePy({
             pyfile: 'training.pca',
@@ -51,7 +51,7 @@
                 n_clusters,
                 radius,
                 embeddings_save_loc: $embeddings_save_loc,
-                embedding_pipeline_loc: use_embedding_pipeline ? $embedding_pipeline_loc : null,
+                // embedding_pipeline_loc: use_embedding_pipeline ? $embedding_pipeline_loc : null,
                 model_file: $model_file,
                 npy_file: $npy_file,
                 compute_kmeans,
@@ -99,7 +99,7 @@
             </div>
         {/if}
     </div>
-    <div class="grid grid-cols-4 justify-start">
+    <!-- <div class="grid grid-cols-4 justify-start">
         <div class="grid">
             <span>use saved pipeline</span>
             <input type="checkbox" class="toggle" bind:checked={use_embedding_pipeline} />
@@ -114,7 +114,7 @@
                 }}
             />
         </div>
-    </div>
+    </div> -->
     <BrowseFile directory={true} bind:filename={$embeddings_save_loc} btn_name={'Browse Save location'} />
     <Loadingbtn class="w-lg m-auto " name="Compute" callback={generate_pca} subprocess={true} />
 </div>

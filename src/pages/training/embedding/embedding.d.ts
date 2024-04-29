@@ -14,4 +14,4 @@ interface EmbeddingResult {
     computed_time: string;
 }
 
-type Embedding = 'mol2vec' | 'mol2vec_PCA' | 'VICGAE';
+type Embedding = 'mol2vec' | 'VICGAE';

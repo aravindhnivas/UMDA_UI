@@ -1,6 +1,6 @@
 <script lang="ts">
+    import { embedding, pretrained_model_location, embeddings, PCA_pipeline_location } from './stores';
     import FileLoader from '../FileLoader.svelte';
-    import { embedding, pretrained_model_location, embeddings } from './stores';
     import { NPARTITIONS } from '$lib/stores/system';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import computePy from '$lib/pyserver/computePy';
@@ -15,11 +15,12 @@
     export let columns: string[] = [];
 
     const auto_fetch_columns = writable('auto_fetch_columns', false);
-    let test_mode = import.meta.env.DEV;
+    // let test_mode = import.meta.env.DEV;
+    let test_mode = false;
     const test_smiles = writable_store('test_smiles', 'CCO');
     let test_result = '';
     let df_column = 'SMILES';
-
+    const use_PCA = writable_store('use_PCA', false);
     const embedd_data = async (e: MouseEvent) => {
         if (!$pretrained_model_location[$embedding]) {
             toast.error('Please select a pretrained model');
@@ -48,6 +49,7 @@
                 pretrained_model_location: $pretrained_model_location[$embedding],
                 test_mode,
                 test_smiles: $test_smiles,
+                PCA_pipeline_location: $use_PCA ? $PCA_pipeline_location[$embedding] : null,
             },
             general: true && !test_mode,
             target: e.target as HTMLButtonElement,
@@ -100,12 +102,20 @@
         filename={$pretrained_model_location[$embedding]}
         on:file_selected={e => {
             $pretrained_model_location[$embedding] = e.detail;
-            // console.log(e.detail, { $embedding, $pretrained_model_location });
         }}
+        label="Model"
     />
+
+    {#if $use_PCA}
+        <BrowseFile filename={$PCA_pipeline_location[$embedding]} label="PCA pipeline" />
+    {/if}
 
     {#if test_mode}
         <div class="flex items-end gap-4">
+            <div class="flex-center border-1 border-solid border-rounded p-1">
+                <span>PCA</span>
+                <input type="checkbox" class="toggle" bind:checked={$use_PCA} />
+            </div>
             <CustomSelect label="embedding" bind:value={$embedding} items={embeddings} />
             <div class="flex flex-col gap-1">
                 <span class="text-xs pl-1">Enter SMILES</span>
@@ -141,9 +151,17 @@
     {:else}
         <div class="flex flex-col gap-1">
             <div class="flex-center">
-                <span>Auto-fetch column name</span>
-                <input type="checkbox" class="toggle" bind:checked={$auto_fetch_columns} />
+                <div class="flex-center border-1 border-solid border-rounded p-1">
+                    <span>Auto-fetch column name</span>
+                    <input type="checkbox" class="toggle" bind:checked={$auto_fetch_columns} />
+                </div>
+
+                <div class="flex-center border-1 border-solid border-rounded p-1">
+                    <span>PCA</span>
+                    <input type="checkbox" class="toggle" bind:checked={$use_PCA} />
+                </div>
             </div>
+
             {#if $auto_fetch_columns && !columns.length}
                 <span class="text-sm">Load file first!</span>
             {/if}
@@ -158,7 +176,9 @@
                     <input type="text" class="input input-sm" bind:value={df_column} placeholder="Enter column name" />
                 </div>
             {/if}
+
             <CustomSelect label="embedding" bind:value={$embedding} items={embeddings} />
+
             <div class="flex flex-col gap-1">
                 <span class="text-xs pl-1">npartitions</span>
                 <input

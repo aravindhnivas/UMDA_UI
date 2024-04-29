@@ -22,7 +22,7 @@
 
 <div class="flex flex-col gap-1">
     {#if label}
-        <span class="text-sm pl-1">{label}</span>
+        <span class="text-sm pl-1">{label} (<em>{filename.split('/').at(-1) || 'Choose a file'}</em>)</span>
     {:else if filename && !directory}
         <span class="text-sm pl-1">Filename: <em>{filename.split('/').at(-1)}</em></span>
     {/if}
