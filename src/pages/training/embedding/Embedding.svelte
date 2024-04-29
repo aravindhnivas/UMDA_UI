@@ -107,7 +107,7 @@
     />
 
     {#if $use_PCA}
-        <BrowseFile filename={$PCA_pipeline_location[$embedding]} label="PCA pipeline" />
+        <BrowseFile bind:filename={$PCA_pipeline_location[$embedding]} label="PCA pipeline" />
     {/if}
 
     {#if test_mode}
