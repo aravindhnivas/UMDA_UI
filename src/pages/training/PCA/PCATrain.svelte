@@ -99,22 +99,6 @@
             </div>
         {/if}
     </div>
-    <!-- <div class="grid grid-cols-4 justify-start">
-        <div class="grid">
-            <span>use saved pipeline</span>
-            <input type="checkbox" class="toggle" bind:checked={use_embedding_pipeline} />
-        </div>
-        <div class="col-span-3">
-            <BrowseFile
-                bind:filename={$embedding_pipeline_loc}
-                btn_name={'Browse pipeline'}
-                label="Optional. If not provided, the pipeline will be used to generate the final embedder function."
-                on:file_selected={() => {
-                    use_embedding_pipeline = true;
-                }}
-            />
-        </div>
-    </div> -->
     <BrowseFile directory={true} bind:filename={$embeddings_save_loc} btn_name={'Browse Save location'} />
     <Loadingbtn class="w-lg m-auto " name="Compute" callback={generate_pca} subprocess={true} />
 </div>
