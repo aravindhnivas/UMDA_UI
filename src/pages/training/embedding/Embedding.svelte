@@ -87,7 +87,7 @@
             test_result += '\n[';
 
             for (let i = 0; i < vec.length; i += 3) {
-                let chunk = vec.slice(i, i + 3);
+                let chunk = vec.slice(i, i + 3).map((v: number) => v.toFixed(10));
                 test_result += '\n\t' + chunk.join(',\t');
             }
             test_result += '\n]';
