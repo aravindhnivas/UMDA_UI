@@ -39,6 +39,11 @@
     let df_column = 'SMILES';
 
     const embedd_data = async (e: MouseEvent) => {
+        if (!test_mode && !$filename) {
+            toast.error('Please select a file');
+            return;
+        }
+
         if (!$model_and_pipeline_files[$embedding].model_file) {
             toast.error('Please select a pretrained model');
             return;
@@ -51,11 +56,6 @@
 
         if (!df_column) {
             toast.error('Please provide a column name');
-            return;
-        }
-
-        if (!$filename) {
-            toast.error('Please select a file');
             return;
         }
 
