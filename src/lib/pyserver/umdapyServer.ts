@@ -19,6 +19,7 @@ import { createPersistanceStore } from '$utils/index';
 import { sleep } from '$lib/utils/initialise';
 import { toggle_loading } from '$utils/index';
 import { Alert } from '$utils/stores';
+import { check_umdapy_assets_status } from '$pages/settings/utils/assets-status';
 
 export const currentPortPID = createPersistanceStore<string[]>([], 'pyserver-pid');
 
@@ -181,8 +182,11 @@ export const start_and_check_umdapy = () =>
     new Promise(async (resolve, reject) => {
         try {
             if (!get(developerMode) && !get(python_asset_ready)) {
-                serverInfo.error('umdapy is not installed. Maybe check-umdapy-assets?');
-                return reject('umdapy is not installed. Maybe check-umdapy-assets?');
+                await check_umdapy_assets_status();
+                if (!get(python_asset_ready)) {
+                    serverInfo.error('umdapy is not installed. Maybe check-umdapy-assets?');
+                    return reject('umdapy is not installed. Maybe check-umdapy-assets?');
+                }
             }
 
             const out = await startServer();
