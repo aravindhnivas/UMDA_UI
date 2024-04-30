@@ -39,7 +39,7 @@
                                 {:else if process.completed}
                                     <span style="color: green;">completed</span>
                                 {:else}
-                                    {process?.progress ? `(${process?.progress} %)` : ''}
+                                    {process?.progress ? `(${process?.progress} %)` : 'running...'}
                                 {/if}
                             </td>
                             <td
