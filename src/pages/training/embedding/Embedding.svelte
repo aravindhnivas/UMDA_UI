@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { embedding, pretrained_model_location, embeddings, PCA_pipeline_location } from './stores';
+    import { embedding, embeddings } from './stores';
     import FileLoader from '../FileLoader.svelte';
     import { NPARTITIONS } from '$lib/stores/system';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
@@ -14,16 +14,38 @@
     export let display: string = 'none';
     export let columns: string[] = [];
 
+    const model_and_pipeline_files = writable_store<{
+        [name: string]: {
+            model_file: string;
+            pipeline_file: string;
+        };
+    }>('model_and_pipeline_files', {});
+
+    $: if ($embedding && !$model_and_pipeline_files[$embedding]) {
+        $model_and_pipeline_files[$embedding] = {
+            model_file: '',
+            pipeline_file: '',
+        };
+    }
+
     const auto_fetch_columns = writable('auto_fetch_columns', false);
+    const use_PCA = writable_store('use_PCA', false);
+
     // let test_mode = import.meta.env.DEV;
     let test_mode = false;
     const test_smiles = writable_store('test_smiles', 'CCO');
     let test_result = '';
+
     let df_column = 'SMILES';
-    const use_PCA = writable_store('use_PCA', false);
+
     const embedd_data = async (e: MouseEvent) => {
-        if (!$pretrained_model_location[$embedding]) {
+        if (!$model_and_pipeline_files[$embedding].model_file) {
             toast.error('Please select a pretrained model');
+            return;
+        }
+
+        if ($use_PCA && !$model_and_pipeline_files[$embedding].pipeline_file) {
+            toast.error('Please select a PCA pipeline');
             return;
         }
 
@@ -40,16 +62,16 @@
         dataFromPython = await computePy({
             pyfile: 'training.embedd_data',
             args: {
-                filename: $filename,
-                filetype,
                 key,
+                filetype,
+                test_mode,
                 df_column,
+                filename: $filename,
                 embedding: $embedding,
                 npartitions: $NPARTITIONS,
-                pretrained_model_location: $pretrained_model_location[$embedding],
-                test_mode,
                 test_smiles: $test_smiles,
-                PCA_pipeline_location: $use_PCA ? $PCA_pipeline_location[$embedding] : null,
+                pretrained_model_location: $model_and_pipeline_files[$embedding].model_file,
+                PCA_pipeline_location: $use_PCA ? $model_and_pipeline_files[$embedding].pipeline_file : null,
             },
             general: true && !test_mode,
             target: e.target as HTMLButtonElement,
@@ -57,10 +79,7 @@
 
         console.log(dataFromPython);
         let vec = dataFromPython?.embedded_vector[0] ?? dataFromPython?.embedded_vector;
-
-        if ($embedding === 'mol2vec_PCA') {
-            vec = dataFromPython?.embedded_vector;
-        }
+        if ($use_PCA && vec) vec = dataFromPython?.embedded_vector;
 
         if (vec) {
             console.log(vec);
@@ -75,7 +94,6 @@
         }
     };
     const filename = writable_store('data_filename', '');
-    console.log({ $pretrained_model_location });
     let dataFromPython;
     let data: DataType | null = null;
     let filetype = 'csv';
@@ -98,17 +116,11 @@
 
     <h3>Pre-trained model ({$embedding})</h3>
 
-    <BrowseFile
-        bind:filename={$pretrained_model_location[$embedding]}
-        on:file_selected={e => {
-            $pretrained_model_location[$embedding] = e.detail;
-        }}
-        label="Model"
-    />
+    <BrowseFile bind:filename={$model_and_pipeline_files[$embedding].model_file} label="Model" />
 
     {#if $use_PCA}
         <BrowseFile
-            bind:filename={$PCA_pipeline_location[$embedding]}
+            bind:filename={$model_and_pipeline_files[$embedding].pipeline_file}
             label="PCA pipeline"
             helper="Make sure to give a pipeline without kmeans clustering"
         />
