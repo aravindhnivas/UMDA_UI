@@ -3,13 +3,20 @@
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import computePy from '$lib/pyserver/computePy';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
-    import { models } from '../embedding/stores';
+    import { embeddings } from '../embedding/stores';
 
     export let id: string = 'pca-train-container';
     export let display: string = 'none';
 
     const model_file = writable_store('pca_model_file', '');
     const npy_file = writable_store('pca_npy_file', '');
+
+    const pca_model_and_npy_files = writable_store<{
+        [name: string]: {
+            model_file: string;
+            npy_file: string;
+        };
+    }>('pca_model_and_npy_files', {});
 
     const embeddings_save_loc = writable_store('pca_embeddings_save_loc', '');
     // const embedding_pipeline_loc = writable_store('pca_embedding_pipeline_loc', '');
@@ -18,8 +25,8 @@
     let pca_dim = 70;
     let n_clusters = 20;
     // let use_embedding_pipeline = false;
-    let compute_kmeans = true;
-    let original_model = models[0];
+    let compute_kmeans = false;
+    let original_model = embeddings[0];
 
     const generate_pca = async (e: MouseEvent) => {
         if (!$model_file) {
@@ -37,13 +44,6 @@
             return;
         }
 
-        // if (use_embedding_pipeline) {
-        //     if (!$embedding_pipeline_loc) {
-        //         toast.error('Please select a embedding pipeline location');
-        //         return;
-        //     }
-        // }
-
         await computePy({
             pyfile: 'training.pca',
             args: {
@@ -51,7 +51,6 @@
                 n_clusters,
                 radius,
                 embeddings_save_loc: $embeddings_save_loc,
-                // embedding_pipeline_loc: use_embedding_pipeline ? $embedding_pipeline_loc : null,
                 model_file: $model_file,
                 npy_file: $npy_file,
                 compute_kmeans,
@@ -61,6 +60,13 @@
             target: e.target as HTMLButtonElement,
         });
     };
+
+    $: if (original_model && !$pca_model_and_npy_files[original_model]) {
+        $pca_model_and_npy_files[original_model] = {
+            model_file: '',
+            npy_file: '',
+        };
+    }
 </script>
 
 <div class="grid content-start gap-2" {id} style:display>
@@ -69,9 +75,9 @@
         <span class="text-sm">A linear dimensionality reduction technique</span>
     </div>
 
-    <CustomSelect class="w-max" label="Choose model" bind:value={original_model} items={models} />
-    <BrowseFile bind:filename={$model_file} btn_name={'Browse model (.pkl)'} />
-    <BrowseFile bind:filename={$npy_file} btn_name={'Browse vectors (.npy)'} />
+    <CustomSelect class="w-max" label="Choose model" bind:value={original_model} items={embeddings} />
+    <BrowseFile bind:filename={$pca_model_and_npy_files[original_model].model_file} btn_name={'Browse model (.pkl)'} />
+    <BrowseFile bind:filename={$pca_model_and_npy_files[original_model].npy_file} btn_name={'Browse vectors (.npy)'} />
 
     <div class="flex-center">
         <span>Compute KMeans clustering</span>
