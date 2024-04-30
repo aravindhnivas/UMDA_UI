@@ -107,7 +107,11 @@
     />
 
     {#if $use_PCA}
-        <BrowseFile bind:filename={$PCA_pipeline_location[$embedding]} label="PCA pipeline" />
+        <BrowseFile
+            bind:filename={$PCA_pipeline_location[$embedding]}
+            label="PCA pipeline"
+            helper="Make sure to give a pipeline without kmeans clustering"
+        />
     {/if}
 
     {#if test_mode}
