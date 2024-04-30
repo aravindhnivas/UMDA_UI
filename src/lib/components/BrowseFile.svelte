@@ -33,7 +33,7 @@
     {#if helper}
         <span class="flex items-center gap-0.5 text-xs ml-auto">
             <HelpCircle size="20" />
-            <span>filename</span>
+            <span>{helper}</span>
         </span>
     {/if}
 </div>
