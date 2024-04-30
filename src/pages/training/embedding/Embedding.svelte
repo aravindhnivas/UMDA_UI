@@ -31,8 +31,8 @@
     const auto_fetch_columns = writable('auto_fetch_columns', false);
     const use_PCA = writable_store('use_PCA', false);
 
-    // let test_mode = import.meta.env.DEV;
-    let test_mode = false;
+    let test_mode = import.meta.env.DEV;
+    // let test_mode = false;
     const test_smiles = writable_store('test_smiles', 'CCO');
     let test_result = '';
 
@@ -77,13 +77,13 @@
             target: e.target as HTMLButtonElement,
         });
 
-        console.log(dataFromPython);
+        // console.log(dataFromPython);
         let vec = dataFromPython?.embedded_vector[0] ?? dataFromPython?.embedded_vector;
-        if ($use_PCA && vec) vec = dataFromPython?.embedded_vector;
+        // if ($use_PCA) vec = dataFromPython?.embedded_vector;
 
         if (vec) {
-            console.log(vec);
             test_result = `Embedded vector: ${vec.length} dimensions`;
+            console.log({ vec });
             test_result += '\n[';
 
             for (let i = 0; i < vec.length; i += 3) {
