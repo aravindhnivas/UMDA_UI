@@ -1,5 +1,4 @@
 export const embeddings = ['mol2vec', 'VICGAE'];
-export const models = ['mol2vec', 'VICGAE'];
 export const embedding = writable<Embedding>('mol2vec');
 
 export const default_pretrained_modes = writable<{ [key: string]: boolean }>({
