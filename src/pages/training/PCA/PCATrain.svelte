@@ -35,13 +35,13 @@
         console.warn('File read', { explained_varience, cumulative_variance });
         explained_variance_data = [
             {
-                x: Array.from({ length: explained_varience.length }, (_, i) => i),
+                x: Array.from({ length: explained_varience.length }, (_, i) => i + 1),
                 y: explained_varience,
             },
         ];
         cumulative_variance_data = [
             {
-                x: Array.from({ length: explained_varience.length }, (_, i) => i),
+                x: Array.from({ length: explained_varience.length }, (_, i) => i + 1),
                 y: cumulative_variance,
             },
         ];
