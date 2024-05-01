@@ -16,7 +16,7 @@
 
     let explained_variance_data: { x: number[]; y: number[] }[] = [];
     let cumulative_variance_data: { x: number[]; y: number[] }[] = [];
-    let explained_variance_file = '';
+    const explained_variance_file = writable_store('pca-explained-variance-file', '');
 
     const read_file = async (filename: string) => {
         const explained_varience_read = (await fs.readTextFile(filename)) as string;
@@ -162,7 +162,7 @@
         <Loadingbtn class="w-lg m-auto " name="Compute" callback={generate_pca} subprocess={true} />
     {:else if $active === 'Analysis'}
         <BrowseFile
-            bind:filename={explained_variance_file}
+            bind:filename={$explained_variance_file}
             btn_name={'Browse explained_variance'}
             load_callback={read_file}
         />
@@ -184,7 +184,12 @@
             </div>
 
             <div class="grid">
-                <h2>Scree plot</h2>
+                <!-- {cumulative_variance_data[0]} -->
+                <h2>
+                    Cumulative explained variance ({cumulative_variance_data[0]
+                        ? Number(cumulative_variance_data[0].y.at(-1) * 100).toFixed(0)
+                        : ''} %)
+                </h2>
                 <div class="plot w-[700px] h-lg">
                     <Plot
                         data={cumulative_variance_data}
