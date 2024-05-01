@@ -5,6 +5,7 @@
     export let helper = '';
     export let label = '';
     export let directory = false;
+    export let load_callback: null | ((filename: string) => void) = null;
 
     const dispatch = createEventDispatcher();
 
@@ -29,6 +30,9 @@
     <div class="join">
         <button class="btn btn-sm join-item" on:click={browse_file}>{btn_name}</button>
         <input type="text" class="input input-sm join-item w-full" bind:value={filename} />
+        {#if load_callback}
+            <button class="btn btn-sm join-item" on:click={() => load_callback?.(filename)}>load</button>
+        {/if}
     </div>
     {#if helper}
         <span class="flex items-center gap-0.5 text-xs ml-auto">

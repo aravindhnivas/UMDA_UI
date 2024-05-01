@@ -16,7 +16,9 @@
     "@tauri-apps/cli": "^1.5.12",
     "@xterm/addon-fit": "^0.10.0",
     "@xterm/xterm": "^5.5.0",
+    "jsfive": "^0.3.14",
     "lucide-svelte": "^0.372.0",
+    "plotly.js-basic-dist-min": "^2.32.0",
     "smiles-drawer": "^2.1.7"
   },
   "devDependencies": {
@@ -28,6 +30,9 @@
     "@smui/icon-button": "7.0.0-beta.18",
     "@smui/linear-progress": "7.0.0-beta.18",
     "@smui/menu-surface": "7.0.0-beta.18",
+    "@smui/paper": "7.0.0-beta.18",
+    "@smui/tab": "7.0.0-beta.18",
+    "@smui/tab-bar": "7.0.0-beta.18",
     "@smui/textfield": "7.0.0-beta.18",
     "@sveltejs/vite-plugin-svelte": "^3.1.0",
     "@tsconfig/svelte": "^5.0.4",
@@ -52,6 +57,7 @@
     "svelte-check": "^3.7.0",
     "svelte-flatlist": "^0.2.6",
     "svelte-material-ui": "7.0.0-beta.18",
+    "svelte-plotly.js": "^0.3.2",
     "svelte-sonner": "^0.3.22",
     "svelte-splitpanes": "^0.8.0",
     "ts-try": "^0.2.0",

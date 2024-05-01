@@ -17,9 +17,15 @@ dependencies:
   '@xterm/xterm':
     specifier: ^5.5.0
     version: 5.5.0
+  jsfive:
+    specifier: ^0.3.14
+    version: 0.3.14
   lucide-svelte:
     specifier: ^0.372.0
     version: 0.372.0(svelte@4.2.15)
+  plotly.js-basic-dist-min:
+    specifier: ^2.32.0
+    version: 2.32.0
   smiles-drawer:
     specifier: ^2.1.7
     version: 2.1.7
@@ -47,6 +53,15 @@ devDependencies:
     specifier: 7.0.0-beta.18
     version: 7.0.0-beta.18(svelte@4.2.15)(typescript@5.4.5)
   '@smui/menu-surface':
+    specifier: 7.0.0-beta.18
+    version: 7.0.0-beta.18(svelte@4.2.15)(typescript@5.4.5)
+  '@smui/paper':
+    specifier: 7.0.0-beta.18
+    version: 7.0.0-beta.18(svelte@4.2.15)(typescript@5.4.5)
+  '@smui/tab':
+    specifier: 7.0.0-beta.18
+    version: 7.0.0-beta.18(svelte@4.2.15)(typescript@5.4.5)
+  '@smui/tab-bar':
     specifier: 7.0.0-beta.18
     version: 7.0.0-beta.18(svelte@4.2.15)(typescript@5.4.5)
   '@smui/textfield':
@@ -121,6 +136,9 @@ devDependencies:
   svelte-material-ui:
     specifier: 7.0.0-beta.18
     version: 7.0.0-beta.18(svelte@4.2.15)(typescript@5.4.5)
+  svelte-plotly.js:
+    specifier: ^0.3.2
+    version: 0.3.2(plotly.js-dist@2.32.0)
   svelte-sonner:
     specifier: ^0.3.22
     version: 0.3.22(svelte@4.2.15)
@@ -2307,6 +2325,10 @@ packages:
       undici-types: 5.26.5
     dev: true
 
+  /@types/plotly.js@2.29.2:
+    resolution: {integrity: sha512-tJqUVa6CmNHrzTANWO/ZLNmdvjZ6zHOAnM9iQUORVnnLvWmcO9DPdQCsrNumNvHD1aqGNxQJ8pla8CK/NUiZgA==}
+    dev: true
+
   /@types/pug@2.0.10:
     resolution: {integrity: sha512-Sk/uYFOBAB7mb74XcpizmH0KOR2Pv3D2Hmrh1Dmy5BmK3MpdSa5kqZcg6EKBdklU0bFXX9gCfzvpnyUehrPIuA==}
     dev: true
@@ -3288,6 +3310,12 @@ packages:
     hasBin: true
     dev: true
 
+  /jsfive@0.3.14:
+    resolution: {integrity: sha512-CptUQRZw1JHgQKhuZX6ozL/5PndJWetPz3K/Raeh5U/ise8FO84BIcBwbUBq2WsCl/zrnu3phnwazL+IuvaQ5A==}
+    dependencies:
+      pako: 2.1.0
+    dev: false
+
   /json5@2.2.3:
     resolution: {integrity: sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==}
     engines: {node: '>=6'}
@@ -3559,6 +3587,10 @@ packages:
       p-limit: 3.1.0
     dev: true
 
+  /pako@2.1.0:
+    resolution: {integrity: sha512-w+eufiZ1WuJYgPXbV/PO3NCMEc3xqylkKHzp8bxp1uW4qaSNQUkwmLLEc3kKsfz8lpV1F8Ht3U1Cm+9Srog2ug==}
+    dev: false
+
   /parent-module@1.0.1:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==}
     engines: {node: '>=6'}
@@ -3644,6 +3676,14 @@ packages:
       confbox: 0.1.7
       mlly: 1.6.1
       pathe: 1.1.2
+    dev: true
+
+  /plotly.js-basic-dist-min@2.32.0:
+    resolution: {integrity: sha512-hBHvjCpNWleAKKmig40h68Y+He2mzeC4otyoCiF62SsrBIsquZjey8+cM8t44GZbiHwwWIuJgHUbfMPJQ0Avlg==}
+    dev: false
+
+  /plotly.js-dist@2.32.0:
+    resolution: {integrity: sha512-+RnvqNTJADe3ctmCMT2YOhXu4ZwYuBi7eD4FF0oyaJ8jWj65Ru6lZVnetr7T3ZvnU5BgQWbbId+tYgf0PBFkeQ==}
     dev: true
 
   /postcss-import@15.1.0(postcss@8.4.38):
@@ -4076,6 +4116,17 @@ packages:
     transitivePeerDependencies:
       - svelte
       - typescript
+    dev: true
+
+  /svelte-plotly.js@0.3.2(plotly.js-dist@2.32.0):
+    resolution: {integrity: sha512-9OtCLoYfa8CluRkEod8NOa35GW5Y98+tZN7RKZLM7B4mYhsizSPvevLvxkN39XW7+jvx6rugUKTUtb6YQlYyNA==}
+    peerDependencies:
+      plotly.js-dist: ^2.12
+    dependencies:
+      '@types/lodash-es': 4.17.12
+      '@types/plotly.js': 2.29.2
+      lodash-es: 4.17.21
+      plotly.js-dist: 2.32.0
     dev: true
 
   /svelte-preprocess@5.1.4(@babel/core@7.24.4)(postcss@8.4.38)(sass@1.75.0)(svelte@4.2.15)(typescript@5.4.5):
