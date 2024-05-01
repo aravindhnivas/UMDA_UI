@@ -8,8 +8,8 @@
     export let id: string = 'pca-train-container';
     export let display: string = 'none';
 
-    const model_file = writable_store('pca_model_file', '');
-    const npy_file = writable_store('pca_npy_file', '');
+    // const model_file = writable_store('pca_model_file', '');
+    // const npy_file = writable_store('pca_npy_file', '');
 
     const pca_model_and_npy_files = writable_store<{
         [name: string]: {
@@ -29,12 +29,12 @@
     let original_model = embeddings[0];
 
     const generate_pca = async (e: MouseEvent) => {
-        if (!$model_file) {
+        if (!$pca_model_and_npy_files[original_model].model_file) {
             toast.error('Please select a model_file');
             return;
         }
 
-        if (!$npy_file) {
+        if (!$pca_model_and_npy_files[original_model].npy_file) {
             toast.error('Please select a .npy vectors file');
             return;
         }
@@ -51,8 +51,8 @@
                 n_clusters,
                 radius,
                 embeddings_save_loc: $embeddings_save_loc,
-                model_file: $model_file,
-                npy_file: $npy_file,
+                model_file: $pca_model_and_npy_files[original_model].model_file,
+                npy_file: $pca_model_and_npy_files[original_model].npy_file,
                 compute_kmeans,
                 original_model,
             },
