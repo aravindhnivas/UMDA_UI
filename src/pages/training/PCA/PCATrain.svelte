@@ -109,7 +109,7 @@
 </script>
 
 <div class="grid content-start gap-2" {id} style:display>
-    <div>
+    <div class="w-max">
         <TabBar tabs={['Training', 'Analysis']} let:tab bind:active={$active}>
             <Tab {tab}>
                 <Label>{tab}</Label>
@@ -161,15 +161,16 @@
         <BrowseFile directory={true} bind:filename={$embeddings_save_loc} btn_name={'Browse Save location'} />
         <Loadingbtn class="w-lg m-auto " name="Compute" callback={generate_pca} subprocess={true} />
     {:else if $active === 'Analysis'}
+        <!-- <div class="w-lg"> -->
         <BrowseFile
             bind:filename={$explained_variance_file}
             btn_name={'Browse explained_variance'}
             load_callback={read_file}
         />
-        <div class="flex gap-1 mt-5">
+        <div class="plot__div">
             <div class="grid">
                 <h2>Scree plot</h2>
-                <div class="plot w-[700px] h-lg">
+                <div class="plot w-xl h-lg">
                     <Plot
                         data={explained_variance_data}
                         layout={{
@@ -190,7 +191,7 @@
                         ? Number(cumulative_variance_data[0].y.at(-1) * 100).toFixed(0)
                         : ''} %)
                 </h2>
-                <div class="plot w-[700px] h-lg">
+                <div class="plot w-xl h-lg">
                     <Plot
                         data={cumulative_variance_data}
                         layout={{
@@ -204,5 +205,15 @@
                 </div>
             </div>
         </div>
+        <!-- </div> -->
     {/if}
 </div>
+
+<style>
+    .plot__div {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(700px, 1fr));
+        margin-top: 1rem;
+    }
+</style>
