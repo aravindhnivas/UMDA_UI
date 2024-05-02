@@ -23,7 +23,7 @@
     });
 </script>
 
-<Toaster position="bottom-left" />
+<Toaster position="bottom-left" richColors />
 <PreModal />
 <Modal />
 <div class="parent w-full h-full">
