@@ -5,6 +5,7 @@ export class LOGGER {
     term: Terminal;
     fitAddon = new FitAddon();
     constructor(node: HTMLElement, options?: ITerminalOptions & ITerminalInitOnlyOptions) {
+        console.log('LOGGER', node);
         if (!node) throw new Error('No node provided!');
         options = {
             // cursorBlink: true,
