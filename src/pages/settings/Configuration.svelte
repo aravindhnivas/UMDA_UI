@@ -41,7 +41,6 @@
     };
 
     onMount(async () => {
-        // const socket = make_ws();
         if (import.meta.env.DEV) {
             if (!$pyServerReady) {
                 const [err] = await oO(fetchServerROOT());
