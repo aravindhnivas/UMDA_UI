@@ -122,6 +122,9 @@
     let currentVersion = '';
     onMount(async () => {
         currentVersion = await getVersion();
+        if (import.meta.env.PROD) {
+            await check_for_update();
+        }
     });
 
     onDestroy(async () => {
