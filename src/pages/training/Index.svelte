@@ -13,12 +13,24 @@
 <Page id="Training">
     <svelte:fragment slot="body">
         <Pane class="p-2" size={15} minSize={10} maxSize={20}>
-            <ul class="menu rounded-box gap-1">
-                {#each sidebar_items as item}
-                    <li on:click={() => (active_item = item)}>
-                        <span class:active={active_item == item}>{item}</span>
-                    </li>
-                {/each}
+            <ul class="menu rounded-box">
+                <!-- <li><a>Item 1</a></li> -->
+                <li>
+                    <details open>
+                        <summary>Train Embedder</summary>
+                        <ul>
+                            <li on:click={() => (active_item = 'Mol2Vec')}>
+                                <span class:active={active_item == 'Mol2Vec'}>Mol2Vec</span>
+                            </li>
+                            <li on:click={() => (active_item = 'PCA')}>
+                                <span class:active={active_item == 'PCA'}>PCA</span>
+                            </li>
+                        </ul>
+                    </details>
+                </li>
+                <li on:click={() => (active_item = 'Embedding')}>
+                    <span class:active={active_item == 'Embedding'}>Embedding</span>
+                </li>
             </ul>
         </Pane>
         <Pane minSize={80}>
