@@ -16,7 +16,7 @@
 
     let explained_variance_data: { x: number[]; y: number[] }[] = [];
     let cumulative_variance_data: { x: number[]; y: number[] }[] = [];
-    const explained_variance_file = writable_store('pca-explained-variance-file', '');
+    const explained_variance_file = localWritable('pca-explained-variance-file', '');
 
     const read_file = async (filename: string) => {
         const explained_varience_read = (await fs.readTextFile(filename)) as string;
@@ -48,17 +48,17 @@
     };
 
     // read_file().then(() => console.log('done'));
-    const active = writable_store('pca-active-tab', 'Training');
+    const active = localWritable('pca-active-tab', 'Training');
 
-    const pca_model_and_npy_files = writable_store<{
+    const pca_model_and_npy_files = localWritable<{
         [name: string]: {
             model_file: string;
             npy_file: string;
         };
     }>('pca_model_and_npy_files', {});
 
-    const embeddings_save_loc = writable_store('pca_embeddings_save_loc', '');
-    // const embedding_pipeline_loc = writable_store('pca_embedding_pipeline_loc', '');
+    const embeddings_save_loc = localWritable('pca_embeddings_save_loc', '');
+    // const embedding_pipeline_loc = localWritable('pca_embedding_pipeline_loc', '');
 
     let radius = 1;
     let pca_dim = 70;

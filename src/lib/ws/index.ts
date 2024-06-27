@@ -1,10 +1,9 @@
 import computePy from '$lib/pyserver/computePy';
 import { serverInfo } from '$pages/settings/utils/stores';
+
 export const wsready = writable(false);
-export const wsport = writable_store('wsport', 8765);
-
+export const wsport = localWritable('wsport', 8765);
 export const socket = writable<WebSocket>();
-
 export const ws_readyState = {
     0: 'CONNECTING',
     1: 'OPEN',

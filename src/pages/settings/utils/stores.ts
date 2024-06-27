@@ -1,5 +1,4 @@
 import { LOGGER } from '$lib/utils/logger';
-import { createPersistanceStore } from '$utils/index';
 
 export function xterm_logger_store() {
     const { subscribe, set } = writable<LOGGER>();
@@ -47,10 +46,10 @@ export const assets_version_available = writable('');
 export const downloadoverrideURL = writable(import.meta.env.DEV);
 export const installing_python_assets = writable(false);
 export const install_update_without_promt = writable(false);
-export const python_asset_ready_to_install = createPersistanceStore(false, 'python_asset_ready_to_install');
-export const assets_installation_required = createPersistanceStore(false, 'assets_installation_required');
+export const python_asset_ready_to_install = localWritable('python_asset_ready_to_install', false);
+export const assets_installation_required = localWritable('assets_installation_required', false);
 export const python_asset_ready = writable(false);
-export const downloadURL = createPersistanceStore<string>('', 'downloadURL');
+export const downloadURL = localWritable<string>('downloadURL', '');
 
 interface RunningProcess {
     pyfile: string;

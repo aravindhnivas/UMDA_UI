@@ -1,6 +1,3 @@
-import { createPersistanceStore } from '$utils/index';
-import { writable } from 'svelte/store';
-
 function openModalStore() {
     const defaultValues: {
         type: 'error' | 'info' | 'warn';
@@ -36,9 +33,9 @@ function openModalStore() {
     };
 }
 export const Alert = openModalStore();
-export const active_tab = createPersistanceStore('Home', 'active_tab');
+export const active_tab = localWritable('active_tab', 'Home');
 
-export const updateInterval = createPersistanceStore(15, 'updateInterval')
-export const updateError = writable('')
-export const updateStatus = writable('')
-export const activateChangelog = writable(false)
+export const updateInterval = localWritable('updateInterval', 15);
+export const updateError = writable('');
+export const updateStatus = writable('');
+export const activateChangelog = writable(false);

@@ -8,7 +8,7 @@
     export let id: string = 'mol2vec-train-container';
     export let display: string = 'none';
 
-    const filename = writable_store('data_filename', '');
+    const filename = localWritable('data_filename', '');
     let data: DataType | null = null;
     let filetype = 'csv';
     let key = 'data';

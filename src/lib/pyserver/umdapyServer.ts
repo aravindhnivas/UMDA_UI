@@ -15,13 +15,11 @@ import { python_asset_ready } from '$settings/utils/stores';
 import { checkNetstat, checkNetstat_execution, killPID } from '$settings/utils/network';
 import type { Child } from '@tauri-apps/api/shell';
 import { getPyVersion } from '$settings/utils/checkPython';
-import { createPersistanceStore } from '$utils/index';
 import { sleep } from '$lib/utils/initialise';
-import { toggle_loading } from '$utils/index';
 import { Alert } from '$utils/stores';
 import { check_umdapy_assets_status } from '$pages/settings/utils/assets-status';
 
-export const currentPortPID = createPersistanceStore<string[]>([], 'pyserver-pid');
+export const currentPortPID = localWritable<string[]>('pyserver-pid', []);
 
 export async function startServer() {
     if (!get(developerMode) && !get(python_asset_ready)) return serverInfo.error('python asset not ready');

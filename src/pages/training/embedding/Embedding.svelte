@@ -4,7 +4,6 @@
     import { NPARTITIONS } from '$lib/stores/system';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import computePy from '$lib/pyserver/computePy';
-    import { writable } from '@macfja/svelte-persistent-store';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
     import { CheckCheck } from 'lucide-svelte';
     import BrowseFile from '$lib/components/BrowseFile.svelte';
@@ -14,7 +13,7 @@
     export let display: string = 'none';
     export let columns: string[] = [];
 
-    const model_and_pipeline_files = writable_store<{
+    const model_and_pipeline_files = localWritable<{
         [name: string]: {
             model_file: string;
             pipeline_file: string;
@@ -28,12 +27,12 @@
         };
     }
 
-    const auto_fetch_columns = writable('auto_fetch_columns', false);
-    const use_PCA = writable_store('use_PCA', false);
+    const auto_fetch_columns = localWritable('auto_fetch_columns', false);
+    const use_PCA = localWritable('use_PCA', false);
 
     let test_mode = import.meta.env.DEV;
     // let test_mode = false;
-    const test_smiles = writable_store('test_smiles', 'CCO');
+    const test_smiles = localWritable('test_smiles', 'CCO');
     let test_result = '';
 
     let df_column = 'SMILES';
@@ -93,7 +92,7 @@
             test_result += '\n]';
         }
     };
-    const filename = writable_store('data_filename', '');
+    const filename = localWritable('data_filename', '');
     let dataFromPython;
     let data: DataType | null = null;
     let filetype = 'csv';

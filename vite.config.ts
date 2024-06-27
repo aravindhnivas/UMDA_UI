@@ -19,12 +19,10 @@ export default defineConfig(async () => ({
                         ['default', 'axios'], // import { default as axios } from 'axios',
                     ],
                     '@zmotivat0r/o0': ['oO'],
-                    '@tauri-apps/api/os': ['platform'],
+                    '@tauri-apps/api/os': ['platform', 'tempdir'],
                     '@tauri-apps/api': ['fs', 'path', 'dialog', 'shell', 'invoke'],
                     'svelte-sonner': ['toast', 'Toaster'],
-                    '@macfja/svelte-persistent-store': [
-                        ['writable', 'writable_store'], // import { writable as writable_store } from '@macfja/svelte-persistent-store';
-                    ],
+                    '@macfja/svelte-persistent-store': ['localWritable'],
                 },
             ],
             dts: './src/auto-imports.d.ts',

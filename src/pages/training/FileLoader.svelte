@@ -13,7 +13,7 @@
     export let filename: string;
     export let filetypes = ['csv', 'hdf', 'json', 'parquet'];
 
-    // const filename = writable_store('data_filename', '');
+    // const filename = localWritable('data_filename', '');
     interface DataType {
         columns: string[];
         nrows: {
