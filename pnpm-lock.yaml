@@ -34,8 +34,8 @@ importers:
         version: 2.1.7
     devDependencies:
       '@iconify/json':
-        specifier: ^2.2.222
-        version: 2.2.222
+        specifier: ^2.2.223
+        version: 2.2.223
       '@loadingio/loading.css':
         specifier: ^3.2.1
         version: 3.2.1
@@ -71,7 +71,7 @@ importers:
         version: 7.0.0-beta.18(svelte@4.2.18)(typescript@5.5.2)
       '@sveltejs/vite-plugin-svelte':
         specifier: ^3.1.1
-        version: 3.1.1(svelte@4.2.18)(vite@5.3.1(@types/node@20.14.9)(sass@1.77.6))
+        version: 3.1.1(svelte@4.2.18)(vite@5.3.2(@types/node@20.14.9)(sass@1.77.6))
       '@tsconfig/svelte':
         specifier: ^5.0.4
         version: 5.0.4
@@ -139,8 +139,8 @@ importers:
         specifier: ^7.0.0
         version: 7.0.0(svelte@4.2.18)(typescript@5.5.2)
       svelte-plotly.js:
-        specifier: ^0.3.2
-        version: 0.3.2(plotly.js-dist@2.32.0)
+        specifier: ^0.4.0
+        version: 0.4.0(plotly.js-dist@2.32.0)
       svelte-sonner:
         specifier: ^0.3.24
         version: 0.3.24(svelte@4.2.18)
@@ -158,16 +158,16 @@ importers:
         version: 5.5.2
       unocss:
         specifier: ^0.61.0
-        version: 0.61.0(postcss@8.4.38)(rollup@4.17.1)(vite@5.3.1(@types/node@20.14.9)(sass@1.77.6))
+        version: 0.61.0(postcss@8.4.38)(rollup@4.17.1)(vite@5.3.2(@types/node@20.14.9)(sass@1.77.6))
       unocss-preset-daisy:
         specifier: ^7.0.0
-        version: 7.0.0(daisyui@3.9.4)(unocss@0.61.0(postcss@8.4.38)(rollup@4.17.1)(vite@5.3.1(@types/node@20.14.9)(sass@1.77.6)))
+        version: 7.0.0(daisyui@3.9.4)(unocss@0.61.0(postcss@8.4.38)(rollup@4.17.1)(vite@5.3.2(@types/node@20.14.9)(sass@1.77.6)))
       unplugin-auto-import:
         specifier: ^0.17.6
         version: 0.17.6(rollup@4.17.1)
       vite:
-        specifier: ^5.3.1
-        version: 5.3.1(@types/node@20.14.9)(sass@1.77.6)
+        specifier: ^5.3.2
+        version: 5.3.2(@types/node@20.14.9)(sass@1.77.6)
 
 packages:
 
@@ -472,8 +472,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@iconify/json@2.2.222':
-    resolution: {integrity: sha512-7Q3wTaWCOk/npMrH1fyy37noARUBTb3B6daGr23+CiNCrTpV3byH+d5LEqPPVi+RT369IEKEcE8+s5MFN1hcOg==}
+  '@iconify/json@2.2.223':
+    resolution: {integrity: sha512-SKQnMyKVehUEYrKDEu/MIochMNFLAdNNGQOez0l6OEyVD6IDyM1vc8vGQFFFXcjHHadaRemxBScWqlimPuYyGA==}
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
@@ -1462,8 +1462,8 @@ packages:
       debug:
         optional: true
 
-  foreground-child@3.1.1:
-    resolution: {integrity: sha512-TMKDUnIte6bfb5nWv7V/caI169OHgvwjb7V4WkeUvbQQdjr5rWKqHFiKWb/fcOwB+CzBT+qbWjvj+DVwRskpIg==}
+  foreground-child@3.2.1:
+    resolution: {integrity: sha512-PXUUyLqrR2XCWICfv6ukppP96sdFwWbNEnfEMt7jNsISjMsvaLNinAHNDYyvkyU+SZG2BTSbT5NjG+vZslfGTA==}
     engines: {node: '>=14'}
 
   form-data@4.0.0:
@@ -1500,9 +1500,9 @@ packages:
     resolution: {integrity: sha512-XxwI8EOhVQgWp6iDL+3b0r86f4d6AX6zSU55HfB4ydCEuXLXc5FcYeOu+nnGftS4TEju/11rt4KJPTMgbfmv4A==}
     engines: {node: '>=10.13.0'}
 
-  glob@10.3.12:
-    resolution: {integrity: sha512-TCNv8vJ+xz4QiqTpfOJA7HvYv+tNIRHKfUWw/q+v2jdgN4ebz+KY9tGx5J4rHP0o84mNP+ApH66HRX8us3Khqg==}
-    engines: {node: '>=16 || 14 >=14.17'}
+  glob@10.4.2:
+    resolution: {integrity: sha512-GwMlUF6PkPo3Gk21UxkCohOv0PLcIXVtKyLlpEI28R/cO/4eNOdmLk3CMW1wROV/WR/EsZOWAfBbBOqYvs88/w==}
+    engines: {node: '>=16 || 14 >=14.18'}
     hasBin: true
 
   glob@7.2.3:
@@ -1552,8 +1552,9 @@ packages:
     resolution: {integrity: sha512-ZMERYes6pDydyuGidse7OsHxtbI7WVeUEozgR/g7rd0xUimYNlvZRE/K2MgZTjWy725IfelLeVcEM97mmtRGXw==}
     engines: {node: '>=8'}
 
-  is-core-module@2.13.1:
-    resolution: {integrity: sha512-hHrIjvZsftOsvKSn2TRYl63zvxsgE0K+0mYMoH6gD4omR5IWB2KynivBQczo3+wF1cCkjzvptnI9Q0sPU66ilw==}
+  is-core-module@2.14.0:
+    resolution: {integrity: sha512-a5dFJih5ZLYlRtDc0dZWP7RiKr6xIKzmn/oAYCDvdLThadVgyJwlaoQPmRtMSpz+rk0OGAgIu+TcM9HUF0fk1A==}
+    engines: {node: '>= 0.4'}
 
   is-extglob@2.1.1:
     resolution: {integrity: sha512-SbKbANkN603Vi4jEZv49LeVJMn4yGwsbzZworEoyEiutsN3nJYdbO36zfhGJ6QEDpOZIFkDtnq5JRxmvl3jsoQ==}
@@ -1581,8 +1582,8 @@ packages:
   isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
 
-  jackspeak@2.3.6:
-    resolution: {integrity: sha512-N3yCS/NegsOBokc8GAdM8UcmfsKiSS8cipheD/nivzr700H+nsMOxJjQnvwOcRYVuFkdH0wGUvW2WbXGmrZGbQ==}
+  jackspeak@3.4.0:
+    resolution: {integrity: sha512-JVYhQnN59LVPFCEcVa2C3CrEKYacvjRfqIQl+h8oi91aLYQVWRYbxjPcv1bUiUy/kLmQaANrYfNMCO3kuEDHfw==}
     engines: {node: '>=14'}
 
   jiti@1.21.0:
@@ -1699,8 +1700,8 @@ packages:
   minimist@1.2.8:
     resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
 
-  minipass@7.0.4:
-    resolution: {integrity: sha512-jYofLM5Dam9279rdkWzqHozUo4ybjdZmCsDHePy5V/PbBcVMiSZR97gmAy45aqi8CK1lG2ECd356FU86avfwUQ==}
+  minipass@7.1.2:
+    resolution: {integrity: sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==}
     engines: {node: '>=16 || 14 >=14.17'}
 
   mkdirp@0.5.6:
@@ -1776,6 +1777,9 @@ packages:
     resolution: {integrity: sha512-LaNjtRWUBY++zB5nE/NwcaoMylSPk+S+ZHNB1TzdbMJMny6dynpAGt7X/tl/QYq3TIeE6nxHppbo2LGymrG5Pw==}
     engines: {node: '>=10'}
 
+  package-json-from-dist@1.0.0:
+    resolution: {integrity: sha512-dATvCeZN/8wQsGywez1mzHtTlP22H8OEfPrVMLNr4/eGa+ijtLn/6M5f0dY8UKNrC2O9UCU6SSoG3qRKnt7STw==}
+
   pako@2.1.0:
     resolution: {integrity: sha512-w+eufiZ1WuJYgPXbV/PO3NCMEc3xqylkKHzp8bxp1uW4qaSNQUkwmLLEc3kKsfz8lpV1F8Ht3U1Cm+9Srog2ug==}
 
@@ -1800,9 +1804,9 @@ packages:
   path-parse@1.0.7:
     resolution: {integrity: sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==}
 
-  path-scurry@1.10.2:
-    resolution: {integrity: sha512-7xTavNy5RQXnsjANvVvMkEjvloOinkAjv/Z6Ildz9v2RinZ4SBKTWFOVRbaF8p0vpHnyjV/UwNDdKuUv6M5qcA==}
-    engines: {node: '>=16 || 14 >=14.17'}
+  path-scurry@1.11.1:
+    resolution: {integrity: sha512-Xa4Nw17FS9ApQFJ9umLiJS4orGjm7ZzwUrwamcGQuHSzDyth9boKDaycYdDcZDuqYATXw4HFXgaqWTctW/v1HA==}
+    engines: {node: '>=16 || 14 >=14.18'}
 
   pathe@1.1.2:
     resolution: {integrity: sha512-whLdWMYL2TwI08hn8/ZqAbrVemu0LNaNNJZX73O6qaIdCTfXutsLhMkjdENX0qhsQ9uIimo4/aQOmXkoon2nDQ==}
@@ -1867,8 +1871,8 @@ packages:
     peerDependencies:
       postcss: ^8.2.14
 
-  postcss-selector-parser@6.0.16:
-    resolution: {integrity: sha512-A0RVJrX+IUkVZbW3ClroRWurercFhieevHB38sr2+l9eUClMqome3LmEmnhlNy+5Mr2EYN6B2Kaw9wYdd+VHiw==}
+  postcss-selector-parser@6.1.0:
+    resolution: {integrity: sha512-UMz42UD0UY0EApS0ZL9o1XnLhSTtvvvLe5Dc2H2O56fvRZi+KulDyf5ctDhhtYJBGKStV2FL1fy6253cmLgqVQ==}
     engines: {node: '>=4'}
 
   postcss-value-parser@4.2.0:
@@ -2041,8 +2045,8 @@ packages:
   svelte-material-ui@7.0.0:
     resolution: {integrity: sha512-j8vT8zX8ekQ8MNBAvU9q/okQrXCYrJSxoDH06PQNCYrbNrTYzqKa+Fb9KSEGTaqs4PXi9aqjn687ykCiGqbPmQ==}
 
-  svelte-plotly.js@0.3.2:
-    resolution: {integrity: sha512-9OtCLoYfa8CluRkEod8NOa35GW5Y98+tZN7RKZLM7B4mYhsizSPvevLvxkN39XW7+jvx6rugUKTUtb6YQlYyNA==}
+  svelte-plotly.js@0.4.0:
+    resolution: {integrity: sha512-Klx51/opewktQV5Ky4+Yn6F8LHJb3hbo005Mm3rkEoxGvfwEoAdEh29DRrzBWh6JwcQowrJYjVMW2uBObFzhnA==}
     peerDependencies:
       plotly.js-dist: ^2.12
 
@@ -2109,8 +2113,8 @@ packages:
     resolution: {integrity: sha512-d0FdzYIiAePqRJEb90WlJDkjUEx42xhivxN8muUBmfZnP+tzUgz12DJ2hRJi8sIHCME7jeK1PTMgKPSfTd8JrA==}
     engines: {node: '>=16'}
 
-  tailwindcss@3.4.3:
-    resolution: {integrity: sha512-U7sxQk/n397Bmx4JHbJx/iSOOv5G+II3f1kpLpY2QeUv5DcPdcTsYLlusZfq1NthHS1c1cZoyFmmkex1rzke0A==}
+  tailwindcss@3.4.4:
+    resolution: {integrity: sha512-ZoyXOdJjISB7/BcLTR6SEsLgKtDStYyYZVLsUtWChO4Ps20CBad7lfJKVDiejocV4ME1hLmyY0WJE3hSDcmQ2A==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
@@ -2202,8 +2206,8 @@ packages:
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
-  vite@5.3.1:
-    resolution: {integrity: sha512-XBmSKRLXLxiaPYamLv3/hnP/KXDai1NDexN0FpkTaZXTfycHvkRHoenpgl/fvuK/kPbB6xAgoyiryAhQNxYmAQ==}
+  vite@5.3.2:
+    resolution: {integrity: sha512-6lA7OBHBlXUxiJxbO5aAY2fsHHzDr1q7DvXYnyZycRs2Dz+dXBWuhpWHvmljTRTpQC2uvGmUFFkSHF2vGo90MA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -2579,7 +2583,7 @@ snapshots:
   '@esbuild/win32-x64@0.21.5':
     optional: true
 
-  '@iconify/json@2.2.222':
+  '@iconify/json@2.2.223':
     dependencies:
       '@iconify/types': 2.0.0
       pathe: 1.1.2
@@ -3926,26 +3930,26 @@ snapshots:
       - svelte
       - typescript
 
-  '@sveltejs/vite-plugin-svelte-inspector@2.1.0(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.1(@types/node@20.14.9)(sass@1.77.6)))(svelte@4.2.18)(vite@5.3.1(@types/node@20.14.9)(sass@1.77.6))':
+  '@sveltejs/vite-plugin-svelte-inspector@2.1.0(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.2(@types/node@20.14.9)(sass@1.77.6)))(svelte@4.2.18)(vite@5.3.2(@types/node@20.14.9)(sass@1.77.6))':
     dependencies:
-      '@sveltejs/vite-plugin-svelte': 3.1.1(svelte@4.2.18)(vite@5.3.1(@types/node@20.14.9)(sass@1.77.6))
+      '@sveltejs/vite-plugin-svelte': 3.1.1(svelte@4.2.18)(vite@5.3.2(@types/node@20.14.9)(sass@1.77.6))
       debug: 4.3.4
       svelte: 4.2.18
-      vite: 5.3.1(@types/node@20.14.9)(sass@1.77.6)
+      vite: 5.3.2(@types/node@20.14.9)(sass@1.77.6)
     transitivePeerDependencies:
       - supports-color
 
-  '@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.1(@types/node@20.14.9)(sass@1.77.6))':
+  '@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.2(@types/node@20.14.9)(sass@1.77.6))':
     dependencies:
-      '@sveltejs/vite-plugin-svelte-inspector': 2.1.0(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.1(@types/node@20.14.9)(sass@1.77.6)))(svelte@4.2.18)(vite@5.3.1(@types/node@20.14.9)(sass@1.77.6))
+      '@sveltejs/vite-plugin-svelte-inspector': 2.1.0(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.2(@types/node@20.14.9)(sass@1.77.6)))(svelte@4.2.18)(vite@5.3.2(@types/node@20.14.9)(sass@1.77.6))
       debug: 4.3.4
       deepmerge: 4.3.1
       kleur: 4.1.5
       magic-string: 0.30.10
       svelte: 4.2.18
       svelte-hmr: 0.16.0(svelte@4.2.18)
-      vite: 5.3.1(@types/node@20.14.9)(sass@1.77.6)
-      vitefu: 0.2.5(vite@5.3.1(@types/node@20.14.9)(sass@1.77.6))
+      vite: 5.3.2(@types/node@20.14.9)(sass@1.77.6)
+      vitefu: 0.2.5(vite@5.3.2(@types/node@20.14.9)(sass@1.77.6))
     transitivePeerDependencies:
       - supports-color
 
@@ -4012,13 +4016,13 @@ snapshots:
 
   '@types/pug@2.0.10': {}
 
-  '@unocss/astro@0.61.0(rollup@4.17.1)(vite@5.3.1(@types/node@20.14.9)(sass@1.77.6))':
+  '@unocss/astro@0.61.0(rollup@4.17.1)(vite@5.3.2(@types/node@20.14.9)(sass@1.77.6))':
     dependencies:
       '@unocss/core': 0.61.0
       '@unocss/reset': 0.61.0
-      '@unocss/vite': 0.61.0(rollup@4.17.1)(vite@5.3.1(@types/node@20.14.9)(sass@1.77.6))
+      '@unocss/vite': 0.61.0(rollup@4.17.1)(vite@5.3.2(@types/node@20.14.9)(sass@1.77.6))
     optionalDependencies:
-      vite: 5.3.1(@types/node@20.14.9)(sass@1.77.6)
+      vite: 5.3.2(@types/node@20.14.9)(sass@1.77.6)
     transitivePeerDependencies:
       - rollup
 
@@ -4151,7 +4155,7 @@ snapshots:
     dependencies:
       '@unocss/core': 0.61.0
 
-  '@unocss/vite@0.61.0(rollup@4.17.1)(vite@5.3.1(@types/node@20.14.9)(sass@1.77.6))':
+  '@unocss/vite@0.61.0(rollup@4.17.1)(vite@5.3.2(@types/node@20.14.9)(sass@1.77.6))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@rollup/pluginutils': 5.1.0(rollup@4.17.1)
@@ -4163,7 +4167,7 @@ snapshots:
       chokidar: 3.6.0
       fast-glob: 3.3.2
       magic-string: 0.30.10
-      vite: 5.3.1(@types/node@20.14.9)(sass@1.77.6)
+      vite: 5.3.2(@types/node@20.14.9)(sass@1.77.6)
     transitivePeerDependencies:
       - rollup
 
@@ -4354,7 +4358,7 @@ snapshots:
       css-selector-tokenizer: 0.8.0
       postcss: 8.4.38
       postcss-js: 4.0.1(postcss@8.4.38)
-      tailwindcss: 3.4.3
+      tailwindcss: 3.4.4
     transitivePeerDependencies:
       - ts-node
 
@@ -4473,7 +4477,7 @@ snapshots:
 
   follow-redirects@1.15.6: {}
 
-  foreground-child@3.1.1:
+  foreground-child@3.2.1:
     dependencies:
       cross-spawn: 7.0.3
       signal-exit: 4.1.0
@@ -4505,13 +4509,14 @@ snapshots:
     dependencies:
       is-glob: 4.0.3
 
-  glob@10.3.12:
+  glob@10.4.2:
     dependencies:
-      foreground-child: 3.1.1
-      jackspeak: 2.3.6
+      foreground-child: 3.2.1
+      jackspeak: 3.4.0
       minimatch: 9.0.4
-      minipass: 7.0.4
-      path-scurry: 1.10.2
+      minipass: 7.1.2
+      package-json-from-dist: 1.0.0
+      path-scurry: 1.11.1
 
   glob@7.2.3:
     dependencies:
@@ -4555,7 +4560,7 @@ snapshots:
     dependencies:
       binary-extensions: 2.3.0
 
-  is-core-module@2.13.1:
+  is-core-module@2.14.0:
     dependencies:
       hasown: 2.0.2
 
@@ -4577,7 +4582,7 @@ snapshots:
 
   isexe@2.0.0: {}
 
-  jackspeak@2.3.6:
+  jackspeak@3.4.0:
     dependencies:
       '@isaacs/cliui': 8.0.2
     optionalDependencies:
@@ -4669,7 +4674,7 @@ snapshots:
 
   minimist@1.2.8: {}
 
-  minipass@7.0.4: {}
+  minipass@7.1.2: {}
 
   mkdirp@0.5.6:
     dependencies:
@@ -4739,6 +4744,8 @@ snapshots:
     dependencies:
       p-limit: 3.1.0
 
+  package-json-from-dist@1.0.0: {}
+
   pako@2.1.0: {}
 
   parsel-js@1.1.2: {}
@@ -4756,10 +4763,10 @@ snapshots:
 
   path-parse@1.0.7: {}
 
-  path-scurry@1.10.2:
+  path-scurry@1.11.1:
     dependencies:
       lru-cache: 10.2.2
-      minipass: 7.0.4
+      minipass: 7.1.2
 
   pathe@1.1.2: {}
 
@@ -4811,9 +4818,9 @@ snapshots:
   postcss-nested@6.0.1(postcss@8.4.38):
     dependencies:
       postcss: 8.4.38
-      postcss-selector-parser: 6.0.16
+      postcss-selector-parser: 6.1.0
 
-  postcss-selector-parser@6.0.16:
+  postcss-selector-parser@6.1.0:
     dependencies:
       cssesc: 3.0.0
       util-deprecate: 1.0.2
@@ -4847,7 +4854,7 @@ snapshots:
 
   resolve@1.22.8:
     dependencies:
-      is-core-module: 2.13.1
+      is-core-module: 2.14.0
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 
@@ -4975,7 +4982,7 @@ snapshots:
     dependencies:
       '@jridgewell/gen-mapping': 0.3.5
       commander: 4.1.1
-      glob: 10.3.12
+      glob: 10.4.2
       lines-and-columns: 1.2.4
       mz: 2.7.0
       pirates: 4.0.6
@@ -5061,12 +5068,13 @@ snapshots:
       - svelte
       - typescript
 
-  svelte-plotly.js@0.3.2(plotly.js-dist@2.32.0):
+  svelte-plotly.js@0.4.0(plotly.js-dist@2.32.0):
     dependencies:
       '@types/lodash-es': 4.17.12
       '@types/plotly.js': 2.29.2
       lodash-es: 4.17.21
       plotly.js-dist: 2.32.0
+      svelte: 4.2.18
 
   svelte-preprocess@5.1.4(@babel/core@7.24.7)(postcss-load-config@4.0.2(postcss@8.4.38))(postcss@8.4.38)(sass@1.77.6)(svelte@4.2.18)(typescript@5.5.2):
     dependencies:
@@ -5123,7 +5131,7 @@ snapshots:
       magic-string: 0.30.10
       periscopic: 3.1.0
 
-  tailwindcss@3.4.3:
+  tailwindcss@3.4.4:
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
@@ -5144,7 +5152,7 @@ snapshots:
       postcss-js: 4.0.1(postcss@8.4.38)
       postcss-load-config: 4.0.2(postcss@8.4.38)
       postcss-nested: 6.0.1(postcss@8.4.38)
-      postcss-selector-parser: 6.0.16
+      postcss-selector-parser: 6.1.0
       resolve: 1.22.8
       sucrase: 3.35.0
     transitivePeerDependencies:
@@ -5202,7 +5210,7 @@ snapshots:
     transitivePeerDependencies:
       - rollup
 
-  unocss-preset-daisy@7.0.0(daisyui@3.9.4)(unocss@0.61.0(postcss@8.4.38)(rollup@4.17.1)(vite@5.3.1(@types/node@20.14.9)(sass@1.77.6))):
+  unocss-preset-daisy@7.0.0(daisyui@3.9.4)(unocss@0.61.0(postcss@8.4.38)(rollup@4.17.1)(vite@5.3.2(@types/node@20.14.9)(sass@1.77.6))):
     dependencies:
       autoprefixer: 10.4.19(postcss@8.4.38)
       camelcase: 8.0.0
@@ -5210,11 +5218,11 @@ snapshots:
       parsel-js: 1.1.2
       postcss: 8.4.38
       postcss-js: 4.0.1(postcss@8.4.38)
-      unocss: 0.61.0(postcss@8.4.38)(rollup@4.17.1)(vite@5.3.1(@types/node@20.14.9)(sass@1.77.6))
+      unocss: 0.61.0(postcss@8.4.38)(rollup@4.17.1)(vite@5.3.2(@types/node@20.14.9)(sass@1.77.6))
 
-  unocss@0.61.0(postcss@8.4.38)(rollup@4.17.1)(vite@5.3.1(@types/node@20.14.9)(sass@1.77.6)):
+  unocss@0.61.0(postcss@8.4.38)(rollup@4.17.1)(vite@5.3.2(@types/node@20.14.9)(sass@1.77.6)):
     dependencies:
-      '@unocss/astro': 0.61.0(rollup@4.17.1)(vite@5.3.1(@types/node@20.14.9)(sass@1.77.6))
+      '@unocss/astro': 0.61.0(rollup@4.17.1)(vite@5.3.2(@types/node@20.14.9)(sass@1.77.6))
       '@unocss/cli': 0.61.0(rollup@4.17.1)
       '@unocss/core': 0.61.0
       '@unocss/extractor-arbitrary-variants': 0.61.0
@@ -5233,9 +5241,9 @@ snapshots:
       '@unocss/transformer-compile-class': 0.61.0
       '@unocss/transformer-directives': 0.61.0
       '@unocss/transformer-variant-group': 0.61.0
-      '@unocss/vite': 0.61.0(rollup@4.17.1)(vite@5.3.1(@types/node@20.14.9)(sass@1.77.6))
+      '@unocss/vite': 0.61.0(rollup@4.17.1)(vite@5.3.2(@types/node@20.14.9)(sass@1.77.6))
     optionalDependencies:
-      vite: 5.3.1(@types/node@20.14.9)(sass@1.77.6)
+      vite: 5.3.2(@types/node@20.14.9)(sass@1.77.6)
     transitivePeerDependencies:
       - postcss
       - rollup
@@ -5269,7 +5277,7 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  vite@5.3.1(@types/node@20.14.9)(sass@1.77.6):
+  vite@5.3.2(@types/node@20.14.9)(sass@1.77.6):
     dependencies:
       esbuild: 0.21.5
       postcss: 8.4.38
@@ -5279,9 +5287,9 @@ snapshots:
       fsevents: 2.3.3
       sass: 1.77.6
 
-  vitefu@0.2.5(vite@5.3.1(@types/node@20.14.9)(sass@1.77.6)):
+  vitefu@0.2.5(vite@5.3.2(@types/node@20.14.9)(sass@1.77.6)):
     optionalDependencies:
-      vite: 5.3.1(@types/node@20.14.9)(sass@1.77.6)
+      vite: 5.3.2(@types/node@20.14.9)(sass@1.77.6)
 
   webpack-sources@3.2.3: {}
 

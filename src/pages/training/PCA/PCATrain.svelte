@@ -8,7 +8,7 @@
     import TabBar from '@smui/tab-bar';
     // import Paper, { Content } from '@smui/paper';
     // import { Code2 } from 'lucide-svelte/icons';
-    import Plot from 'svelte-plotly.js/Plot.svelte';
+    import Plot from 'svelte-plotly.js';
     // import * as hdf5 from 'jsfive';
 
     export let id: string = 'pca-train-container';
