@@ -2,7 +2,7 @@
     // import { Loadingbtn } from '$lib/components/';
     import Page from '$lib/layouts/Page.svelte';
     import { Pane } from 'svelte-splitpanes';
-    import { Embedding, Mol2VecTrain, VICGAETrain, PCATrain } from '.';
+    import { Embedding, Mol2VecTrain, VICGAETrain, PCATrain, MLmodelTrain } from '.';
 
     const sidebar_items = ['Mol2Vec', 'VICGAE', 'PCA', 'Embedding'];
     let active_item = sidebar_items[0];
@@ -34,6 +34,9 @@
                 <li on:click={() => (active_item = 'Embedding')}>
                     <span class:active={active_item == 'Embedding'}>Embedding</span>
                 </li>
+                <li on:click={() => (active_item = 'ML_Model')}>
+                    <span class:active={active_item == 'ML_Model'}>ML Model</span>
+                </li>
             </ul>
         </Pane>
         <Pane minSize={80}>
@@ -42,6 +45,7 @@
                 <Mol2VecTrain display={active_item.toLowerCase() === 'mol2vec' ? '' : 'none'} />
                 <VICGAETrain display={active_item.toLowerCase() === 'vicgae' ? '' : 'none'} />
                 <PCATrain display={active_item.toLowerCase() === 'pca' ? '' : 'none'} />
+                <MLmodelTrain display={active_item.toLowerCase() === 'ml_model' ? '' : 'none'} />
             </div>
         </Pane>
     </svelte:fragment>
