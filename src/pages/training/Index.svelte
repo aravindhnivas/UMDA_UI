@@ -2,9 +2,9 @@
     // import { Loadingbtn } from '$lib/components/';
     import Page from '$lib/layouts/Page.svelte';
     import { Pane } from 'svelte-splitpanes';
-    import { Embedding, Mol2VecTrain, PCATrain } from '.';
+    import { Embedding, Mol2VecTrain, VICGAETrain, PCATrain } from '.';
 
-    const sidebar_items = ['Mol2Vec', 'PCA', 'Embedding'];
+    const sidebar_items = ['Mol2Vec', 'VICGAE', 'PCA', 'Embedding'];
     let active_item = sidebar_items[0];
 </script>
 
@@ -22,6 +22,9 @@
                             <li on:click={() => (active_item = 'Mol2Vec')}>
                                 <span class:active={active_item == 'Mol2Vec'}>Mol2Vec</span>
                             </li>
+                            <li on:click={() => (active_item = 'VICGAE')}>
+                                <span class:active={active_item == 'VICGAE'}>VICGAE</span>
+                            </li>
                             <li on:click={() => (active_item = 'PCA')}>
                                 <span class:active={active_item == 'PCA'}>PCA</span>
                             </li>
@@ -37,6 +40,7 @@
             <div class="p-4 overflow-auto max-h-[80vh]">
                 <Embedding display={active_item.toLowerCase() === 'embedding' ? '' : 'none'} />
                 <Mol2VecTrain display={active_item.toLowerCase() === 'mol2vec' ? '' : 'none'} />
+                <VICGAETrain display={active_item.toLowerCase() === 'vicgae' ? '' : 'none'} />
                 <PCATrain display={active_item.toLowerCase() === 'pca' ? '' : 'none'} />
             </div>
         </Pane>
