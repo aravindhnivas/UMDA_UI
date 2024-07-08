@@ -17,9 +17,6 @@ dependencies:
   '@xterm/xterm':
     specifier: ^5.5.0
     version: 5.5.0
-  jsfive:
-    specifier: ^0.3.14
-    version: 0.3.14
   lucide-svelte:
     specifier: ^0.399.0
     version: 0.399.0(svelte@4.2.18)
@@ -3439,12 +3436,6 @@ packages:
     hasBin: true
     dev: true
 
-  /jsfive@0.3.14:
-    resolution: {integrity: sha512-CptUQRZw1JHgQKhuZX6ozL/5PndJWetPz3K/Raeh5U/ise8FO84BIcBwbUBq2WsCl/zrnu3phnwazL+IuvaQ5A==}
-    dependencies:
-      pako: 2.1.0
-    dev: false
-
   /json5@2.2.3:
     resolution: {integrity: sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==}
     engines: {node: '>=6'}
@@ -3719,10 +3710,6 @@ packages:
   /package-json-from-dist@1.0.0:
     resolution: {integrity: sha512-dATvCeZN/8wQsGywez1mzHtTlP22H8OEfPrVMLNr4/eGa+ijtLn/6M5f0dY8UKNrC2O9UCU6SSoG3qRKnt7STw==}
     dev: true
-
-  /pako@2.1.0:
-    resolution: {integrity: sha512-w+eufiZ1WuJYgPXbV/PO3NCMEc3xqylkKHzp8bxp1uW4qaSNQUkwmLLEc3kKsfz8lpV1F8Ht3U1Cm+9Srog2ug==}
-    dev: false
 
   /parsel-js@1.1.2:
     resolution: {integrity: sha512-D66DG2nKx4Yoq66TMEyCUHlR2STGqO7vsBrX7tgyS9cfQyO6XD5JyzOiflwmWN6a4wbUAqpmHqmrxlTQVGZcbA==}

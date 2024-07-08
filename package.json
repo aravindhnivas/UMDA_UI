@@ -16,7 +16,6 @@
     "@tauri-apps/cli": "^1.6.0",
     "@xterm/addon-fit": "^0.10.0",
     "@xterm/xterm": "^5.5.0",
-    "jsfive": "^0.3.14",
     "lucide-svelte": "^0.399.0",
     "plotly.js-basic-dist-min": "^2.33.0",
     "smiles-drawer": "^2.1.7"
