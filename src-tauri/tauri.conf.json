@@ -3,8 +3,7 @@
         "beforeDevCommand": "pnpm dev",
         "beforeBuildCommand": "pnpm build",
         "devPath": "http://localhost:1420",
-        "distDir": "../dist",
-        "withGlobalTauri": true
+        "distDir": "../dist"
     },
     "package": {
         "productName": "umda_ui",
