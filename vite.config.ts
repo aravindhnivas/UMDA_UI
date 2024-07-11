@@ -3,6 +3,7 @@ import { svelte } from '@sveltejs/vite-plugin-svelte';
 import UnoCSS from 'unocss/vite';
 import path from 'path';
 import AutoImport from 'unplugin-auto-import/vite';
+import ViteYaml from '@modyfi/vite-plugin-yaml';
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
@@ -27,8 +28,8 @@ export default defineConfig(async () => ({
             ],
             dts: './src/auto-imports.d.ts',
         }),
+        ViteYaml(),
     ],
-
     resolve: {
         alias: {
             'plotly.js-dist': 'plotly.js-basic-dist-min',

@@ -15,10 +15,9 @@
 
 <style lang="scss">
     .comp__div {
+        justify-content: center;
         label {
             padding: 0 0.2rem;
         }
-
-        justify-content: center;
     }
 </style>
