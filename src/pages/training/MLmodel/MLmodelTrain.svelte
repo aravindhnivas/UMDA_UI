@@ -12,8 +12,6 @@
         description: string;
         hyperparameters: Record<string, any>;
     };
-    // $: current_model = model ? supervised_ml_models[model] : {};
-    // $: console.log(values);
 
     const set_model = () => {
         if (!$model) return;
@@ -38,7 +36,6 @@
     });
 </script>
 
-<!-- <pre>{JSON.stringify(supervised_ml_models, null, 2)}</pre> -->
 <div {id} style:display class="grid content-start gap-2">
     <div class="flex">
         <CustomSelect
@@ -56,7 +53,6 @@
         <div class="flex gap-4 flex-wrap">
             {#each Object.keys(current_model['hyperparameters']) as label (label)}
                 {@const value = current_model['hyperparameters'][label]}
-                <!-- {typeof value} -->
                 {#if typeof value === 'boolean'}
                     <Checkbox class="p-2" bind:value={values[label]} {label} />
                 {:else if typeof value === 'string' || typeof value === 'number'}
@@ -66,9 +62,5 @@
                 {/if}
             {/each}
         </div>
-
-        <!-- <pre>
-            {JSON.stringify(values, null, 2)}
-        </pre> -->
     {/if}
 </div>
