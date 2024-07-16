@@ -41,7 +41,15 @@ ridge:
         solver:
             value:
                 default: 'auto'
-                options: ['auto', 'svd', 'cholesky', 'lsqr', 'sparse_cg', 'sag', 'saga']
+                # options: ['auto', 'svd', 'cholesky', 'lsqr', 'sparse_cg', 'sag', 'saga']
+                options:
+                    auto: 'Automatic selection of the most appropriate solver for the data.'
+                    svd: 'Singular Value Decomposition.'
+                    cholesky: 'Cholesky decomposition.'
+                    lsqr: 'Least Squares solution.'
+                    sparse_cg: 'Conjugate Gradient solver.'
+                    sag: 'Stochastic Average Gradient descent.'
+                    saga: 'SAGA solver.'
             description: 'Solver to use in the computational routines.'
 
 svr:
@@ -51,7 +59,13 @@ svr:
         kernel:
             value:
                 default: 'rbf'
-                options: ['linear', 'poly', 'rbf', 'sigmoid', 'precomputed']
+                # options: ['linear', 'poly', 'rbf', 'sigmoid', 'precomputed']
+                options:
+                    linear: 'Linear kernel.'
+                    poly: 'Polynomial kernel.'
+                    rbf: 'Radial Basis Function kernel.'
+                    sigmoid: 'Sigmoid kernel.'
+                    precomputed: 'Precomputed kernel.'
             description: 'Specifies the kernel type to be used in the algorithm.'
         degree:
             value: 3
@@ -59,7 +73,10 @@ svr:
         gamma:
             value:
                 default: 'scale'
-                options: ['scale', 'auto']
+                # options: ['scale', 'auto']
+                options:
+                    scale: '1 / (n_features * X.var())'
+                    auto: '1 / n_features'
             description: "Kernel coefficient for 'rbf', 'poly' and 'sigmoid'."
         coef0:
             value: 0.0
@@ -96,12 +113,20 @@ knn:
         weights:
             value:
                 default: 'uniform'
-                options: ['uniform', 'distance']
+                # options: ['uniform', 'distance']
+                options:
+                    uniform: 'All points in each neighborhood are weighted equally.'
+                    distance: 'Weight points by the inverse of their distance.'
             description: 'Weight function used in prediction.'
         algorithm:
             value:
                 default: 'auto'
-                options: ['auto', 'ball_tree', 'kd_tree', 'brute']
+                # options: ['auto', 'ball_tree', 'kd_tree', 'brute']
+                options:
+                    auto: 'Automatically select the most appropriate algorithm.'
+                    ball_tree: 'BallTree algorithm.'
+                    kd_tree: 'KDTree algorithm.'
+                    brute: 'Brute-force search algorithm.'
             description: 'Algorithm used to compute the nearest neighbors.'
         leaf_size:
             value: 30
@@ -112,7 +137,16 @@ knn:
         metric:
             value:
                 default: 'minkowski'
-                options: ['minkowski', 'cosine', 'euclidean', 'nan_euclidean', 'manhattan', 'l1', 'l2', 'cityblock']
+                # options: ['minkowski', 'cosine', 'euclidean', 'nan_euclidean', 'manhattan', 'l1', 'l2', 'cityblock']
+                options:
+                    minkowski: 'Minkowski distance.'
+                    cosine: 'Cosine distance.'
+                    euclidean: 'Euclidean distance.'
+                    nan_euclidean: 'Euclidean distance ignoring NaN values.'
+                    manhattan: 'Manhattan distance.'
+                    l1: 'L1 norm.'
+                    l2: 'L2 norm.'
+                    cityblock: 'City block distance.'
             description: 'Distance metric used for the tree.'
         metric_params:
             value: null
@@ -128,7 +162,12 @@ rfr:
         criterion:
             value:
                 default: 'squared_error'
-                options: ['squared_error', 'absolute_error', 'friedman_mse', 'poisson']
+                # options: ['squared_error', 'absolute_error', 'friedman_mse', 'poisson']
+                options:
+                    squared_error: 'Mean squared error.'
+                    absolute_error: 'Mean absolute error.'
+                    friedman_mse: 'Mean squared error with improvement score by Friedman.'
+                    poisson: 'Mean squared error for Poisson distribution.'
             description: 'Function to measure the quality of a split.'
         max_depth:
             value: null
@@ -145,7 +184,11 @@ rfr:
         max_features:
             value:
                 default: null
-                options: ['log2', 'sqrt', null]
+                # options: ['log2', 'sqrt', null]
+                options:
+                    log2: 'log2(n_features).'
+                    sqrt: 'sqrt(n_features).'
+                    null: 'n_features.'
             description: 'Number of features to consider when looking for the best split.'
         max_leaf_nodes:
             value: null
@@ -185,7 +228,12 @@ gbr:
         loss:
             value:
                 default: 'squared_error'
-                options: ['squared_error', 'absolute_error', 'huber', 'quantile']
+                # options: ['squared_error', 'absolute_error', 'huber', 'quantile']
+                options:
+                    squared_error: 'Least squares regression.'
+                    absolute_error: 'Least absolute deviation regression.'
+                    huber: 'Huber loss for robust regression.'
+                    quantile: 'Quantile regression.'
             description: 'Loss function to be optimized.'
         learning_rate:
             value: 0.1
@@ -199,7 +247,10 @@ gbr:
         criterion:
             value:
                 default: 'friedman_mse'
-                options: ['friedman_mse', 'squared_error']
+                # options: ['friedman_mse', 'squared_error']
+                options:
+                    friedman_mse: 'Mean squared error with improvement score by Friedman.'
+                    squared_error: 'Mean squared error.'
             description: 'Function to measure the quality of a split.'
         min_samples_split:
             value: 2
@@ -222,7 +273,11 @@ gbr:
         max_features:
             value:
                 default: null
-                options: ['log2', 'sqrt', null]
+                # options: ['log2', 'sqrt', null]
+                options:
+                    log2: 'log2(n_features).'
+                    sqrt: 'sqrt(n_features).'
+                    null: 'n_features.'
             description: 'Number of features to consider when looking for the best split.'
         alpha:
             value: 0.9

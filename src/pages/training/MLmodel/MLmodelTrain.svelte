@@ -37,7 +37,7 @@
         set_model();
     });
 
-    const tooltip_direction = 'top';
+    const tooltip_direction = 'right';
 </script>
 
 <div {id} style:display class="grid content-start gap-2">
@@ -54,7 +54,7 @@
         <span class="text-sm">{current_model['description']}</span>
         <hr />
 
-        <div class="flex flex-wrap gap-4">
+        <div class="flex flex-col gap-4">
             {#each Object.keys(current_model['hyperparameters']) as label (label)}
                 {@const { value, description } = current_model['hyperparameters'][label]}
                 {#if typeof value === 'boolean'}
@@ -78,14 +78,14 @@
                 {:else if typeof value === 'object' && value}
                     <div class="grid">
                         <div class="flex gap-1">
-                            <CustomSelect {label} items={value.options} bind:value={values[label]} />
+                            <CustomSelect {label} items={Object.keys(value.options)} bind:value={values[label]} />
                             <span
                                 class="badge cursor-pointer text-xs p-1"
                                 aria-label={description}
                                 data-cooltipz-dir={tooltip_direction}>?</span
                             >
                         </div>
-                        <span class="text-xs">Description: </span>
+                        <span class="text-xs">{value.options[values[label]]}</span>
                     </div>
                 {:else if value == null}
                     <div class="grid">
