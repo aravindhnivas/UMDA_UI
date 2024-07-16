@@ -11,6 +11,7 @@ linear_regression:
         positive:
             value: false
             description: 'Specifies whether to enforce positive coefficients'
+    optimize_for_CV: ['fit_intercept']
 
 ridge:
     name: 'Ridge Regression'
@@ -49,6 +50,7 @@ ridge:
                     sag: 'Stochastic Average Gradient descent'
                     saga: 'SAGA solver'
             description: 'Solver to use in the computational routines'
+    optimize_for_CV: ['alpha']
 
 svr:
     name: 'Support Vector Regression'
@@ -73,6 +75,7 @@ svr:
                 options:
                     scale: '1 / (n_features * X.var())'
                     auto: '1 / n_features'
+                    float: 'must be non-negative'
             description: "Kernel coefficient for 'rbf', 'poly' and 'sigmoid'."
         coef0:
             value: 0.0
@@ -98,6 +101,7 @@ svr:
         max_iter:
             value: -1
             description: 'Maximum number of iterations for the solver'
+    optimize_for_CV: ['C', 'epsilon', 'gamma']
 
 knn:
     name: 'K-Nearest Neighbors'
@@ -137,13 +141,11 @@ knn:
                     euclidean: 'Euclidean distance'
                     nan_euclidean: 'Euclidean distance ignoring NaN values'
                     manhattan: 'Manhattan distance'
-                    l1: 'L1 norm'
-                    l2: 'L2 norm'
-                    cityblock: 'City block distance'
             description: 'Distance metric used for the tree'
         metric_params:
             value: null
             description: 'Additional keyword arguments for the metric function'
+    optimize_for_CV: ['n_neighbors', 'weights', 'metric']
 
 rfr:
     name: 'Random Forest Regression'
@@ -180,6 +182,7 @@ rfr:
                     log2: 'log2(n_features)'
                     sqrt: 'sqrt(n_features)'
                     null: 'n_features'
+                    float: 'n_features'
             description: 'Number of features to consider when looking for the best split'
         max_leaf_nodes:
             value: null
@@ -211,6 +214,7 @@ rfr:
         monotonic_cst:
             value: null
             description: 'List of constraints to impose monotonicity on features'
+    optimize_for_CV: ['n_estimators', 'max_leaf_nodes', 'min_samples_leaf', 'max_depth']
 
 gbr:
     name: 'Gradient Boosting Regression'
@@ -266,6 +270,7 @@ gbr:
                     log2: 'log2(n_features)'
                     sqrt: 'sqrt(n_features)'
                     null: 'n_features'
+                    float: 'n_features'
             description: 'Number of features to consider when looking for the best split'
         alpha:
             value: 0.9
@@ -291,6 +296,7 @@ gbr:
         ccp_alpha:
             value: 0.0
             description: 'Complexity parameter used for Minimal Cost-Complexity Pruning'
+    optimize_for_CV: ['n_estimators', 'learning_rate', 'subsample', 'max_depth']
 
 gpr:
     name: 'Gaussian Process Regression'
@@ -317,3 +323,4 @@ gpr:
         n_targets:
             value: null
             description: 'The number of output targets'
+    optimize_for_CV: ['alpha', 'n_restarts_optimizer']

@@ -39,7 +39,7 @@
             </ul>
         </Pane>
         <Pane minSize={80}>
-            <div class="overflow-auto max-h-[80vh] p-2">
+            <div class="overflow-auto max-h-[100%] p-2">
                 <Embedding display={active_item.toLowerCase() === 'embedding' ? '' : 'none'} />
                 <Mol2VecTrain display={active_item.toLowerCase() === 'mol2vec' ? '' : 'none'} />
                 <VICGAETrain display={active_item.toLowerCase() === 'vicgae' ? '' : 'none'} />

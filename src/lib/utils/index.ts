@@ -40,3 +40,20 @@ export const browse_folder = async (
     if (!result) return '';
     return result;
 };
+
+export function validateInput(event: KeyboardEvent) {
+    const input = event.target as HTMLInputElement;
+    const key = event.key as string;
+
+    // Allow digits, one decimal point, control keys, and navigation keys
+    // Check if the key is a digit or a control/navigation key
+    const isDigitOrControlKey =
+        /[0-9]/.test(key) || ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete'].includes(key);
+
+    // Allow only one decimal point
+    const isDecimalPoint = key === '.' && !input.value.includes('.');
+
+    if (!isDigitOrControlKey && !isDecimalPoint) {
+        event.preventDefault();
+    }
+}

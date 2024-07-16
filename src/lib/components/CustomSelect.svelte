@@ -11,7 +11,7 @@
 <div class="flex flex-col gap-1 min-w-[100px] max-w-lg">
     <span class="text-xs pl-1">{label}</span>
 
-    <select class="select select-sm select-bordered {className}" bind:value on:change>
+    <select class="select select-sm select-bordered w-max {className}" bind:value on:change>
         {#if !label}
             <option disabled selected>embedding</option>
         {/if}
