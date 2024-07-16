@@ -5,7 +5,6 @@ linear_regression:
     description: 'Linear regression is a linear approach to modeling the relationship between a scalar response (or dependent variable) and one or more explanatory variables (or independent variables).'
     hyperparameters:
         fit_intercept: true
-        normalize: false
         copy_X: true
         positive: false
 
@@ -18,7 +17,8 @@ ridge:
         normalize: false
         copy_X: true
         max_iter: null
-        tol: 0.001
+        tol: 1e-4
+        positive: false
         solver:
             default: 'auto'
             options: ['auto', 'svd', 'cholesky', 'lsqr', 'sparse_cg', 'sag', 'saga']
@@ -35,7 +35,7 @@ svr:
             default: 'scale'
             options: ['scale', 'auto']
         coef0: 0.0
-        tol: 0.001
+        tol: 1e-3
         C: 1.0
         epsilon: 0.1
         shrinking: true
@@ -58,7 +58,7 @@ knn:
         p: 2
         metric:
             default: 'minkowski'
-            options: ['minkowski', 'cosine', 'euclidean']
+            options: ['minkowski', 'cosine', 'euclidean', 'nan_euclidean', 'manhattan', 'l1', 'l2', 'cityblock']
         metric_params: null
 
 rfr:
@@ -85,6 +85,7 @@ rfr:
         warm_start: false
         ccp_alpha: 0.0
         max_samples: null
+        monotonic_cst: null
 
 gbr:
     name: 'Gradient Boosting Regression'
@@ -104,7 +105,6 @@ gbr:
         min_weight_fraction_leaf: 0.0
         max_depth: 3
         min_impurity_decrease: 0.0
-        min_impurity_split: null
         init: null
         max_features:
             default: null
@@ -115,16 +115,17 @@ gbr:
         warm_start: false
         validation_fraction: 0.1
         n_iter_no_change: null
-        tol: 0.0001
+        tol: 1e-4
         ccp_alpha: 0.0
 
 gpr:
     name: 'Gaussian Process Regression'
     description: 'Gaussian processes are a powerful, non-parametric approach to regression.'
     hyperparameters:
-        kernel: 'RBF'
+        kernel: null
         alpha: 1e-10
         optimizer: 'fmin_l_bfgs_b'
         n_restarts_optimizer: 0
         normalize_y: false
         copy_X_train: true
+        n_targets: null
