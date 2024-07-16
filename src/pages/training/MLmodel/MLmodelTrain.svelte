@@ -93,7 +93,7 @@
                     </div>
                 {:else if typeof value === 'string' || typeof value === 'number'}
                     <div class="grid gap-1">
-                        <Textfield class="w-max" bind:value={values[label]} {label} />
+                        <Textfield class="w-max" bind:value={values[label]} {label} autocomplete="false" />
                         <span class="text-xs">{description}</span>
                     </div>
                 {:else if typeof value === 'object' && value}
@@ -122,7 +122,7 @@
                     </div>
                 {:else if value == null}
                     <div class="grid">
-                        <Textfield class="w-max" bind:value={values[label]} {label} />
+                        <Textfield class="w-max" bind:value={values[label]} {label} autocomplete="false" />
                         <span class="text-xs">{description}. Default: None</span>
                     </div>
                 {/if}
