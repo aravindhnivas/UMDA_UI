@@ -22,7 +22,7 @@
         Object.keys(current_model['hyperparameters']).forEach(label => {
             if (!current_model) return;
             const value = current_model['hyperparameters'][label];
-            console.log(typeof value, value);
+            // console.log(typeof value, value);
             if (typeof value === 'object' && value) {
                 values[label] = value.default;
             } else {
@@ -50,15 +50,20 @@
         <span class="text-sm">{current_model['description']}</span>
         <hr />
 
-        <div class="flex gap-4 flex-wrap">
+        <div class="flex flex-wrap gap-4">
             {#each Object.keys(current_model['hyperparameters']) as label (label)}
                 {@const value = current_model['hyperparameters'][label]}
                 {#if typeof value === 'boolean'}
-                    <Checkbox class="p-2" bind:value={values[label]} {label} />
+                    <div class="flex gap-1">
+                        <Checkbox class="p-2" bind:value={values[label]} {label} />
+                        <span class="badge cursor-pointer text-xs p-1">?</span>
+                    </div>
                 {:else if typeof value === 'string' || typeof value === 'number'}
                     <Textfield bind:value={values[label]} {label} />
                 {:else if typeof value === 'object' && value}
                     <CustomSelect {label} items={value.options} bind:value={values[label]} />
+                {:else if value == null}
+                    <Textfield bind:value={values[label]} {label} />
                 {/if}
             {/each}
         </div>
