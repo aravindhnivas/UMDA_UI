@@ -45,21 +45,24 @@
     const fit_function = () => {
         const clonedValues = structuredClone(values);
         Object.entries(values).forEach(([key, value]) => {
-            if (value !== 'float') return;
-            const input = document.getElementById(`${unique_id}_${id}_${key}`) as HTMLInputElement;
+            if (value === 'float') {
+                const input = document.getElementById(`${unique_id}_${id}_${key}`) as HTMLInputElement;
 
-            if (!input) {
-                toast.error(`Error: ${key} input not found`);
-                return;
+                if (!input) {
+                    toast.error(`Error: ${key} input not found`);
+                    return;
+                }
+                const val = parseFloat(input.value);
+
+                if (isNaN(val)) {
+                    toast.error(`Error: ${key} input is not a number. Please enter a valid number`);
+                    return;
+                }
+
+                clonedValues[key] = val;
+            } else if (typeof value === 'string' && value.trim() === '') {
+                clonedValues[key] = null;
             }
-            const val = parseFloat(input.value);
-
-            if (isNaN(val)) {
-                toast.error(`Error: ${key} input is not a number. Please enter a valid number`);
-                return;
-            }
-
-            clonedValues[key] = val;
         });
         console.log({ values, clonedValues });
     };
