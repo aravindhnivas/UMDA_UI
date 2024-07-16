@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { Checkbox, CustomSelect } from '$lib/components';
-    import supervised_ml_models from '$lib/config/supervised_ml_models.yml';
     import Textfield from '@smui/textfield';
     import { validateInput } from '$lib/utils';
+    import { Checkbox, CustomSelect } from '$lib/components';
+    import supervised_ml_models from '$lib/config/supervised_ml_models.yml';
 
     export let id: string = 'ml_model-train-container';
     export let display: string = 'none';
