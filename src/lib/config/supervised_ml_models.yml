@@ -1,331 +1,319 @@
-# Supervised learning models configuration
 linear_regression:
     name: 'Linear Regression'
-    description: 'Linear regression is a linear approach to modeling the relationship between a scalar response (or dependent variable) and one or more explanatory variables (or independent variables).'
+    description: 'Linear regression is a linear approach to modeling the relationship between a scalar response (or dependent variable) and one or more explanatory variables (or independent variables)'
     hyperparameters:
         fit_intercept:
             value: true
-            description: 'Specifies whether to calculate the intercept for this model.'
+            description: 'Specifies whether to calculate the intercept for this model'
         copy_X:
             value: true
-            description: 'Specifies whether to copy the input data before fitting the model.'
+            description: 'Specifies whether to copy the input data before fitting the model'
         positive:
             value: false
-            description: 'Specifies whether to enforce positive coefficients.'
+            description: 'Specifies whether to enforce positive coefficients'
 
 ridge:
     name: 'Ridge Regression'
-    description: 'Ridge regression addresses some of the problems of Ordinary Least Squares by imposing a penalty on the size of the coefficients.'
+    description: 'Ridge regression addresses some of the problems of Ordinary Least Squares by imposing a penalty on the size of the coefficients'
     hyperparameters:
         alpha:
             value: 1.0
-            description: 'Regularization strength; must be a positive float.'
+            description: 'Regularization strength; must be a positive float'
         fit_intercept:
             value: true
-            description: 'Specifies whether to calculate the intercept for this model.'
+            description: 'Specifies whether to calculate the intercept for this model'
         normalize:
             value: false
-            description: 'Specifies whether to normalize the input data.'
+            description: 'Specifies whether to normalize the input data'
         copy_X:
             value: true
-            description: 'Specifies whether to copy the input data before fitting the model.'
+            description: 'Specifies whether to copy the input data before fitting the model'
         max_iter:
             value: null
-            description: 'Maximum number of iterations for the solver.'
+            description: 'Maximum number of iterations for the solver'
         tol:
             value: 1e-4
-            description: 'Tolerance for stopping criteria.'
+            description: 'Tolerance for stopping criteria'
         positive:
             value: false
-            description: 'Specifies whether to enforce positive coefficients.'
+            description: 'Specifies whether to enforce positive coefficients'
         solver:
             value:
                 default: 'auto'
-                # options: ['auto', 'svd', 'cholesky', 'lsqr', 'sparse_cg', 'sag', 'saga']
                 options:
-                    auto: 'Automatic selection of the most appropriate solver for the data.'
-                    svd: 'Singular Value Decomposition.'
-                    cholesky: 'Cholesky decomposition.'
-                    lsqr: 'Least Squares solution.'
-                    sparse_cg: 'Conjugate Gradient solver.'
-                    sag: 'Stochastic Average Gradient descent.'
-                    saga: 'SAGA solver.'
-            description: 'Solver to use in the computational routines.'
+                    auto: 'Automatic selection of the most appropriate solver for the data'
+                    svd: 'Singular Value Decomposition'
+                    cholesky: 'Cholesky decomposition'
+                    lsqr: 'Least Squares solution'
+                    sparse_cg: 'Conjugate Gradient solver'
+                    sag: 'Stochastic Average Gradient descent'
+                    saga: 'SAGA solver'
+            description: 'Solver to use in the computational routines'
 
 svr:
     name: 'Support Vector Regression'
-    description: 'Support Vector Regression (SVR) uses the same principles as the SVM for classification, with only a few minor differences.'
+    description: 'Support Vector Regression (SVR) uses the same principles as the SVM for classification, with only a few minor differences'
     hyperparameters:
         kernel:
             value:
                 default: 'rbf'
-                # options: ['linear', 'poly', 'rbf', 'sigmoid', 'precomputed']
                 options:
-                    linear: 'Linear kernel.'
-                    poly: 'Polynomial kernel.'
-                    rbf: 'Radial Basis Function kernel.'
-                    sigmoid: 'Sigmoid kernel.'
-                    precomputed: 'Precomputed kernel.'
-            description: 'Specifies the kernel type to be used in the algorithm.'
+                    linear: 'Linear kernel'
+                    poly: 'Polynomial kernel'
+                    rbf: 'Radial Basis Function kernel'
+                    sigmoid: 'Sigmoid kernel'
+                    precomputed: 'Precomputed kernel'
+            description: 'Specifies the kernel type to be used in the algorithm'
         degree:
             value: 3
-            description: 'Degree of the polynomial kernel function.'
+            description: 'Degree of the polynomial kernel function'
         gamma:
             value:
                 default: 'scale'
-                # options: ['scale', 'auto']
                 options:
                     scale: '1 / (n_features * X.var())'
                     auto: '1 / n_features'
             description: "Kernel coefficient for 'rbf', 'poly' and 'sigmoid'."
         coef0:
             value: 0.0
-            description: 'Independent term in kernel function.'
+            description: 'Independent term in kernel function'
         tol:
             value: 1e-3
-            description: 'Tolerance for stopping criteria.'
+            description: 'Tolerance for stopping criteria'
         C:
             value: 1.0
-            description: 'Regularization parameter.'
+            description: 'Regularization parameter'
         epsilon:
             value: 0.1
-            description: 'Epsilon in the epsilon-SVR model.'
+            description: 'Epsilon in the epsilon-SVR model'
         shrinking:
             value: true
-            description: 'Specifies whether to use the shrinking heuristic.'
+            description: 'Specifies whether to use the shrinking heuristic'
         cache_size:
             value: 200
-            description: 'Size of the kernel cache.'
+            description: 'Size of the kernel cache in MB'
         verbose:
             value: false
-            description: 'Specifies whether to enable verbose output.'
+            description: 'Specifies whether to enable verbose output'
         max_iter:
             value: -1
-            description: 'Maximum number of iterations for the solver.'
+            description: 'Maximum number of iterations for the solver'
 
 knn:
     name: 'K-Nearest Neighbors'
-    description: 'K-Nearest Neighbors (KNN) is a type of instance-based learning, or lazy learning, where the function is only approximated locally and all computation is deferred until function evaluation.'
+    description: 'K-Nearest Neighbors (KNN) is a type of instance-based learning, or lazy learning, where the function is only approximated locally and all computation is deferred until function evaluation'
     hyperparameters:
         n_neighbors:
             value: 5
-            description: 'Number of neighbors to use for kneighbors queries.'
+            description: 'Number of neighbors to use for kneighbors queries'
         weights:
             value:
                 default: 'uniform'
-                # options: ['uniform', 'distance']
                 options:
-                    uniform: 'All points in each neighborhood are weighted equally.'
-                    distance: 'Weight points by the inverse of their distance.'
-            description: 'Weight function used in prediction.'
+                    uniform: 'All points in each neighborhood are weighted equally'
+                    distance: 'Weight points by the inverse of their distance'
+            description: 'Weight function used in prediction'
         algorithm:
             value:
                 default: 'auto'
-                # options: ['auto', 'ball_tree', 'kd_tree', 'brute']
                 options:
-                    auto: 'Automatically select the most appropriate algorithm.'
-                    ball_tree: 'BallTree algorithm.'
-                    kd_tree: 'KDTree algorithm.'
-                    brute: 'Brute-force search algorithm.'
-            description: 'Algorithm used to compute the nearest neighbors.'
+                    auto: 'Automatically select the most appropriate algorithm'
+                    ball_tree: 'BallTree algorithm'
+                    kd_tree: 'KDTree algorithm'
+                    brute: 'Brute-force search algorithm'
+            description: 'Algorithm used to compute the nearest neighbors'
         leaf_size:
             value: 30
-            description: 'Leaf size passed to BallTree or KDTree.'
+            description: 'Leaf size passed to BallTree or KDTree'
         p:
             value: 2
-            description: 'Power parameter for the Minkowski metric.'
+            description: 'Power parameter for the Minkowski metric'
         metric:
             value:
                 default: 'minkowski'
-                # options: ['minkowski', 'cosine', 'euclidean', 'nan_euclidean', 'manhattan', 'l1', 'l2', 'cityblock']
                 options:
-                    minkowski: 'Minkowski distance.'
-                    cosine: 'Cosine distance.'
-                    euclidean: 'Euclidean distance.'
-                    nan_euclidean: 'Euclidean distance ignoring NaN values.'
-                    manhattan: 'Manhattan distance.'
-                    l1: 'L1 norm.'
-                    l2: 'L2 norm.'
-                    cityblock: 'City block distance.'
-            description: 'Distance metric used for the tree.'
+                    minkowski: 'Minkowski distance'
+                    cosine: 'Cosine distance'
+                    euclidean: 'Euclidean distance'
+                    nan_euclidean: 'Euclidean distance ignoring NaN values'
+                    manhattan: 'Manhattan distance'
+                    l1: 'L1 norm'
+                    l2: 'L2 norm'
+                    cityblock: 'City block distance'
+            description: 'Distance metric used for the tree'
         metric_params:
             value: null
-            description: 'Additional keyword arguments for the metric function.'
+            description: 'Additional keyword arguments for the metric function'
 
 rfr:
     name: 'Random Forest Regression'
-    description: 'Random forests or random decision forests are an ensemble learning method for classification, regression and other tasks that operate by constructing a multitude of decision trees at training time and outputting the class that is the mode of the classes (classification) or mean prediction (regression) of the individual trees.'
+    description: 'Random forests or random decision forests are an ensemble learning method for classification, regression and other tasks that operate by constructing a multitude of decision trees at training time and outputting the class that is the mode of the classes (classification) or mean prediction (regression) of the individual trees'
     hyperparameters:
         n_estimators:
             value: 100
-            description: 'Number of trees in the forest.'
+            description: 'Number of trees in the forest'
         criterion:
             value:
                 default: 'squared_error'
-                # options: ['squared_error', 'absolute_error', 'friedman_mse', 'poisson']
                 options:
-                    squared_error: 'Mean squared error.'
-                    absolute_error: 'Mean absolute error.'
-                    friedman_mse: 'Mean squared error with improvement score by Friedman.'
-                    poisson: 'Mean squared error for Poisson distribution.'
-            description: 'Function to measure the quality of a split.'
+                    squared_error: 'Mean squared error'
+                    absolute_error: 'Mean absolute error'
+                    friedman_mse: 'Mean squared error with improvement score by Friedman'
+                    poisson: 'Mean squared error for Poisson distribution'
+            description: 'Function to measure the quality of a split'
         max_depth:
             value: null
-            description: 'Maximum depth of the tree.'
+            description: 'Maximum depth of the tree'
         min_samples_split:
             value: 2
-            description: 'Minimum number of samples required to split an internal node.'
+            description: 'Minimum number of samples required to split an internal node'
         min_samples_leaf:
             value: 1
-            description: 'Minimum number of samples required to be at a leaf node.'
+            description: 'Minimum number of samples required to be at a leaf node'
         min_weight_fraction_leaf:
             value: 0.0
-            description: 'Minimum weighted fraction of the sum total of weights required to be at a leaf node.'
+            description: 'Minimum weighted fraction of the sum total of weights required to be at a leaf node'
         max_features:
             value:
                 default: null
-                # options: ['log2', 'sqrt', null]
                 options:
-                    log2: 'log2(n_features).'
-                    sqrt: 'sqrt(n_features).'
-                    null: 'n_features.'
-            description: 'Number of features to consider when looking for the best split.'
+                    log2: 'log2(n_features)'
+                    sqrt: 'sqrt(n_features)'
+                    null: 'n_features'
+            description: 'Number of features to consider when looking for the best split'
         max_leaf_nodes:
             value: null
-            description: 'Grow trees with max_leaf_nodes in best-first fashion.'
+            description: 'Grow trees with max_leaf_nodes in best-first fashion'
         min_impurity_decrease:
             value: 0.0
-            description: 'A node will be split if this split induces a decrease of the impurity greater than or equal to this value.'
+            description: 'A node will be split if this split induces a decrease of the impurity greater than or equal to this value'
         min_impurity_split:
             value: null
-            description: 'Threshold for early stopping in tree growth.'
+            description: 'Threshold for early stopping in tree growth'
         bootstrap:
             value: true
-            description: 'Whether bootstrap samples are used when building trees.'
+            description: 'Whether bootstrap samples are used when building trees'
         oob_score:
             value: false
-            description: 'Whether to use out-of-bag samples to estimate the R^2 on unseen data.'
+            description: 'Whether to use out-of-bag samples to estimate the R^2 on unseen data'
         verbose:
             value: 0
-            description: 'Controls the verbosity when fitting and predicting.'
+            description: 'Controls the verbosity when fitting and predicting'
         warm_start:
             value: false
-            description: 'When set to True, reuse the solution of the previous call to fit and add more estimators to the ensemble.'
+            description: 'When set to True, reuse the solution of the previous call to fit and add more estimators to the ensemble'
         ccp_alpha:
             value: 0.0
-            description: 'Complexity parameter used for Minimal Cost-Complexity Pruning.'
+            description: 'Complexity parameter used for Minimal Cost-Complexity Pruning'
         max_samples:
             value: null
-            description: 'If bootstrap is True, the number of samples to draw from X to train each base estimator.'
+            description: 'If bootstrap is True, the number of samples to draw from X to train each base estimator'
         monotonic_cst:
             value: null
-            description: 'List of constraints to impose monotonicity on features.'
+            description: 'List of constraints to impose monotonicity on features'
 
 gbr:
     name: 'Gradient Boosting Regression'
-    description: 'Gradient Boosting builds an additive model in a forward stage-wise fashion; it allows for the optimization of arbitrary differentiable loss functions.'
+    description: 'Gradient Boosting builds an additive model in a forward stage-wise fashion; it allows for the optimization of arbitrary differentiable loss functions'
     hyperparameters:
         loss:
             value:
                 default: 'squared_error'
-                # options: ['squared_error', 'absolute_error', 'huber', 'quantile']
                 options:
-                    squared_error: 'Least squares regression.'
-                    absolute_error: 'Least absolute deviation regression.'
-                    huber: 'Huber loss for robust regression.'
-                    quantile: 'Quantile regression.'
-            description: 'Loss function to be optimized.'
+                    squared_error: 'Least squares regression'
+                    absolute_error: 'Least absolute deviation regression'
+                    huber: 'Huber loss for robust regression'
+                    quantile: 'Quantile regression'
+            description: 'Loss function to be optimized'
         learning_rate:
             value: 0.1
-            description: 'Learning rate shrinks the contribution of each tree.'
+            description: 'Learning rate shrinks the contribution of each tree'
         n_estimators:
             value: 100
-            description: 'The number of boosting stages to perform.'
+            description: 'The number of boosting stages to perform'
         subsample:
             value: 1.0
-            description: 'The fraction of samples to be used for fitting the individual base learners.'
+            description: 'The fraction of samples to be used for fitting the individual base learners'
         criterion:
             value:
                 default: 'friedman_mse'
-                # options: ['friedman_mse', 'squared_error']
                 options:
-                    friedman_mse: 'Mean squared error with improvement score by Friedman.'
-                    squared_error: 'Mean squared error.'
-            description: 'Function to measure the quality of a split.'
+                    friedman_mse: 'Mean squared error with improvement score by Friedman'
+                    squared_error: 'Mean squared error'
+            description: 'Function to measure the quality of a split'
         min_samples_split:
             value: 2
-            description: 'Minimum number of samples required to split an internal node.'
+            description: 'Minimum number of samples required to split an internal node'
         min_samples_leaf:
             value: 1
-            description: 'Minimum number of samples required to be at a leaf node.'
+            description: 'Minimum number of samples required to be at a leaf node'
         min_weight_fraction_leaf:
             value: 0.0
-            description: 'Minimum weighted fraction of the sum total of weights required to be at a leaf node.'
+            description: 'Minimum weighted fraction of the sum total of weights required to be at a leaf node'
         max_depth:
             value: 3
-            description: 'Maximum depth of the individual regression estimators.'
+            description: 'Maximum depth of the individual regression estimators'
         min_impurity_decrease:
             value: 0.0
-            description: 'A node will be split if this split induces a decrease of the impurity greater than or equal to this value.'
+            description: 'A node will be split if this split induces a decrease of the impurity greater than or equal to this value'
         init:
             value: null
-            description: 'An estimator object that is used to compute the initial predictions.'
+            description: 'An estimator object that is used to compute the initial predictions'
         max_features:
             value:
                 default: null
-                # options: ['log2', 'sqrt', null]
                 options:
-                    log2: 'log2(n_features).'
-                    sqrt: 'sqrt(n_features).'
-                    null: 'n_features.'
-            description: 'Number of features to consider when looking for the best split.'
+                    log2: 'log2(n_features)'
+                    sqrt: 'sqrt(n_features)'
+                    null: 'n_features'
+            description: 'Number of features to consider when looking for the best split'
         alpha:
             value: 0.9
-            description: 'The alpha-quantile of the huber loss function and the quantile loss function.'
+            description: 'The alpha-quantile of the huber loss function and the quantile loss function'
         verbose:
             value: 0
-            description: 'Controls the verbosity when fitting and predicting.'
+            description: 'Controls the verbosity when fitting and predicting'
         max_leaf_nodes:
             value: null
-            description: 'Grow trees with max_leaf_nodes in best-first fashion.'
+            description: 'Grow trees with max_leaf_nodes in best-first fashion'
         warm_start:
             value: false
-            description: 'When set to True, reuse the solution of the previous call to fit and add more estimators to the ensemble.'
+            description: 'When set to True, reuse the solution of the previous call to fit and add more estimators to the ensemble'
         validation_fraction:
             value: 0.1
-            description: 'The proportion of training data to set aside as validation set for early stopping.'
+            description: 'The proportion of training data to set aside as validation set for early stopping'
         n_iter_no_change:
             value: null
-            description: 'Number of iterations with no improvement to wait before early stopping.'
+            description: 'Number of iterations with no improvement to wait before early stopping'
         tol:
             value: 1e-4
-            description: 'Tolerance for the early stopping criterion.'
+            description: 'Tolerance for the early stopping criterion'
         ccp_alpha:
             value: 0.0
-            description: 'Complexity parameter used for Minimal Cost-Complexity Pruning.'
+            description: 'Complexity parameter used for Minimal Cost-Complexity Pruning'
 
 gpr:
     name: 'Gaussian Process Regression'
-    description: 'Gaussian processes are a powerful, non-parametric approach to regression.'
+    description: 'Gaussian processes are a powerful, non-parametric approach to regression'
     hyperparameters:
         kernel:
             value: null
-            description: 'Kernel specifying the covariance function of the GP.'
+            description: 'Kernel specifying the covariance function of the GP'
         alpha:
             value: 1e-10
-            description: 'Value added to the diagonal of the kernel matrix during fitting.'
+            description: 'Value added to the diagonal of the kernel matrix during fitting'
         optimizer:
             value: 'fmin_l_bfgs_b'
-            description: 'The optimizer to use for optimizing the kernel parameters.'
+            description: 'The optimizer to use for optimizing the kernel parameters'
         n_restarts_optimizer:
             value: 0
-            description: 'The number of restarts of the optimizer for finding the kernel parameters.'
+            description: 'The number of restarts of the optimizer for finding the kernel parameters'
         normalize_y:
             value: false
-            description: 'Whether to normalize the target values.'
+            description: 'Whether to normalize the target values'
         copy_X_train:
             value: true
-            description: 'Whether to copy the training data before fitting the model.'
+            description: 'Whether to copy the training data before fitting the model'
         n_targets:
             value: null
-            description: 'The number of output targets.'
+            description: 'The number of output targets'

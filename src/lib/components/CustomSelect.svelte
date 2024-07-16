@@ -6,10 +6,6 @@
 
     let className = '';
     export { className as class };
-
-    // onMount(() => {
-    //     if (!value) value = items[0];
-    // });
 </script>
 
 <div class="flex flex-col gap-1 min-w-[100px] max-w-lg">

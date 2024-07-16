@@ -37,7 +37,7 @@
         set_model();
     });
 
-    const tooltip_direction = 'right';
+    // const tooltip_direction = 'right';
 </script>
 
 <div {id} style:display class="grid content-start gap-2">
@@ -58,45 +58,27 @@
             {#each Object.keys(current_model['hyperparameters']) as label (label)}
                 {@const { value, description } = current_model['hyperparameters'][label]}
                 {#if typeof value === 'boolean'}
-                    <div class="flex gap-1">
+                    <div class="grid gap-1 w-max">
                         <Checkbox class="p-2" bind:value={values[label]} {label} />
-                        <span
-                            class="badge cursor-pointer text-xs p-1"
-                            aria-label={description}
-                            data-cooltipz-dir={tooltip_direction}>?</span
-                        >
+                        <span class="text-xs">{description}</span>
                     </div>
                 {:else if typeof value === 'string' || typeof value === 'number'}
-                    <div class="flex gap-1">
+                    <div class="grid gap-1 w-max">
                         <Textfield bind:value={values[label]} {label} />
-                        <span
-                            class="badge cursor-pointer text-xs p-1"
-                            aria-label={description}
-                            data-cooltipz-dir={tooltip_direction}>?</span
-                        >
+                        <span class="text-xs">{description}</span>
                     </div>
                 {:else if typeof value === 'object' && value}
-                    <div class="grid">
-                        <div class="flex gap-1">
-                            <CustomSelect {label} items={Object.keys(value.options)} bind:value={values[label]} />
-                            <span
-                                class="badge cursor-pointer text-xs p-1"
-                                aria-label={description}
-                                data-cooltipz-dir={tooltip_direction}>?</span
-                            >
-                        </div>
-                        <span class="text-xs">{value.options[values[label]]}</span>
+                    <div class="grid w-max">
+                        <CustomSelect
+                            label={`${label} (${description})`}
+                            items={Object.keys(value.options)}
+                            bind:value={values[label]}
+                        />
+                        <span class="text-xs pl-1">{value.options[values[label]]}</span>
                     </div>
                 {:else if value == null}
                     <div class="grid">
-                        <div class="flex gap-1">
-                            <Textfield bind:value={values[label]} {label} />
-                            <span
-                                class="badge cursor-pointer text-xs p-1"
-                                aria-label={description}
-                                data-cooltipz-dir={tooltip_direction}>?</span
-                            >
-                        </div>
+                        <Textfield bind:value={values[label]} {label} />
                         <span class="text-xs">Default: None</span>
                     </div>
                 {/if}
