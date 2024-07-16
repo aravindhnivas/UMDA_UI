@@ -1,5 +1,4 @@
 <script lang="ts">
-    // import { Loadingbtn } from '$lib/components/';
     import Page from '$lib/layouts/Page.svelte';
     import { Pane } from 'svelte-splitpanes';
     import { Embedding, Mol2VecTrain, VICGAETrain, PCATrain, MLmodelTrain } from '.';
@@ -12,7 +11,7 @@
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <Page id="Training">
     <svelte:fragment slot="body">
-        <Pane class="p-2" size={15} minSize={10} maxSize={20}>
+        <Pane class="p-2" size={20} minSize={10} maxSize={20}>
             <ul class="menu rounded-box">
                 <!-- <li><a>Item 1</a></li> -->
                 <li>
@@ -40,7 +39,7 @@
             </ul>
         </Pane>
         <Pane minSize={80}>
-            <div class="p-4 overflow-auto max-h-[80vh]">
+            <div class="overflow-auto max-h-[80vh] p-2">
                 <Embedding display={active_item.toLowerCase() === 'embedding' ? '' : 'none'} />
                 <Mol2VecTrain display={active_item.toLowerCase() === 'mol2vec' ? '' : 'none'} />
                 <VICGAETrain display={active_item.toLowerCase() === 'vicgae' ? '' : 'none'} />

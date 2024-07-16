@@ -15,14 +15,16 @@
 
     const set_model = () => {
         if (!$model) return;
+
         current_model = supervised_ml_models[$model];
         if (!current_model) return;
 
         values = {};
+
         Object.keys(current_model['hyperparameters']).forEach(label => {
             if (!current_model) return;
-            const value = current_model['hyperparameters'][label];
-            // console.log(typeof value, value);
+            const { value } = current_model['hyperparameters'][label];
+
             if (typeof value === 'object' && value) {
                 values[label] = value.default;
             } else {
@@ -34,6 +36,8 @@
     onMount(() => {
         set_model();
     });
+
+    const tooltip_direction = 'top';
 </script>
 
 <div {id} style:display class="grid content-start gap-2">
@@ -52,18 +56,49 @@
 
         <div class="flex flex-wrap gap-4">
             {#each Object.keys(current_model['hyperparameters']) as label (label)}
-                {@const value = current_model['hyperparameters'][label]}
+                {@const { value, description } = current_model['hyperparameters'][label]}
                 {#if typeof value === 'boolean'}
                     <div class="flex gap-1">
                         <Checkbox class="p-2" bind:value={values[label]} {label} />
-                        <span class="badge cursor-pointer text-xs p-1">?</span>
+                        <span
+                            class="badge cursor-pointer text-xs p-1"
+                            aria-label={description}
+                            data-cooltipz-dir={tooltip_direction}>?</span
+                        >
                     </div>
                 {:else if typeof value === 'string' || typeof value === 'number'}
-                    <Textfield bind:value={values[label]} {label} />
+                    <div class="flex gap-1">
+                        <Textfield bind:value={values[label]} {label} />
+                        <span
+                            class="badge cursor-pointer text-xs p-1"
+                            aria-label={description}
+                            data-cooltipz-dir={tooltip_direction}>?</span
+                        >
+                    </div>
                 {:else if typeof value === 'object' && value}
-                    <CustomSelect {label} items={value.options} bind:value={values[label]} />
+                    <div class="grid">
+                        <div class="flex gap-1">
+                            <CustomSelect {label} items={value.options} bind:value={values[label]} />
+                            <span
+                                class="badge cursor-pointer text-xs p-1"
+                                aria-label={description}
+                                data-cooltipz-dir={tooltip_direction}>?</span
+                            >
+                        </div>
+                        <span class="text-xs">Description: </span>
+                    </div>
                 {:else if value == null}
-                    <Textfield bind:value={values[label]} {label} />
+                    <div class="grid">
+                        <div class="flex gap-1">
+                            <Textfield bind:value={values[label]} {label} />
+                            <span
+                                class="badge cursor-pointer text-xs p-1"
+                                aria-label={description}
+                                data-cooltipz-dir={tooltip_direction}>?</span
+                            >
+                        </div>
+                        <span class="text-xs">Default: None</span>
+                    </div>
                 {/if}
             {/each}
         </div>
