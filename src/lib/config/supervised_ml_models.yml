@@ -1,117 +1,130 @@
 # Supervised learning models configuration
 
 linear_regression:
-  name: "Linear Regression"
-  description: "Linear regression is a linear approach to modeling the relationship between a scalar response (or dependent variable) and one or more explanatory variables (or independent variables)."
-  hyperparameters:
-    fit_intercept: true
-    normalize: false
-    copy_X: true
-    n_jobs: null
-    positive: false
-    random_state: null
+    name: 'Linear Regression'
+    description: 'Linear regression is a linear approach to modeling the relationship between a scalar response (or dependent variable) and one or more explanatory variables (or independent variables).'
+    hyperparameters:
+        fit_intercept: true
+        normalize: false
+        copy_X: true
+        positive: false
 
 ridge:
-  name: "Ridge Regression"
-  description: "Ridge regression addresses some of the problems of Ordinary Least Squares by imposing a penalty on the size of the coefficients."
-  hyperparameters:
-    alpha: 1.0
-    fit_intercept: true
-    normalize: false
-    copy_X: true
-    max_iter: null
-    tol: 0.001
-    solver: "auto"
-    random_state: null
+    name: 'Ridge Regression'
+    description: 'Ridge regression addresses some of the problems of Ordinary Least Squares by imposing a penalty on the size of the coefficients.'
+    hyperparameters:
+        alpha: 1.0
+        fit_intercept: true
+        normalize: false
+        copy_X: true
+        max_iter: null
+        tol: 0.001
+        solver:
+            default: 'auto'
+            options: ['auto', 'svd', 'cholesky', 'lsqr', 'sparse_cg', 'sag', 'saga']
+
 svr:
-  name: "Support Vector Regression"
-  description: "Support Vector Regression (SVR) uses the same principles as the SVM for classification, with only a few minor differences."
-  hyperparameters:
-    kernel: "rbf"
-    degree: 3
-    gamma: "scale"
-    coef0: 0.0
-    tol: 0.001
-    C: 1.0
-    epsilon: 0.1
-    shrinking: true
-    cache_size: 200
-    verbose: false
-    max_iter: -1
-    random_state: null
+    name: 'Support Vector Regression'
+    description: 'Support Vector Regression (SVR) uses the same principles as the SVM for classification, with only a few minor differences.'
+    hyperparameters:
+        kernel:
+            default: 'rbf'
+            options: ['linear', 'poly', 'rbf', 'sigmoid', 'precomputed']
+        degree: 3
+        gamma:
+            default: 'scale'
+            options: ['scale', 'auto']
+        coef0: 0.0
+        tol: 0.001
+        C: 1.0
+        epsilon: 0.1
+        shrinking: true
+        cache_size: 200
+        verbose: false
+        max_iter: -1
 
 knn:
-  name: "K-Nearest Neighbors"
-  description: "K-Nearest Neighbors (KNN) is a type of instance-based learning, or lazy learning, where the function is only approximated locally and all computation is deferred until function evaluation."
-  hyperparameters:
-    n_neighbors: 5
-    weights: "uniform"
-    algorithm: "auto"
-    leaf_size: 30
-    p: 2
-    metric: "minkowski"
-    metric_params: null
-    n_jobs: null
+    name: 'K-Nearest Neighbors'
+    description: 'K-Nearest Neighbors (KNN) is a type of instance-based learning, or lazy learning, where the function is only approximated locally and all computation is deferred until function evaluation.'
+    hyperparameters:
+        n_neighbors: 5
+        weights:
+            default: 'uniform'
+            options: ['uniform', 'distance']
+        algorithm:
+            default: 'auto'
+            options: ['auto', 'ball_tree', 'kd_tree', 'brute']
+        leaf_size: 30
+        p: 2
+        metric:
+            default: 'minkowski'
+            options: ['minkowski', 'cosine', 'euclidean']
+        metric_params: null
 
 rfr:
-  name: "Random Forest Regression"
-  description: "Random forests or random decision forests are an ensemble learning method for classification, regression and other tasks that operate by constructing a multitude of decision trees at training time and outputting the class that is the mode of the classes (classification) or mean prediction (regression) of the individual trees."
-  hyperparameters:
-    n_estimators: 100
-    criterion: "mse"
-    max_depth: null
-    min_samples_split: 2
-    min_samples_leaf: 1
-    min_weight_fraction_leaf: 0.0
-    max_features: "auto"
-    max_leaf_nodes: null
-    min_impurity_decrease: 0.0
-    min_impurity_split: null
-    bootstrap: true
-    oob_score: false
-    n_jobs: null
-    random_state: null
-    verbose: 0
-    warm_start: false
-    ccp_alpha: 0.0
-    max_samples: null
+    name: 'Random Forest Regression'
+    description: 'Random forests or random decision forests are an ensemble learning method for classification, regression and other tasks that operate by constructing a multitude of decision trees at training time and outputting the class that is the mode of the classes (classification) or mean prediction (regression) of the individual trees.'
+    hyperparameters:
+        n_estimators: 100
+        criterion:
+            default: 'squared_error'
+            options: ['squared_error', 'absolute_error', 'friedman_mse', 'poisson']
+        max_depth: null
+        min_samples_split: 2
+        min_samples_leaf: 1
+        min_weight_fraction_leaf: 0.0
+        max_features:
+            default: null
+            options: ['log2', 'sqrt', null]
+        max_leaf_nodes: null
+        min_impurity_decrease: 0.0
+        min_impurity_split: null
+        bootstrap: true
+        oob_score: false
+        verbose: 0
+        warm_start: false
+        ccp_alpha: 0.0
+        max_samples: null
 
 gbr:
-  name: "Gradient Boosting Regression"
-  description: "Gradient Boosting builds an additive model in a forward stage-wise fashion; it allows for the optimization of arbitrary differentiable loss functions."
-  hyperparameters:
-    loss: "ls"
-    learning_rate: 0.1
-    n_estimators: 100
-    subsample: 1.0
-    criterion: "friedman_mse"
-    min_samples_split: 2
-    min_samples_leaf: 1
-    min_weight_fraction_leaf: 0.0
-    max_depth: 3
-    min_impurity_decrease: 0.0
-    min_impurity_split: null
-    init: null
-    random_state: null
-    max_features: null
-    alpha: 0.9
-    verbose: 0
-    max_leaf_nodes: null
-    warm_start: false
-    presort: "deprecated"
-    validation_fraction: 0.1
-    n_iter_no_change: null
-    tol: 0.0001
-    ccp_alpha: 0.0
+    name: 'Gradient Boosting Regression'
+    description: 'Gradient Boosting builds an additive model in a forward stage-wise fashion; it allows for the optimization of arbitrary differentiable loss functions.'
+    hyperparameters:
+        loss:
+            default: 'squared_error'
+            options: ['squared_error', 'absolute_error', 'huber', 'quantile']
+        learning_rate: 0.1
+        n_estimators: 100
+        subsample: 1.0
+        criterion:
+            default: 'friedman_mse'
+            options: ['friedman_mse', 'squared_error']
+        min_samples_split: 2
+        min_samples_leaf: 1
+        min_weight_fraction_leaf: 0.0
+        max_depth: 3
+        min_impurity_decrease: 0.0
+        min_impurity_split: null
+        init: null
+        max_features:
+            default: null
+            options: ['log2', 'sqrt', null]
+        alpha: 0.9
+        verbose: 0
+        max_leaf_nodes: null
+        warm_start: false
+        validation_fraction: 0.1
+        n_iter_no_change: null
+        tol: 0.0001
+        ccp_alpha: 0.0
 
 gpr:
-  name: "Gaussian Process Regression"
-  description: "Gaussian processes are a powerful, non-parametric approach to regression."
-  hyperparameters:
-    kernel: "RBF"
-    alpha: 1e-10
-    optimizer: "fmin_l_bfgs_b"
-    n_restarts_optimizer: 0
-    normalize_y: false
-    copy_X_train: true
-    random_state: null
+    name: 'Gaussian Process Regression'
+    description: 'Gaussian processes are a powerful, non-parametric approach to regression.'
+    hyperparameters:
+        kernel: 'RBF'
+        alpha: 1e-10
+        optimizer: 'fmin_l_bfgs_b'
+        n_restarts_optimizer: 0
+        normalize_y: false
+        copy_X_train: true
