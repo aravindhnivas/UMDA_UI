@@ -7,7 +7,7 @@ linear_regression:
             description: 'Specifies whether to calculate the intercept for this model'
         copy_X:
             value: true
-            description: 'Specifies whether to copy the input data before fitting the model'
+            description: 'If True, X will be copied; else, it may be overwritten'
         positive:
             value: false
             description: 'Specifies whether to enforce positive coefficients'
@@ -19,22 +19,22 @@ ridge:
     hyperparameters:
         alpha:
             value: 1.0
-            description: 'Regularization strength; must be a positive float'
+            description: 'Constant that multiplies the L2 term, controlling regularization strength; must be a positive float [0, Inf].  For numerical reasons, using alpha = 0 with the Ridge object is not advised. Instead, you should use the LinearRegression.'
         fit_intercept:
             value: true
-            description: 'Specifies whether to calculate the intercept for this model'
+            description: 'Specifies whether to calculate the intercept for this model. If set to false, no intercept will be used in calculations (i.e. X and y are expected to be centered).'
         normalize:
             value: false
             description: 'Specifies whether to normalize the input data'
         copy_X:
             value: true
-            description: 'Specifies whether to copy the input data before fitting the model'
+            description: 'If True, X will be copied; else, it may be overwritten.'
         max_iter:
             value: null
-            description: 'Maximum number of iterations for the solver'
+            description: 'Maximum number of iterations for conjugate gradient solver'
         tol:
             value: 1e-4
-            description: 'Tolerance for stopping criteria'
+            description: 'The precision of the solution (coef_) is determined by tol which specifies a different convergence criterion for each solver'
         positive:
             value: false
             description: 'Specifies whether to enforce positive coefficients'
@@ -68,7 +68,7 @@ svr:
             description: 'Specifies the kernel type to be used in the algorithm'
         degree:
             value: 3
-            description: 'Degree of the polynomial kernel function'
+            description: 'Degree of the polynomial kernel function (only for poly). Must be non-negative'
         gamma:
             value:
                 default: 'scale'
@@ -79,7 +79,7 @@ svr:
             description: "Kernel coefficient for 'rbf', 'poly' and 'sigmoid'."
         coef0:
             value: 0.0
-            description: 'Independent term in kernel function'
+            description: 'Independent term in kernel function. It is only significant in poly and sigmoid.'
         tol:
             value: 1e-3
             description: 'Tolerance for stopping criteria'
@@ -100,7 +100,7 @@ svr:
             description: 'Specifies whether to enable verbose output'
         max_iter:
             value: -1
-            description: 'Maximum number of iterations for the solver'
+            description: 'Hard limit on iterations within solver, or -1 for no limit'
     optimize_for_CV: ['C', 'epsilon', 'gamma']
 
 knn:
@@ -141,7 +141,7 @@ knn:
                     euclidean: 'Euclidean distance'
                     nan_euclidean: 'Euclidean distance ignoring NaN values'
                     manhattan: 'Manhattan distance'
-            description: 'Distance metric used for the tree'
+            description: 'Metric to use for distance computation'
         metric_params:
             value: null
             description: 'Additional keyword arguments for the metric function'
@@ -213,7 +213,7 @@ rfr:
             description: 'If bootstrap is True, the number of samples to draw from X to train each base estimator'
         monotonic_cst:
             value: null
-            description: 'List of constraints to impose monotonicity on features'
+            description: 'List of constraints to impose monotonicity on features. 1: monotonically increasing, 0: no constraint, -1: monotonically decreasing'
     optimize_for_CV: ['n_estimators', 'max_leaf_nodes', 'min_samples_leaf', 'max_depth']
 
 gbr:
@@ -316,11 +316,11 @@ gpr:
             description: 'The number of restarts of the optimizer for finding the kernel parameters'
         normalize_y:
             value: false
-            description: 'Whether to normalize the target values'
+            description: 'Whether to normalize the target values y by removing the mean and scaling to unit-variance. This is recommended for cases where zero-mean, unit-variance priors are used.'
         copy_X_train:
             value: true
-            description: 'Whether to copy the training data before fitting the model'
+            description: 'If True, a persistent copy of the training data is stored in the object. Otherwise, just a reference to the training data is stored, which might cause predictions to change if the data is modified externally.'
         n_targets:
             value: null
-            description: 'The number of output targets'
+            description: 'The number of dimensions of the target values. Used to decide the number of outputs when sampling from the prior distributions (i.e. calling sample_y before fit). This parameter is ignored once fit has been called.'
     optimize_for_CV: ['alpha', 'n_restarts_optimizer']
