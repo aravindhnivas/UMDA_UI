@@ -58,27 +58,27 @@
             {#each Object.keys(current_model['hyperparameters']) as label (label)}
                 {@const { value, description } = current_model['hyperparameters'][label]}
                 {#if typeof value === 'boolean'}
-                    <div class="grid gap-1 w-max">
-                        <Checkbox class="p-2" bind:value={values[label]} {label} />
+                    <div class="grid gap-1">
+                        <Checkbox class="p-2 w-max" bind:value={values[label]} {label} />
                         <span class="text-xs">{description}</span>
                     </div>
                 {:else if typeof value === 'string' || typeof value === 'number'}
-                    <div class="grid gap-1 w-max">
-                        <Textfield bind:value={values[label]} {label} />
+                    <div class="grid gap-1">
+                        <Textfield class="w-max" bind:value={values[label]} {label} />
                         <span class="text-xs">{description}</span>
                     </div>
                 {:else if typeof value === 'object' && value}
                     <div class="grid w-max">
                         <CustomSelect
-                            label={`${label} (${description})`}
+                            label={`${label} (${value.options[values[label]]})`}
                             items={Object.keys(value.options)}
                             bind:value={values[label]}
                         />
-                        <span class="text-xs pl-1">{value.options[values[label]]}</span>
+                        <span class="text-xs pl-1">{description}</span>
                     </div>
                 {:else if value == null}
                     <div class="grid">
-                        <Textfield bind:value={values[label]} {label} />
+                        <Textfield class="w-max" bind:value={values[label]} {label} />
                         <span class="text-xs">Default: None</span>
                     </div>
                 {/if}
