@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { model } from './stores';
     import Textfield from '@smui/textfield';
     import { validateInput } from '$lib/utils';
     import { Checkbox, CustomSelect } from '$lib/components';
@@ -6,8 +7,9 @@
 
     export let parameters: Record<string, any>;
     export let values: Record<string, any>;
-    export let unique_id: string;
-    export let model: string;
+    // export let model: string;
+
+    const unique_id = getContext<string>('unique_id');
 
     // let origial_values = {} as Record<string, any>;
 
@@ -46,7 +48,7 @@
         return all_values;
     };
 
-    $: origial_values = get_values_from_model(model);
+    $: origial_values = get_values_from_model($model);
 </script>
 
 <div class="flex flex-col gap-4 hyperparameters__div">

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { model } from './stores';
     import { CustomSelect } from '$lib/components';
     import supervised_ml_models from '$lib/config/supervised_ml_models.yml';
     import { ArrowDown, ArrowUp } from 'lucide-svelte';
@@ -8,7 +9,8 @@
     export let display: string = 'none';
 
     const unique_id = Math.random().toString(36).substring(2, 15);
-    const model = localWritable('ml_model', '');
+    setContext('unique_id', unique_id);
+    // const model = localWritable('ml_model', '');
 
     let hyperparameters_values = {} as Record<string, any>;
     let parameters_values = {} as Record<string, any>;
@@ -103,12 +105,7 @@
         </div>
 
         <h3>Hyperparameters and Parameters</h3>
-        <ModelParameters
-            model={$model}
-            parameters={current_model['hyperparameters']}
-            bind:values={hyperparameters_values}
-            {unique_id}
-        />
+        <ModelParameters parameters={current_model['hyperparameters']} bind:values={hyperparameters_values} />
 
         <button
             class="btn btn-sm w-max ml-auto"
@@ -125,12 +122,7 @@
         </button>
         {#if more_options}
             <hr />
-            <ModelParameters
-                model={$model}
-                parameters={current_model['parameters']}
-                bind:values={parameters_values}
-                {unique_id}
-            />
+            <ModelParameters parameters={current_model['parameters']} bind:values={parameters_values} />
         {/if}
 
         <button class="btn btn-sm w-max m-auto" on:click={fit_function}>Submit</button>
