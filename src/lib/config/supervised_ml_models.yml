@@ -5,6 +5,7 @@ linear_regression:
         fit_intercept:
             value: true
             description: 'Specifies whether to calculate the intercept for this model'
+    parameters:
         copy_X:
             value: true
             description: 'If True, X will be copied; else, it may be overwritten'
@@ -20,6 +21,7 @@ ridge:
         alpha:
             value: 1.0
             description: 'Constant that multiplies the L2 term, controlling regularization strength; must be a positive float [0, Inf].  For numerical reasons, using alpha = 0 with the Ridge object is not advised. Instead, you should use the LinearRegression.'
+    parameters:
         fit_intercept:
             value: true
             description: 'Specifies whether to calculate the intercept for this model. If set to false, no intercept will be used in calculations (i.e. X and y are expected to be centered).'
@@ -66,9 +68,6 @@ svr:
                     sigmoid: 'Sigmoid kernel'
                     precomputed: 'Precomputed kernel'
             description: 'Specifies the kernel type to be used in the algorithm'
-        degree:
-            value: 3
-            description: 'Degree of the polynomial kernel function (only for poly). Must be non-negative'
         gamma:
             value:
                 default: 'scale'
@@ -77,18 +76,24 @@ svr:
                     auto: '1 / n_features'
                     float: 'must be non-negative'
             description: "Kernel coefficient for 'rbf', 'poly' and 'sigmoid'."
-        coef0:
-            value: 0.0
-            description: 'Independent term in kernel function. It is only significant in poly and sigmoid.'
-        tol:
-            value: 1e-3
-            description: 'Tolerance for stopping criteria'
         C:
             value: 1.0
             description: 'Regularization parameter'
         epsilon:
             value: 0.1
             description: 'Epsilon in the epsilon-SVR model'
+    parameters:
+        degree:
+            value: 3
+            description: 'Degree of the polynomial kernel function (only for poly). Must be non-negative'
+
+        coef0:
+            value: 0.0
+            description: 'Independent term in kernel function. It is only significant in poly and sigmoid.'
+        tol:
+            value: 1e-3
+            description: 'Tolerance for stopping criteria'
+
         shrinking:
             value: true
             description: 'Specifies whether to use the shrinking heuristic'
@@ -117,6 +122,17 @@ knn:
                     uniform: 'All points in each neighborhood are weighted equally'
                     distance: 'Weight points by the inverse of their distance'
             description: 'Weight function used in prediction'
+        metric:
+            value:
+                default: 'minkowski'
+                options:
+                    minkowski: 'Minkowski distance'
+                    cosine: 'Cosine distance'
+                    euclidean: 'Euclidean distance'
+                    nan_euclidean: 'Euclidean distance ignoring NaN values'
+                    manhattan: 'Manhattan distance'
+            description: 'Metric to use for distance computation'
+    parameters:
         algorithm:
             value:
                 default: 'auto'
@@ -132,16 +148,6 @@ knn:
         p:
             value: 2
             description: 'Power parameter for the Minkowski metric'
-        metric:
-            value:
-                default: 'minkowski'
-                options:
-                    minkowski: 'Minkowski distance'
-                    cosine: 'Cosine distance'
-                    euclidean: 'Euclidean distance'
-                    nan_euclidean: 'Euclidean distance ignoring NaN values'
-                    manhattan: 'Manhattan distance'
-            description: 'Metric to use for distance computation'
         metric_params:
             value: null
             description: 'Additional keyword arguments for the metric function'
@@ -154,6 +160,16 @@ rfr:
         n_estimators:
             value: 100
             description: 'Number of trees in the forest'
+        max_leaf_nodes:
+            value: null
+            description: 'Grow trees with max_leaf_nodes in best-first fashion'
+        min_samples_leaf:
+            value: 1
+            description: 'Minimum number of samples required to be at a leaf node'
+        max_depth:
+            value: null
+            description: 'Maximum depth of the tree'
+    parameters:
         criterion:
             value:
                 default: 'squared_error'
@@ -163,15 +179,9 @@ rfr:
                     friedman_mse: 'Mean squared error with improvement score by Friedman'
                     poisson: 'Mean squared error for Poisson distribution'
             description: 'Function to measure the quality of a split'
-        max_depth:
-            value: null
-            description: 'Maximum depth of the tree'
         min_samples_split:
             value: 2
             description: 'Minimum number of samples required to split an internal node'
-        min_samples_leaf:
-            value: 1
-            description: 'Minimum number of samples required to be at a leaf node'
         min_weight_fraction_leaf:
             value: 0.0
             description: 'Minimum weighted fraction of the sum total of weights required to be at a leaf node'
@@ -184,9 +194,6 @@ rfr:
                     null: 'n_features'
                     float: 'n_features'
             description: 'Number of features to consider when looking for the best split'
-        max_leaf_nodes:
-            value: null
-            description: 'Grow trees with max_leaf_nodes in best-first fashion'
         min_impurity_decrease:
             value: 0.0
             description: 'A node will be split if this split induces a decrease of the impurity greater than or equal to this value'
@@ -220,15 +227,6 @@ gbr:
     name: 'Gradient Boosting Regression'
     description: 'Gradient Boosting builds an additive model in a forward stage-wise fashion; it allows for the optimization of arbitrary differentiable loss functions'
     hyperparameters:
-        loss:
-            value:
-                default: 'squared_error'
-                options:
-                    squared_error: 'Least squares regression'
-                    absolute_error: 'Least absolute deviation regression'
-                    huber: 'Huber loss for robust regression'
-                    quantile: 'Quantile regression'
-            description: 'Loss function to be optimized'
         learning_rate:
             value: 0.1
             description: 'Learning rate shrinks the contribution of each tree'
@@ -238,6 +236,19 @@ gbr:
         subsample:
             value: 1.0
             description: 'The fraction of samples to be used for fitting the individual base learners'
+        max_depth:
+            value: 3
+            description: 'Maximum depth of the individual regression estimators'
+    parameters:
+        loss:
+            value:
+                default: 'squared_error'
+                options:
+                    squared_error: 'Least squares regression'
+                    absolute_error: 'Least absolute deviation regression'
+                    huber: 'Huber loss for robust regression'
+                    quantile: 'Quantile regression'
+            description: 'Loss function to be optimized'
         criterion:
             value:
                 default: 'friedman_mse'
@@ -254,9 +265,7 @@ gbr:
         min_weight_fraction_leaf:
             value: 0.0
             description: 'Minimum weighted fraction of the sum total of weights required to be at a leaf node'
-        max_depth:
-            value: 3
-            description: 'Maximum depth of the individual regression estimators'
+
         min_impurity_decrease:
             value: 0.0
             description: 'A node will be split if this split induces a decrease of the impurity greater than or equal to this value'
@@ -302,18 +311,19 @@ gpr:
     name: 'Gaussian Process Regression'
     description: 'Gaussian processes are a powerful, non-parametric approach to regression'
     hyperparameters:
-        kernel:
-            value: null
-            description: 'Kernel specifying the covariance function of the GP'
         alpha:
             value: 1e-10
             description: 'Value added to the diagonal of the kernel matrix during fitting'
-        optimizer:
-            value: 'fmin_l_bfgs_b'
-            description: 'The optimizer to use for optimizing the kernel parameters'
         n_restarts_optimizer:
             value: 0
             description: 'The number of restarts of the optimizer for finding the kernel parameters'
+    parameters:
+        kernel:
+            value: null
+            description: 'Kernel specifying the covariance function of the GP'
+        optimizer:
+            value: 'fmin_l_bfgs_b'
+            description: 'The optimizer to use for optimizing the kernel parameters'
         normalize_y:
             value: false
             description: 'Whether to normalize the target values y by removing the mean and scaling to unit-variance. This is recommended for cases where zero-mean, unit-variance priors are used.'
