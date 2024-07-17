@@ -104,6 +104,7 @@
 
         <h3>Hyperparameters and Parameters</h3>
         <ModelParameters
+            model={$model}
             parameters={current_model['hyperparameters']}
             bind:values={hyperparameters_values}
             {unique_id}
@@ -124,7 +125,12 @@
         </button>
         {#if more_options}
             <hr />
-            <ModelParameters parameters={current_model['parameters']} bind:values={parameters_values} {unique_id} />
+            <ModelParameters
+                model={$model}
+                parameters={current_model['parameters']}
+                bind:values={parameters_values}
+                {unique_id}
+            />
         {/if}
 
         <button class="btn btn-sm w-max m-auto" on:click={fit_function}>Submit</button>
