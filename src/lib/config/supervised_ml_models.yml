@@ -12,7 +12,6 @@ linear_regression:
         positive:
             value: false
             description: 'Specifies whether to enforce positive coefficients'
-    optimize_for_CV: ['fit_intercept']
 
 ridge:
     name: 'Ridge Regression'
@@ -52,7 +51,6 @@ ridge:
                     sag: 'Stochastic Average Gradient descent'
                     saga: 'SAGA solver'
             description: 'Solver to use in the computational routines'
-    optimize_for_CV: ['alpha']
 
 svr:
     name: 'Support Vector Regression'
@@ -106,7 +104,6 @@ svr:
         max_iter:
             value: -1
             description: 'Hard limit on iterations within solver, or -1 for no limit'
-    optimize_for_CV: ['C', 'epsilon', 'gamma']
 
 knn:
     name: 'K-Nearest Neighbors'
@@ -151,7 +148,6 @@ knn:
         metric_params:
             value: null
             description: 'Additional keyword arguments for the metric function'
-    optimize_for_CV: ['n_neighbors', 'weights', 'metric']
 
 rfr:
     name: 'Random Forest Regression'
@@ -221,7 +217,6 @@ rfr:
         monotonic_cst:
             value: null
             description: 'List of constraints to impose monotonicity on features. 1: monotonically increasing, 0: no constraint, -1: monotonically decreasing'
-    optimize_for_CV: ['n_estimators', 'max_leaf_nodes', 'min_samples_leaf', 'max_depth']
 
 gbr:
     name: 'Gradient Boosting Regression'
@@ -305,7 +300,6 @@ gbr:
         ccp_alpha:
             value: 0.0
             description: 'Complexity parameter used for Minimal Cost-Complexity Pruning'
-    optimize_for_CV: ['n_estimators', 'learning_rate', 'subsample', 'max_depth']
 
 gpr:
     name: 'Gaussian Process Regression'
@@ -333,4 +327,3 @@ gpr:
         n_targets:
             value: null
             description: 'The number of dimensions of the target values. Used to decide the number of outputs when sampling from the prior distributions (i.e. calling sample_y before fit). This parameter is ignored once fit has been called'
-    optimize_for_CV: ['alpha', 'n_restarts_optimizer']
