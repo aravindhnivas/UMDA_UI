@@ -1,5 +1,4 @@
 import supervised_ml_models from '$lib/config/supervised_ml_models.yml';
-
 interface CurrentModel {
     name: string;
     description: string;
@@ -8,7 +7,6 @@ interface CurrentModel {
 }
 
 export const model = localWritable('ml_model', '');
-
 export const current_model = derived(model, $model => {
     return supervised_ml_models[$model] as CurrentModel;
 });
