@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { model, get_params_from_current_model } from './stores';
-    import { CustomSelect } from '$lib/components';
+    import { model, values_stored, model_name, model_description, original_model_parameters } from './stores';
     import supervised_ml_models from '$lib/config/supervised_ml_models.yml';
+    import { CustomSelect } from '$lib/components';
     import { ArrowDown, ArrowUp } from 'lucide-svelte';
     import ModelParameters from './ModelParameters.svelte';
 
@@ -10,17 +10,12 @@
 
     const unique_id = Math.random().toString(36).substring(2, 15);
     setContext('unique_id', unique_id);
-    // const model = localWritable('ml_model', '');
-
-    let hyperparameters_values = {} as Record<string, any>;
-    let parameters_values = {} as Record<string, any>;
 
     let current_model = null as null | {
         name: string;
         description: string;
         hyperparameters: Record<string, any>;
         parameters: Record<string, any>;
-        optimize_for_CV: string[];
     };
 
     const set_model = () => {
@@ -29,8 +24,12 @@
         current_model = supervised_ml_models[$model];
         if (!current_model) return;
 
-        hyperparameters_values = get_params_from_current_model('hyperparameters', current_model);
-        parameters_values = get_params_from_current_model('parameters', current_model);
+        if (!$values_stored[$model]) {
+            $values_stored[$model] = {
+                hyperparameters: structuredClone($original_model_parameters.hyperparameters),
+                parameters: structuredClone($original_model_parameters.parameters),
+            };
+        }
     };
 
     onMount(() => {
@@ -38,7 +37,7 @@
     });
 
     const fit_function = () => {
-        const values = { ...hyperparameters_values, ...parameters_values };
+        const values = { ...$values_stored[$model].hyperparameters, ...$values_stored[$model].parameters };
         const clonedValues = structuredClone(values);
 
         Object.entries(values).forEach(([key, value]) => {
@@ -75,19 +74,15 @@
         on:change={set_model}
     />
 
-    {#if current_model}
+    {#if $model && current_model && $values_stored[$model]}
         <div class="grid gap-1">
-            <h2 class="flex justify-center">{current_model['name']}</h2>
-            <span class="text-sm">{current_model['description']}</span>
+            <h2 class="flex justify-center">{$model_name}</h2>
+            <span class="text-sm">{$model_description}</span>
             <hr />
         </div>
 
         <h3>Hyperparameters and Parameters</h3>
-        <ModelParameters
-            key="hyperparameters"
-            parameters={current_model['hyperparameters']}
-            bind:values={hyperparameters_values}
-        />
+        <ModelParameters key="hyperparameters" bind:values={$values_stored[$model].hyperparameters} />
 
         <button
             class="btn btn-sm w-max ml-auto"
@@ -104,11 +99,7 @@
         </button>
         {#if more_options}
             <hr />
-            <ModelParameters
-                key="parameters"
-                parameters={current_model['parameters']}
-                bind:values={parameters_values}
-            />
+            <ModelParameters key="parameters" bind:values={$values_stored[$model].parameters} />
         {/if}
 
         <button class="btn btn-sm w-max m-auto" on:click={fit_function}>Submit</button>

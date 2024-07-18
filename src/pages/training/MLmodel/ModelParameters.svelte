@@ -1,19 +1,17 @@
 <script lang="ts">
-    import { original_model_parameters } from './stores';
+    import { current_model, original_model_parameters } from './stores';
     import Textfield from '@smui/textfield';
     import { validateInput } from '$lib/utils';
     import { Checkbox, CustomSelect } from '$lib/components';
 
-    export let parameters: Record<string, any>;
     export let values: Record<string, any>;
     export let key: 'hyperparameters' | 'parameters';
     const unique_id = getContext<string>('unique_id');
-    console.log('parameters', parameters);
 </script>
 
 <div class="flex flex-col gap-4 hyperparameters__div">
-    {#each Object.keys(parameters) as label (label)}
-        {@const { value, description } = parameters[label]}
+    {#each Object.keys($current_model[key]) as label (label)}
+        {@const { value, description } = $current_model[key][label]}
         {#if typeof value === 'boolean'}
             <div class="grid gap-1">
                 <Checkbox class="p-2 w-max" bind:value={values[label]} {label} />
