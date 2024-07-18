@@ -16,20 +16,15 @@
         if (!$model) return;
         if (!$current_model) return;
 
-        if (!$values_stored[$model]) {
-            $values_stored[$model] = {
-                hyperparameters: structuredClone($default_param_values.hyperparameters),
-                parameters: structuredClone($default_param_values.parameters),
-            };
-        }
+        // Initialize the values_stored object if it doesn't exist
+        $values_stored[$model] ??= {
+            hyperparameters: structuredClone($default_param_values.hyperparameters),
+            parameters: structuredClone($default_param_values.parameters),
+        };
 
-        if (!$values_stored[$model].hyperparameters) {
-            $values_stored[$model].hyperparameters = structuredClone($default_param_values.hyperparameters);
-        }
-
-        if (!$values_stored[$model].parameters) {
-            $values_stored[$model].parameters = structuredClone($default_param_values.parameters);
-        }
+        // Set the default values if they don't exist
+        $values_stored[$model].hyperparameters ??= structuredClone($default_param_values.hyperparameters);
+        $values_stored[$model].parameters ??= structuredClone($default_param_values.parameters);
 
         console.log($values_stored[$model]);
     };
