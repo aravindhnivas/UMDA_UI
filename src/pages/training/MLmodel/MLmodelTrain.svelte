@@ -61,7 +61,8 @@
     };
 
     let more_options = false;
-
+    let savedfile: string;
+    let uploadedfile: { fullname: string; name: string; model: string } | null = null;
     const save_parameters = async () => {
         // Save the parameters to the backend
 
@@ -71,7 +72,7 @@
             defaultPath: `./${$model}.json`,
         });
         if (!saveloc) return;
-
+        savedfile = saveloc;
         // if (await fs.exists(saveloc)) {
         //     const overwrite = await dialog.confirm(
         //         'File already exists. Do you want to overwrite it?',
@@ -80,8 +81,16 @@
         //     if (!overwrite) return;
         // }
 
-        const save_content = JSON.stringify($values_stored[$model], null, 4);
-        await fs.writeTextFile(saveloc, save_content);
+        const save_content = JSON.stringify(
+            {
+                values: $values_stored[$model],
+                model: $model,
+                time: new Date().toISOString(),
+            },
+            null,
+            4,
+        );
+        await fs.writeTextFile(savedfile, save_content);
 
         // Show a success notification
         toast.success('Parameters saved successfully');
@@ -94,8 +103,7 @@
             filters: [{ name: 'JSON', extensions: ['json'] }],
             defaultPath: `./${$model}.json`,
         });
-
-        let uploadloc: string;
+        let uploadloc = selected;
         if (Array.isArray(selected)) {
             // user selected multiple files
             uploadloc = selected[0];
@@ -107,10 +115,23 @@
             uploadloc = selected;
         }
 
+        uploadedfile = null;
+
         const contents = await fs.readTextFile(uploadloc);
         try {
             const parsed = JSON.parse(contents);
-            $values_stored[$model] = parsed;
+
+            if ($model !== parsed.model) {
+                toast.error('Error: Model mismatch');
+                return;
+            }
+            const basefilename = await path.basename(uploadloc);
+            uploadedfile = {
+                fullname: uploadloc,
+                name: basefilename,
+                model: parsed.model,
+            };
+            $values_stored[$model] = parsed.values;
             toast.success('Parameters uploaded successfully');
         } catch (e) {
             toast.error('Error: Invalid JSON file');
@@ -134,7 +155,12 @@
         </div>
 
         <div class="flex">
-            <h3>Hyperparameters and Parameters</h3>
+            <h3>
+                <span>Hyperparameters and Parameters</span>
+                {#if uploadedfile && uploadedfile.model === $model}
+                    <div class="badge badge-sm badge-info">Uploaded: {uploadedfile.name}</div>
+                {/if}
+            </h3>
             <div class="ml-auto">
                 <button class="btn btn-sm" on:click={upload_parameters}>
                     <Upload />
