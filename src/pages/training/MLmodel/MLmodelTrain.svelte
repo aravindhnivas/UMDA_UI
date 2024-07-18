@@ -165,7 +165,7 @@
             <h3>
                 <span>Hyperparameters and Parameters</span>
                 {#if uploadedfile && uploadedfile.model === $model}
-                    <div class="badge badge-sm badge-info">Uploaded: {uploadedfile.name}</div>
+                    <div class="badge badge-sm badge-info">loaded: {uploadedfile.name}</div>
                 {/if}
             </h3>
             <div class="ml-auto">
