@@ -2,7 +2,7 @@
     import { model, current_model, values_stored, model_name, model_description, default_param_values } from './stores';
     import supervised_ml_models from '$lib/config/supervised_ml_models.yml';
     import { CustomSelect } from '$lib/components';
-    import { ArrowDown, ArrowUp, CircleX, Save, Upload } from 'lucide-svelte/icons';
+    import { ArrowDown, ArrowUp, CircleX, RotateCcw, Save, Upload } from 'lucide-svelte/icons';
     import ModelParameters from './ModelParameters.svelte';
     import Notification from '$lib/components/Notification.svelte';
 
@@ -137,6 +137,13 @@
             toast.error('Error: Invalid JSON file');
         }
     };
+
+    const reset_parameters = () => {
+        $values_stored[$model] = {
+            hyperparameters: structuredClone($default_param_values.hyperparameters),
+            parameters: structuredClone($default_param_values.parameters),
+        };
+    };
 </script>
 
 <div {id} style:display class="grid content-start gap-2">
@@ -162,6 +169,10 @@
                 {/if}
             </h3>
             <div class="ml-auto">
+                <button class="btn btn-sm" on:click={reset_parameters}>
+                    <RotateCcw />
+                    <span>Reset</span>
+                </button>
                 <button class="btn btn-sm" on:click={upload_parameters}>
                     <Upload />
                     <span>Upload</span>
