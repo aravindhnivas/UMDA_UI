@@ -13,13 +13,6 @@ export const current_model = derived(model, $model => {
     return supervised_ml_models[$model] as CurrentModel;
 });
 
-export const model_name = derived(current_model, $current_model => {
-    return $current_model.name;
-});
-
-export const model_description = derived(current_model, $current_model => {
-    return $current_model.description;
-});
 
 export const get_params_from_current_model = (key: 'hyperparameters' | 'parameters', data: CurrentModel) => {
     // const data: CurrentModel = get(current_model);

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { model, current_model, values_stored, model_name, model_description, default_param_values } from './stores';
+    import { model, current_model, values_stored, default_param_values } from './stores';
     import supervised_ml_models from '$lib/config/supervised_ml_models.yml';
     import { CustomSelect } from '$lib/components';
     import { ArrowDown, ArrowUp, CircleX, RotateCcw, Save, Upload } from 'lucide-svelte/icons';
@@ -156,8 +156,8 @@
 
     {#if $current_model && $values_stored[$model]}
         <div class="grid gap-1">
-            <h2 class="flex justify-center">{$model_name}</h2>
-            <span class="text-sm">{$model_description}</span>
+            <h2 class="flex justify-center">{$current_model.name}</h2>
+            <span class="text-sm">{$current_model.description}</span>
             <hr />
         </div>
 
