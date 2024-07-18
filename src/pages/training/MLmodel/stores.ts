@@ -6,13 +6,13 @@ interface CurrentModel {
     parameters: Record<string, any>;
 }
 
-export const model = localWritable('ml_model', '');
+export const model = localWritable('ml_model', 'ridge');
 export const current_model = derived(model, $model => {
     return supervised_ml_models[$model] as CurrentModel;
 });
 
-export const get_params_from_current_model = (key: 'hyperparameters' | 'parameters') => {
-    const data: CurrentModel = get(current_model);
+export const get_params_from_current_model = (key: 'hyperparameters' | 'parameters', data: CurrentModel) => {
+    // const data: CurrentModel = get(current_model);
 
     let values = {} as Record<string, any>;
 
@@ -30,10 +30,8 @@ export const get_params_from_current_model = (key: 'hyperparameters' | 'paramete
     return values;
 };
 
-// export const hyperparameters_values = derived(current_model, $current_model => {
-//     return get_params_from_current_model('hyperparameters', $current_model);
-// });
-
-// export const parameters_values = derived(current_model, $current_model => {
-//     return get_params_from_current_model('parameters', $current_model);
-// });
+export const original_model_parameters = derived(current_model, $current_model => {
+    const hyperparameters = get_params_from_current_model('hyperparameters', $current_model);
+    const parameters = get_params_from_current_model('parameters', $current_model);
+    return { hyperparameters, parameters };
+})

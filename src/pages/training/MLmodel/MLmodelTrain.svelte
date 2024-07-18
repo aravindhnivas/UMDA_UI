@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { model } from './stores';
+    import { model, get_params_from_current_model } from './stores';
     import { CustomSelect } from '$lib/components';
     import supervised_ml_models from '$lib/config/supervised_ml_models.yml';
     import { ArrowDown, ArrowUp } from 'lucide-svelte';
@@ -29,30 +29,8 @@
         current_model = supervised_ml_models[$model];
         if (!current_model) return;
 
-        hyperparameters_values = {};
-        parameters_values = {};
-
-        Object.keys(current_model['hyperparameters']).forEach(label => {
-            if (!current_model) return;
-            const { value } = current_model['hyperparameters'][label];
-
-            if (typeof value === 'object' && value) {
-                hyperparameters_values[label] = value.default;
-            } else {
-                hyperparameters_values[label] = value;
-            }
-        });
-
-        Object.keys(current_model['parameters']).forEach(label => {
-            if (!current_model) return;
-            const { value } = current_model['parameters'][label];
-
-            if (typeof value === 'object' && value) {
-                parameters_values[label] = value.default;
-            } else {
-                parameters_values[label] = value;
-            }
-        });
+        hyperparameters_values = get_params_from_current_model('hyperparameters', current_model);
+        parameters_values = get_params_from_current_model('parameters', current_model);
     };
 
     onMount(() => {
@@ -105,7 +83,11 @@
         </div>
 
         <h3>Hyperparameters and Parameters</h3>
-        <ModelParameters parameters={current_model['hyperparameters']} bind:values={hyperparameters_values} />
+        <ModelParameters
+            key="hyperparameters"
+            parameters={current_model['hyperparameters']}
+            bind:values={hyperparameters_values}
+        />
 
         <button
             class="btn btn-sm w-max ml-auto"
@@ -122,7 +104,11 @@
         </button>
         {#if more_options}
             <hr />
-            <ModelParameters parameters={current_model['parameters']} bind:values={parameters_values} />
+            <ModelParameters
+                key="parameters"
+                parameters={current_model['parameters']}
+                bind:values={parameters_values}
+            />
         {/if}
 
         <button class="btn btn-sm w-max m-auto" on:click={fit_function}>Submit</button>
