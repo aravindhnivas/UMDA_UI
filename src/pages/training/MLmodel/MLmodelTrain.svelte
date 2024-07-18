@@ -2,8 +2,9 @@
     import { model, current_model, values_stored, model_name, model_description, default_param_values } from './stores';
     import supervised_ml_models from '$lib/config/supervised_ml_models.yml';
     import { CustomSelect } from '$lib/components';
-    import { ArrowDown, ArrowUp } from 'lucide-svelte';
+    import { ArrowDown, ArrowUp, CircleX } from 'lucide-svelte/icons';
     import ModelParameters from './ModelParameters.svelte';
+    import Notification from '$lib/components/Notification.svelte';
 
     export let id: string = 'ml_model-train-container';
     export let display: string = 'none';
@@ -21,6 +22,16 @@
                 parameters: structuredClone($default_param_values.parameters),
             };
         }
+
+        if (!$values_stored[$model].hyperparameters) {
+            $values_stored[$model].hyperparameters = structuredClone($default_param_values.hyperparameters);
+        }
+
+        if (!$values_stored[$model].parameters) {
+            $values_stored[$model].parameters = structuredClone($default_param_values.parameters);
+        }
+
+        console.log($values_stored[$model]);
     };
 
     onMount(() => {
@@ -73,7 +84,12 @@
         </div>
 
         <h3>Hyperparameters and Parameters</h3>
-        <ModelParameters key="hyperparameters" bind:values={$values_stored[$model].hyperparameters} />
+
+        {#if $values_stored[$model]?.hyperparameters}
+            <ModelParameters key="hyperparameters" bind:values={$values_stored[$model].hyperparameters} />
+        {:else}
+            <Notification message="No hyperparameters found" type="error" />
+        {/if}
 
         <button
             class="btn btn-sm w-max ml-auto"
@@ -88,9 +104,14 @@
                 <ArrowDown />
             {/if}
         </button>
+
         {#if more_options}
             <hr />
-            <ModelParameters key="parameters" bind:values={$values_stored[$model].parameters} />
+            {#if $values_stored[$model]?.parameters}
+                <ModelParameters key="parameters" bind:values={$values_stored[$model].parameters} />
+            {:else}
+                <Notification message="No parameters found" type="error" />
+            {/if}
         {/if}
 
         <button class="btn btn-sm w-max m-auto" on:click={fit_function}>Submit</button>

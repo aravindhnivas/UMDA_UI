@@ -5,7 +5,7 @@
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import computePy from '$lib/pyserver/computePy';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
-    import { CheckCheck } from 'lucide-svelte';
+    import { CheckCheck } from 'lucide-svelte/icons';
     import BrowseFile from '$lib/components/BrowseFile.svelte';
     import Molecule from '$lib/components/Molecule.svelte';
 
