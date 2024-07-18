@@ -2,7 +2,7 @@
     import { model, current_model, values_stored, model_name, model_description, default_param_values } from './stores';
     import supervised_ml_models from '$lib/config/supervised_ml_models.yml';
     import { CustomSelect } from '$lib/components';
-    import { ArrowDown, ArrowUp, CircleX } from 'lucide-svelte/icons';
+    import { ArrowDown, ArrowUp, CircleX, Save, Upload } from 'lucide-svelte/icons';
     import ModelParameters from './ModelParameters.svelte';
     import Notification from '$lib/components/Notification.svelte';
 
@@ -61,6 +61,61 @@
     };
 
     let more_options = false;
+
+    const save_parameters = async () => {
+        // Save the parameters to the backend
+
+        const saveloc = await dialog.save({
+            title: 'Save parameters',
+            filters: [{ name: 'JSON', extensions: ['json'] }],
+            defaultPath: `./${$model}.json`,
+        });
+        if (!saveloc) return;
+
+        // if (await fs.exists(saveloc)) {
+        //     const overwrite = await dialog.confirm(
+        //         'File already exists. Do you want to overwrite it?',
+        //         'Overwrite file',
+        //     );
+        //     if (!overwrite) return;
+        // }
+
+        const save_content = JSON.stringify($values_stored[$model], null, 4);
+        await fs.writeTextFile(saveloc, save_content);
+
+        // Show a success notification
+        toast.success('Parameters saved successfully');
+    };
+
+    const upload_parameters = async () => {
+        // Upload the parameters from the backend
+        const selected = await dialog.open({
+            title: 'Upload parameters',
+            filters: [{ name: 'JSON', extensions: ['json'] }],
+            defaultPath: `./${$model}.json`,
+        });
+
+        let uploadloc: string;
+        if (Array.isArray(selected)) {
+            // user selected multiple files
+            uploadloc = selected[0];
+        } else if (selected === null) {
+            // user cancelled the selection
+            return;
+        } else {
+            // user selected a single file
+            uploadloc = selected;
+        }
+
+        const contents = await fs.readTextFile(uploadloc);
+        try {
+            const parsed = JSON.parse(contents);
+            $values_stored[$model] = parsed;
+            toast.success('Parameters uploaded successfully');
+        } catch (e) {
+            toast.error('Error: Invalid JSON file');
+        }
+    };
 </script>
 
 <div {id} style:display class="grid content-start gap-2">
@@ -78,7 +133,19 @@
             <hr />
         </div>
 
-        <h3>Hyperparameters and Parameters</h3>
+        <div class="flex">
+            <h3>Hyperparameters and Parameters</h3>
+            <div class="ml-auto">
+                <button class="btn btn-sm" on:click={upload_parameters}>
+                    <Upload />
+                    <span>Upload</span>
+                </button>
+                <button class="btn btn-sm" on:click={save_parameters}>
+                    <Save />
+                    <span>Save</span>
+                </button>
+            </div>
+        </div>
 
         {#if $values_stored[$model]?.hyperparameters}
             <ModelParameters key="hyperparameters" bind:values={$values_stored[$model].hyperparameters} />
