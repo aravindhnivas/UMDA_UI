@@ -46,9 +46,9 @@ export const default_param_values = derived(current_model, $current_model => {
     return { hyperparameters, parameters };
 })
 
-export const values_stored = localWritable<{
+export const values_stored = writable<{
     [key: string]: {
         hyperparameters: Record<string, any>;
         parameters: Record<string, any>;
     };
-}>('ml_model_values', {});
+}>({});
