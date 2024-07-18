@@ -2,7 +2,7 @@
     import { model, current_model, values_stored, default_param_values } from './stores';
     import supervised_ml_models from '$lib/config/supervised_ml_models.yml';
     import { CustomSelect } from '$lib/components';
-    import { ArrowDown, ArrowUp, CircleX, RotateCcw, Save, Upload } from 'lucide-svelte/icons';
+    import { ArrowDown, ArrowUp, RotateCcw, Save, Upload } from 'lucide-svelte/icons';
     import ModelParameters from './ModelParameters.svelte';
     import Notification from '$lib/components/Notification.svelte';
 
