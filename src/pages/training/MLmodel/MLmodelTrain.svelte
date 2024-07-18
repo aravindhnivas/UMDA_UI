@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { model, values_stored, model_name, model_description, original_model_parameters } from './stores';
+    import { model, current_model, values_stored, model_name, model_description, default_param_values } from './stores';
     import supervised_ml_models from '$lib/config/supervised_ml_models.yml';
     import { CustomSelect } from '$lib/components';
     import { ArrowDown, ArrowUp } from 'lucide-svelte';
@@ -11,29 +11,20 @@
     const unique_id = Math.random().toString(36).substring(2, 15);
     setContext('unique_id', unique_id);
 
-    let current_model = null as null | {
-        name: string;
-        description: string;
-        hyperparameters: Record<string, any>;
-        parameters: Record<string, any>;
-    };
-
-    const set_model = () => {
+    const set_model_params = () => {
         if (!$model) return;
-
-        current_model = supervised_ml_models[$model];
-        if (!current_model) return;
+        if (!$current_model) return;
 
         if (!$values_stored[$model]) {
             $values_stored[$model] = {
-                hyperparameters: structuredClone($original_model_parameters.hyperparameters),
-                parameters: structuredClone($original_model_parameters.parameters),
+                hyperparameters: structuredClone($default_param_values.hyperparameters),
+                parameters: structuredClone($default_param_values.parameters),
             };
         }
     };
 
     onMount(() => {
-        set_model();
+        set_model_params();
     });
 
     const fit_function = () => {
@@ -71,10 +62,10 @@
         label="Supervised Learning Algorithms"
         bind:value={$model}
         items={Object.keys(supervised_ml_models)}
-        on:change={set_model}
+        on:change={set_model_params}
     />
 
-    {#if $model && current_model && $values_stored[$model]}
+    {#if $current_model && $values_stored[$model]}
         <div class="grid gap-1">
             <h2 class="flex justify-center">{$model_name}</h2>
             <span class="text-sm">{$model_description}</span>

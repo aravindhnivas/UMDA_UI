@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { current_model, original_model_parameters } from './stores';
+    import { current_model, default_param_values } from './stores';
     import Textfield from '@smui/textfield';
     import { validateInput } from '$lib/utils';
     import { Checkbox, CustomSelect } from '$lib/components';
@@ -17,7 +17,7 @@
                 <Checkbox class="p-2 w-max" bind:value={values[label]} {label} />
                 <span class="text-xs">
                     {description}
-                    <div class="badge badge-sm badge-neutral">Default: {$original_model_parameters[key][label]}</div>
+                    <div class="badge badge-sm badge-neutral">Default: {$default_param_values[key][label]}</div>
                 </span>
             </div>
         {:else if typeof value === 'string' || typeof value === 'number'}
@@ -25,7 +25,7 @@
                 <Textfield class="w-max" bind:value={values[label]} {label} autocomplete="false" />
                 <span class="text-xs"
                     >{description}
-                    <div class="badge badge-sm badge-neutral">Default: {$original_model_parameters[key][label]}</div>
+                    <div class="badge badge-sm badge-neutral">Default: {$default_param_values[key][label]}</div>
                 </span>
             </div>
         {:else if typeof value === 'object' && value}
@@ -52,7 +52,7 @@
                 </div>
                 <span class="text-xs pl-1"
                     >{description}
-                    <div class="badge badge-sm badge-neutral">Default: {$original_model_parameters[key][label]}</div>
+                    <div class="badge badge-sm badge-neutral">Default: {$default_param_values[key][label]}</div>
                 </span>
             </div>
         {:else if value == null}

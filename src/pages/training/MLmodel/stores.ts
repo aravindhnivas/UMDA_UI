@@ -40,7 +40,7 @@ export const get_params_from_current_model = (key: 'hyperparameters' | 'paramete
     return values;
 };
 
-export const original_model_parameters = derived(current_model, $current_model => {
+export const default_param_values = derived(current_model, $current_model => {
     const hyperparameters = get_params_from_current_model('hyperparameters', $current_model);
     const parameters = get_params_from_current_model('parameters', $current_model);
     return { hyperparameters, parameters };
