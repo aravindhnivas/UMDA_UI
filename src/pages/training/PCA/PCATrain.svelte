@@ -162,7 +162,7 @@
         <BrowseFile
             bind:filename={$explained_variance_file}
             btn_name={'Browse explained_variance'}
-            load_callback={read_file}
+            callback={read_file}
         />
         <div class="plot__div">
             <div class="grid">

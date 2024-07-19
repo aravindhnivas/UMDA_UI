@@ -1,12 +1,13 @@
 <script lang="ts">
-    import { isError, tryF } from 'ts-try';
+    import { isError } from 'ts-try';
     import { HelpCircle } from 'lucide-svelte/icons';
+
     export let btn_name = 'Browse file';
     export let filename = '';
     export let helper = '';
     export let label = '';
     export let directory = false;
-    export let load_callback: null | ((filename: string) => Promise<void>) = null;
+    export let callback: null | ((filename: string) => Promise<void>) = null;
 
     const dispatch = createEventDispatcher();
 
@@ -21,11 +22,11 @@
         if (filename) dispatch('file_selected', filename);
     };
 
-    const callback = async () => {
+    const load_callback = async () => {
         try {
-            if (!load_callback) return toast.error('No load callback provided');
+            if (!callback) return toast.error('No load callback provided');
             if (!filename) return toast.error('No file selected');
-            const result = await load_callback(filename);
+            const result = await callback(filename);
             toast.success('File loaded successfully: ' + (await path.basename(filename)));
             return result;
         } catch (error) {
@@ -44,9 +45,9 @@
     {/if}
     <div class="join">
         <button class="btn btn-sm join-item" on:click={browse_file}>{btn_name}</button>
-        <input type="text" class="input input-sm join-item w-full" bind:value={filename} on:change={callback} />
-        {#if load_callback}
-            <button class="btn btn-sm join-item" on:click={callback}>load</button>
+        <input type="text" class="input input-sm join-item w-full" bind:value={filename} on:change={load_callback} />
+        {#if callback}
+            <button class="btn btn-sm join-item" on:click={load_callback}>load</button>
         {/if}
     </div>
     {#if helper}
