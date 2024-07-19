@@ -61,9 +61,12 @@
             }
         });
         const args = {
+            model: $model,
             parameters: clonedValues,
             vectors_file,
             labels_file,
+            bootstrap,
+            bootstrap_nsamples,
         };
         console.log(args);
     };
