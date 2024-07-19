@@ -8,6 +8,8 @@
     export let label = '';
     export let directory = false;
     export let callback: null | ((filename: string) => Promise<void>) = null;
+    let className = '';
+    export { className as class };
 
     const dispatch = createEventDispatcher();
 
@@ -37,7 +39,7 @@
     };
 </script>
 
-<div class="flex flex-col gap-1">
+<div class="flex flex-col gap-1 w-full {className}">
     <div class="flex">
         {#if label}
             <span class="text-sm pl-1">{label} (<em>{filename.split('/').at(-1) || 'Choose a file'}</em>)</span>
@@ -58,10 +60,4 @@
             <button class="btn btn-sm join-item" on:click={load_callback}>load</button>
         {/if}
     </div>
-    <!-- {#if helper}
-        <span class="flex items-center gap-0.5 text-xs ml-auto">
-            <HelpCircle size="20" />
-            <span>{helper}</span>
-        </span>
-    {/if} -->
 </div>

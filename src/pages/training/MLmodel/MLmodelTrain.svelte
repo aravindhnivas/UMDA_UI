@@ -6,6 +6,8 @@
     import ModelParameters from './ModelParameters.svelte';
     import Notification from '$lib/components/Notification.svelte';
     import BrowseFile from '$lib/components/BrowseFile.svelte';
+    import Checkbox from '$lib/components/Checkbox.svelte';
+    import Textfield from '@smui/textfield';
 
     export let id: string = 'ml_model-train-container';
     export let display: string = 'none';
@@ -156,6 +158,8 @@
     let toggle_browse_files = true;
     let vectors_file = '';
     let labels_file = '';
+    let bootstrap = true;
+    let bootstrap_nsamples = 100;
 </script>
 
 <div {id} style:display class="grid content-start gap-2">
@@ -171,8 +175,20 @@
     </div>
 
     {#if toggle_browse_files}
-        <BrowseFile btn_name="Browse - X (.npy)" helper="embedded N dimension vectors" bind:filename={vectors_file} />
-        <BrowseFile btn_name="Browse - Y" helper="single column 1-D labels" bind:filename={labels_file} />
+        <div class="flex gap-2">
+            <BrowseFile
+                btn_name="Browse - X (.npy)"
+                helper="embedded N dimension vectors"
+                bind:filename={vectors_file}
+            />
+            <BrowseFile btn_name="Browse - Y" helper="single column 1-D labels" bind:filename={labels_file} />
+        </div>
+        <div class="flex gap-2">
+            <Checkbox bind:value={bootstrap} label="bootstrap" bordered={false} />
+            {#if bootstrap}
+                <Textfield bind:value={bootstrap_nsamples} label="Number of samples" type="number" />
+            {/if}
+        </div>
     {/if}
 
     <CustomSelect
