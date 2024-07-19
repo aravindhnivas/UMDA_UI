@@ -68,8 +68,9 @@
             labels_file,
             bootstrap,
             bootstrap_nsamples,
+            test_split_ratio: test_split_ratio / 100,
         };
-        console.log(args);
+        // console.log(args);
 
         await computePy({
             pyfile: 'training.ml_model',
@@ -165,12 +166,14 @@
             parameters: structuredClone($default_param_values.parameters),
         };
     };
-
     let toggle_browse_files = true;
     let vectors_file = '';
     let labels_file = '';
-    let bootstrap = true;
-    let bootstrap_nsamples = 100;
+    let bootstrap = false;
+    let bootstrap_nsamples = 800;
+    let test_split_ratio = 20;
+
+    // $: console.log(test_split_ratio, typeof test_split_ratio, test_split_ratio / 100);
 </script>
 
 <div {id} style:display class="grid content-start gap-2">
@@ -194,11 +197,21 @@
             />
             <BrowseFile btn_name="Browse - Y" helper="single column 1-D labels" bind:filename={labels_file} />
         </div>
-        <div class="flex gap-2">
-            <Checkbox bind:value={bootstrap} label="bootstrap" bordered={false} />
-            {#if bootstrap}
-                <Textfield bind:value={bootstrap_nsamples} label="Number of samples" type="number" />
-            {/if}
+        <div class="flex gap-2 justify-between">
+            <div class="grid">
+                <input class="range w-xs" type="range" min="5" max="95" step="5" bind:value={test_split_ratio} />
+                <span>split: {test_split_ratio}% test : {100 - test_split_ratio}% train</span>
+                {#if test_split_ratio > 50}
+                    <div class="badge badge-sm badge-warning">Warning: Test split ratio is greater than 50%</div>
+                {/if}
+            </div>
+
+            <div>
+                <Checkbox bind:value={bootstrap} label="bootstrap" check="checkbox" />
+                {#if bootstrap}
+                    <Textfield bind:value={bootstrap_nsamples} label="Number of samples" type="number" />
+                {/if}
+            </div>
         </div>
     {/if}
 
