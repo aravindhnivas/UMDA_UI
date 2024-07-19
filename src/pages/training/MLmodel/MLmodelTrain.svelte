@@ -58,12 +58,17 @@
                 clonedValues[key] = null;
             }
         });
-        console.log(clonedValues);
+        const args = {
+            parameters: clonedValues,
+            vectors: train_X_file,
+            labels: train_Y_file,
+        };
     };
 
     let more_options = false;
     let savedfile: string;
     let uploadedfile: { fullname: string; name: string; model: string } | null = null;
+
     const save_parameters = async () => {
         // Save the parameters to the backend
 
@@ -72,6 +77,7 @@
             filters: [{ name: 'JSON', extensions: ['json'] }],
             defaultPath: `./${$model}.json`,
         });
+
         if (!saveloc) return;
         savedfile = saveloc;
         // if (await fs.exists(saveloc)) {
