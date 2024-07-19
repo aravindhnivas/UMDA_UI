@@ -60,9 +60,10 @@
         });
         const args = {
             parameters: clonedValues,
-            vectors: train_X_file,
-            labels: train_Y_file,
+            vectors_file,
+            labels_file,
         };
+        console.log(args);
     };
 
     let more_options = false;
@@ -153,8 +154,8 @@
     };
 
     let toggle_browse_files = true;
-    let train_X_file = '';
-    let train_Y_file = '';
+    let vectors_file = '';
+    let labels_file = '';
 </script>
 
 <div {id} style:display class="grid content-start gap-2">
@@ -170,8 +171,8 @@
     </div>
 
     {#if toggle_browse_files}
-        <BrowseFile btn_name="Browse - X (.npy)" helper="embedded N dimension vectors" bind:filename={train_X_file} />
-        <BrowseFile btn_name="Browse - Y" helper="single column 1-D labels" bind:filename={train_Y_file} />
+        <BrowseFile btn_name="Browse - X (.npy)" helper="embedded N dimension vectors" bind:filename={vectors_file} />
+        <BrowseFile btn_name="Browse - Y" helper="single column 1-D labels" bind:filename={labels_file} />
     {/if}
 
     <CustomSelect
