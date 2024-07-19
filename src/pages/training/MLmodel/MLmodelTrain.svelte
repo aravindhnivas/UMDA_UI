@@ -5,6 +5,7 @@
     import { ArrowDown, ArrowUp, RotateCcw, Save, Upload } from 'lucide-svelte/icons';
     import ModelParameters from './ModelParameters.svelte';
     import Notification from '$lib/components/Notification.svelte';
+    import BrowseFile from '$lib/components/BrowseFile.svelte';
 
     export let id: string = 'ml_model-train-container';
     export let display: string = 'none';
@@ -144,9 +145,29 @@
             parameters: structuredClone($default_param_values.parameters),
         };
     };
+
+    let toggle_browse_files = true;
+    let train_X_file = '';
+    let train_Y_file = '';
 </script>
 
 <div {id} style:display class="grid content-start gap-2">
+    <h2>ML model training</h2>
+
+    <div class="flex gap-2">
+        <h3>Browse training files</h3>
+        <label class="swap">
+            <input type="checkbox" bind:checked={toggle_browse_files} />
+            <div class="swap-on">Hide</div>
+            <div class="swap-off">Show</div>
+        </label>
+    </div>
+
+    {#if toggle_browse_files}
+        <BrowseFile btn_name="Browse - X (.npy)" helper="embedded N dimension vectors" bind:filename={train_X_file} />
+        <BrowseFile btn_name="Browse - Y" helper="single column 1-D file" bind:filename={train_Y_file} />
+    {/if}
+
     <CustomSelect
         label="Supervised Learning Algorithms"
         bind:value={$model}
