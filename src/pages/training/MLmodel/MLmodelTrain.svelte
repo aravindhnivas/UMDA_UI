@@ -1,13 +1,14 @@
 <script lang="ts">
     import { model, current_model, values_stored, default_param_values } from './stores';
     import supervised_ml_models from '$lib/config/supervised_ml_models.yml';
-    import { CustomSelect } from '$lib/components';
+    import { CustomSelect, Loadingbtn } from '$lib/components';
     import { ArrowDown, ArrowUp, RotateCcw, Save, Upload } from 'lucide-svelte/icons';
     import ModelParameters from './ModelParameters.svelte';
     import Notification from '$lib/components/Notification.svelte';
     import BrowseFile from '$lib/components/BrowseFile.svelte';
     import Checkbox from '$lib/components/Checkbox.svelte';
     import Textfield from '@smui/textfield';
+    import computePy from '$lib/pyserver/computePy';
 
     export let id: string = 'ml_model-train-container';
     export let display: string = 'none';
@@ -36,7 +37,7 @@
         set_model_params();
     });
 
-    const fit_function = () => {
+    const fit_function = async (e: Event) => {
         const values = { ...$values_stored[$model].hyperparameters, ...$values_stored[$model].parameters };
         const clonedValues = structuredClone(values);
 
@@ -69,6 +70,13 @@
             bootstrap_nsamples,
         };
         console.log(args);
+
+        await computePy({
+            pyfile: 'training.ml_model',
+            args,
+            general: true,
+            target: e.target as HTMLButtonElement,
+        });
     };
 
     let more_options = false;
@@ -262,6 +270,7 @@
             {/if}
         {/if}
 
-        <button class="btn btn-sm w-max m-auto" on:click={fit_function}>Submit</button>
+        <!-- <button class="btn btn-sm w-max m-auto" on:click={fit_function}>Submit</button> -->
+        <Loadingbtn class="w-lg m-auto " name="Compute" callback={fit_function} subprocess={true} />
     {/if}
 </div>
