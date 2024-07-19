@@ -191,19 +191,21 @@
         </div>
     {/if}
 
-    <CustomSelect
-        label="Supervised Learning Algorithms"
-        bind:value={$model}
-        items={Object.keys(supervised_ml_models)}
-        on:change={set_model_params}
-    />
+    <hr />
+    <div class="flex items-center gap-4 justify-between">
+        <h2>{$current_model.name}</h2>
+        <CustomSelect
+            class="ml-auto"
+            label="Supervised Learning Algorithms"
+            bind:value={$model}
+            items={Object.keys(supervised_ml_models)}
+            on:change={set_model_params}
+        />
+    </div>
 
     {#if $current_model && $values_stored[$model]}
-        <div class="grid gap-1">
-            <h2 class="flex justify-center">{$current_model.name}</h2>
-            <span class="text-sm">{$current_model.description}</span>
-            <hr />
-        </div>
+        <span class="text-sm">{$current_model.description}</span>
+        <hr />
 
         <div class="flex">
             <h3>
