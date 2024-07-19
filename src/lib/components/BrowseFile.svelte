@@ -38,11 +38,19 @@
 </script>
 
 <div class="flex flex-col gap-1">
-    {#if label}
-        <span class="text-sm pl-1">{label} (<em>{filename.split('/').at(-1) || 'Choose a file'}</em>)</span>
-    {:else if filename && !directory}
-        <span class="text-sm pl-1">Filename: <em>{filename.split('/').at(-1)}</em></span>
-    {/if}
+    <div class="flex">
+        {#if label}
+            <span class="text-sm pl-1">{label} (<em>{filename.split('/').at(-1) || 'Choose a file'}</em>)</span>
+        {:else if filename && !directory}
+            <span class="text-sm pl-1">Filename: <em>{filename.split('/').at(-1)}</em></span>
+        {/if}
+        {#if helper}
+            <span class="flex items-center gap-0.5 text-xs ml-auto">
+                <HelpCircle size="20" />
+                <span>{helper}</span>
+            </span>
+        {/if}
+    </div>
     <div class="join">
         <button class="btn btn-sm join-item" on:click={browse_file}>{btn_name}</button>
         <input type="text" class="input input-sm join-item w-full" bind:value={filename} on:change={load_callback} />
@@ -50,10 +58,10 @@
             <button class="btn btn-sm join-item" on:click={load_callback}>load</button>
         {/if}
     </div>
-    {#if helper}
+    <!-- {#if helper}
         <span class="flex items-center gap-0.5 text-xs ml-auto">
             <HelpCircle size="20" />
             <span>{helper}</span>
         </span>
-    {/if}
+    {/if} -->
 </div>
