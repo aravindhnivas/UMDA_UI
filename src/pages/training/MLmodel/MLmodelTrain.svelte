@@ -171,7 +171,7 @@
 
     {#if toggle_browse_files}
         <BrowseFile btn_name="Browse - X (.npy)" helper="embedded N dimension vectors" bind:filename={train_X_file} />
-        <BrowseFile btn_name="Browse - Y" helper="single column 1-D file" bind:filename={train_Y_file} />
+        <BrowseFile btn_name="Browse - Y" helper="single column 1-D labels" bind:filename={train_Y_file} />
     {/if}
 
     <CustomSelect
