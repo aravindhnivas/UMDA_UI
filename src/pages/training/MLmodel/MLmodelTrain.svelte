@@ -22,8 +22,6 @@
         if (!$model) return;
         if (!$current_model) return;
 
-        $pre_trained_filename = `${$model}`;
-
         // Initialize the values_stored object if it doesn't exist
         $values_stored[$model] ??= {
             hyperparameters: structuredClone($default_param_values.hyperparameters),
@@ -35,6 +33,9 @@
         $values_stored[$model].parameters ??= structuredClone($default_param_values.parameters);
 
         console.log($values_stored[$model]);
+
+        // Set the pre-trained model filename
+        $pre_trained_filename = `${$model}_pretrained_model`;
     };
 
     onMount(() => {
@@ -290,9 +291,9 @@
             {/if}
         </Modal>
 
-        <div class="flex items-end gap-2">
+        <div class="grid gap-2">
             <BrowseFile directory={true} bind:filename={$pre_trained_file_loc} label="Save trained model" />
-            <Textfield bind:value={$pre_trained_filename} label="Name" />
+            <Textfield bind:value={$pre_trained_filename} label="save filename (.pkl)" />
         </div>
         <Loadingbtn class="w-lg m-auto " name="Compute" callback={fit_function} subprocess={true} />
     {/if}
