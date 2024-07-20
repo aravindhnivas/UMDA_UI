@@ -63,16 +63,6 @@
         {/if}
         <div class="badge badge-{$serverCurrentStatus.type}">{$serverCurrentStatus.value}</div>
         <Checkbox class="ml-auto" bind:value={$developerMode} label="Developer mode" />
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <!-- svelte-ignore a11y-no-static-element-interactions -->
-        <i
-            on:click={() => {
-                // console.log($serverInfo.info('settings opened'));
-                const modal = document.getElementById('umdaui_modal');
-                modal?.showModal();
-            }}
-            class="i-material-symbols-settings-alert-outline"
-        ></i>
     </div>
 
     <div class="flex items-center gap-1">

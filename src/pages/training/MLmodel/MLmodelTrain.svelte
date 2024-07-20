@@ -9,6 +9,7 @@
     import Checkbox from '$lib/components/Checkbox.svelte';
     import Textfield from '@smui/textfield';
     import computePy from '$lib/pyserver/computePy';
+    import Modal from '$lib/components/modal/Modal.svelte';
 
     export let id: string = 'ml_model-train-container';
     export let display: string = 'none';
@@ -41,6 +42,18 @@
         const values = { ...$values_stored[$model].hyperparameters, ...$values_stored[$model].parameters };
         const clonedValues = structuredClone(values);
 
+        $save_ml_model_name = $save_ml_model_name.trim();
+        $save_ml_model_name ||= `${$model}.pkl`;
+
+        const pre_trained_model = await path.join($save_ml_model_loc, $save_ml_model_name);
+        if (await fs.exists(pre_trained_model)) {
+            const overwrite = await dialog.confirm(
+                $save_ml_model_name + ': Pre trained model file already exists. Do you want to overwrite it?',
+                'Overwrite file',
+            );
+            if (!overwrite) return;
+        }
+
         Object.entries(values).forEach(([key, value]) => {
             if (value === 'float') {
                 const input = document.getElementById(`${unique_id}_${key}`) as HTMLInputElement;
@@ -61,6 +74,7 @@
                 clonedValues[key] = null;
             }
         });
+
         const args = {
             model: $model,
             parameters: clonedValues,
@@ -69,24 +83,23 @@
             bootstrap,
             bootstrap_nsamples,
             test_split_ratio: test_split_ratio / 100,
+            save_ml_model_loc: $save_ml_model_loc,
+            save_ml_model_name: $save_ml_model_name,
         };
-        // console.log(args);
 
-        await computePy({
-            pyfile: 'training.ml_model',
-            args,
-            general: true,
-            target: e.target as HTMLButtonElement,
-        });
+        // console.log(args);
+        // await computePy({
+        //     pyfile: 'training.ml_model',
+        //     args,
+        //     general: true,
+        //     target: e.target as HTMLButtonElement,
+        // });
     };
 
-    let more_options = false;
     let savedfile: string;
     let uploadedfile: { fullname: string; name: string; model: string } | null = null;
 
     const save_parameters = async () => {
-        // Save the parameters to the backend
-
         const saveloc = await dialog.save({
             title: 'Save parameters',
             filters: [{ name: 'JSON', extensions: ['json'] }],
@@ -166,14 +179,15 @@
             parameters: structuredClone($default_param_values.parameters),
         };
     };
+
     let toggle_browse_files = true;
     let vectors_file = '';
     let labels_file = '';
     let bootstrap = false;
     let bootstrap_nsamples = 800;
     let test_split_ratio = 20;
-
-    // $: console.log(test_split_ratio, typeof test_split_ratio, test_split_ratio / 100);
+    const save_ml_model_loc = localWritable('save_ml_model_loc', '');
+    const save_ml_model_name = localWritable('save_ml_model_name', '');
 </script>
 
 <div {id} style:display class="grid content-start gap-2">
@@ -198,7 +212,7 @@
             <BrowseFile btn_name="Browse - Y" helper="single column 1-D labels" bind:filename={labels_file} />
         </div>
         <div class="flex gap-2 justify-between">
-            <div class="grid">
+            <div class="grid gap-1">
                 <input class="range w-xs" type="range" min="5" max="95" step="5" bind:value={test_split_ratio} />
                 <span>split: {test_split_ratio}% test : {100 - test_split_ratio}% train</span>
                 {#if test_split_ratio > 50}
@@ -260,30 +274,18 @@
             <Notification message="No hyperparameters found" type="error" />
         {/if}
 
-        <button
-            class="btn btn-sm w-max ml-auto"
-            on:click={() => {
-                more_options = !more_options;
-            }}
-        >
-            <span>More options</span>
-            {#if more_options}
-                <ArrowUp />
-            {:else}
-                <ArrowDown />
-            {/if}
-        </button>
-
-        {#if more_options}
-            <hr />
+        <Modal title="More options for {$current_model.name}" label="More options">
             {#if $values_stored[$model]?.parameters}
                 <ModelParameters key="parameters" bind:values={$values_stored[$model].parameters} />
             {:else}
                 <Notification message="No parameters found" type="error" />
             {/if}
-        {/if}
+        </Modal>
 
-        <!-- <button class="btn btn-sm w-max m-auto" on:click={fit_function}>Submit</button> -->
+        <div class="flex items-end gap-2">
+            <BrowseFile directory={true} bind:filename={$save_ml_model_loc} label="Save trained model" />
+            <Textfield bind:value={$save_ml_model_name} label="Name" />
+        </div>
         <Loadingbtn class="w-lg m-auto " name="Compute" callback={fit_function} subprocess={true} />
     {/if}
 </div>

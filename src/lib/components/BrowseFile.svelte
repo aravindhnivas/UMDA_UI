@@ -2,11 +2,11 @@
     import { isError } from 'ts-try';
     import { HelpCircle } from 'lucide-svelte/icons';
 
-    export let btn_name = 'Browse file';
     export let filename = '';
     export let helper = '';
     export let label = '';
     export let directory = false;
+    export let btn_name = `Browse ${directory ? 'directory' : 'file'}`;
     export let callback: null | ((filename: string) => Promise<void>) = null;
     let className = '';
     export { className as class };
@@ -42,7 +42,9 @@
 <div class="flex flex-col gap-1 w-full {className}">
     <div class="flex">
         {#if label}
-            <span class="text-sm pl-1">{label} (<em>{filename.split('/').at(-1) || 'Choose a file'}</em>)</span>
+            <span class="text-sm pl-1"
+                >{label} (<em>{filename.split('/').at(-1) || `Choose a ${directory ? 'directory' : 'file'}`}</em>)</span
+            >
         {:else if filename && !directory}
             <span class="text-sm pl-1">Filename: <em>{filename.split('/').at(-1)}</em></span>
         {/if}

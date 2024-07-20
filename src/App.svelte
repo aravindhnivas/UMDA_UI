@@ -25,7 +25,6 @@
 
 <Toaster position="bottom-left" richColors />
 <PreModal />
-<Modal />
 <div class="parent w-full h-full">
     <header><Nav /></header>
     <main>
