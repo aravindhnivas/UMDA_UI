@@ -18,9 +18,11 @@
     const unique_id = getID();
     setContext('unique_id', unique_id);
 
-    const set_model_params = () => {
+    const set_model_params = async () => {
         if (!$model) return;
         if (!$current_model) return;
+
+        console.log($model, $values_stored[$model]);
 
         // Initialize the values_stored object if it doesn't exist
         $values_stored[$model] ??= {
@@ -32,14 +34,14 @@
         $values_stored[$model].hyperparameters ??= structuredClone($default_param_values.hyperparameters);
         $values_stored[$model].parameters ??= structuredClone($default_param_values.parameters);
 
-        console.log($values_stored[$model]);
-
+        console.log($model, $values_stored[$model]);
+        await tick();
         // Set the pre-trained model filename
         $pre_trained_filename = `${$model}_pretrained_model`;
     };
 
-    onMount(() => {
-        set_model_params();
+    onMount(async () => {
+        await set_model_params();
     });
 
     const fit_function = async (e: Event) => {
