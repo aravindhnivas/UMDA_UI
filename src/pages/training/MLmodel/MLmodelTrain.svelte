@@ -10,11 +10,12 @@
     import Textfield from '@smui/textfield';
     import computePy from '$lib/pyserver/computePy';
     import Modal from '$lib/components/modal/Modal.svelte';
+    import { getID } from '$lib/utils/initialise';
 
     export let id: string = 'ml_model-train-container';
     export let display: string = 'none';
 
-    const unique_id = Math.random().toString(36).substring(2, 15);
+    const unique_id = getID();
     setContext('unique_id', unique_id);
 
     const set_model_params = () => {
