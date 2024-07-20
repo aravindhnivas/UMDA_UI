@@ -22,6 +22,8 @@
         if (!$model) return;
         if (!$current_model) return;
 
+        $pre_trained_filename = `${$model}`;
+
         // Initialize the values_stored object if it doesn't exist
         $values_stored[$model] ??= {
             hyperparameters: structuredClone($default_param_values.hyperparameters),
@@ -43,13 +45,19 @@
         const values = { ...$values_stored[$model].hyperparameters, ...$values_stored[$model].parameters };
         const clonedValues = structuredClone(values);
 
-        $save_ml_model_name = $save_ml_model_name.trim();
-        $save_ml_model_name ||= `${$model}.pkl`;
+        $pre_trained_filename = $pre_trained_filename.trim();
 
-        const pre_trained_model = await path.join($save_ml_model_loc, $save_ml_model_name);
-        if (await fs.exists(pre_trained_model)) {
+        if (!(await fs.exists($pre_trained_file_loc))) {
+            toast.error('Error: Save location does not exist');
+            return;
+        }
+
+        const filename = $pre_trained_filename.split('.pkl')[0];
+        const pre_trained_file = await path.join($pre_trained_file_loc, filename + '.pkl');
+
+        if (await fs.exists(pre_trained_file)) {
             const overwrite = await dialog.confirm(
-                $save_ml_model_name + ': Pre trained model file already exists. Do you want to overwrite it?',
+                $pre_trained_filename + ': Pre trained model file already exists. Do you want to overwrite it?',
                 'Overwrite file',
             );
             if (!overwrite) return;
@@ -84,8 +92,7 @@
             bootstrap,
             bootstrap_nsamples,
             test_split_ratio: test_split_ratio / 100,
-            save_ml_model_loc: $save_ml_model_loc,
-            save_ml_model_name: $save_ml_model_name,
+            pre_trained_file,
         };
 
         // console.log(args);
@@ -187,8 +194,8 @@
     let bootstrap = false;
     let bootstrap_nsamples = 800;
     let test_split_ratio = 20;
-    const save_ml_model_loc = localWritable('save_ml_model_loc', '');
-    const save_ml_model_name = localWritable('save_ml_model_name', '');
+    const pre_trained_file_loc = localWritable('pre_trained_file_loc', '');
+    const pre_trained_filename = localWritable('pre_trained_filename', '');
 </script>
 
 <div {id} style:display class="grid content-start gap-2">
@@ -284,8 +291,8 @@
         </Modal>
 
         <div class="flex items-end gap-2">
-            <BrowseFile directory={true} bind:filename={$save_ml_model_loc} label="Save trained model" />
-            <Textfield bind:value={$save_ml_model_name} label="Name" />
+            <BrowseFile directory={true} bind:filename={$pre_trained_file_loc} label="Save trained model" />
+            <Textfield bind:value={$pre_trained_filename} label="Name" />
         </div>
         <Loadingbtn class="w-lg m-auto " name="Compute" callback={fit_function} subprocess={true} />
     {/if}
