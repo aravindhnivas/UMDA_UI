@@ -91,7 +91,7 @@
             labels_file,
             bootstrap,
             bootstrap_nsamples,
-            test_split_ratio: test_split_ratio / 100,
+            test_size: test_size / 100,
             pre_trained_file,
         };
 
@@ -193,7 +193,7 @@
     let labels_file = '';
     let bootstrap = false;
     let bootstrap_nsamples = 800;
-    let test_split_ratio = 20;
+    let test_size = 20;
     const pre_trained_file_loc = localWritable('pre_trained_file_loc', '');
     const pre_trained_filename = localWritable('pre_trained_filename', '');
 </script>
@@ -221,9 +221,9 @@
         </div>
         <div class="flex gap-2 justify-between">
             <div class="grid gap-1">
-                <input class="range w-xs" type="range" min="5" max="95" step="5" bind:value={test_split_ratio} />
-                <span>split: {test_split_ratio}% test : {100 - test_split_ratio}% train</span>
-                {#if test_split_ratio > 50}
+                <input class="range w-xs" type="range" min="5" max="95" step="5" bind:value={test_size} />
+                <span>split: {test_size}% test : {100 - test_size}% train</span>
+                {#if test_size > 50}
                     <div class="badge badge-sm badge-warning">Warning: Test split ratio is greater than 50%</div>
                 {/if}
             </div>
