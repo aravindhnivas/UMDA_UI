@@ -98,10 +98,6 @@
         }
     }
 
-    function close(): void {
-        dispatch('close');
-    }
-
     onMount(() => {
         document.addEventListener('mousemove', handleMouseMove);
         document.addEventListener('mouseup', handleMouseUp);
@@ -116,6 +112,7 @@
     let showWindow = true;
     export function handleClose(): void {
         showWindow = false;
+        dispatch('close');
     }
 </script>
 
@@ -154,7 +151,6 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        /* transition: all 0.3s ease; */
     }
 
     .maximized {
