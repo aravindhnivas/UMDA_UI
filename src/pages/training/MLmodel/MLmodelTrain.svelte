@@ -22,14 +22,15 @@
     setContext('unique_id', unique_id);
 
     const set_model_params = () => {
+        console.log('Setting model params');
         if (!$model) return;
         if (!$current_model) return;
 
-        console.log({ $hyperparameters, $parameters });
+        console.log($hyperparameters, $parameters);
         // Set the default values if they don't exist
         $hyperparameters = structuredClone($default_param_values.hyperparameters);
         $parameters = structuredClone($default_param_values.parameters);
-        console.log({ $hyperparameters, $parameters });
+        console.log($hyperparameters, $parameters);
 
         // Set the pre-trained model filename
         $pre_trained_filename = `${$model}_pretrained_model`;
@@ -198,7 +199,8 @@
     let test_size = 20;
     const pre_trained_file_loc = localWritable('pre_trained_file_loc', '');
     const pre_trained_filename = localWritable('pre_trained_filename', '');
-    console.log(supervised_ml_models);
+    $: if ($model) set_model_params();
+    // console.log(supervised_ml_models);
 </script>
 
 <div {id} style:display class="grid content-start gap-2">
