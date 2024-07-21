@@ -1,6 +1,7 @@
 import supervised_ml_models from '$lib/config/supervised_ml_models.yml';
 
 type ParamValue = string | number | boolean | null | { [key: string]: string };
+
 interface CurrentModel {
     name: string;
     description: string;
@@ -9,15 +10,13 @@ interface CurrentModel {
 }
 
 export const model = localWritable('ml_model', 'ridge');
+
 export const current_model = derived(model, $model => {
     return supervised_ml_models[$model] as CurrentModel;
 });
 
 export const get_params_from_current_model = (key: 'hyperparameters' | 'parameters', data: CurrentModel) => {
-    // const data: CurrentModel = get(current_model);
-
     let values = {} as Record<string, any>;
-
     Object.keys(data[key]).forEach(label => {
         if (!data) return;
         const { value } = data[key][label];
@@ -28,7 +27,6 @@ export const get_params_from_current_model = (key: 'hyperparameters' | 'paramete
             values[label] = value;
         }
     });
-
     return values;
 };
 
@@ -37,13 +35,6 @@ export const default_param_values = derived(current_model, $current_model => {
     const parameters = get_params_from_current_model('parameters', $current_model);
     return { hyperparameters, parameters };
 });
-
-// export const values_stored = writable<{
-//     [key: string]: {
-//         hyperparameters: Record<string, any>;
-//         parameters: Record<string, any>;
-//     };
-// }>({});
 
 export const hyperparameters = writable<Record<string, any>>();
 export const parameters = writable<Record<string, any>>();
