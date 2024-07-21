@@ -1,33 +1,40 @@
 <script lang="ts">
     import Textfield from '@smui/textfield';
 
-    const unique_id = getContext<string>('unique_id');
-
     export let value: string | number;
     export let label: string;
 
-    let values = {
-        min: 0,
-        max: 1,
-        step: 0.01,
+    const unique_id = getContext<string>('unique_id');
+
+    let values: Record<string, string> = {
+        min: '0',
+        max: '0',
+        step: '0',
     };
 
+    let Ndata = 10;
+
     onMount(() => {
-        if (typeof value === 'string' && !isNaN(Number(value))) {
-            value = parseFloat(value);
-            console.log(value);
-            values = {
-                min: value - 10 * value,
-                max: value + 10 * value,
-                step: value / 100,
-            };
+        value = Number(value);
+        if (isNaN(value)) {
+            return;
         }
+        const min = Number(value - 10 * value).toExponential(2);
+        const max = Number(value + 10 * value).toExponential(2);
+        const step = Number((Number(max) - Number(min)) / Ndata).toExponential(0);
+        values = { min, max, step };
     });
 </script>
 
 <div class="flex gap-1" id="{unique_id}-{label}">
-    <Textfield bind:value label="value" />
+    <Textfield
+        bind:value={Ndata}
+        label="# data"
+        on:change={() => {
+            values.step = Number((Number(values.max) - Number(values.min)) / Ndata).toExponential(0);
+        }}
+    />
     {#each ['min', 'max', 'step'] as item}
-        <Textfield value={values[item]} label={item} id="{unique_id}-{label}-{item}" />
+        <Textfield bind:value={values[item]} label={item} id="{unique_id}-{label}-{item}" type="text" />
     {/each}
 </div>
