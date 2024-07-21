@@ -12,6 +12,8 @@
     import Textfield from '@smui/textfield';
     import computePy from '$lib/pyserver/computePy';
     import { getID } from '$lib/utils/initialise';
+    import Tab, { Label } from '@smui/tab';
+    import TabBar from '@smui/tab-bar';
 
     export let id: string = 'ml_model-train-container';
     export let display: string = 'none';
@@ -194,6 +196,7 @@
     let test_size = 20;
     const pre_trained_file_loc = localWritable('pre_trained_file_loc', '');
     const pre_trained_filename = localWritable('pre_trained_filename', '');
+    console.log(supervised_ml_models);
 </script>
 
 <div {id} style:display class="grid content-start gap-2">
@@ -233,48 +236,45 @@
                 </div>
             </div>
         </CustomPanel>
-        <CustomPanel title="MODEL: {$current_model.name}">
+
+        <CustomPanel title="MODEL: {$current_model.name}" open={true}>
             <div class="grid gap-2">
-                <CustomSelect
-                    label="Supervised Learning Algorithms"
-                    bind:value={$model}
-                    items={Object.keys(supervised_ml_models)}
-                    on:change={set_model_params}
-                />
+                <TabBar tabs={Object.keys(supervised_ml_models)} let:tab bind:active={$model}>
+                    <Tab {tab}>
+                        <Label><span class="text-black">{tab}</span></Label>
+                    </Tab>
+                </TabBar>
                 <span class="text-sm">{$current_model.description}</span>
-            </div>
-        </CustomPanel>
-
-        <CustomPanel title="Hyperparameters" open={true}>
-            {#if $current_model}
-                <div class="flex">
-                    <h3>
-                        <span>Hyperparameters and Parameters</span>
-                        {#if uploadedfile && uploadedfile.model === $model}
-                            <div class="badge badge-sm badge-info">loaded: {uploadedfile.name}</div>
-                        {/if}
-                    </h3>
-                    <div class="ml-auto">
-                        <button class="btn btn-sm" on:click={reset_parameters}>
-                            <RotateCcw />
-                            <span>Reset</span>
-                        </button>
-                        <button class="btn btn-sm" on:click={upload_parameters}>
-                            <Upload />
-                            <span>Upload</span>
-                        </button>
-                        <button class="btn btn-sm" on:click={save_parameters}>
-                            <Save />
-                            <span>Save</span>
-                        </button>
+                {#if $current_model}
+                    <div class="flex">
+                        <h3>
+                            Hyperparameters
+                            {#if uploadedfile && uploadedfile.model === $model}
+                                <div class="badge badge-sm badge-info">loaded: {uploadedfile.name}</div>
+                            {/if}
+                        </h3>
+                        <div class="ml-auto">
+                            <button class="btn btn-sm" on:click={reset_parameters}>
+                                <RotateCcw />
+                                <span>Reset</span>
+                            </button>
+                            <button class="btn btn-sm" on:click={upload_parameters}>
+                                <Upload />
+                                <span>Upload</span>
+                            </button>
+                            <button class="btn btn-sm" on:click={save_parameters}>
+                                <Save />
+                                <span>Save</span>
+                            </button>
+                        </div>
                     </div>
-                </div>
-
-                {#if $hyperparameters}
-                    <ModelParameters key="hyperparameters" bind:values={$hyperparameters} />
-                {:else}
-                    <Notification message="No hyperparameters found" type="error" />
                 {/if}
+            </div>
+
+            {#if $hyperparameters}
+                <ModelParameters key="hyperparameters" bind:values={$hyperparameters} />
+            {:else}
+                <Notification message="No hyperparameters found" type="error" />
             {/if}
         </CustomPanel>
         <CustomPanel title="More options">
