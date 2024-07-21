@@ -1,8 +1,8 @@
 <script lang="ts">
     import { model, current_model, hyperparameters, parameters, default_param_values } from './stores';
     import supervised_ml_models from '$lib/config/supervised_ml_models.yml';
-    import { CustomSelect, Loadingbtn } from '$lib/components';
-    import { ArrowDown, ArrowUp, Menu, RotateCcw, Save, Upload } from 'lucide-svelte/icons';
+    import { Loadingbtn } from '$lib/components';
+    import { RotateCcw, Save, Upload } from 'lucide-svelte/icons';
     import Accordion from '@smui-extra/accordion';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import ModelParameters from './ModelParameters.svelte';
@@ -27,8 +27,8 @@
 
         console.log({ $hyperparameters, $parameters });
         // Set the default values if they don't exist
-        $hyperparameters ??= structuredClone($default_param_values.hyperparameters);
-        $parameters ??= structuredClone($default_param_values.parameters);
+        $hyperparameters = structuredClone($default_param_values.hyperparameters);
+        $parameters = structuredClone($default_param_values.parameters);
         console.log({ $hyperparameters, $parameters });
 
         // Set the pre-trained model filename
@@ -40,10 +40,12 @@
     });
 
     const fit_function = async (e: Event) => {
+        console.log({ hyperparameters: $hyperparameters, parameters: $parameters });
         const values = { ...$hyperparameters, ...$parameters };
         const clonedValues = structuredClone(values);
 
         $pre_trained_filename = $pre_trained_filename.trim();
+        $pre_trained_file_loc = $pre_trained_file_loc.trim();
 
         if (!(await fs.exists($pre_trained_file_loc))) {
             toast.error('Error: Save location does not exist');
@@ -93,7 +95,7 @@
             pre_trained_file,
         };
 
-        // console.log(args);
+        console.log(args);
         // await computePy({
         //     pyfile: 'training.ml_model',
         //     args,
