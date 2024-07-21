@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Panel, Header, Content } from '@smui-extra/accordion';
-    import { ArrowDown, ArrowDownCircle, ArrowUp, ArrowUpCircle } from 'lucide-svelte/icons';
+    import { ArrowDownCircle, ArrowUpCircle } from 'lucide-svelte/icons';
 
     export let title: string;
     export let open: boolean = false;
