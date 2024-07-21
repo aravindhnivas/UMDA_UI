@@ -1,8 +1,10 @@
 <script lang="ts">
-    import { model, current_model, values_stored, default_param_values } from './stores';
+    import { model, current_model, hyperparameters, parameters, default_param_values } from './stores';
     import supervised_ml_models from '$lib/config/supervised_ml_models.yml';
     import { CustomSelect, Loadingbtn } from '$lib/components';
-    import { RotateCcw, Save, Upload } from 'lucide-svelte/icons';
+    import { ArrowDown, ArrowUp, Menu, RotateCcw, Save, Upload } from 'lucide-svelte/icons';
+    import Accordion from '@smui-extra/accordion';
+    import CustomPanel from '$lib/components/CustomPanel.svelte';
     import ModelParameters from './ModelParameters.svelte';
     import Notification from '$lib/components/Notification.svelte';
     import BrowseFile from '$lib/components/BrowseFile.svelte';
@@ -21,19 +23,12 @@
         if (!$model) return;
         if (!$current_model) return;
 
-        console.log($model, $values_stored[$model]);
-
-        // Initialize the values_stored object if it doesn't exist
-        $values_stored[$model] ??= {
-            hyperparameters: structuredClone($default_param_values.hyperparameters),
-            parameters: structuredClone($default_param_values.parameters),
-        };
-
+        console.log({ $hyperparameters, $parameters });
         // Set the default values if they don't exist
-        $values_stored[$model].hyperparameters ??= structuredClone($default_param_values.hyperparameters);
-        $values_stored[$model].parameters ??= structuredClone($default_param_values.parameters);
+        $hyperparameters ??= structuredClone($default_param_values.hyperparameters);
+        $parameters ??= structuredClone($default_param_values.parameters);
+        console.log({ $hyperparameters, $parameters });
 
-        console.log($model, $values_stored[$model]);
         // Set the pre-trained model filename
         $pre_trained_filename = `${$model}_pretrained_model`;
     };
@@ -43,7 +38,7 @@
     });
 
     const fit_function = async (e: Event) => {
-        const values = { ...$values_stored[$model].hyperparameters, ...$values_stored[$model].parameters };
+        const values = { ...$hyperparameters, ...$parameters };
         const clonedValues = structuredClone(values);
 
         $pre_trained_filename = $pre_trained_filename.trim();
@@ -127,7 +122,7 @@
 
         const save_content = JSON.stringify(
             {
-                values: $values_stored[$model],
+                values: { hyperparameters: $hyperparameters, parameters: $parameters },
                 model: $model,
                 time: new Date().toISOString(),
             },
@@ -175,7 +170,9 @@
                 name: basefilename,
                 model: parsed.model,
             };
-            $values_stored[$model] = parsed.values;
+
+            $hyperparameters = parsed.values.hyperparameters;
+            $parameters = parsed.values.parameters;
             toast.success('Parameters uploaded successfully');
         } catch (e) {
             toast.error('Error: Invalid JSON file');
@@ -183,16 +180,16 @@
     };
 
     const reset_parameters = () => {
-        $values_stored[$model] = {
-            hyperparameters: structuredClone($default_param_values.hyperparameters),
-            parameters: structuredClone($default_param_values.parameters),
-        };
+        $hyperparameters = structuredClone($default_param_values.hyperparameters);
+        $parameters = structuredClone($default_param_values.parameters);
     };
 
     let toggle_browse_files = true;
     let vectors_file = '';
     let labels_file = '';
     let bootstrap = false;
+    let fine_tune_mode = false;
+    // let more_options = false;
     let bootstrap_nsamples = 800;
     let test_size = 20;
     const pre_trained_file_loc = localWritable('pre_trained_file_loc', '');
@@ -202,98 +199,97 @@
 <div {id} style:display class="grid content-start gap-2">
     <h2>ML model training</h2>
 
-    <div class="flex gap-2">
-        <h3>Browse training files</h3>
-        <label class="swap">
-            <input type="checkbox" bind:checked={toggle_browse_files} />
-            <div class="swap-on">Hide</div>
-            <div class="swap-off">Show</div>
-        </label>
-    </div>
+    <Accordion multiple>
+        <CustomPanel title="Browse training files">
+            <div class="grid gap-2">
+                <div class="flex gap-2">
+                    <BrowseFile
+                        btn_name="Browse - X (.npy)"
+                        helper="embedded N dimension vectors"
+                        bind:filename={vectors_file}
+                    />
+                    <BrowseFile btn_name="Browse - Y" helper="single column 1-D labels" bind:filename={labels_file} />
+                </div>
+                <div class="flex gap-2 justify-between">
+                    <div class="grid gap-1">
+                        <input class="range w-xs" type="range" min="5" max="95" step="5" bind:value={test_size} />
+                        <span>split: {test_size}% test : {100 - test_size}% train</span>
+                        {#if test_size > 50}
+                            <div class="badge badge-sm badge-warning">
+                                Warning: Test split ratio is greater than 50%
+                            </div>
+                        {/if}
+                    </div>
 
-    {#if toggle_browse_files}
-        <div class="flex gap-2">
-            <BrowseFile
-                btn_name="Browse - X (.npy)"
-                helper="embedded N dimension vectors"
-                bind:filename={vectors_file}
-            />
-            <BrowseFile btn_name="Browse - Y" helper="single column 1-D labels" bind:filename={labels_file} />
-        </div>
-        <div class="flex gap-2 justify-between">
-            <div class="grid gap-1">
-                <input class="range w-xs" type="range" min="5" max="95" step="5" bind:value={test_size} />
-                <span>split: {test_size}% test : {100 - test_size}% train</span>
-                {#if test_size > 50}
-                    <div class="badge badge-sm badge-warning">Warning: Test split ratio is greater than 50%</div>
-                {/if}
+                    <div class="flex gap-2 items-center">
+                        <Checkbox bind:value={fine_tune_mode} label="fine-tune mode" />
+                        <div class="">
+                            <Checkbox bind:value={bootstrap} label="bootstrap" check="checkbox" />
+                            {#if bootstrap}
+                                <Textfield bind:value={bootstrap_nsamples} label="Number of samples" type="number" />
+                            {/if}
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div>
-                <Checkbox bind:value={bootstrap} label="bootstrap" check="checkbox" />
-                {#if bootstrap}
-                    <Textfield bind:value={bootstrap_nsamples} label="Number of samples" type="number" />
-                {/if}
+        </CustomPanel>
+        <CustomPanel title="MODEL: {$current_model.name}">
+            <div class="grid gap-2">
+                <CustomSelect
+                    label="Supervised Learning Algorithms"
+                    bind:value={$model}
+                    items={Object.keys(supervised_ml_models)}
+                    on:change={set_model_params}
+                />
+                <span class="text-sm">{$current_model.description}</span>
             </div>
-        </div>
-    {/if}
+        </CustomPanel>
 
-    <hr />
-    <div class="flex items-center gap-4 justify-between">
-        <h2>{$current_model.name}</h2>
-        <CustomSelect
-            class="ml-auto"
-            label="Supervised Learning Algorithms"
-            bind:value={$model}
-            items={Object.keys(supervised_ml_models)}
-            on:change={set_model_params}
-        />
-    </div>
+        <CustomPanel title="Hyperparameters" open={true}>
+            {#if $current_model}
+                <div class="flex">
+                    <h3>
+                        <span>Hyperparameters and Parameters</span>
+                        {#if uploadedfile && uploadedfile.model === $model}
+                            <div class="badge badge-sm badge-info">loaded: {uploadedfile.name}</div>
+                        {/if}
+                    </h3>
+                    <div class="ml-auto">
+                        <button class="btn btn-sm" on:click={reset_parameters}>
+                            <RotateCcw />
+                            <span>Reset</span>
+                        </button>
+                        <button class="btn btn-sm" on:click={upload_parameters}>
+                            <Upload />
+                            <span>Upload</span>
+                        </button>
+                        <button class="btn btn-sm" on:click={save_parameters}>
+                            <Save />
+                            <span>Save</span>
+                        </button>
+                    </div>
+                </div>
 
-    {#if $current_model && $values_stored[$model]}
-        <span class="text-sm">{$current_model.description}</span>
-        <hr />
-
-        <div class="flex">
-            <h3>
-                <span>Hyperparameters and Parameters</span>
-                {#if uploadedfile && uploadedfile.model === $model}
-                    <div class="badge badge-sm badge-info">loaded: {uploadedfile.name}</div>
+                {#if $hyperparameters}
+                    <ModelParameters key="hyperparameters" bind:values={$hyperparameters} />
+                {:else}
+                    <Notification message="No hyperparameters found" type="error" />
                 {/if}
-            </h3>
-            <div class="ml-auto">
-                <button class="btn btn-sm" on:click={reset_parameters}>
-                    <RotateCcw />
-                    <span>Reset</span>
-                </button>
-                <button class="btn btn-sm" on:click={upload_parameters}>
-                    <Upload />
-                    <span>Upload</span>
-                </button>
-                <button class="btn btn-sm" on:click={save_parameters}>
-                    <Save />
-                    <span>Save</span>
-                </button>
+            {/if}
+        </CustomPanel>
+        <CustomPanel title="More options">
+            {#if $parameters}
+                <ModelParameters key="parameters" bind:values={$parameters} />
+            {:else}
+                <Notification message="No parameters found" type="error" />
+            {/if}
+        </CustomPanel>
+        <CustomPanel title="Save Model">
+            <div class="grid gap-2">
+                <BrowseFile directory={true} bind:filename={$pre_trained_file_loc} label="Save trained model" />
+                <Textfield bind:value={$pre_trained_filename} label="save filename (.pkl)" />
             </div>
-        </div>
-
-        {#if $values_stored[$model]?.hyperparameters}
-            <ModelParameters key="hyperparameters" bind:values={$values_stored[$model].hyperparameters} />
-        {:else}
-            <Notification message="No hyperparameters found" type="error" />
-        {/if}
-        <hr />
-        <h3>More options</h3>
-        {#if $values_stored[$model]?.parameters}
-            <ModelParameters key="parameters" bind:values={$values_stored[$model].parameters} />
-        {:else}
-            <Notification message="No parameters found" type="error" />
-        {/if}
-
-        <div class="grid gap-2">
-            <BrowseFile directory={true} bind:filename={$pre_trained_file_loc} label="Save trained model" />
-            <Textfield bind:value={$pre_trained_filename} label="save filename (.pkl)" />
-        </div>
-        <Loadingbtn class="w-lg m-auto " name="Compute" callback={fit_function} subprocess={true} />
-    {/if}
+        </CustomPanel>
+    </Accordion>
+    <Loadingbtn class="w-lg m-auto " name="Compute" callback={fit_function} subprocess={true} />
 </div>

@@ -57,7 +57,7 @@
     </div>
     <div class="join">
         <button class="btn btn-sm join-item" on:click={browse_file}>{btn_name}</button>
-        <input type="text" class="input input-sm join-item w-full" bind:value={filename} on:change={load_callback} />
+        <input type="text" class="input input-sm join-item w-full" bind:value={filename} />
         {#if callback}
             <button class="btn btn-sm join-item" on:click={load_callback}>load</button>
         {/if}

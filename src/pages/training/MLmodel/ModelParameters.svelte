@@ -22,7 +22,10 @@
             </div>
         {:else if typeof value === 'string' || typeof value === 'number'}
             <div class="grid gap-1">
-                <Textfield class="w-max" bind:value={values[label]} {label} autocomplete="false" />
+                <div class="grid">
+                    <div class="text-xs">{label}</div>
+                    <input class="w-max input input-sm" bind:value={values[label]} autocomplete="false" />
+                </div>
                 <span class="text-xs"
                     >{description}
                     <div class="badge badge-sm badge-neutral">Default: {$default_param_values[key][label]}</div>
@@ -57,7 +60,8 @@
             </div>
         {:else if value == null}
             <div class="grid">
-                <Textfield class="w-max" bind:value={values[label]} {label} autocomplete="false" />
+                <span class="text-xs">{label}</span>
+                <input class="w-max input input-sm" bind:value={values[label]} autocomplete="false" />
                 <span class="text-xs">{description}. Default: None</span>
             </div>
         {/if}
