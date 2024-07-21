@@ -17,7 +17,7 @@
     const unique_id = getID();
     setContext('unique_id', unique_id);
 
-    const set_model_params = async () => {
+    const set_model_params = () => {
         if (!$model) return;
         if (!$current_model) return;
 
@@ -34,13 +34,12 @@
         $values_stored[$model].parameters ??= structuredClone($default_param_values.parameters);
 
         console.log($model, $values_stored[$model]);
-        await tick();
         // Set the pre-trained model filename
         $pre_trained_filename = `${$model}_pretrained_model`;
     };
 
-    onMount(async () => {
-        await set_model_params();
+    onMount(() => {
+        set_model_params();
     });
 
     const fit_function = async (e: Event) => {
