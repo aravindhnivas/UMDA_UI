@@ -2,14 +2,13 @@
     import { model, current_model, values_stored, default_param_values } from './stores';
     import supervised_ml_models from '$lib/config/supervised_ml_models.yml';
     import { CustomSelect, Loadingbtn } from '$lib/components';
-    import { ArrowDown, ArrowUp, RotateCcw, Save, Upload } from 'lucide-svelte/icons';
+    import { RotateCcw, Save, Upload } from 'lucide-svelte/icons';
     import ModelParameters from './ModelParameters.svelte';
     import Notification from '$lib/components/Notification.svelte';
     import BrowseFile from '$lib/components/BrowseFile.svelte';
     import Checkbox from '$lib/components/Checkbox.svelte';
     import Textfield from '@smui/textfield';
     import computePy from '$lib/pyserver/computePy';
-    import Modal from '$lib/components/modal/Modal.svelte';
     import { getID } from '$lib/utils/initialise';
 
     export let id: string = 'ml_model-train-container';
@@ -284,14 +283,13 @@
         {:else}
             <Notification message="No hyperparameters found" type="error" />
         {/if}
-
-        <Modal title="More options for {$current_model.name}" label="More options">
-            {#if $values_stored[$model]?.parameters}
-                <ModelParameters key="parameters" bind:values={$values_stored[$model].parameters} />
-            {:else}
-                <Notification message="No parameters found" type="error" />
-            {/if}
-        </Modal>
+        <hr />
+        <h3>More options</h3>
+        {#if $values_stored[$model]?.parameters}
+            <ModelParameters key="parameters" bind:values={$values_stored[$model].parameters} />
+        {:else}
+            <Notification message="No parameters found" type="error" />
+        {/if}
 
         <div class="grid gap-2">
             <BrowseFile directory={true} bind:filename={$pre_trained_file_loc} label="Save trained model" />
