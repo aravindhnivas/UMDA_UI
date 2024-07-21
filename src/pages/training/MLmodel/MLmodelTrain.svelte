@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { model, current_model, hyperparameters, parameters, default_param_values } from './stores';
+    import { model, current_model, hyperparameters, parameters, default_param_values, fine_tune_model } from './stores';
     import supervised_ml_models from '$lib/config/supervised_ml_models.yml';
     import { Loadingbtn } from '$lib/components';
     import { RotateCcw, Save, Upload } from 'lucide-svelte/icons';
@@ -189,11 +189,11 @@
         $parameters = structuredClone($default_param_values.parameters);
     };
 
-    let toggle_browse_files = true;
+    // let toggle_browse_files = true;
     let vectors_file = '';
     let labels_file = '';
     let bootstrap = false;
-    let fine_tune_mode = false;
+    // let fine_tune_mode = false;
     // let more_options = false;
     let bootstrap_nsamples = 800;
     let test_size = 20;
@@ -229,7 +229,7 @@
                 </div>
 
                 <div class="flex gap-2 items-center">
-                    <Checkbox bind:value={fine_tune_mode} label="fine-tune mode" />
+                    <Checkbox bind:value={$fine_tune_model} label="fine-tune parameters" />
                     <div class="">
                         <Checkbox bind:value={bootstrap} label="bootstrap" check="checkbox" />
                         {#if bootstrap}

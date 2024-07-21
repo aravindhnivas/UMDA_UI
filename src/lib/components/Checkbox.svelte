@@ -4,6 +4,8 @@
     export let bordered = true;
     export let check: 'toggle' | 'checkbox' = 'toggle';
     export let text_position: 'left' | 'right' = 'left';
+    export let disabled = false;
+
     let className = '';
     export { className as class };
     if (check === 'checkbox') {
@@ -17,7 +19,7 @@
         {#if text_position === 'left'}
             <span class="label-text">{label}</span>
         {/if}
-        <input type="checkbox" class={check} bind:checked={value} />
+        <input type="checkbox" class={check} bind:checked={value} {disabled} />
         {#if text_position === 'right'}
             <span class="label-text">{label}</span>
         {/if}

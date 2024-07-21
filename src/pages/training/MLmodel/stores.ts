@@ -38,3 +38,4 @@ export const default_param_values = derived(current_model, $current_model => {
 
 export const hyperparameters = writable<Record<string, any>>();
 export const parameters = writable<Record<string, any>>();
+export const fine_tune_model = writable(false);

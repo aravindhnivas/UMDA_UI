@@ -1,13 +1,13 @@
 <script lang="ts">
-    import { current_model, default_param_values } from './stores';
-    import Textfield from '@smui/textfield';
+    import { current_model, default_param_values, fine_tune_model } from './stores';
+    // import Textfield from '@smui/textfield';
     import { validateInput } from '$lib/utils';
     import { Checkbox, CustomSelect } from '$lib/components';
 
     export let values: Record<string, any>;
     export let key: 'hyperparameters' | 'parameters';
     const unique_id = getContext<string>('unique_id');
-    $: console.log(key + ' values', values);
+    $: disabled = $fine_tune_model && key === 'hyperparameters';
 </script>
 
 <div class="flex flex-col gap-4 hyperparameters__div">
@@ -16,7 +16,7 @@
         {#if label in values}
             {#if typeof value === 'boolean'}
                 <div class="grid gap-1">
-                    <Checkbox class="p-2 w-max" bind:value={values[label]} {label} />
+                    <Checkbox class="p-2 w-max" bind:value={values[label]} {label} {disabled} />
                     <span class="text-xs">
                         {description}
                         <div class="badge badge-sm badge-neutral">Default: {$default_param_values[key][label]}</div>
@@ -26,7 +26,12 @@
                 <div class="grid gap-1">
                     <div class="grid">
                         <div class="text-xs">{label}</div>
-                        <input class="w-max input input-sm" bind:value={values[label]} autocomplete="false" />
+                        <input
+                            class="w-max input input-sm"
+                            bind:value={values[label]}
+                            autocomplete="false"
+                            {disabled}
+                        />
                     </div>
                     <span class="text-xs"
                         >{description}
@@ -40,6 +45,7 @@
                             label={`${label} (${value.options[values[label]]})`}
                             items={Object.keys(value.options)}
                             bind:value={values[label]}
+                            {disabled}
                         />
                         {#if values[label] === 'float'}
                             <div class="grid">
@@ -51,6 +57,7 @@
                                     id="{unique_id}_{label}"
                                     class="input input-sm"
                                     type="number"
+                                    {disabled}
                                 />
                             </div>
                         {/if}
@@ -63,7 +70,7 @@
             {:else if value == null}
                 <div class="grid">
                     <span class="text-xs">{label}</span>
-                    <input class="w-max input input-sm" bind:value={values[label]} autocomplete="false" />
+                    <input class="w-max input input-sm" bind:value={values[label]} autocomplete="false" {disabled} />
                     <span class="text-xs">{description}. Default: None</span>
                 </div>
             {/if}
