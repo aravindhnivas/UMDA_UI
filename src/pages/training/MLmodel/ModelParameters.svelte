@@ -18,7 +18,7 @@
             {#if typeof value === 'boolean'}
                 <div class="grid gap-1">
                     {#if fine_tune_mode}
-                        <Textfield class="w-max" value="true, false" {label} id="{unique_id}-{label}" />
+                        <Textfield class="w-max" value="true, false" {label} input$id="{unique_id}-{label}" />
                     {:else}
                         <Checkbox class="p-2 w-max" bind:value={values[label]} {label} />
                     {/if}
@@ -53,10 +53,10 @@
                                         .filter(k => k !== 'float')
                                         .join(', ')}
                                     {label}
-                                    id="{unique_id}-{label}"
+                                    input$id="{unique_id}-{label}"
                                 />
                                 {#if Object.keys(value.options).includes('float')}
-                                    <FineTuneTextfields value="0" label="float" />
+                                    <FineTuneTextfields value="0" label={label + '-float'} />
                                 {/if}
                             </div>
                         {:else}
@@ -93,7 +93,7 @@
                             class="w-lg"
                             value=""
                             label="Enter comma separated values"
-                            id="{unique_id}-{label}"
+                            input$id="{unique_id}-{label}"
                         />
                     {:else}
                         <input class="w-max input input-sm" bind:value={values[label]} autocomplete="false" />

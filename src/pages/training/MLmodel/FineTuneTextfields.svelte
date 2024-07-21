@@ -26,7 +26,7 @@
     });
 </script>
 
-<div class="flex gap-1" id="{unique_id}-{label}">
+<div class="flex gap-1">
     <Textfield
         bind:value={Ndata}
         label="# data"
@@ -37,4 +37,5 @@
     {#each ['min', 'max', 'step'] as item}
         <Textfield bind:value={values[item]} label={item} id="{unique_id}-{label}-{item}" type="text" />
     {/each}
+    <input type="text" hidden value={`${values.min}, ${values.max}, ${values.step}`} id="{unique_id}-{label}" />
 </div>

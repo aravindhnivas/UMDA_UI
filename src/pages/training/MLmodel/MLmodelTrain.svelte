@@ -10,15 +10,11 @@
     import BrowseFile from '$lib/components/BrowseFile.svelte';
     import Checkbox from '$lib/components/Checkbox.svelte';
     import Textfield from '@smui/textfield';
-    // import computePy from '$lib/pyserver/computePy';
-    // import { getID } from '$lib/utils/initialise';
     import Tab, { Label } from '@smui/tab';
     import TabBar from '@smui/tab-bar';
-    // import { range as linspace } from 'lodash-es';
+
     export let id: string = 'ml_model-train-container';
     export let display: string = 'none';
-
-    // console.log(linspace(0, 10, 1));
 
     const unique_id = getID();
     setContext('unique_id', unique_id);
@@ -46,6 +42,35 @@
         console.log({ hyperparameters: $hyperparameters, parameters: $parameters });
         const values = { ...$hyperparameters, ...$parameters };
         const clonedValues = structuredClone(values);
+
+        if ($fine_tune_model) {
+            console.log('Fine tuning model');
+            console.log($hyperparameters);
+
+            let fine_tune_values: Record<string, any> = {};
+            Object.keys($hyperparameters).forEach(lb => {
+                const input = document.getElementById(`${unique_id}-${lb}`) as HTMLInputElement;
+                if (!input) return;
+                let val: (string | null)[] = [null];
+                if (input.value.includes(',')) {
+                    val = input.value.split(',').map(v => v.trim());
+                }
+
+                // console.log(lb);
+                if ($current_model.hyperparameters[lb]?.value?.options) {
+                    if ('float' in $current_model.hyperparameters[lb].value.options) {
+                        const float_input = document.getElementById(`${unique_id}-${lb}-float`) as HTMLInputElement;
+                        if (!float_input) return;
+                        if (float_input.value.includes(',')) {
+                            val = [...val, ...float_input.value.split(',').map(v => v.trim())];
+                        }
+                    }
+                }
+                fine_tune_values[lb] = val;
+            });
+            console.log(fine_tune_values);
+            return;
+        }
 
         $pre_trained_filename = $pre_trained_filename.trim();
         $pre_trained_file_loc = $pre_trained_file_loc.trim();
@@ -99,12 +124,13 @@
         };
 
         console.log(args);
-        // await computePy({
-        //     pyfile: 'training.ml_model',
-        //     args,
-        //     general: true,
-        //     target: e.target as HTMLButtonElement,
-        // });
+        return;
+        await computePy({
+            pyfile: 'training.ml_model',
+            args,
+            general: true,
+            target: e.target as HTMLButtonElement,
+        });
     };
 
     let savedfile: string;
