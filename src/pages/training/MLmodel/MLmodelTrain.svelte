@@ -62,9 +62,6 @@
                         const float_input = document.getElementById(`${unique_id}-${lb}-float`) as HTMLInputElement;
                         if (!float_input) return;
                         val.push(`float: ${float_input.value}`);
-                        // if (float_input.value.includes(',')) {
-                        //     val = [...val, ...float_input.value.split(',').map(v => v.trim())];
-                        // }
                     }
                 }
                 fine_tune_values[lb] = val;
