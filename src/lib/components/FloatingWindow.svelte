@@ -128,7 +128,7 @@
             <span>{title}</span>
             <div class="window-controls">
                 <button class="minimize" on:click={minimize}>&#8212;</button>
-                <button class="maximize" on:click={maximize}>&#9633;</button>
+                <button class="maximize" on:click={maximize} disabled={isMinimized}>&#9633;</button>
                 <button class="close" on:click={handleClose}>&#10005;</button>
             </div>
         </div>
