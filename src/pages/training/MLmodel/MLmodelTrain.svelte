@@ -204,34 +204,33 @@
 
     <Accordion multiple>
         <CustomPanel title="Browse training files">
-            <div class="grid gap-2">
-                <div class="flex gap-2">
-                    <BrowseFile
-                        btn_name="Browse - X (.npy)"
-                        helper="embedded N dimension vectors"
-                        bind:filename={vectors_file}
-                    />
-                    <BrowseFile btn_name="Browse - Y" helper="single column 1-D labels" bind:filename={labels_file} />
-                </div>
-                <div class="flex gap-2 justify-between">
-                    <div class="grid gap-1">
-                        <input class="range w-xs" type="range" min="5" max="95" step="5" bind:value={test_size} />
-                        <span>split: {test_size}% test : {100 - test_size}% train</span>
-                        {#if test_size > 50}
-                            <div class="badge badge-sm badge-warning">
-                                Warning: Test split ratio is greater than 50%
-                            </div>
-                        {/if}
-                    </div>
+            <div class="flex gap-2">
+                <BrowseFile
+                    btn_name="Browse - X (.npy)"
+                    helper="embedded N dimension vectors"
+                    bind:filename={vectors_file}
+                />
+                <BrowseFile btn_name="Browse - Y" helper="single column 1-D labels" bind:filename={labels_file} />
+            </div>
+        </CustomPanel>
 
-                    <div class="flex gap-2 items-center">
-                        <Checkbox bind:value={fine_tune_mode} label="fine-tune mode" />
-                        <div class="">
-                            <Checkbox bind:value={bootstrap} label="bootstrap" check="checkbox" />
-                            {#if bootstrap}
-                                <Textfield bind:value={bootstrap_nsamples} label="Number of samples" type="number" />
-                            {/if}
-                        </div>
+        <CustomPanel title="Control" open={true}>
+            <div class="flex gap-2 justify-between">
+                <div class="grid gap-1">
+                    <input class="range w-xs" type="range" min="5" max="95" step="5" bind:value={test_size} />
+                    <span>split: {test_size}% test : {100 - test_size}% train</span>
+                    {#if test_size > 50}
+                        <div class="badge badge-sm badge-warning">Warning: Test split ratio is greater than 50%</div>
+                    {/if}
+                </div>
+
+                <div class="flex gap-2 items-center">
+                    <Checkbox bind:value={fine_tune_mode} label="fine-tune mode" />
+                    <div class="">
+                        <Checkbox bind:value={bootstrap} label="bootstrap" check="checkbox" />
+                        {#if bootstrap}
+                            <Textfield bind:value={bootstrap_nsamples} label="Number of samples" type="number" />
+                        {/if}
                     </div>
                 </div>
             </div>
