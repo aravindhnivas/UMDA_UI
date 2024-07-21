@@ -1,8 +1,9 @@
 <script lang="ts">
     import { current_model, default_param_values, fine_tune_model } from './stores';
-    // import Textfield from '@smui/textfield';
+    import Textfield from '@smui/textfield';
     import { validateInput } from '$lib/utils';
     import { Checkbox, CustomSelect } from '$lib/components';
+    import FineTuneTextfields from './FineTuneTextfields.svelte';
 
     export let values: Record<string, any>;
     export let key: 'hyperparameters' | 'parameters';
@@ -16,7 +17,11 @@
         {#if label in values}
             {#if typeof value === 'boolean'}
                 <div class="grid gap-1">
-                    <Checkbox class="p-2 w-max" bind:value={values[label]} {label} {disabled} />
+                    {#if disabled}
+                        <Textfield class="w-max" bind:value={values[label]} />
+                    {:else}
+                        <Checkbox class="p-2 w-max" bind:value={values[label]} {label} />
+                    {/if}
                     <span class="text-xs">
                         {description}
                         <div class="badge badge-sm badge-neutral">Default: {$default_param_values[key][label]}</div>
@@ -26,12 +31,16 @@
                 <div class="grid gap-1">
                     <div class="grid">
                         <div class="text-xs">{label}</div>
-                        <input
-                            class="w-max input input-sm"
-                            bind:value={values[label]}
-                            autocomplete="false"
-                            {disabled}
-                        />
+                        {#if disabled}
+                            <FineTuneTextfields value={values[label]} {label} />
+                        {:else}
+                            <input
+                                class="w-max input input-sm"
+                                bind:value={values[label]}
+                                autocomplete="false"
+                                {disabled}
+                            />
+                        {/if}
                     </div>
                     <span class="text-xs"
                         >{description}

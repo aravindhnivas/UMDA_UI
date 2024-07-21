@@ -10,13 +10,15 @@
     import BrowseFile from '$lib/components/BrowseFile.svelte';
     import Checkbox from '$lib/components/Checkbox.svelte';
     import Textfield from '@smui/textfield';
-    import computePy from '$lib/pyserver/computePy';
-    import { getID } from '$lib/utils/initialise';
+    // import computePy from '$lib/pyserver/computePy';
+    // import { getID } from '$lib/utils/initialise';
     import Tab, { Label } from '@smui/tab';
     import TabBar from '@smui/tab-bar';
-
+    // import { range as linspace } from 'lodash-es';
     export let id: string = 'ml_model-train-container';
     export let display: string = 'none';
+
+    // console.log(linspace(0, 10, 1));
 
     const unique_id = getID();
     setContext('unique_id', unique_id);
