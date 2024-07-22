@@ -5,7 +5,7 @@ type ParamValue = string | number | boolean | null | { [key: string]: string };
 interface CurrentModel {
     name: string;
     description: string;
-    hyperparameters: Record<string, { value: ParamValue; description: string }>;
+    hyperparameters: Record<string, { value: ParamValue; description: string; fine_tune: string }>;
     parameters: Record<string, { value: ParamValue; description: string }>;
 }
 
@@ -31,12 +31,15 @@ export const get_params_from_current_model = (key: 'hyperparameters' | 'paramete
 };
 
 export const default_param_values = derived(current_model, $current_model => {
-    const hyperparameters = get_params_from_current_model('hyperparameters', $current_model);
-    const parameters = get_params_from_current_model('parameters', $current_model);
+    const hyperparameters = get_params_from_current_model(
+        'hyperparameters',
+        $current_model,
+    ) as CurrentModel['hyperparameters'];
+    const parameters = get_params_from_current_model('parameters', $current_model) as CurrentModel['parameters'];
     return { hyperparameters, parameters };
 });
 
-export const hyperparameters = writable<{ [name: string]: Record<string, any> }>({});
-export const parameters = writable<{ [name: string]: Record<string, any> }>({});
-export const fine_tuned_hyperparameters = writable<{ [name: string]: Record<string, any> }>({});
+export const hyperparameters = writable<{ [name: string]: CurrentModel['hyperparameters'] }>({});
+export const parameters = writable<{ [name: string]: CurrentModel['parameters'] }>({});
+export const fine_tuned_hyperparameters = writable<{ [name: string]: Record<string, string> }>({});
 export const fine_tune_model = writable(false);

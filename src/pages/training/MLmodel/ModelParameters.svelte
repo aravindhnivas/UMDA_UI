@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { current_model, default_param_values, fine_tune_model } from './stores';
+    import { current_model, default_param_values, fine_tune_model, fine_tuned_hyperparameters, model } from './stores';
     import Textfield from '@smui/textfield';
     import { validateInput } from '$lib/utils';
     import { Checkbox, CustomSelect } from '$lib/components';
@@ -9,6 +9,7 @@
     export let key: 'hyperparameters' | 'parameters';
     const unique_id = getContext<string>('unique_id');
     $: fine_tune_mode = $fine_tune_model && key === 'hyperparameters';
+    $: console.log($fine_tuned_hyperparameters[$model]);
 </script>
 
 <div class="flex flex-col gap-4 hyperparameters__div">
@@ -18,7 +19,11 @@
             {#if typeof value === 'boolean'}
                 <div class="grid gap-1">
                     {#if fine_tune_mode}
-                        <Textfield class="w-max" value="true, false" {label} input$id="{unique_id}-{label}" />
+                        <input
+                            class="input input-sm"
+                            bind:value={$fine_tuned_hyperparameters[$model][label]}
+                            autocomplete="false"
+                        />
                     {:else}
                         <Checkbox class="p-2 w-max" bind:value={values[label]} {label} />
                     {/if}
@@ -32,7 +37,11 @@
                     <div class="grid">
                         <div class="text-xs">{label}</div>
                         {#if fine_tune_mode}
-                            <FineTuneTextfields value={values[label]} {label} />
+                            <input
+                                class="input input-sm"
+                                bind:value={$fine_tuned_hyperparameters[$model][label]}
+                                autocomplete="false"
+                            />
                         {:else}
                             <input class="w-max input input-sm" bind:value={values[label]} autocomplete="false" />
                         {/if}
@@ -43,21 +52,16 @@
                     </span>
                 </div>
             {:else if typeof value === 'object' && value}
-                <div class="grid w-max">
+                <div class="grid gap-1">
                     <div class="flex items-end gap-4">
                         {#if fine_tune_mode}
-                            <div class="grid border border-black border-2">
-                                <Textfield
-                                    class="w-lg"
-                                    value={Object.keys(value.options)
-                                        .filter(k => k !== 'float')
-                                        .join(', ')}
-                                    {label}
-                                    input$id="{unique_id}-{label}"
+                            <div class="grid w-full">
+                                <div class="text-xs">{label}</div>
+                                <input
+                                    class=" input input-sm"
+                                    bind:value={$fine_tuned_hyperparameters[$model][label]}
+                                    autocomplete="false"
                                 />
-                                {#if Object.keys(value.options).includes('float')}
-                                    <FineTuneTextfields value="0" label={label + '-float'} />
-                                {/if}
                             </div>
                         {:else}
                             <CustomSelect
@@ -86,14 +90,13 @@
                     </span>
                 </div>
             {:else if value == null}
-                <div class="grid">
+                <div class="grid gap-1">
                     <span class="text-xs">{label}</span>
                     {#if fine_tune_mode}
-                        <Textfield
-                            class="w-lg"
-                            value=""
-                            label="Enter comma separated values"
-                            input$id="{unique_id}-{label}"
+                        <input
+                            class="input input-sm"
+                            bind:value={$fine_tuned_hyperparameters[$model][label]}
+                            autocomplete="false"
                         />
                     {:else}
                         <input class="w-max input input-sm" bind:value={values[label]} autocomplete="false" />

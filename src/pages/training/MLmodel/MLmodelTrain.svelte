@@ -28,16 +28,22 @@
     setContext('unique_id', unique_id);
 
     const set_model_params = () => {
-        console.log('Setting model params');
+        console.log('Setting model params', $current_model, $model);
         if (!$model) return;
         if (!$current_model) return;
 
         console.log($hyperparameters, $parameters);
         // Set the default values if they don't exist
         $hyperparameters[$model] ??= structuredClone($default_param_values.hyperparameters);
-        $fine_tuned_hyperparameters[$model] ??= structuredClone($default_param_values.hyperparameters);
         $parameters[$model] ??= structuredClone($default_param_values.parameters);
+
+        // setting fine tuned hyperparameters
+        $fine_tuned_hyperparameters[$model] ??= {};
+        Object.keys($current_model.hyperparameters).forEach(f => {
+            $fine_tuned_hyperparameters[$model][f] ??= structuredClone($current_model.hyperparameters[f].fine_tune);
+        });
         console.log($hyperparameters, $parameters);
+        console.log('fine tuned hyperparameters values', $fine_tuned_hyperparameters);
 
         // Set the pre-trained model filename
         $pre_trained_filename = `${$model}_pretrained_model`;
@@ -48,9 +54,38 @@
     });
 
     const fit_function = async (e: Event) => {
-        // console.log({ hyperparameters: $hyperparameters[$model], parameters: $parameters[$model] });
         const values = { ...$hyperparameters[$model], ...$parameters[$model] };
         const clonedValues = structuredClone(values);
+
+        let clonedFineTunedValues: Record<string, any> = {};
+        if ($fine_tune_model) {
+            if (!$fine_tuned_hyperparameters[$model]) {
+                toast.error('Error: Fine tuned hyperparameters not found');
+                return;
+            }
+            Object.keys($fine_tuned_hyperparameters[$model]).forEach(f => {
+                const val = structuredClone($fine_tuned_hyperparameters[$model][f]);
+                clonedFineTunedValues[f] = val.split(',').map(f => {
+                    f = f.trim();
+                    try {
+                        // console.log('parse check', f === 'true' || f === 'false' || 'null');
+                        // console.log('number check', !isNaN(Number(f)));
+                        // console.log('parsing', f);
+                        if (f === 'true' || f === 'false' || f === 'null') {
+                            // console.log('JSON parsing', f);
+                            return JSON.parse(f);
+                        }
+                        if (!isNaN(Number(f))) return Number(f);
+                        return f;
+                    } catch (error) {
+                        console.error('Error parsing', f, error);
+                    }
+                });
+                console.log(f, val, clonedFineTunedValues[f]);
+            });
+            console.log('fine tuned values', clonedFineTunedValues);
+            return;
+        }
 
         $pre_trained_filename = $pre_trained_filename.trim();
         $pre_trained_file_loc = $pre_trained_file_loc.trim();

@@ -5,7 +5,7 @@ linear_regression:
         fit_intercept:
             value: true
             description: 'Specifies whether to calculate the intercept for this model'
-            fine_tune: [true, false]
+            fine_tune: 'true, false'
     parameters:
         copy_X:
             value: true
@@ -21,7 +21,7 @@ ridge:
         alpha:
             value: 1.0
             description: 'Constant that multiplies the L2 term, controlling regularization strength; must be a positive float [0, Inf].  For numerical reasons, using alpha = 0 with the Ridge object is not advised. Instead, you should use the LinearRegression.'
-            fine_tune: [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000]
+            fine_tune: '0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000'
 
     parameters:
         fit_intercept:
@@ -69,7 +69,7 @@ svr:
                     sigmoid: 'Sigmoid kernel'
                     precomputed: 'Precomputed kernel'
             description: 'Specifies the kernel type to be used in the algorithm'
-            fine_tune: ['linear', 'poly', 'rbf', 'sigmoid']
+            fine_tune: 'linear, poly, rbf, sigmoid'
         gamma:
             value:
                 default: 'scale'
@@ -77,16 +77,16 @@ svr:
                     scale: '1 / (n_features * X.var())'
                     auto: '1 / n_features'
                     float: 'must be non-negative'
-            description: "Kernel coefficient for 'rbf', 'poly' and 'sigmoid'."
-            fine_tune: ['scale', 'auto', 0.001, 0.01, 0.1, 1, 10, 100, 1000]
+            description: Kernel coefficient for 'rbf', 'poly' and 'sigmoid'.
+            fine_tune: 'scale, auto, 0.001, 0.01, 0.1, 1, 10, 100, 1000'
         C:
             value: 1.0
             description: 'Regularization parameter'
-            fine_tune: [0.001, 0.01, 0.1, 1, 10, 100, 1000]
+            fine_tune: '0.001, 0.01, 0.1, 1, 10, 100, 1000'
         epsilon:
             value: 0.1
             description: 'Epsilon in the epsilon-SVR model'
-            fine_tune: [0.01, 0.1, 0.5, 1, 2, 5, 10]
+            fine_tune: '0.01, 0.1, 0.5, 1, 2, 5, 10'
     parameters:
         degree:
             value: 3
@@ -119,6 +119,7 @@ knn:
         n_neighbors:
             value: 5
             description: 'Number of neighbors to use for kneighbors queries'
+            fine_tune: '1, 3, 5, 10, 20, 50'
         weights:
             value:
                 default: 'uniform'
@@ -126,6 +127,7 @@ knn:
                     uniform: 'All points in each neighborhood are weighted equally'
                     distance: 'Weight points by the inverse of their distance'
             description: 'Weight function used in prediction'
+            fine_tune: 'uniform, distance'
         metric:
             value:
                 default: 'minkowski'
@@ -136,7 +138,7 @@ knn:
                     nan_euclidean: 'Euclidean distance ignoring NaN values'
                     manhattan: 'Manhattan distance'
             description: 'Metric to use for distance computation'
-            fine_tune: ['minkowski', 'cosine', 'euclidean', 'nan_euclidean', 'manhattan']
+            fine_tune: 'minkowski, cosine, euclidean, nan_euclidean, manhattan'
     parameters:
         algorithm:
             value:
@@ -164,19 +166,19 @@ rfr:
         n_estimators:
             value: 100
             description: 'Number of trees in the forest'
-            fine_tune: [10, 50, 100, 200, 500]
+            fine_tune: '10, 50, 100, 200, 500'
         max_leaf_nodes:
             value: null
             description: 'Grow trees with max_leaf_nodes in best-first fashion'
-            fine_tune: [null, 5, 10, 20, 50, 100]
+            fine_tune: 'null, 5, 10, 20, 50, 100'
         min_samples_leaf:
             value: 1
             description: 'Minimum number of samples required to be at a leaf node'
-            fine_tune: [0.1, 0.3, 0.5, 0.7, 1]
+            fine_tune: '0.1, 0.3, 0.5, 0.7, 1'
         max_depth:
             value: null
             description: 'Maximum depth of the tree'
-            fine_tune: [5, 10, 15, 20, 25]
+            fine_tune: '5, 10, 15, 20, 25'
     parameters:
         criterion:
             value:
@@ -237,27 +239,27 @@ gbr:
         learning_rate:
             value: 0.1
             description: 'Learning rate shrinks the contribution of each tree'
-            fine_tune: [0.001, 0.01, 0.1, 0.5, 1]
+            fine_tune: '0.001, 0.01, 0.1, 0.5, 1'
         n_estimators:
             value: 100
             description: 'The number of boosting stages to perform'
-            fine_tune: [10, 50, 100, 200, 500]
+            fine_tune: '10, 50, 100, 200, 500'
         min_samples_split:
             value: 2
             description: 'Minimum number of samples required to split an internal node'
-            fine_tune: [0.1, 0.3, 0.5, 0.7, 1]
+            fine_tune: '0.1, 0.3, 0.5, 0.7, 1'
         min_samples_leaf:
             value: 1
             description: 'Minimum number of samples required to be at a leaf node'
-            fine_tune: [0.1, 0.3, 0.5, 0.7, 1]
+            fine_tune: '0.1, 0.3, 0.5, 0.7, 1'
         subsample:
             value: 1.0
             description: 'The fraction of samples to be used for fitting the individual base learners'
-            fine_tune: [0.1, 0.3, 0.5, 0.7, 1]
+            fine_tune: '0.1, 0.3, 0.5, 0.7, 1'
         max_depth:
             value: 3
             description: 'Maximum depth of the individual regression estimators'
-            fine_tune: [3, 5, 7, 9, 11]
+            fine_tune: '3, 5, 7, 9, 11'
     parameters:
         loss:
             value:
@@ -325,11 +327,11 @@ gpr:
         alpha:
             value: 1e-10
             description: 'Value added to the diagonal of the kernel matrix during fitting'
-            fine_tune: [1e-10, 1e-9, 1e-8, 1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1, 10, 100]
+            fine_tune: '1e-10, 1e-9, 1e-8, 1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1, 10, 100'
         n_restarts_optimizer:
             value: 0
             description: 'The number of restarts of the optimizer for finding the kernel parameters'
-            fine_tune: [0, 1, 2, 3, 4, 5]
+            fine_tune: '0, 1, 2, 3, 4, 5'
     parameters:
         kernel:
             value: null
