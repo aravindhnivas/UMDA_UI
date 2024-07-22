@@ -143,12 +143,13 @@
             labels_file,
             bootstrap,
             bootstrap_nsamples,
+            kfold_nsamples,
             test_size: test_size / 100,
             pre_trained_file,
         };
 
         console.log(args);
-        return;
+        // return;
         await computePy({
             pyfile: 'training.ml_model',
             args,
@@ -249,6 +250,7 @@
     // let fine_tune_mode = false;
     // let more_options = false;
     let bootstrap_nsamples = 800;
+    const kfold_nsamples = localWritable('kfold_nsamples', 5);
     let test_size = 20;
     const pre_trained_file_loc = localWritable('pre_trained_file_loc', '');
     const pre_trained_filename = localWritable('pre_trained_filename', '');
@@ -283,6 +285,9 @@
 
                 <div class="flex gap-2 items-center">
                     <Checkbox bind:value={$fine_tune_model} label="fine-tune hyperparameters" />
+                    {#if $fine_tune_model}
+                        <Textfield bind:value={$kfold_nsamples} input$min="2" label="# Split (N-fold)" type="number" />
+                    {/if}
                     <div class="">
                         <Checkbox bind:value={bootstrap} label="bootstrap" check="checkbox" />
                         {#if bootstrap}
@@ -304,7 +309,7 @@
                 {#if $current_model}
                     <div class="flex">
                         <h3>
-                            Hyperparameters
+                            <span>Hyperparameters</span>
                             {#if uploadedfile && uploadedfile.model === $model}
                                 <div class="badge badge-sm badge-info">loaded: {uploadedfile.name}</div>
                             {/if}
