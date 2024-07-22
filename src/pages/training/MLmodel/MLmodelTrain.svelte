@@ -1,5 +1,13 @@
 <script lang="ts">
-    import { model, current_model, hyperparameters, parameters, default_param_values, fine_tune_model } from './stores';
+    import {
+        model,
+        current_model,
+        hyperparameters,
+        parameters,
+        default_param_values,
+        fine_tune_model,
+        fine_tuned_hyperparameters,
+    } from './stores';
     import supervised_ml_models from '$lib/config/supervised_ml_models.yml';
     import { Loadingbtn } from '$lib/components';
     import { RotateCcw, Save, Upload } from 'lucide-svelte/icons';
@@ -26,8 +34,9 @@
 
         console.log($hyperparameters, $parameters);
         // Set the default values if they don't exist
-        $hyperparameters = structuredClone($default_param_values.hyperparameters);
-        $parameters = structuredClone($default_param_values.parameters);
+        $hyperparameters[$model] ??= structuredClone($default_param_values.hyperparameters);
+        $fine_tuned_hyperparameters[$model] ??= structuredClone($default_param_values.hyperparameters);
+        $parameters[$model] ??= structuredClone($default_param_values.parameters);
         console.log($hyperparameters, $parameters);
 
         // Set the pre-trained model filename
@@ -39,36 +48,9 @@
     });
 
     const fit_function = async (e: Event) => {
-        console.log({ hyperparameters: $hyperparameters, parameters: $parameters });
-        const values = { ...$hyperparameters, ...$parameters };
+        // console.log({ hyperparameters: $hyperparameters[$model], parameters: $parameters[$model] });
+        const values = { ...$hyperparameters[$model], ...$parameters[$model] };
         const clonedValues = structuredClone(values);
-
-        if ($fine_tune_model) {
-            console.log('Fine tuning model');
-            console.log($hyperparameters);
-
-            let fine_tune_values: Record<string, any> = {};
-            Object.keys($hyperparameters).forEach(lb => {
-                const input = document.getElementById(`${unique_id}-${lb}`) as HTMLInputElement;
-                if (!input) return;
-                let val: (string | null)[] = [null];
-                if (input.value.includes(',')) {
-                    val = input.value.split(',').map(v => v.trim());
-                }
-
-                // console.log(lb);
-                if ($current_model.hyperparameters[lb]?.value?.options) {
-                    if ('float' in $current_model.hyperparameters[lb].value.options) {
-                        const float_input = document.getElementById(`${unique_id}-${lb}-float`) as HTMLInputElement;
-                        if (!float_input) return;
-                        val.push(`float: ${float_input.value}`);
-                    }
-                }
-                fine_tune_values[lb] = val;
-            });
-            console.log(fine_tune_values);
-            return;
-        }
 
         $pre_trained_filename = $pre_trained_filename.trim();
         $pre_trained_file_loc = $pre_trained_file_loc.trim();
@@ -153,7 +135,7 @@
 
         const save_content = JSON.stringify(
             {
-                values: { hyperparameters: $hyperparameters, parameters: $parameters },
+                values: { hyperparameters: $hyperparameters[$model], parameters: $parameters[$model] },
                 model: $model,
                 time: new Date().toISOString(),
             },
@@ -202,8 +184,8 @@
                 model: parsed.model,
             };
 
-            $hyperparameters = parsed.values.hyperparameters;
-            $parameters = parsed.values.parameters;
+            $hyperparameters[$model] = parsed.values.hyperparameters;
+            $parameters[$model] = parsed.values.parameters;
             toast.success('Parameters uploaded successfully');
         } catch (e) {
             toast.error('Error: Invalid JSON file');
@@ -211,8 +193,9 @@
     };
 
     const reset_parameters = () => {
-        $hyperparameters = structuredClone($default_param_values.hyperparameters);
-        $parameters = structuredClone($default_param_values.parameters);
+        uploadedfile = null;
+        $hyperparameters[$model] = structuredClone($default_param_values.hyperparameters);
+        $parameters[$model] = structuredClone($default_param_values.parameters);
     };
 
     // let toggle_browse_files = true;
@@ -255,7 +238,7 @@
                 </div>
 
                 <div class="flex gap-2 items-center">
-                    <Checkbox bind:value={$fine_tune_model} label="fine-tune parameters" />
+                    <Checkbox bind:value={$fine_tune_model} label="fine-tune hyperparameters" />
                     <div class="">
                         <Checkbox bind:value={bootstrap} label="bootstrap" check="checkbox" />
                         {#if bootstrap}
@@ -300,15 +283,15 @@
                 {/if}
             </div>
 
-            {#if $hyperparameters}
-                <ModelParameters key="hyperparameters" bind:values={$hyperparameters} />
+            {#if $hyperparameters?.[$model]}
+                <ModelParameters key="hyperparameters" bind:values={$hyperparameters[$model]} />
             {:else}
                 <Notification message="No hyperparameters found" type="error" />
             {/if}
         </CustomPanel>
         <CustomPanel title="More options">
-            {#if $parameters}
-                <ModelParameters key="parameters" bind:values={$parameters} />
+            {#if $parameters?.[$model]}
+                <ModelParameters key="parameters" bind:values={$parameters[$model]} />
             {:else}
                 <Notification message="No parameters found" type="error" />
             {/if}

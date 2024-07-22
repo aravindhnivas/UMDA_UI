@@ -5,6 +5,7 @@ linear_regression:
         fit_intercept:
             value: true
             description: 'Specifies whether to calculate the intercept for this model'
+            fine_tune: [true, false]
     parameters:
         copy_X:
             value: true
