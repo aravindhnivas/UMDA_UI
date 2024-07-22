@@ -54,10 +54,8 @@
     });
 
     const fit_function = async (e: Event) => {
-        const values = { ...$hyperparameters[$model], ...$parameters[$model] };
-        const clonedValues = structuredClone(values);
-
         let clonedFineTunedValues: Record<string, any> = {};
+
         if ($fine_tune_model) {
             if (!$fine_tuned_hyperparameters[$model]) {
                 toast.error('Error: Fine tuned hyperparameters not found');
@@ -84,7 +82,11 @@
                 console.log(f, val, clonedFineTunedValues[f]);
             });
             console.log('fine tuned values', clonedFineTunedValues);
-            return;
+            // return;
+            if (isEmpty(clonedFineTunedValues)) {
+                toast.error('Error: Fine tuned hyperparameters not found');
+                return;
+            }
         }
 
         $pre_trained_filename = $pre_trained_filename.trim();
@@ -106,30 +108,37 @@
             if (!overwrite) return;
         }
 
-        Object.entries(values).forEach(([key, value]) => {
-            if (value === 'float') {
-                const input = document.getElementById(`${unique_id}_${key}`) as HTMLInputElement;
+        const values = { ...$hyperparameters[$model], ...$parameters[$model] };
+        const clonedValues = structuredClone(values);
 
-                if (!input) {
-                    toast.error(`Error: ${key} input not found`);
-                    return;
+        if (!$fine_tune_model) {
+            Object.entries(values).forEach(([key, value]) => {
+                if (typeof value === 'string' && value === 'float') {
+                    const input = document.getElementById(`${unique_id}_${key}`) as HTMLInputElement;
+
+                    if (!input) {
+                        toast.error(`Error: ${key} input not found`);
+                        return;
+                    }
+                    const val = parseFloat(input.value);
+
+                    if (isNaN(val)) {
+                        toast.error(`Error: ${key} input is not a number. Please enter a valid number`);
+                        return;
+                    }
+
+                    clonedValues[key] = val;
+                } else if (typeof value === 'string' && value.trim() === '') {
+                    clonedValues[key] = null;
                 }
-                const val = parseFloat(input.value);
-
-                if (isNaN(val)) {
-                    toast.error(`Error: ${key} input is not a number. Please enter a valid number`);
-                    return;
-                }
-
-                clonedValues[key] = val;
-            } else if (typeof value === 'string' && value.trim() === '') {
-                clonedValues[key] = null;
-            }
-        });
+            });
+        }
 
         const args = {
             model: $model,
             parameters: clonedValues,
+            fine_tuned_hyperparameters: clonedFineTunedValues,
+            fine_tune_model: $fine_tune_model,
             vectors_file,
             labels_file,
             bootstrap,
