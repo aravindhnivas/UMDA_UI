@@ -54,6 +54,11 @@
     });
 
     const fit_function = async (e: Event) => {
+        if (!vectors_file || !labels_file) {
+            toast.error('Error: Please browse training vectors and labels files');
+            return;
+        }
+
         let clonedFineTunedValues: Record<string, any> = {};
 
         if ($fine_tune_model) {
