@@ -11,7 +11,7 @@
 
     export let id: string = 'main-data-container';
     export let display: string = 'none';
-    export let columns: string[] = [];
+    // export let columns: string[] = [];
 
     const model_and_pipeline_files = localWritable<{
         [name: string]: {
@@ -177,14 +177,14 @@
                 </div>
             </div>
 
-            {#if $auto_fetch_columns && !columns.length}
+            {#if $auto_fetch_columns && !data?.columns.length}
                 <span class="text-sm">Load file first!</span>
             {/if}
         </div>
 
         <div class="flex items-end gap-1">
             {#if $auto_fetch_columns}
-                <CustomSelect label="column name" bind:value={df_column} items={columns} />
+                <CustomSelect label="column name" bind:value={df_column} items={data?.columns} />
             {:else}
                 <div class="flex flex-col gap-1">
                     <span class="text-xs pl-1">column name</span>
