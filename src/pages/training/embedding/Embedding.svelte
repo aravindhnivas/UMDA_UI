@@ -129,11 +129,15 @@
         <h3>Loaded training file</h3>
         <div class="flex-center">
             <span class="text-sm">Filename: </span>
-            <div class="badge bg-indigo">{$training_file.filename}</div>
+            <div class="badge bg-indigo" class:bg-red={!$training_file.filename}>
+                {$training_file.filename || 'No file selected'}
+            </div>
         </div>
         <div class="flex-center">
             <span class="text-sm">Column:</span>
-            <div class="badge">{$training_column_name_X}</div>
+            <div class="badge bg-indigo" class:bg-red={!$training_column_name_X}>
+                {$training_column_name_X || 'Column not provided'}
+            </div>
         </div>
         <hr />
     {/if}
