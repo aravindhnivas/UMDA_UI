@@ -34,7 +34,7 @@
         $embedd_savefile = name.split('.').slice(0, -1).join('.') + `_${column_X_name}_${embedding_name}_embeddings`;
     };
 
-    $: get_embedd_savefile($training_file.filename, $embedding, $training_column_name_X);
+    $: get_embedd_savefile($training_file.filename, $training_column_name_X, $embedding);
 
     const use_PCA = localWritable('use_PCA', false);
 
