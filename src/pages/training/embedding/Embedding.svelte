@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { embedding, embeddings } from './stores';
+    import { embedding, embeddings, embedd_savefile } from './stores';
     import { training_file, training_column_name_X } from '../training_file/stores';
     import { NPARTITIONS } from '$lib/stores/system';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
@@ -8,6 +8,7 @@
     import { CheckCheck } from 'lucide-svelte/icons';
     import BrowseFile from '$lib/components/BrowseFile.svelte';
     import Molecule from '$lib/components/Molecule.svelte';
+    import Textfield from '@smui/textfield';
 
     export let id: string = 'main-data-container';
     export let display: string = 'none';
@@ -26,11 +27,19 @@
         };
     }
 
-    const auto_fetch_columns = localWritable('auto_fetch_columns', false);
+    const get_embedd_savefile = async () => {
+        if (!$training_file.filename) return;
+        const name = await path.basename($training_file.filename);
+        console.log(name);
+        $embedd_savefile =
+            name.split('.').slice(0, -1).join('.') + `_${$training_column_name_X}_${$embedding}_embeddings`;
+    };
+
+    $: if ($training_file.filename) get_embedd_savefile();
+
     const use_PCA = localWritable('use_PCA', false);
 
     let test_mode = import.meta.env.DEV;
-    // let test_mode = false;
     const test_smiles = localWritable('test_smiles', 'CCO');
     let test_result = '';
 
@@ -68,6 +77,7 @@
                 test_smiles: $test_smiles,
                 pretrained_model_location: $model_and_pipeline_files[$embedding].model_file,
                 PCA_pipeline_location: $use_PCA ? $model_and_pipeline_files[$embedding].pipeline_file : null,
+                embedd_savefile: $embedd_savefile,
             },
             general: true && !test_mode,
             target: e.target as HTMLButtonElement,
@@ -104,7 +114,7 @@
     {#if !test_mode}
         <hr />
 
-        <h3>Load data file</h3>
+        <h3>Loaded training file</h3>
         <div class="flex-center">
             <span class="text-sm">Filename: </span>
             <div class="badge bg-indigo">{$training_file.filename}</div>
@@ -171,22 +181,12 @@
             <span>PCA</span>
             <input type="checkbox" class="toggle" bind:checked={$use_PCA} />
         </div>
-
-        <div class="flex items-end gap-1">
-            <CustomSelect label="embedding" bind:value={$embedding} items={embeddings} />
-
-            <div class="flex flex-col gap-1">
-                <span class="text-xs pl-1">npartitions</span>
-                <input
-                    bind:value={$NPARTITIONS}
-                    type="number"
-                    class="input input-sm"
-                    placeholder="Enter dask npartitions"
-                />
-            </div>
-            <Loadingbtn name="Compute" callback={embedd_data} subprocess={true} />
-        </div>
     {/if}
+    <div class="grid gap-2 items-end" style="grid-auto-flow: column; grid-template-columns: auto 1fr auto;">
+        <CustomSelect label="embedding" bind:value={$embedding} items={embeddings} />
+        <Textfield label="embedd_savefile" bind:value={$embedd_savefile} />
+        <Loadingbtn name="Compute" callback={embedd_data} subprocess={true} />
+    </div>
 
     {#if dataFromPython}
         <div class=" flex flex-col gap-1">
