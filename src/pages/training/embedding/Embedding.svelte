@@ -37,6 +37,18 @@
 
     $: if ($training_file.filename) get_embedd_savefile();
 
+    function replaceFirstMatchingSubstring(original: string, substrings: string[], newName: string) {
+        for (let substring of substrings) {
+            if (original.includes(substring)) {
+                // Replace the first matching substring and return
+                return original.replace(substring, newName);
+            }
+        }
+        // Return the original string if no substring matches
+        return original;
+    }
+    $: if ($embedding) $embedd_savefile = replaceFirstMatchingSubstring($embedd_savefile, embeddings, $embedding);
+
     const use_PCA = localWritable('use_PCA', false);
 
     let test_mode = import.meta.env.DEV;
@@ -181,12 +193,12 @@
             <span>PCA</span>
             <input type="checkbox" class="toggle" bind:checked={$use_PCA} />
         </div>
+        <div class="grid gap-2 items-end" style="grid-auto-flow: column; grid-template-columns: auto 1fr auto;">
+            <CustomSelect label="embedding" bind:value={$embedding} items={embeddings} />
+            <Textfield label="embedd_savefile" bind:value={$embedd_savefile} />
+            <Loadingbtn name="Compute" callback={embedd_data} subprocess={true} />
+        </div>
     {/if}
-    <div class="grid gap-2 items-end" style="grid-auto-flow: column; grid-template-columns: auto 1fr auto;">
-        <CustomSelect label="embedding" bind:value={$embedding} items={embeddings} />
-        <Textfield label="embedd_savefile" bind:value={$embedd_savefile} />
-        <Loadingbtn name="Compute" callback={embedd_data} subprocess={true} />
-    </div>
 
     {#if dataFromPython}
         <div class=" flex flex-col gap-1">
