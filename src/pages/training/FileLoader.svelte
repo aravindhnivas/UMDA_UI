@@ -22,6 +22,8 @@
         shape: number;
     }
 
+    const dispatch = createEventDispatcher();
+
     const load_data = async () => {
         if (!filename) {
             toast.error('Please provide a filename');
@@ -55,6 +57,7 @@
         }
         data = dataFromPython;
         console.warn({ data, dataFromPython });
+        dispatch('load', data);
     };
     let loading = false;
     const rows = {
