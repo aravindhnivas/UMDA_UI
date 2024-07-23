@@ -1,10 +1,9 @@
 <script lang="ts">
     import Page from '$lib/layouts/Page.svelte';
     import { Pane } from 'svelte-splitpanes';
-    import { Embedding, Mol2VecTrain, VICGAETrain, PCATrain, MLmodelTrain } from '.';
+    import { Embedding, Mol2VecTrain, VICGAETrain, PCATrain, MLmodelTrain, TrainingFile } from '.';
 
-    const sidebar_items = ['Mol2Vec', 'VICGAE', 'PCA', 'Embedding'];
-    let active_item = sidebar_items[0];
+    let active_item = 'Mol2Vec';
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -30,6 +29,9 @@
                         </ul>
                     </details>
                 </li>
+                <li on:click={() => (active_item = 'training_file')}>
+                    <span class:active={active_item == 'training_file'}>Training File</span>
+                </li>
                 <li on:click={() => (active_item = 'Embedding')}>
                     <span class:active={active_item == 'Embedding'}>Embedding</span>
                 </li>
@@ -40,10 +42,11 @@
         </Pane>
         <Pane minSize={80}>
             <div class="overflow-auto max-h-[100%] p-2">
-                <Embedding display={active_item.toLowerCase() === 'embedding' ? '' : 'none'} />
                 <Mol2VecTrain display={active_item.toLowerCase() === 'mol2vec' ? '' : 'none'} />
                 <VICGAETrain display={active_item.toLowerCase() === 'vicgae' ? '' : 'none'} />
                 <PCATrain display={active_item.toLowerCase() === 'pca' ? '' : 'none'} />
+                <TrainingFile display={active_item.toLowerCase() === 'training_file' ? '' : 'none'} />
+                <Embedding display={active_item.toLowerCase() === 'embedding' ? '' : 'none'} />
                 <MLmodelTrain display={active_item.toLowerCase() === 'ml_model' ? '' : 'none'} />
             </div>
         </Pane>

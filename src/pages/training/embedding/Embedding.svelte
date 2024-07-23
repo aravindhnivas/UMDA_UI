@@ -1,6 +1,6 @@
 <script lang="ts">
     import { embedding, embeddings } from './stores';
-    import FileLoader from '../FileLoader.svelte';
+    import { training_file, training_column_name_X } from '../training_file/stores';
     import { NPARTITIONS } from '$lib/stores/system';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import computePy from '$lib/pyserver/computePy';
@@ -11,7 +11,6 @@
 
     export let id: string = 'main-data-container';
     export let display: string = 'none';
-    // export let columns: string[] = [];
 
     const model_and_pipeline_files = localWritable<{
         [name: string]: {
@@ -35,10 +34,8 @@
     const test_smiles = localWritable('test_smiles', 'CCO');
     let test_result = '';
 
-    let df_column = 'SMILES';
-
     const embedd_data = async (e: MouseEvent) => {
-        if (!test_mode && !$filename) {
+        if (!test_mode && !$training_file.filename) {
             toast.error('Please select a file');
             return;
         }
@@ -53,7 +50,7 @@
             return;
         }
 
-        if (!df_column) {
+        if (!$training_column_name_X) {
             toast.error('Please provide a column name');
             return;
         }
@@ -61,11 +58,11 @@
         dataFromPython = await computePy({
             pyfile: 'training.embedd_data',
             args: {
-                key,
-                filetype,
                 test_mode,
-                df_column,
-                filename: $filename,
+                key: $training_file.key,
+                filetype: $training_file.filetype,
+                filename: $training_file.filename,
+                df_column: $training_column_name_X,
                 embedding: $embedding,
                 npartitions: $NPARTITIONS,
                 test_smiles: $test_smiles,
@@ -92,11 +89,7 @@
             test_result += '\n]';
         }
     };
-    const filename = localWritable('data_filename', '');
     let dataFromPython;
-    let data: DataType | null = null;
-    let filetype = 'csv';
-    let key = 'data';
 </script>
 
 <div class="grid content-start gap-2" {id} style:display>
@@ -109,8 +102,18 @@
     </div>
 
     {#if !test_mode}
+        <hr />
+
         <h3>Load data file</h3>
-        <FileLoader bind:filename={$filename} bind:data bind:filetype bind:key />
+        <div class="flex-center">
+            <span class="text-sm">Filename: </span>
+            <div class="badge bg-indigo">{$training_file.filename}</div>
+        </div>
+        <div class="flex-center">
+            <span class="text-sm">Column:</span>
+            <div class="badge">{$training_column_name_X}</div>
+        </div>
+        <hr />
     {/if}
 
     <h3>Pre-trained model ({$embedding})</h3>
@@ -164,34 +167,12 @@
             </div>
         </div>
     {:else}
-        <div class="flex flex-col gap-1">
-            <div class="flex-center">
-                <div class="flex-center border-1 border-solid border-rounded p-1">
-                    <span>Auto-fetch column name</span>
-                    <input type="checkbox" class="toggle" bind:checked={$auto_fetch_columns} />
-                </div>
-
-                <div class="flex-center border-1 border-solid border-rounded p-1">
-                    <span>PCA</span>
-                    <input type="checkbox" class="toggle" bind:checked={$use_PCA} />
-                </div>
-            </div>
-
-            {#if $auto_fetch_columns && !data?.columns.length}
-                <span class="text-sm">Load file first!</span>
-            {/if}
+        <div class="flex-center border-1 border-solid border-rounded p-1 w-max">
+            <span>PCA</span>
+            <input type="checkbox" class="toggle" bind:checked={$use_PCA} />
         </div>
 
         <div class="flex items-end gap-1">
-            {#if $auto_fetch_columns}
-                <CustomSelect label="column name" bind:value={df_column} items={data?.columns} />
-            {:else}
-                <div class="flex flex-col gap-1">
-                    <span class="text-xs pl-1">column name</span>
-                    <input type="text" class="input input-sm" bind:value={df_column} placeholder="Enter column name" />
-                </div>
-            {/if}
-
             <CustomSelect label="embedding" bind:value={$embedding} items={embeddings} />
 
             <div class="flex flex-col gap-1">
@@ -220,8 +201,8 @@
 
             {#if dataFromPython.invalid_smiles?.length}
                 <h3>
-                    Could not compute embeddings for the following {df_column} (total: {dataFromPython.invalid_smiles
-                        .length})
+                    Could not compute embeddings for the following {$training_column_name_X} (total: {dataFromPython
+                        .invalid_smiles.length})
                 </h3>
                 <ul class="invalid_smi_list px-4">
                     {#each dataFromPython.invalid_smiles as smiles}
