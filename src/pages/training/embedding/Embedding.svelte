@@ -27,27 +27,14 @@
         };
     }
 
-    const get_embedd_savefile = async () => {
+    const get_embedd_savefile = async (filename: string, column_X_name: string, embedding_name: string) => {
         if (!$training_file.filename) return;
-        const name = await path.basename($training_file.filename);
-        console.log(name);
-        $embedd_savefile =
-            name.split('.').slice(0, -1).join('.') + `_${$training_column_name_X}_${$embedding}_embeddings`;
+        const name = await path.basename(filename);
+        // console.log(name);
+        $embedd_savefile = name.split('.').slice(0, -1).join('.') + `_${column_X_name}_${embedding_name}_embeddings`;
     };
 
-    $: if ($training_file.filename) get_embedd_savefile();
-
-    function replaceFirstMatchingSubstring(original: string, substrings: string[], newName: string) {
-        for (let substring of substrings) {
-            if (original.includes(substring)) {
-                // Replace the first matching substring and return
-                return original.replace(substring, newName);
-            }
-        }
-        // Return the original string if no substring matches
-        return original;
-    }
-    $: if ($embedding) $embedd_savefile = replaceFirstMatchingSubstring($embedd_savefile, embeddings, $embedding);
+    $: get_embedd_savefile($training_file.filename, $embedding, $training_column_name_X);
 
     const use_PCA = localWritable('use_PCA', false);
 
