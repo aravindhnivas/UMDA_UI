@@ -7,6 +7,7 @@
         default_param_values,
         fine_tune_model,
         fine_tuned_hyperparameters,
+        variable_type,
     } from './stores';
     import { NPARTITIONS } from '$lib/stores/system';
     import { embedd_savefile_path } from '../embedding/stores';
@@ -66,6 +67,10 @@
             return toast.error('Error: Training file not found');
         }
 
+        if (!$training_column_name_y) {
+            return toast.error('Error: Column Y not provided. Set it in the training file');
+        }
+
         let clonedFineTunedValues: Record<string, any> = {};
 
         if ($fine_tune_model) {
@@ -117,6 +122,7 @@
         const values = { ...$hyperparameters[$model], ...$parameters[$model] };
         const clonedValues = structuredClone(values);
 
+        console.log({ values, $variable_type });
         if (!$fine_tune_model) {
             Object.entries(values).forEach(([key, value]) => {
                 if (typeof value === 'string' && value === 'float') {
@@ -134,11 +140,23 @@
                     }
 
                     clonedValues[key] = val;
-                } else if (typeof value === 'string' && value.trim() === '') {
+                }
+
+                if (typeof value === 'string' && value.trim() === '') {
                     clonedValues[key] = null;
+                }
+
+                if ($variable_type[key] === 'float' && !isNaN(Number(clonedValues[key]))) {
+                    clonedValues[key] = parseFloat(clonedValues[key]);
+                }
+
+                if ($variable_type[key] === 'integer' && !isNaN(Number(clonedValues[key]))) {
+                    clonedValues[key] = parseInt(clonedValues[key]);
                 }
             });
         }
+
+        console.log(clonedValues);
 
         const args = {
             model: $model,
@@ -245,8 +263,6 @@
         $parameters[$model] = structuredClone($default_param_values.parameters);
     };
 
-    // let vectors_file = '';
-    // let labels_file = '';
     let bootstrap = false;
     let bootstrap_nsamples = 800;
     let test_size = 20;
@@ -254,6 +270,7 @@
     const kfold_nsamples = localWritable('kfold_nsamples', 5);
     const pre_trained_file_loc = localWritable('pre_trained_file_loc', '');
     const pre_trained_filename = localWritable('pre_trained_filename', '');
+
     $: if ($model) set_model_params();
 </script>
 
