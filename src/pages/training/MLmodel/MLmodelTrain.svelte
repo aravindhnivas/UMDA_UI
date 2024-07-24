@@ -8,6 +8,7 @@
         fine_tune_model,
         fine_tuned_hyperparameters,
     } from './stores';
+    import { embedd_savefile_path } from '../embedding/stores';
     import supervised_ml_models from '$lib/config/supervised_ml_models.yml';
     import { Loadingbtn } from '$lib/components';
     import { RotateCcw, Save, Upload } from 'lucide-svelte/icons';
@@ -20,6 +21,7 @@
     import Textfield from '@smui/textfield';
     import Tab, { Label } from '@smui/tab';
     import TabBar from '@smui/tab-bar';
+    import { training_column_name_y, training_file } from '../training_file/stores';
 
     export let id: string = 'ml_model-train-container';
     export let display: string = 'none';
@@ -175,13 +177,6 @@
 
         if (!saveloc) return;
         savedfile = saveloc;
-        // if (await fs.exists(saveloc)) {
-        //     const overwrite = await dialog.confirm(
-        //         'File already exists. Do you want to overwrite it?',
-        //         'Overwrite file',
-        //     );
-        //     if (!overwrite) return;
-        // }
 
         const save_content = JSON.stringify(
             {
@@ -248,33 +243,44 @@
         $parameters[$model] = structuredClone($default_param_values.parameters);
     };
 
-    // let toggle_browse_files = true;
     let vectors_file = '';
     let labels_file = '';
     let bootstrap = false;
-    // let fine_tune_mode = false;
-    // let more_options = false;
     let bootstrap_nsamples = 800;
-    const kfold_nsamples = localWritable('kfold_nsamples', 5);
     let test_size = 20;
+
+    const kfold_nsamples = localWritable('kfold_nsamples', 5);
     const pre_trained_file_loc = localWritable('pre_trained_file_loc', '');
     const pre_trained_filename = localWritable('pre_trained_filename', '');
     $: if ($model) set_model_params();
-    // console.log(supervised_ml_models);
 </script>
 
 <div {id} style:display class="grid content-start gap-2">
     <h2>ML model training</h2>
 
     <Accordion multiple>
-        <CustomPanel title="Browse training files">
-            <div class="flex gap-2">
-                <BrowseFile
-                    btn_name="Browse - X (.npy)"
-                    helper="embedded N dimension vectors"
-                    bind:filename={vectors_file}
-                />
-                <BrowseFile btn_name="Browse - Y" helper="single column 1-D labels" bind:filename={labels_file} />
+        <CustomPanel title="Loaded training file" open={true}>
+            <div class="grid gap-2">
+                <div class="flex-center">
+                    <span class="text-sm">Training file: </span>
+                    <div class="badge" class:bg-red={!$training_file.filename}>
+                        {$training_file.filename || 'No file selected'}
+                    </div>
+                </div>
+                <div class="flex-center">
+                    <span class="text-sm">Embedded vector file (train_X): </span>
+                    {#await $embedd_savefile_path then value}
+                        <div class="badge" class:bg-red={!$training_file.filename}>
+                            {value || 'No file selected'}
+                        </div>
+                    {/await}
+                </div>
+                <div class="flex-center">
+                    <span class="text-sm">Column (train_y):</span>
+                    <div class="badge" class:bg-red={!$training_column_name_y}>
+                        {$training_column_name_y || 'Column not provided'}
+                    </div>
+                </div>
             </div>
         </CustomPanel>
 
@@ -289,10 +295,6 @@
                 </div>
 
                 <div class="flex gap-2 items-center">
-                    <!-- <Checkbox bind:value={$fine_tune_model} label="fine-tune hyperparameters" />
-                    {#if $fine_tune_model}
-                        <Textfield bind:value={$kfold_nsamples} input$min="2" label="# Split (N-fold)" type="number" />
-                    {/if} -->
                     <div class="grid justify-items-end">
                         <Checkbox bind:value={$fine_tune_model} label="fine-tune hyperparameters" check="checkbox" />
                         {#if $fine_tune_model}
@@ -354,6 +356,7 @@
                 <Notification message="No hyperparameters found" type="error" />
             {/if}
         </CustomPanel>
+
         <CustomPanel title="More options">
             {#if $parameters?.[$model]}
                 <ModelParameters key="parameters" bind:values={$parameters[$model]} />
@@ -361,6 +364,7 @@
                 <Notification message="No parameters found" type="error" />
             {/if}
         </CustomPanel>
+
         <CustomPanel title="Save Model">
             <div class="grid gap-2">
                 <BrowseFile directory={true} bind:filename={$pre_trained_file_loc} label="Save trained model" />

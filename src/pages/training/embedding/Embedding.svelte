@@ -1,11 +1,11 @@
 <script lang="ts">
-    import { embedding, embeddings, embedd_savefile } from './stores';
+    import { embedding, embeddings, embedd_savefile, embedd_savefile_path } from './stores';
     import { training_file, training_column_name_X } from '../training_file/stores';
     import { NPARTITIONS } from '$lib/stores/system';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import computePy from '$lib/pyserver/computePy';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
-    import { CheckCheck } from 'lucide-svelte/icons';
+    import { CheckCheck, TriangleAlert } from 'lucide-svelte/icons';
     import BrowseFile from '$lib/components/BrowseFile.svelte';
     import Molecule from '$lib/components/Molecule.svelte';
     import Textfield from '@smui/textfield';
@@ -13,6 +13,7 @@
     export let id: string = 'main-data-container';
     export let display: string = 'none';
 
+    // $: console.log({ $embedd_savefile_path });
     const model_and_pipeline_files = localWritable<{
         [name: string]: {
             model_file: string;
@@ -38,7 +39,8 @@
 
     const use_PCA = localWritable('use_PCA', false);
 
-    let test_mode = import.meta.env.DEV;
+    // let test_mode = import.meta.env.DEV;
+    let test_mode = false;
     const test_smiles = localWritable('test_smiles', 'CCO');
     let test_result = '';
 
@@ -62,14 +64,10 @@
             toast.error('Please provide a column name');
             return;
         }
-        const embedd_savefile_path = await path.join(
-            await path.dirname($training_file.filename),
-            $embedd_savefile + '.npy',
-        );
-        console.log({ embedd_savefile_path });
-        if (await fs.exists(embedd_savefile_path)) {
+
+        if (await fs.exists(await $embedd_savefile_path)) {
             const overwrite = await dialog.confirm(
-                `embedd_savefile ${await path.basename(embedd_savefile_path)} already exists. Do you want to overwrite it ?`,
+                `embedd_savefile ${await path.basename(await $embedd_savefile_path)} already exists. Do you want to overwrite it ?`,
                 {
                     title: 'Overwrite ?',
                     type: 'warning',
@@ -77,7 +75,6 @@
             );
             if (!overwrite) return;
         }
-        // return;
 
         dataFromPython = await computePy({
             pyfile: 'training.embedd_data',
@@ -98,11 +95,11 @@
             target: e.target as HTMLButtonElement,
         });
 
-        console.log(dataFromPython);
-        // if ($use_PCA) vec = dataFromPython?.embedded_vector;
+        // console.log(dataFromPython);
+        let vec = dataFromPython?.embedded_vector[0] ?? dataFromPython?.embedded_vector;
+        if ($use_PCA) vec = dataFromPython?.embedded_vector;
 
         if (test_mode) {
-            const vec = dataFromPython?.embedded_vector[0] ?? dataFromPython?.embedded_vector;
             test_result = `Embedded vector: ${vec.length} dimensions`;
             console.log({ vec });
             test_result += '\n[';
@@ -134,7 +131,7 @@
 
         <h3>Loaded training file</h3>
         <div class="flex-center">
-            <span class="text-sm">Filename: </span>
+            <span class="text-sm">File: </span>
             <div class="badge bg-indigo" class:bg-red={!$training_file.filename}>
                 {$training_file.filename || 'No file selected'}
             </div>
@@ -203,9 +200,21 @@
             <span>PCA</span>
             <input type="checkbox" class="toggle" bind:checked={$use_PCA} />
         </div>
-        <div class="grid gap-2 items-end" style="grid-auto-flow: column; grid-template-columns: auto 1fr auto;">
+        <div class="grid gap-2 items-center" style="grid-auto-flow: column; grid-template-columns: auto 1fr auto;">
             <CustomSelect label="embedding" bind:value={$embedding} items={embeddings} />
-            <Textfield label="embedd_savefile" bind:value={$embedd_savefile} />
+            <div class="grid gap-1">
+                <Textfield label="embedd_savefile" bind:value={$embedd_savefile} />
+                {#await $embedd_savefile_path then file_path}
+                    {#await fs.exists(file_path) then value}
+                        {#if value}
+                            <span class="flex items-center gap-2 text-sm ml-auto">
+                                <TriangleAlert />
+                                <span>Embedded file exists</span>
+                            </span>
+                        {/if}
+                    {/await}
+                {/await}
+            </div>
             <Loadingbtn name="Compute" callback={embedd_data} subprocess={true} />
         </div>
     {/if}

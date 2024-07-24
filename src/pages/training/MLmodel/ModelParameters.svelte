@@ -1,9 +1,7 @@
 <script lang="ts">
     import { current_model, default_param_values, fine_tune_model, fine_tuned_hyperparameters, model } from './stores';
-    import Textfield from '@smui/textfield';
     import { validateInput } from '$lib/utils';
     import { Checkbox, CustomSelect } from '$lib/components';
-    import FineTuneTextfields from './FineTuneTextfields.svelte';
 
     export let values: Record<string, any>;
     export let key: 'hyperparameters' | 'parameters';
