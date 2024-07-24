@@ -69,7 +69,7 @@
         console.log({ embedd_savefile_path });
         if (await fs.exists(embedd_savefile_path)) {
             const overwrite = await dialog.confirm(
-                `File ${await path.basename(embedd_savefile_path)} already exists. Do you want to overwrite it ?`,
+                `embedd_savefile ${await path.basename(embedd_savefile_path)} already exists. Do you want to overwrite it ?`,
                 {
                     title: 'Overwrite ?',
                     type: 'warning',
