@@ -6,13 +6,16 @@ linear_regression:
             value: true
             description: 'Specifies whether to calculate the intercept for this model'
             fine_tune: 'true, false'
+            type: 'boolean'
     parameters:
         copy_X:
             value: true
             description: 'If True, X will be copied; else, it may be overwritten'
+            type: 'boolean'
         positive:
             value: false
             description: 'Specifies whether to enforce positive coefficients'
+            type: 'boolean'
 
 ridge:
     name: 'Ridge Regression'
@@ -22,26 +25,33 @@ ridge:
             value: 1.0
             description: 'Constant that multiplies the L2 term, controlling regularization strength; must be a positive float [0, Inf].  For numerical reasons, using alpha = 0 with the Ridge object is not advised. Instead, you should use the LinearRegression.'
             fine_tune: '0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000'
+            type: 'float'
 
     parameters:
         fit_intercept:
             value: true
             description: 'Specifies whether to calculate the intercept for this model. If set to false, no intercept will be used in calculations (i.e. X and y are expected to be centered).'
+            type: 'boolean'
         normalize:
             value: false
             description: 'Specifies whether to normalize the input data'
+            type: 'boolean'
         copy_X:
             value: true
             description: 'If True, X will be copied; else, it may be overwritten.'
+            type: 'boolean'
         max_iter:
             value: null
             description: 'Maximum number of iterations for conjugate gradient solver'
+            type: 'integer'
         tol:
             value: 1e-4
             description: 'The precision of the solution (coef_) is determined by tol which specifies a different convergence criterion for each solver'
+            type: 'float'
         positive:
             value: false
             description: 'Specifies whether to enforce positive coefficients'
+            type: 'boolean'
         solver:
             value:
                 default: 'auto'
@@ -54,6 +64,7 @@ ridge:
                     sag: 'Stochastic Average Gradient descent'
                     saga: 'SAGA solver'
             description: 'Solver to use in the computational routines'
+            type: 'string'
 
 svr:
     name: 'Support Vector Regression'
@@ -70,6 +81,7 @@ svr:
                     precomputed: 'Precomputed kernel'
             description: 'Specifies the kernel type to be used in the algorithm'
             fine_tune: 'linear, poly, rbf, sigmoid'
+            type: 'string'
         gamma:
             value:
                 default: 'scale'
@@ -77,40 +89,48 @@ svr:
                     scale: '1 / (n_features * X.var())'
                     auto: '1 / n_features'
                     float: 'must be non-negative'
-            description: Kernel coefficient for 'rbf', 'poly' and 'sigmoid'.
+            description: 'Kernel coefficient for rbf, poly and sigmoid.'
             fine_tune: 'scale, auto, 0.001, 0.01, 0.1, 1, 10, 100, 1000'
+            type: 'float'
         C:
             value: 1.0
             description: 'Regularization parameter'
             fine_tune: '0.001, 0.01, 0.1, 1, 10, 100, 1000'
+            type: 'float'
         epsilon:
             value: 0.1
             description: 'Epsilon in the epsilon-SVR model'
             fine_tune: '0.01, 0.1, 0.5, 1, 2, 5, 10'
+            type: 'float'
     parameters:
         degree:
             value: 3
             description: 'Degree of the polynomial kernel function (only for poly). Must be non-negative'
-
+            type: 'integer'
         coef0:
             value: 0.0
             description: 'Independent term in kernel function. It is only significant in poly and sigmoid.'
+            type: 'float'
         tol:
             value: 1e-3
             description: 'Tolerance for stopping criteria'
-
+            type: 'float'
         shrinking:
             value: true
             description: 'Specifies whether to use the shrinking heuristic'
+            type: 'boolean'
         cache_size:
             value: 200
             description: 'Size of the kernel cache in MB'
+            type: 'integer'
         verbose:
             value: false
             description: 'Specifies whether to enable verbose output'
+            type: 'boolean'
         max_iter:
             value: -1
             description: 'Hard limit on iterations within solver, or -1 for no limit'
+            type: 'integer'
 
 knn:
     name: 'K-Nearest Neighbors'
@@ -120,6 +140,7 @@ knn:
             value: 5
             description: 'Number of neighbors to use for kneighbors queries'
             fine_tune: '1, 3, 5, 10, 20, 50'
+            type: int
         weights:
             value:
                 default: 'uniform'
@@ -128,6 +149,7 @@ knn:
                     distance: 'Weight points by the inverse of their distance'
             description: 'Weight function used in prediction'
             fine_tune: 'uniform, distance'
+            type: str
         metric:
             value:
                 default: 'minkowski'
@@ -139,6 +161,7 @@ knn:
                     manhattan: 'Manhattan distance'
             description: 'Metric to use for distance computation'
             fine_tune: 'minkowski, cosine, euclidean, nan_euclidean, manhattan'
+            type: str
     parameters:
         algorithm:
             value:
@@ -149,15 +172,19 @@ knn:
                     kd_tree: 'KDTree algorithm'
                     brute: 'Brute-force search algorithm'
             description: 'Algorithm used to compute the nearest neighbors'
+            type: str
         leaf_size:
             value: 30
             description: 'Leaf size passed to BallTree or KDTree'
+            type: int
         p:
             value: 2
             description: 'Power parameter for the Minkowski metric'
+            type: int
         metric_params:
             value: null
             description: 'Additional keyword arguments for the metric function'
+            type: dict
 
 rfr:
     name: 'Random Forest Regression'
@@ -167,18 +194,22 @@ rfr:
             value: 100
             description: 'Number of trees in the forest'
             fine_tune: '10, 50, 100, 200, 500'
+            type: integer
         max_leaf_nodes:
             value: null
             description: 'Grow trees with max_leaf_nodes in best-first fashion'
             fine_tune: 'null, 5, 10, 20, 50, 100'
+            type: integer
         min_samples_leaf:
             value: 1
             description: 'Minimum number of samples required to be at a leaf node'
             fine_tune: '0.1, 0.3, 0.5, 0.7, 1'
+            type: float
         max_depth:
             value: null
             description: 'Maximum depth of the tree'
             fine_tune: '5, 10, 15, 20, 25'
+            type: integer
     parameters:
         criterion:
             value:
@@ -189,12 +220,15 @@ rfr:
                     friedman_mse: 'Mean squared error with improvement score by Friedman'
                     poisson: 'Mean squared error for Poisson distribution'
             description: 'Function to measure the quality of a split'
+            type: str
         min_samples_split:
             value: 2
             description: 'Minimum number of samples required to split an internal node'
+            type: int
         min_weight_fraction_leaf:
             value: 0.0
             description: 'Minimum weighted fraction of the sum total of weights required to be at a leaf node'
+            type: float
         max_features:
             value:
                 default: null
@@ -204,33 +238,39 @@ rfr:
                     null: 'n_features'
                     float: 'n_features'
             description: 'Number of features to consider when looking for the best split'
+            type: str
         min_impurity_decrease:
             value: 0.0
             description: 'A node will be split if this split induces a decrease of the impurity greater than or equal to this value'
-        min_impurity_split:
-            value: null
-            description: 'Threshold for early stopping in tree growth'
+            type: float
         bootstrap:
             value: true
             description: 'Whether bootstrap samples are used when building trees'
+            type: bool
         oob_score:
             value: false
             description: 'Whether to use out-of-bag samples to estimate the R^2 on unseen data'
+            type: bool
         verbose:
             value: 0
             description: 'Controls the verbosity when fitting and predicting'
+            type: int
         warm_start:
             value: false
             description: 'When set to True, reuse the solution of the previous call to fit and add more estimators to the ensemble'
+            type: bool
         ccp_alpha:
             value: 0.0
             description: 'Complexity parameter used for Minimal Cost-Complexity Pruning'
+            type: float
         max_samples:
             value: null
             description: 'If bootstrap is True, the number of samples to draw from X to train each base estimator'
+            type: null
         monotonic_cst:
             value: null
             description: 'List of constraints to impose monotonicity on features. 1: monotonically increasing, 0: no constraint, -1: monotonically decreasing'
+            type: null
 
 gbr:
     name: 'Gradient Boosting Regression'
@@ -240,26 +280,32 @@ gbr:
             value: 0.1
             description: 'Learning rate shrinks the contribution of each tree'
             fine_tune: '0.001, 0.01, 0.1, 0.5, 1'
+            type: float
         n_estimators:
             value: 100
             description: 'The number of boosting stages to perform'
             fine_tune: '10, 50, 100, 200, 500'
+            type: int
         min_samples_split:
             value: 2
             description: 'Minimum number of samples required to split an internal node'
             fine_tune: '0.1, 0.3, 0.5, 0.7, 1'
+            type: float
         min_samples_leaf:
             value: 1
             description: 'Minimum number of samples required to be at a leaf node'
             fine_tune: '0.1, 0.3, 0.5, 0.7, 1'
+            type: float
         subsample:
             value: 1.0
             description: 'The fraction of samples to be used for fitting the individual base learners'
             fine_tune: '0.1, 0.3, 0.5, 0.7, 1'
+            type: float
         max_depth:
             value: 3
             description: 'Maximum depth of the individual regression estimators'
             fine_tune: '3, 5, 7, 9, 11'
+            type: int
     parameters:
         loss:
             value:
@@ -270,6 +316,7 @@ gbr:
                     huber: 'Huber loss for robust regression'
                     quantile: 'Quantile regression'
             description: 'Loss function to be optimized'
+            type: str
         criterion:
             value:
                 default: 'friedman_mse'
@@ -277,15 +324,19 @@ gbr:
                     friedman_mse: 'Mean squared error with improvement score by Friedman'
                     squared_error: 'Mean squared error'
             description: 'Function to measure the quality of a split'
+            type: str
         min_weight_fraction_leaf:
             value: 0.0
             description: 'Minimum weighted fraction of the sum total of weights required to be at a leaf node'
+            type: float
         min_impurity_decrease:
             value: 0.0
             description: 'A node will be split if this split induces a decrease of the impurity greater than or equal to this value'
+            type: float
         init:
             value: null
             description: 'An estimator object that is used to compute the initial predictions'
+            type: null
         max_features:
             value:
                 default: null
@@ -295,30 +346,39 @@ gbr:
                     null: 'n_features'
                     float: 'n_features'
             description: 'Number of features to consider when looking for the best split'
+            type: str
         alpha:
             value: 0.9
             description: 'The alpha-quantile of the huber loss function and the quantile loss function'
+            type: float
         verbose:
             value: 0
             description: 'Controls the verbosity when fitting and predicting'
+            type: int
         max_leaf_nodes:
             value: null
             description: 'Grow trees with max_leaf_nodes in best-first fashion'
+            type: integer
         warm_start:
             value: false
             description: 'When set to True, reuse the solution of the previous call to fit and add more estimators to the ensemble'
+            type: bool
         validation_fraction:
             value: 0.1
             description: 'The proportion of training data to set aside as validation set for early stopping'
+            type: float
         n_iter_no_change:
             value: null
             description: 'Number of iterations with no improvement to wait before early stopping'
+            type: integer
         tol:
             value: 1e-4
             description: 'Tolerance for the early stopping criterion'
+            type: float
         ccp_alpha:
             value: 0.0
             description: 'Complexity parameter used for Minimal Cost-Complexity Pruning'
+            type: float
 
 gpr:
     name: 'Gaussian Process Regression'
@@ -328,23 +388,30 @@ gpr:
             value: 1e-10
             description: 'Value added to the diagonal of the kernel matrix during fitting'
             fine_tune: '1e-10, 1e-9, 1e-8, 1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1, 10, 100'
+            type: float
         n_restarts_optimizer:
             value: 0
             description: 'The number of restarts of the optimizer for finding the kernel parameters'
             fine_tune: '0, 1, 2, 3, 4, 5'
+            type: int
     parameters:
         kernel:
             value: null
             description: 'Kernel specifying the covariance function of the GP'
+            type: null
         optimizer:
             value: 'fmin_l_bfgs_b'
             description: 'The optimizer to use for optimizing the kernel parameters'
+            type: str
         normalize_y:
             value: false
             description: 'Whether to normalize the target values y by removing the mean and scaling to unit-variance. This is recommended for cases where zero-mean, unit-variance priors are used.'
+            type: bool
         copy_X_train:
             value: true
             description: 'If True, a persistent copy of the training data is stored in the object. Otherwise, just a reference to the training data is stored, which might cause predictions to change if the data is modified externally.'
+            type: bool
         n_targets:
             value: null
             description: 'The number of dimensions of the target values. Used to decide the number of outputs when sampling from the prior distributions (i.e. calling sample_y before fit). This parameter is ignored once fit has been called'
+            type: integer
