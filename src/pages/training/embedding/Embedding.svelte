@@ -96,10 +96,10 @@
         });
 
         console.log(dataFromPython);
-        let vec = dataFromPython?.embedded_vector;
-        if ($use_PCA) vec = dataFromPython?.embedded_vector;
+        // if (test_mode && !dataFromPython?.test_mode) return;
 
-        if (test_mode) {
+        if (test_mode && dataFromPython.test_mode) {
+            let vec = dataFromPython.test_mode.embedded_vector;
             test_result = `Embedded vector: ${vec.length} dimensions`;
             console.log({ vec });
             test_result += '\n[';
@@ -112,8 +112,22 @@
         }
     };
 
+    // {
+    //     "name": embedd_savefile.name,
+    //     "shape": vec_computed.shape[0],
+    //     "invalid_smiles": len(invalid_smiles),
+    //     "saved_file": str(embedd_savefile),
+    //     "computed_time": computed_time,
+    // }
     let dataFromPython: {
-        embedded_vector: number[];
+        test_mode?: { embedded_vector: number[] };
+        file_mode?: {
+            name: string;
+            shape: number;
+            invalid_smiles: number;
+            saved_file: string;
+            computed_time: string;
+        };
     };
 </script>
 
@@ -219,27 +233,27 @@
         </div>
     {/if}
 
-    {#if dataFromPython}
+    {#if dataFromPython?.file_mode}
+        {@const { invalid_smiles, saved_file, computed_time } = dataFromPython.file_mode}
+
         <div class=" flex flex-col gap-1">
-            {#if dataFromPython.saved_file}
+            {#if saved_file}
                 <div role="alert" class="alert alert-info p-2">
                     <CheckCheck />
-                    <span class="text-sm"
-                        >(Computed in {dataFromPython.computed_time}) File saved to: {dataFromPython.saved_file}</span
-                    >
+                    <span class="text-sm">(Computed in {computed_time}) File saved to: {saved_file}</span>
                 </div>
             {/if}
 
-            {#if dataFromPython.invalid_smiles?.length}
+            {#if invalid_smiles > 0}
                 <h3>
-                    Could not compute embeddings for the following {$training_column_name_X} (total: {dataFromPython
-                        .invalid_smiles.length})
+                    Could not compute embeddings for {invalid_smiles}
+                    {$training_column_name_X}
                 </h3>
-                <ul class="invalid_smi_list px-4">
-                    {#each dataFromPython.invalid_smiles as smiles}
+                <!-- <ul class="invalid_smi_list px-4">
+                    {#each invalid_smiles as smiles}
                         <li>{smiles}</li>
                     {/each}
-                </ul>
+                </ul> -->
             {/if}
         </div>
     {/if}
