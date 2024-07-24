@@ -43,7 +43,7 @@ ridge:
         max_iter:
             value: null
             description: 'Maximum number of iterations for conjugate gradient solver'
-            type: 'integer'
+            type: integer
         tol:
             value: 1e-4
             description: 'The precision of the solution (coef_) is determined by tol which specifies a different convergence criterion for each solver'
@@ -106,7 +106,7 @@ svr:
         degree:
             value: 3
             description: 'Degree of the polynomial kernel function (only for poly). Must be non-negative'
-            type: 'integer'
+            type: integer
         coef0:
             value: 0.0
             description: 'Independent term in kernel function. It is only significant in poly and sigmoid.'
@@ -122,7 +122,7 @@ svr:
         cache_size:
             value: 200
             description: 'Size of the kernel cache in MB'
-            type: 'integer'
+            type: integer
         verbose:
             value: false
             description: 'Specifies whether to enable verbose output'
@@ -130,7 +130,7 @@ svr:
         max_iter:
             value: -1
             description: 'Hard limit on iterations within solver, or -1 for no limit'
-            type: 'integer'
+            type: integer
 
 knn:
     name: 'K-Nearest Neighbors'
