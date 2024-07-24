@@ -5,14 +5,27 @@ type ParamValue = string | number | boolean | null | { [key: string]: string };
 interface CurrentModel {
     name: string;
     description: string;
-    hyperparameters: Record<string, { value: ParamValue; description: string; fine_tune: string }>;
-    parameters: Record<string, { value: ParamValue; description: string }>;
+    hyperparameters: Record<string, { value: ParamValue; description: string; fine_tune: string; type: string }>;
+    parameters: Record<string, { value: ParamValue; description: string; type: string }>;
 }
 
 export const model = localWritable('ml_model', 'ridge');
 
 export const current_model = derived(model, $model => {
     return supervised_ml_models[$model] as CurrentModel;
+});
+
+export const variable_type = derived(current_model, $current_model => {
+    const hyperparameters = $current_model.hyperparameters;
+    const parameters = $current_model.parameters;
+    return Object.keys({ ...hyperparameters, ...parameters }).reduce(
+        (acc, key) => {
+            const type = hyperparameters[key]?.type || parameters[key]?.type;
+            acc[key] = type;
+            return acc;
+        },
+        {} as Record<string, string>,
+    );
 });
 
 export const get_params_from_current_model = (key: 'hyperparameters' | 'parameters', data: CurrentModel) => {
