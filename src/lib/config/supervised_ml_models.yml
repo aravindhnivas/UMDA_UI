@@ -263,10 +263,10 @@ rfr:
             value: null
             description: 'If bootstrap is True, the number of samples to draw from X to train each base estimator'
             type: null
-        monotonic_cst:
-            value: null
-            description: 'List of constraints to impose monotonicity on features. 1: monotonically increasing, 0: no constraint, -1: monotonically decreasing'
-            type: null
+        # monotonic_cst:
+        #     value: null
+        #     description: 'List of constraints to impose monotonicity on features. 1: monotonically increasing, 0: no constraint, -1: monotonically decreasing'
+        #     type: null
 
 gbr:
     name: 'Gradient Boosting Regression'
