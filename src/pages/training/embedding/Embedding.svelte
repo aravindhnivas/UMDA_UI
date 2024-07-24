@@ -62,6 +62,22 @@
             toast.error('Please provide a column name');
             return;
         }
+        const embedd_savefile_path = await path.join(
+            await path.dirname($training_file.filename),
+            $embedd_savefile + '.npy',
+        );
+        console.log({ embedd_savefile_path });
+        if (await fs.exists(embedd_savefile_path)) {
+            const overwrite = await dialog.confirm(
+                `File ${await path.basename(embedd_savefile_path)} already exists. Do you want to overwrite it ?`,
+                {
+                    title: 'Overwrite ?',
+                    type: 'warning',
+                },
+            );
+            if (!overwrite) return;
+        }
+        // return;
 
         dataFromPython = await computePy({
             pyfile: 'training.embedd_data',
@@ -82,11 +98,11 @@
             target: e.target as HTMLButtonElement,
         });
 
-        // console.log(dataFromPython);
-        let vec = dataFromPython?.embedded_vector[0] ?? dataFromPython?.embedded_vector;
+        console.log(dataFromPython);
         // if ($use_PCA) vec = dataFromPython?.embedded_vector;
 
-        if (vec) {
+        if (test_mode) {
+            const vec = dataFromPython?.embedded_vector[0] ?? dataFromPython?.embedded_vector;
             test_result = `Embedded vector: ${vec.length} dimensions`;
             console.log({ vec });
             test_result += '\n[';
@@ -98,7 +114,10 @@
             test_result += '\n]';
         }
     };
-    let dataFromPython;
+
+    let dataFromPython: {
+        embedded_vector: number[] | number[][];
+    };
 </script>
 
 <div class="grid content-start gap-2" {id} style:display>
