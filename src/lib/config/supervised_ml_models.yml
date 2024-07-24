@@ -140,7 +140,7 @@ knn:
             value: 5
             description: 'Number of neighbors to use for kneighbors queries'
             fine_tune: '1, 3, 5, 10, 20, 50'
-            type: int
+            type: integer
         weights:
             value:
                 default: 'uniform'
@@ -176,11 +176,11 @@ knn:
         leaf_size:
             value: 30
             description: 'Leaf size passed to BallTree or KDTree'
-            type: int
+            type: integer
         p:
             value: 2
             description: 'Power parameter for the Minkowski metric'
-            type: int
+            type: integer
         metric_params:
             value: null
             description: 'Additional keyword arguments for the metric function'
@@ -224,7 +224,7 @@ rfr:
         min_samples_split:
             value: 2
             description: 'Minimum number of samples required to split an internal node'
-            type: int
+            type: integer
         min_weight_fraction_leaf:
             value: 0.0
             description: 'Minimum weighted fraction of the sum total of weights required to be at a leaf node'
@@ -254,7 +254,7 @@ rfr:
         verbose:
             value: 0
             description: 'Controls the verbosity when fitting and predicting'
-            type: int
+            type: integer
         warm_start:
             value: false
             description: 'When set to True, reuse the solution of the previous call to fit and add more estimators to the ensemble'
@@ -285,7 +285,7 @@ gbr:
             value: 100
             description: 'The number of boosting stages to perform'
             fine_tune: '10, 50, 100, 200, 500'
-            type: int
+            type: integer
         min_samples_split:
             value: 2
             description: 'Minimum number of samples required to split an internal node'
@@ -305,7 +305,7 @@ gbr:
             value: 3
             description: 'Maximum depth of the individual regression estimators'
             fine_tune: '3, 5, 7, 9, 11'
-            type: int
+            type: integer
     parameters:
         loss:
             value:
@@ -354,7 +354,7 @@ gbr:
         verbose:
             value: 0
             description: 'Controls the verbosity when fitting and predicting'
-            type: int
+            type: integer
         max_leaf_nodes:
             value: null
             description: 'Grow trees with max_leaf_nodes in best-first fashion'
@@ -393,7 +393,7 @@ gpr:
             value: 0
             description: 'The number of restarts of the optimizer for finding the kernel parameters'
             fine_tune: '0, 1, 2, 3, 4, 5'
-            type: int
+            type: integer
     parameters:
         kernel:
             value: null
