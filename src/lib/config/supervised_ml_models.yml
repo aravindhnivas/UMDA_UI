@@ -25,7 +25,7 @@ ridge:
             value: 1.0
             description: 'Constant that multiplies the L2 term, controlling regularization strength; must be a positive float [0, Inf].  For numerical reasons, using alpha = 0 with the Ridge object is not advised. Instead, you should use the LinearRegression.'
             fine_tune: '0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000'
-            type: 'float'
+            type: float
 
     parameters:
         fit_intercept:
@@ -47,7 +47,7 @@ ridge:
         tol:
             value: 1e-4
             description: 'The precision of the solution (coef_) is determined by tol which specifies a different convergence criterion for each solver'
-            type: 'float'
+            type: float
         positive:
             value: false
             description: 'Specifies whether to enforce positive coefficients'
@@ -64,7 +64,7 @@ ridge:
                     sag: 'Stochastic Average Gradient descent'
                     saga: 'SAGA solver'
             description: 'Solver to use in the computational routines'
-            type: 'string'
+            type: str
 
 svr:
     name: 'Support Vector Regression'
@@ -81,7 +81,7 @@ svr:
                     precomputed: 'Precomputed kernel'
             description: 'Specifies the kernel type to be used in the algorithm'
             fine_tune: 'linear, poly, rbf, sigmoid'
-            type: 'string'
+            type: str
         gamma:
             value:
                 default: 'scale'
@@ -91,17 +91,17 @@ svr:
                     float: 'must be non-negative'
             description: 'Kernel coefficient for rbf, poly and sigmoid.'
             fine_tune: 'scale, auto, 0.001, 0.01, 0.1, 1, 10, 100, 1000'
-            type: 'float'
+            type: float
         C:
             value: 1.0
             description: 'Regularization parameter'
             fine_tune: '0.001, 0.01, 0.1, 1, 10, 100, 1000'
-            type: 'float'
+            type: float
         epsilon:
             value: 0.1
             description: 'Epsilon in the epsilon-SVR model'
             fine_tune: '0.01, 0.1, 0.5, 1, 2, 5, 10'
-            type: 'float'
+            type: float
     parameters:
         degree:
             value: 3
@@ -110,11 +110,11 @@ svr:
         coef0:
             value: 0.0
             description: 'Independent term in kernel function. It is only significant in poly and sigmoid.'
-            type: 'float'
+            type: float
         tol:
             value: 1e-3
             description: 'Tolerance for stopping criteria'
-            type: 'float'
+            type: float
         shrinking:
             value: true
             description: 'Specifies whether to use the shrinking heuristic'
