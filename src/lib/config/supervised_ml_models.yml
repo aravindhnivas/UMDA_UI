@@ -32,10 +32,6 @@ ridge:
             value: true
             description: 'Specifies whether to calculate the intercept for this model. If set to false, no intercept will be used in calculations (i.e. X and y are expected to be centered).'
             type: bool
-        normalize:
-            value: false
-            description: 'Specifies whether to normalize the input data'
-            type: bool
         copy_X:
             value: true
             description: 'If True, X will be copied; else, it may be overwritten.'
