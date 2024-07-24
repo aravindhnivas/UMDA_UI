@@ -8,6 +8,7 @@
         fine_tune_model,
         fine_tuned_hyperparameters,
     } from './stores';
+    import { NPARTITIONS } from '$lib/stores/system';
     import { embedd_savefile_path } from '../embedding/stores';
     import supervised_ml_models from '$lib/config/supervised_ml_models.yml';
     import { Loadingbtn } from '$lib/components';
@@ -56,9 +57,13 @@
     });
 
     const fit_function = async (e: Event) => {
-        if (!vectors_file || !labels_file) {
-            toast.error('Error: Please browse training vectors and labels files');
-            return;
+        const vectors_file = await $embedd_savefile_path;
+        if (!(await fs.exists(vectors_file))) {
+            return toast.error('Error: Embeddings vector file not found');
+        }
+
+        if (!(await fs.exists($training_file.filename))) {
+            return toast.error('Error: Training file not found');
         }
 
         let clonedFineTunedValues: Record<string, any> = {};
@@ -68,18 +73,13 @@
                 toast.error('Error: Fine tuned hyperparameters not found');
                 return;
             }
+
             Object.keys($fine_tuned_hyperparameters[$model]).forEach(f => {
                 const val = structuredClone($fine_tuned_hyperparameters[$model][f]);
                 clonedFineTunedValues[f] = val.split(',').map(f => {
                     f = f.trim();
                     try {
-                        // console.log('parse check', f === 'true' || f === 'false' || 'null');
-                        // console.log('number check', !isNaN(Number(f)));
-                        // console.log('parsing', f);
-                        if (f === 'true' || f === 'false' || f === 'null') {
-                            // console.log('JSON parsing', f);
-                            return JSON.parse(f);
-                        }
+                        if (f === 'true' || f === 'false' || f === 'null') return JSON.parse(f);
                         if (!isNaN(Number(f))) return Number(f);
                         return f;
                     } catch (error) {
@@ -89,7 +89,6 @@
                 console.log(f, val, clonedFineTunedValues[f]);
             });
             console.log('fine tuned values', clonedFineTunedValues);
-            // return;
             if (isEmpty(clonedFineTunedValues)) {
                 toast.error('Error: Fine tuned hyperparameters not found');
                 return;
@@ -146,23 +145,26 @@
             parameters: clonedValues,
             fine_tuned_hyperparameters: clonedFineTunedValues,
             fine_tune_model: $fine_tune_model,
-            vectors_file,
-            labels_file,
             bootstrap,
             bootstrap_nsamples,
             kfold_nsamples,
             test_size: test_size / 100,
             pre_trained_file,
+            training_column_name_y: $training_column_name_y,
+            training_file: $training_file,
+            npartitions: $NPARTITIONS,
+            vectors_file,
         };
 
         console.log(args);
         // return;
-        await computePy({
+        const dataFromPython = await computePy({
             pyfile: 'training.ml_model',
             args,
             general: true,
             target: e.target as HTMLButtonElement,
         });
+        console.log(dataFromPython);
     };
 
     let savedfile: string;
@@ -243,8 +245,8 @@
         $parameters[$model] = structuredClone($default_param_values.parameters);
     };
 
-    let vectors_file = '';
-    let labels_file = '';
+    // let vectors_file = '';
+    // let labels_file = '';
     let bootstrap = false;
     let bootstrap_nsamples = 800;
     let test_size = 20;
@@ -270,7 +272,7 @@
                 <div class="flex-center">
                     <span class="text-sm">Embedded vector file (train_X): </span>
                     {#await $embedd_savefile_path then value}
-                        <div class="badge" class:bg-red={!$training_file.filename}>
+                        <div class="badge" class:bg-red={!value}>
                             {value || 'No file selected'}
                         </div>
                     {/await}
