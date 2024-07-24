@@ -40,7 +40,7 @@
     const use_PCA = localWritable('use_PCA', false);
 
     // let test_mode = import.meta.env.DEV;
-    let test_mode = false;
+    let test_mode = true;
     const test_smiles = localWritable('test_smiles', 'CCO');
     let test_result = '';
 
@@ -65,7 +65,7 @@
             return;
         }
 
-        if (await fs.exists(await $embedd_savefile_path)) {
+        if (!test_mode && (await fs.exists(await $embedd_savefile_path))) {
             const overwrite = await dialog.confirm(
                 `embedd_savefile ${await path.basename(await $embedd_savefile_path)} already exists. Do you want to overwrite it ?`,
                 {
@@ -95,8 +95,8 @@
             target: e.target as HTMLButtonElement,
         });
 
-        // console.log(dataFromPython);
-        let vec = dataFromPython?.embedded_vector[0] ?? dataFromPython?.embedded_vector;
+        console.log(dataFromPython);
+        let vec = dataFromPython?.embedded_vector;
         if ($use_PCA) vec = dataFromPython?.embedded_vector;
 
         if (test_mode) {
@@ -113,7 +113,7 @@
     };
 
     let dataFromPython: {
-        embedded_vector: number[] | number[][];
+        embedded_vector: number[];
     };
 </script>
 
