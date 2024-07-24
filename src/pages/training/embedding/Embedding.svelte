@@ -112,13 +112,6 @@
         }
     };
 
-    // {
-    //     "name": embedd_savefile.name,
-    //     "shape": vec_computed.shape[0],
-    //     "invalid_smiles": len(invalid_smiles),
-    //     "saved_file": str(embedd_savefile),
-    //     "computed_time": computed_time,
-    // }
     let dataFromPython: {
         test_mode?: { embedded_vector: number[] };
         file_mode?: {
@@ -251,7 +244,7 @@
                 </h3>
                 <ul class="invalid_smi_list px-4">
                     {#each invalid_smiles as smiles}
-                        <li>{smiles}</li>
+                        <li class="select-text">{smiles}</li>
                     {/each}
                 </ul>
             {/if}
