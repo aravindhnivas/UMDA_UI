@@ -6,16 +6,16 @@ linear_regression:
             value: true
             description: 'Specifies whether to calculate the intercept for this model'
             fine_tune: 'true, false'
-            type: 'boolean'
+            type: bool
     parameters:
         copy_X:
             value: true
             description: 'If True, X will be copied; else, it may be overwritten'
-            type: 'boolean'
+            type: bool
         positive:
             value: false
             description: 'Specifies whether to enforce positive coefficients'
-            type: 'boolean'
+            type: bool
 
 ridge:
     name: 'Ridge Regression'
@@ -31,15 +31,15 @@ ridge:
         fit_intercept:
             value: true
             description: 'Specifies whether to calculate the intercept for this model. If set to false, no intercept will be used in calculations (i.e. X and y are expected to be centered).'
-            type: 'boolean'
+            type: bool
         normalize:
             value: false
             description: 'Specifies whether to normalize the input data'
-            type: 'boolean'
+            type: bool
         copy_X:
             value: true
             description: 'If True, X will be copied; else, it may be overwritten.'
-            type: 'boolean'
+            type: bool
         max_iter:
             value: null
             description: 'Maximum number of iterations for conjugate gradient solver'
@@ -51,7 +51,7 @@ ridge:
         positive:
             value: false
             description: 'Specifies whether to enforce positive coefficients'
-            type: 'boolean'
+            type: bool
         solver:
             value:
                 default: 'auto'
@@ -118,7 +118,7 @@ svr:
         shrinking:
             value: true
             description: 'Specifies whether to use the shrinking heuristic'
-            type: 'boolean'
+            type: bool
         cache_size:
             value: 200
             description: 'Size of the kernel cache in MB'
@@ -126,7 +126,7 @@ svr:
         verbose:
             value: false
             description: 'Specifies whether to enable verbose output'
-            type: 'boolean'
+            type: bool
         max_iter:
             value: -1
             description: 'Hard limit on iterations within solver, or -1 for no limit'
