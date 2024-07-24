@@ -124,7 +124,7 @@
         file_mode?: {
             name: string;
             shape: number;
-            invalid_smiles: number;
+            invalid_smiles: number[];
             saved_file: string;
             computed_time: string;
         };
@@ -244,16 +244,16 @@
                 </div>
             {/if}
 
-            {#if invalid_smiles > 0}
+            {#if invalid_smiles.length > 0}
                 <h3>
-                    Could not compute embeddings for {invalid_smiles}
+                    Could not compute embeddings for {invalid_smiles.length}
                     {$training_column_name_X}
                 </h3>
-                <!-- <ul class="invalid_smi_list px-4">
+                <ul class="invalid_smi_list px-4">
                     {#each invalid_smiles as smiles}
                         <li>{smiles}</li>
                     {/each}
-                </ul> -->
+                </ul>
             {/if}
         </div>
     {/if}
