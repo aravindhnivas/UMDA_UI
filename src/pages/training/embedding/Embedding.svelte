@@ -242,7 +242,7 @@
                     Could not compute embeddings for {invalid_smiles.length}
                     {$training_column_name_X}
                 </h3>
-                <ul class="invalid_smi_list px-4">
+                <ul class="invalid_smi_list px-4 select-text">
                     {#each invalid_smiles as smiles}
                         <li class="select-text">{smiles}</li>
                     {/each}
