@@ -33,12 +33,17 @@ export default async function <T>({ e, target, pyfile, args, general }: Type) {
                     processDivGeneral.textContent = `${processDivGeneralNum + 1}`;
                 }
             }
-            dataFromPython = await computefromSubprocess<T>({
+            await computefromSubprocess<T>({
                 target,
                 general,
                 pyfile,
                 args,
             });
+
+            const saved_content = await fs.readTextFile(pyfile + '.json', {
+                dir: fs.BaseDirectory.AppLog,
+            });
+            return JSON.parse(saved_content);
         } else {
             if (!get(pyServerReady)) {
                 await fetchServerROOT();
