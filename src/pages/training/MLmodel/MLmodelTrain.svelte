@@ -482,7 +482,6 @@
                 {/if}
 
                 <div class="plot__div">
-                    <h2>Predction vs True</h2>
                     <div class="plot w-xl h-lg">
                         <Plot
                             data={plot_data}
