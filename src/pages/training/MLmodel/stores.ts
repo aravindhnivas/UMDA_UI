@@ -53,3 +53,45 @@ export const hyperparameters = writable<{ [name: string]: Record<string, string 
 export const parameters = writable<{ [name: string]: Record<string, string | boolean | number | null> }>({});
 export const fine_tuned_hyperparameters = writable<{ [name: string]: Record<string, string> }>({});
 export const fine_tune_model = writable(false);
+
+export const kfold_nsamples = localWritable('kfold_nsamples', 5);
+export const bootstrap_nsamples = localWritable('bootstrap_nsamples', 800);
+export const noise_scale = localWritable('noise_scale', 0.5);
+
+export const pre_trained_file_loc = localWritable('pre_trained_file_loc', '');
+export const pre_trained_filename = localWritable('pre_trained_filename', '');
+
+interface Results {
+    r2: number;
+    mse: number;
+    rmse: number;
+    mae: number;
+    y_pred: number[];
+    y_true: number[];
+    y_linear_fit: number[];
+    cv_results?: Record<string, any>;
+    best_params?: Record<string, string | number | boolean | null>;
+    best_score?: number;
+}
+
+export const results = writable<Results | null>(null);
+export const plot_data = derived(results, $results => {
+    if (!$results) return [];
+    const plot_data: Partial<Plotly.PlotData>[] = [
+        {
+            x: $results.y_true,
+            y: $results.y_pred,
+            mode: 'markers',
+            type: 'scatter',
+            name: 'Predicted',
+        },
+        {
+            x: $results.y_true,
+            y: $results.y_linear_fit,
+            mode: 'lines',
+            type: 'scatter',
+            name: 'Linear fit',
+        },
+    ];
+    return plot_data;
+});
