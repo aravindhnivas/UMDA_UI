@@ -186,7 +186,9 @@
         };
 
         console.log(args);
-        // return;
+        results = null;
+        plot_data = [];
+
         const dataFromPython = await computePy({
             pyfile: 'training.ml_model',
             args,
@@ -204,7 +206,11 @@
             try {
                 const saved_file_contents = await fs.readTextFile(result_file);
                 results = JSON.parse(saved_file_contents);
-                console.log('Results', results);
+                if (!results) {
+                    toast.error('Error: Results not found');
+                    return;
+                }
+
                 open_result_panel = true;
 
                 plot_data = [
@@ -231,7 +237,10 @@
         mae: number;
         y_pred: number[];
         y_true: number[];
-    };
+        cv_results?: Record<string, any>;
+        best_params?: Record<string, string | number | boolean | null>;
+        best_score?: number;
+    } | null = null;
 
     let open_result_panel = false;
     let savedfile: string;
@@ -460,6 +469,17 @@
                     <span>RMSE: {results.rmse}</span>
                     <span>MAE: {results.mae}</span>
                 </div>
+
+                {#if results?.best_params}
+                    <hr />
+                    <div class="grid gap-2">
+                        <h3>Best parameters</h3>
+                        {#each Object.entries(results.best_params) as [key, value]}
+                            <span>{key}: {value}</span>
+                        {/each}
+                        <span>Best score: {results.best_score}</span>
+                    </div>
+                {/if}
 
                 <div class="plot__div">
                     <h2>Predction vs True</h2>
