@@ -119,13 +119,23 @@
             if (!overwrite) return;
         }
 
-        const values = { ...$hyperparameters[$model], ...$parameters[$model] };
-        const clonedValues = structuredClone(values);
-
+        const values = structuredClone({ ...$hyperparameters[$model], ...$parameters[$model] });
+        let clonedValues: Record<string, string | boolean | number | null> = {};
         console.log({ values, $variable_type });
+
         if (!$fine_tune_model) {
             Object.entries(values).forEach(([key, value]) => {
-                if (typeof value === 'string' && value === 'float') {
+                // console.log(key, value, typeof value);
+                if (typeof value !== 'string') {
+                    if (value === undefined) {
+                        clonedValues[key] = null;
+                        return;
+                    }
+                    clonedValues[key] = value;
+                    return;
+                }
+
+                if (value === 'float') {
                     const input = document.getElementById(`${unique_id}_${key}`) as HTMLInputElement;
 
                     if (!input) {
@@ -138,26 +148,22 @@
                         toast.error(`Error: ${key} input is not a number. Please enter a valid number`);
                         return;
                     }
-
                     clonedValues[key] = val;
                 }
 
-                if (typeof value === 'string' && value.trim() === '') {
+                if (value.trim() === '') {
                     clonedValues[key] = null;
                 }
 
-                if ($variable_type[key] === 'float' && !isNaN(Number(clonedValues[key]))) {
-                    clonedValues[key] = parseFloat(clonedValues[key]);
-                }
-
-                if ($variable_type[key] === 'integer' && !isNaN(Number(clonedValues[key]))) {
-                    clonedValues[key] = parseInt(clonedValues[key]);
+                if (!isNaN(Number(value))) {
+                    if ($variable_type[key] === 'float') clonedValues[key] = parseFloat(value);
+                    else if ($variable_type[key] === 'integer') clonedValues[key] = parseInt(value);
                 }
             });
         }
 
-        console.log(clonedValues);
-
+        console.log({ clonedValues });
+        // return;
         const args = {
             model: $model,
             parameters: clonedValues,
