@@ -24,6 +24,7 @@
     import Tab, { Label } from '@smui/tab';
     import TabBar from '@smui/tab-bar';
     import { training_column_name_y, training_file } from '../training_file/stores';
+    import Plot from 'svelte-plotly.js';
 
     export let id: string = 'ml_model-train-container';
     export let display: string = 'none';
@@ -109,8 +110,10 @@
             return;
         }
 
-        const filename = $pre_trained_filename.split('.pkl')[0];
-        const pre_trained_file = await path.join($pre_trained_file_loc, filename + '.pkl');
+        const unique_spl_name = getID(5);
+
+        const filename = $pre_trained_filename.split('.pkl')[0] + `_${unique_spl_name}_`;
+        const pre_trained_file = await path.join($pre_trained_file_loc, filename);
 
         if (await fs.exists(pre_trained_file)) {
             const overwrite = await dialog.confirm(
@@ -190,9 +193,47 @@
             general: true,
             target: e.target as HTMLButtonElement,
         });
-        console.log(dataFromPython);
+
+        console.log({ dataFromPython });
+        console.log('Training completed');
+
+        const result_file = pre_trained_file + '.json';
+        console.log('Pre-trained file', result_file);
+        if (await fs.exists(result_file)) {
+            toast.success('Model trained successfully');
+            try {
+                const saved_file_contents = await fs.readTextFile(result_file);
+                results = JSON.parse(saved_file_contents);
+                console.log('Results', results);
+                open_result_panel = true;
+
+                plot_data = [
+                    {
+                        x: results.y_true,
+                        y: results.y_pred,
+                        mode: 'markers',
+                        type: 'scatter',
+                    },
+                ];
+            } catch (error) {
+                toast.error('Error saving results\n' + error);
+            }
+        } else {
+            toast.error('Error: Model not saved');
+        }
     };
 
+    let plot_data: Plotly.Data[] = [];
+    let results: {
+        r2: number;
+        mse: number;
+        rmse: number;
+        mae: number;
+        y_pred: number[];
+        y_true: number[];
+    };
+
+    let open_result_panel = false;
     let savedfile: string;
     let uploadedfile: { fullname: string; name: string; model: string } | null = null;
 
@@ -271,7 +312,7 @@
         $parameters[$model] = structuredClone($default_param_values.parameters);
     };
 
-    let bootstrap = false;
+    let bootstrap = true;
     let test_size = 20;
 
     const kfold_nsamples = localWritable('kfold_nsamples', 5);
@@ -410,6 +451,42 @@
                 <Textfield bind:value={$pre_trained_filename} label="save filename (.pkl)" />
             </div>
         </CustomPanel>
+
+        <CustomPanel title="Results" bind:open={open_result_panel}>
+            {#if results}
+                <div class="grid gap-2">
+                    <span>R2: {results.r2}</span>
+                    <span>MSE: {results.mse}</span>
+                    <span>RMSE: {results.rmse}</span>
+                    <span>MAE: {results.mae}</span>
+                </div>
+
+                <div class="plot__div">
+                    <h2>Predction vs True</h2>
+                    <div class="plot w-xl h-lg">
+                        <Plot
+                            data={plot_data}
+                            layout={{
+                                xaxis: { title: 'y_true' },
+                                yaxis: { title: 'y_pred' },
+                                margin: { t: 0 },
+                            }}
+                            fillParent={true}
+                            debounce={250}
+                        />
+                    </div>
+                </div>
+            {/if}
+        </CustomPanel>
     </Accordion>
     <Loadingbtn class="w-lg m-auto " name="Compute" callback={fit_function} subprocess={true} />
 </div>
+
+<style>
+    .plot__div {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(700px, 1fr));
+        margin-top: 1rem;
+    }
+</style>
