@@ -219,6 +219,14 @@
                         y: results.y_pred,
                         mode: 'markers',
                         type: 'scatter',
+                        name: 'Predicted',
+                    },
+                    {
+                        x: results.y_true,
+                        y: results.y_linear_fit,
+                        mode: 'lines',
+                        type: 'scatter',
+                        name: 'Linear fit',
                     },
                 ];
             } catch (error) {
@@ -229,7 +237,7 @@
         }
     };
 
-    let plot_data: Plotly.Data[] = [];
+    let plot_data: Partial<Plotly.PlotData>[] = [];
     let results: {
         r2: number;
         mse: number;
@@ -237,6 +245,7 @@
         mae: number;
         y_pred: number[];
         y_true: number[];
+        y_linear_fit: number[];
         cv_results?: Record<string, any>;
         best_params?: Record<string, string | number | boolean | null>;
         best_score?: number;
@@ -482,7 +491,7 @@
                 {/if}
 
                 <div class="plot__div">
-                    <div class="plot w-xl h-lg">
+                    <div class="plot w-2xl h-lg">
                         <Plot
                             data={plot_data}
                             layout={{
@@ -505,7 +514,7 @@
     .plot__div {
         display: grid;
         gap: 1rem;
-        grid-template-columns: repeat(auto-fill, minmax(700px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(900px, 1fr));
         margin-top: 1rem;
     }
 </style>
