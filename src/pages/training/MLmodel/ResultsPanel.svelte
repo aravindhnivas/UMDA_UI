@@ -4,28 +4,31 @@
     import Plot from 'svelte-plotly.js';
 </script>
 
-<CustomPanel title="Results">
-    {#if $results}
-        <div class="grid gap-2">
-            <span>R2: {$results.r2}</span>
-            <span>MSE: {$results.mse}</span>
-            <span>RMSE: {$results.rmse}</span>
-            <span>MAE: {$results.mae}</span>
-        </div>
-
-        {#if $results?.best_params}
-            <hr />
-            <div class="grid gap-2">
-                <h3>Best parameters</h3>
-                {#each Object.entries($results.best_params) as [key, value]}
-                    <span>{key}: {value}</span>
-                {/each}
-                <span>Best score: {$results.best_score}</span>
+<CustomPanel title="Results" open={true}>
+    <div class="grid gap-2">
+        {#if $results}
+            <div class="flex gap-2 items-center">
+                <span class="badge">R<sup>2</sup>: {$results.r2}</span>
+                <span class="badge">MSE: {$results.mse}</span>
+                <span class="badge">RMSE: {$results.rmse}</span>
+                <span class="badge">MAE: {$results.mae}</span>
             </div>
-        {/if}
 
-        <div class="plot__div">
-            <div class="plot w-2xl h-lg">
+            {#if $results?.best_params}
+                <hr />
+                <div class="grid gap-2">
+                    <h3>Best parameters</h3>
+                    <span class="text-sm">Best score: {$results.best_score}</span>
+                    <div class="flex gap-2">
+                        {#each Object.entries($results.best_params) as [key, value]}
+                            <span class="badge badge-info">{key}: {value}</span>
+                        {/each}
+                    </div>
+                </div>
+                <hr />
+            {/if}
+
+            <div class="plot h-lg min-w-xl">
                 <Plot
                     data={$plot_data}
                     layout={{
@@ -37,15 +40,6 @@
                     debounce={250}
                 />
             </div>
-        </div>
-    {/if}
+        {/if}
+    </div>
 </CustomPanel>
-
-<style>
-    .plot__div {
-        display: grid;
-        gap: 1rem;
-        grid-template-columns: repeat(auto-fill, minmax(900px, 1fr));
-        margin-top: 1rem;
-    }
-</style>
