@@ -33,17 +33,17 @@ export default async function <T>({ e, target, pyfile, args, general }: Type) {
                     processDivGeneral.textContent = `${processDivGeneralNum + 1}`;
                 }
             }
-            await computefromSubprocess<T>({
+            dataFromPython = await computefromSubprocess<T>({
                 target,
                 general,
                 pyfile,
                 args,
             });
 
-            const saved_content = await fs.readTextFile(pyfile + '.json', {
-                dir: fs.BaseDirectory.AppLog,
-            });
-            return JSON.parse(saved_content);
+            // const saved_content = await fs.readTextFile(pyfile + '.json', {
+            //     dir: fs.BaseDirectory.AppLog,
+            // });
+            // return JSON.parse(saved_content);
         } else {
             if (!get(pyServerReady)) {
                 await fetchServerROOT();
@@ -67,7 +67,6 @@ export default async function <T>({ e, target, pyfile, args, general }: Type) {
                 Alert.warn((dataFromPython as any).warnings);
             }
         }
-
         return Promise.resolve(dataFromPython);
     } catch (error) {
         Alert.error(error);
