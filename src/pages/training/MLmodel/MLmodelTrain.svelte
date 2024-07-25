@@ -170,13 +170,14 @@
             fine_tuned_hyperparameters: clonedFineTunedValues,
             fine_tune_model: $fine_tune_model,
             bootstrap,
-            bootstrap_nsamples,
-            kfold_nsamples,
-            test_size: test_size / 100,
+            bootstrap_nsamples: Number($bootstrap_nsamples),
+            noise_scale: Number($noise_scale),
+            kfold_nsamples: Number($kfold_nsamples),
+            test_size: Number(test_size) / 100,
             pre_trained_file,
             training_column_name_y: $training_column_name_y,
             training_file: $training_file,
-            npartitions: $NPARTITIONS,
+            npartitions: Number($NPARTITIONS),
             vectors_file,
         };
 
@@ -270,10 +271,12 @@
     };
 
     let bootstrap = false;
-    let bootstrap_nsamples = 800;
     let test_size = 20;
 
     const kfold_nsamples = localWritable('kfold_nsamples', 5);
+    const bootstrap_nsamples = localWritable('bootstrap_nsamples', 800);
+    const noise_scale = localWritable('noise_scale', 0.5);
+
     const pre_trained_file_loc = localWritable('pre_trained_file_loc', '');
     const pre_trained_filename = localWritable('pre_trained_filename', '');
 
@@ -334,7 +337,17 @@
                     <div class="grid justify-items-end">
                         <Checkbox bind:value={bootstrap} label="bootstrap" check="checkbox" />
                         {#if bootstrap}
-                            <Textfield bind:value={bootstrap_nsamples} label="Number of samples" type="number" />
+                            <div class="flex gap-2">
+                                <Textfield bind:value={$bootstrap_nsamples} label="Number of samples" type="number" />
+                                <Textfield
+                                    bind:value={$noise_scale}
+                                    label="noise"
+                                    type="number"
+                                    input$step="0.1"
+                                    input$min="0"
+                                    input$max="1"
+                                />
+                            </div>
                         {/if}
                     </div>
                 </div>
