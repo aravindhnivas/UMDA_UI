@@ -103,7 +103,6 @@
 
         if (!$fine_tune_model) {
             Object.entries(values).forEach(([key, value]) => {
-                // console.log(key, value, typeof value);
                 if (typeof value !== 'string') {
                     if (value === undefined) {
                         clonedValues[key] = null;
