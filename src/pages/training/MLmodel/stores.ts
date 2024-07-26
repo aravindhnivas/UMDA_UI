@@ -75,23 +75,5 @@ interface Results {
 }
 
 export const results = writable<Results | null>(null);
-export const plot_data = derived(results, $results => {
-    if (!$results) return [];
-    const plot_data: Partial<Plotly.PlotData>[] = [
-        {
-            x: $results.y_true,
-            y: $results.y_pred,
-            mode: 'markers',
-            type: 'scatter',
-            name: 'Predicted',
-        },
-        {
-            x: $results.y_true,
-            y: $results.y_linear_fit,
-            mode: 'lines',
-            type: 'scatter',
-            name: 'Linear fit',
-        },
-    ];
-    return plot_data;
-});
+// export const plot_data = derived(results, $results => {
+export const plot_data = writable<Partial<Plotly.PlotData>[]>();
