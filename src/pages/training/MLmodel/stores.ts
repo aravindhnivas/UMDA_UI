@@ -66,14 +66,18 @@ interface Results {
     mse: number;
     rmse: number;
     mae: number;
-    y_pred: number[];
-    y_true: number[];
-    y_linear_fit: number[];
-    cv_results?: Record<string, any>;
+    model: string;
+    bootstrap: boolean;
+    bootstrap_nsamples: number;
+    cv_scores: {
+        mean: string;
+        std: string;
+        scores: number[];
+    };
+    timeframe: string;
     best_params?: Record<string, string | number | boolean | null>;
     best_score?: number;
 }
 
 export const results = writable<Results | null>(null);
-// export const plot_data = derived(results, $results => {
-export const plot_data = writable<Partial<Plotly.PlotData>[]>();
+export const plot_data = writable<Partial<Plotly.PlotData>[]>([]);
