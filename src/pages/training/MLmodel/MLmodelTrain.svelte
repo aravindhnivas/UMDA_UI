@@ -12,6 +12,7 @@
         pre_trained_file_loc,
         pre_trained_filename,
         results,
+        plot_data,
     } from './stores';
     import { NPARTITIONS } from '$lib/stores/system';
     import { embedd_savefile_path } from '../embedding/stores';
@@ -172,6 +173,7 @@
         console.log('Training completed');
 
         const result_file = pre_trained_file + '.json';
+
         console.log('Pre-trained file', result_file);
         if (await fs.exists(result_file)) {
             toast.success('Model trained successfully');
@@ -184,6 +186,34 @@
                 }
             } catch (error) {
                 toast.error('Error saving results\n' + error);
+            }
+        } else {
+            toast.error('Error: Model not saved');
+        }
+        const data_file = pre_trained_file + '.dat.json';
+        if (await fs.exists(data_file)) {
+            toast.success('Model trained successfully');
+            try {
+                const saved_file_contents = await fs.readTextFile(data_file);
+                const parsed = JSON.parse(saved_file_contents);
+                $plot_data = [
+                    {
+                        x: parsed.y_true,
+                        y: parsed.y_pred,
+                        mode: 'markers',
+                        type: 'scatter',
+                        name: 'Predicted',
+                    },
+                    {
+                        x: parsed.y_true,
+                        y: parsed.y_linear_fit,
+                        mode: 'lines',
+                        type: 'scatter',
+                        name: 'Linear fit',
+                    },
+                ];
+            } catch (error) {
+                toast.error('Error reading plot data\n' + error);
             }
         } else {
             toast.error('Error: Model not saved');
