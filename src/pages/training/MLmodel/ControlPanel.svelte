@@ -21,9 +21,7 @@
         <div class="flex gap-2 items-center">
             <div class="grid justify-items-end">
                 <Checkbox bind:value={$fine_tune_model} label="fine-tune hyperparameters" check="checkbox" />
-                {#if $fine_tune_model}
-                    <Textfield bind:value={$kfold_nsamples} input$min="2" label="# Split (N-fold)" type="number" />
-                {/if}
+                <Textfield bind:value={$kfold_nsamples} input$min="2" label="CV (N-fold)" type="number" />
             </div>
 
             <div class="grid justify-items-end">
