@@ -39,8 +39,8 @@
 
     const use_PCA = localWritable('use_PCA', false);
 
-    // let test_mode = import.meta.env.DEV;
-    let test_mode = true;
+    let test_mode = import.meta.env.DEV;
+    // let test_mode = true;
     const test_smiles = localWritable('test_smiles', 'CCO');
     let test_result = '';
 
