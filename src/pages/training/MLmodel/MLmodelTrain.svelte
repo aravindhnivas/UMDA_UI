@@ -6,7 +6,7 @@
         fine_tune_model,
         fine_tuned_hyperparameters,
         variable_type,
-        kfold_nsamples,
+        cv_fold,
         bootstrap_nsamples,
         noise_scale,
         pre_trained_file_loc,
@@ -15,6 +15,9 @@
         plot_data,
         logYscale,
         scaleYdata,
+        cross_validation,
+        bootstrap,
+        test_size,
     } from './stores';
     import { embedding, use_PCA } from '../embedding/stores';
     import { NPARTITIONS } from '$lib/stores/system';
@@ -149,11 +152,12 @@
             parameters: clonedValues,
             fine_tuned_hyperparameters: clonedFineTunedValues,
             fine_tune_model: $fine_tune_model,
-            bootstrap,
+            bootstrap: $bootstrap,
             bootstrap_nsamples: Number($bootstrap_nsamples),
             noise_scale: Number($noise_scale),
-            kfold_nsamples: Number($kfold_nsamples),
-            test_size: Number(test_size) / 100,
+            cross_validation: $cross_validation,
+            cv_fold: Number($cv_fold),
+            test_size: Number($test_size) / 100,
             pre_trained_file,
             training_column_name_y: $training_column_name_y,
             training_file: $training_file,
@@ -178,7 +182,7 @@
         console.log({ dataFromPython });
         console.log('Training completed');
 
-        const result_file = pre_trained_file + '.json';
+        const result_file = pre_trained_file + '.results.json';
 
         console.log('Pre-trained file', result_file);
         if (await fs.exists(result_file)) {
@@ -225,9 +229,6 @@
             toast.error('Error: Model not saved');
         }
     };
-
-    let bootstrap = true;
-    let test_size = 20;
 </script>
 
 <div {id} style:display class="grid content-start gap-2">
@@ -235,7 +236,7 @@
     <div class="overflow-auto md:max-h-[80vh] sm:max-h-lg p-2">
         <Accordion multiple>
             <TrainingFilePanel />
-            <ControlPanel bind:test_size bind:bootstrap />
+            <ControlPanel />
             <ModelPanel />
             <MoreOptionsPanel />
             <SaveModelPanel />

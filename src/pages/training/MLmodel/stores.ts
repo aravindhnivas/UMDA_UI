@@ -56,8 +56,11 @@ export const fine_tune_model = writable(false);
 export const logYscale = writable(false);
 export const scaleYdata = writable(true);
 
-export const kfold_nsamples = localWritable('kfold_nsamples', 5);
+export const cross_validation = localWritable('cross_validation', true);
+export const cv_fold = localWritable('cv_fold', 5);
 export const bootstrap_nsamples = localWritable('bootstrap_nsamples', 800);
+export const bootstrap = localWritable('bootstrap', false);
+export const test_size = localWritable('test_size', 20);
 export const noise_scale = localWritable('noise_scale', 0.5);
 
 export const pre_trained_file_loc = localWritable('pre_trained_file_loc', '');
