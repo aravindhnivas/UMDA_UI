@@ -67,13 +67,16 @@ export const pre_trained_file_loc = localWritable('pre_trained_file_loc', '');
 export const pre_trained_filename = localWritable('pre_trained_filename', '');
 
 interface Results {
+    embedding: Embedding;
+    PCA: boolean;
+    data_size: number;
     r2: number;
     mse: number;
     rmse: number;
     mae: number;
     model: string;
     bootstrap: boolean;
-    bootstrap_nsamples: number;
+    bootstrap_nsamples?: number;
     cross_validation: boolean;
     cv_fold?: number;
     cv_scores?: {
