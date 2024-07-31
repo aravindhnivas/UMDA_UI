@@ -9,6 +9,8 @@
         pre_trained_filename,
     } from './stores';
 
+    import { embedding, use_PCA } from '../embedding/stores';
+
     const set_model_params = () => {
         console.log('Setting model params', $current_model, $model);
         if (!$model) return;

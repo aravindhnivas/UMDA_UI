@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { embedding, embeddings, embedd_savefile, embedd_savefile_path } from './stores';
+    import { embedding, embeddings, embedd_savefile, embedd_savefile_path, use_PCA } from './stores';
     import { training_file, training_column_name_X } from '../training_file/stores';
     import { NPARTITIONS } from '$lib/stores/system';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
@@ -28,16 +28,21 @@
         };
     }
 
-    const get_embedd_savefile = async (filename: string, column_X_name: string, embedding_name: string) => {
+    const get_embedd_savefile = async (
+        filename: string,
+        column_X_name: string,
+        embedding_name: string,
+        pca: boolean,
+    ) => {
         if (!$training_file.filename) return;
         const name = await path.basename(filename);
         // console.log(name);
-        $embedd_savefile = name.split('.').slice(0, -1).join('.') + `_${column_X_name}_${embedding_name}_embeddings`;
+        $embedd_savefile =
+            name.split('.').slice(0, -1).join('.') +
+            `_${column_X_name}_${embedding_name}_embeddings${pca ? '_with_PCA' : ''}`;
     };
 
-    $: get_embedd_savefile($training_file.filename, $training_column_name_X, $embedding);
-
-    const use_PCA = localWritable('use_PCA', false);
+    $: get_embedd_savefile($training_file.filename, $training_column_name_X, $embedding, $use_PCA);
 
     let test_mode = import.meta.env.DEV;
     // let test_mode = true;

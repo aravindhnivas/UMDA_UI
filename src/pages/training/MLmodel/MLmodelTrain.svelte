@@ -16,6 +16,7 @@
         logYscale,
         scaleYdata,
     } from './stores';
+    import { embedding, use_PCA } from '../embedding/stores';
     import { NPARTITIONS } from '$lib/stores/system';
     import { embedd_savefile_path } from '../embedding/stores';
     import { Loadingbtn } from '$lib/components';
@@ -143,7 +144,6 @@
         }
 
         console.log({ clonedValues });
-        // return;
         const args = {
             model: $model,
             parameters: clonedValues,
@@ -161,6 +161,8 @@
             vectors_file,
             logYscale: $logYscale,
             scaleYdata: $scaleYdata,
+            embedding: $embedding,
+            pca: $use_PCA,
         };
 
         console.log(args);
