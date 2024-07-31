@@ -74,7 +74,9 @@ interface Results {
     model: string;
     bootstrap: boolean;
     bootstrap_nsamples: number;
-    cv_scores: {
+    cross_validation: boolean;
+    cv_fold?: number;
+    cv_scores?: {
         mean: string;
         std: string;
         scores: number[];
