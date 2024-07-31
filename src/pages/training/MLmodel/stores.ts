@@ -1,14 +1,5 @@
 import supervised_ml_models from '$lib/config/supervised_ml_models.yml';
 
-type ParamValue = string | number | boolean | null | { [key: string]: string };
-
-interface CurrentModel {
-    name: string;
-    description: string;
-    hyperparameters: Record<string, { value: ParamValue; description: string; fine_tune: string; type: string }>;
-    parameters: Record<string, { value: ParamValue; description: string; type: string }>;
-}
-
 export const model = localWritable('ml_model', 'ridge');
 
 export const current_model = derived(model, $model => {
@@ -65,29 +56,6 @@ export const noise_scale = localWritable('noise_scale', 0.5);
 
 export const pre_trained_file_loc = localWritable('pre_trained_file_loc', '');
 export const pre_trained_filename = localWritable('pre_trained_filename', '');
-
-interface Results {
-    embedding: Embedding;
-    PCA: boolean;
-    data_size: number;
-    r2: number;
-    mse: number;
-    rmse: number;
-    mae: number;
-    model: string;
-    bootstrap: boolean;
-    bootstrap_nsamples?: number;
-    cross_validation: boolean;
-    cv_fold?: number;
-    cv_scores?: {
-        mean: string;
-        std: string;
-        scores: number[];
-    };
-    timeframe: string;
-    best_params?: Record<string, string | number | boolean | null>;
-    best_score?: number;
-}
 
 export const results = writable<Results | null>(null);
 export const plot_data = writable<Partial<Plotly.PlotData>[]>([]);
