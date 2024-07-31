@@ -53,6 +53,8 @@ export const hyperparameters = writable<{ [name: string]: Record<string, string 
 export const parameters = writable<{ [name: string]: Record<string, string | boolean | number | null> }>({});
 export const fine_tuned_hyperparameters = writable<{ [name: string]: Record<string, string> }>({});
 export const fine_tune_model = writable(false);
+export const logYscale = writable(false);
+export const scaleYdata = writable(true);
 
 export const kfold_nsamples = localWritable('kfold_nsamples', 5);
 export const bootstrap_nsamples = localWritable('bootstrap_nsamples', 800);

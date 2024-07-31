@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { fine_tune_model, kfold_nsamples, bootstrap_nsamples, noise_scale } from './stores';
+    import { fine_tune_model, logYscale, kfold_nsamples, bootstrap_nsamples, noise_scale, scaleYdata } from './stores';
     import { Checkbox } from '$lib/components';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import Textfield from '@smui/textfield';
@@ -18,7 +18,11 @@
             {/if}
         </div>
 
-        <div class="flex gap-2 items-center">
+        <div class="flex gap-2 items-center flex-wrap">
+            <div class="grid gap-2">
+                <Checkbox bind:value={$logYscale} label="log-yscale" check="checkbox" />
+                <Checkbox bind:value={$scaleYdata} label="scale-ydata" check="checkbox" />
+            </div>
             <div class="grid justify-items-end">
                 <Checkbox bind:value={$fine_tune_model} label="fine-tune hyperparameters" check="checkbox" />
                 <Textfield bind:value={$kfold_nsamples} input$min="2" label="CV (N-fold)" type="number" />

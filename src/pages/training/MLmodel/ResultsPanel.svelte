@@ -9,7 +9,7 @@
         {#if $results}
             <div class="flex gap-2 items-center">
                 <span class="badge">R<sup>2</sup>: {$results.r2}</span>
-                <span class="badge">CV - R<sup>2</sup>: {$results.cv_scores.mean} ({$results.cv_scores.std})</span>
+                <span class="badge">CV - R<sup>2</sup>: {$results.cv_scores?.mean} ({$results.cv_scores?.std})</span>
                 <span class="badge">MSE: {$results.mse}</span>
                 <span class="badge">RMSE: {$results.rmse}</span>
                 <span class="badge">MAE: {$results.mae}</span>

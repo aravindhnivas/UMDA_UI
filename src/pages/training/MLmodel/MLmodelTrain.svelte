@@ -13,6 +13,8 @@
         pre_trained_filename,
         results,
         plot_data,
+        logYscale,
+        scaleYdata,
     } from './stores';
     import { NPARTITIONS } from '$lib/stores/system';
     import { embedd_savefile_path } from '../embedding/stores';
@@ -157,6 +159,8 @@
             training_file: $training_file,
             npartitions: Number($NPARTITIONS),
             vectors_file,
+            logYscale: $logYscale,
+            scaleYdata: $scaleYdata,
         };
 
         console.log(args);
