@@ -29,9 +29,17 @@
     };
 </script>
 
-<button
+<!-- <button
     bind:this={btn}
     disabled={loading && !subprocess}
+    class="btn btn-sm ld-ext-right w-max {className} "
+    class:running={loading}
+    on:click={run_callback}
+> -->
+
+<button
+    bind:this={btn}
+    disabled={loading}
     class="btn btn-sm ld-ext-right w-max {className} "
     class:running={loading}
     on:click={run_callback}
