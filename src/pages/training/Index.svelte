@@ -2,6 +2,7 @@
     import Page from '$lib/layouts/Page.svelte';
     import { Pane } from 'svelte-splitpanes';
     import { Embedding, Mol2VecTrain, VICGAETrain, PCATrain, MLmodelTrain, TrainingFile } from '.';
+    import { ConstructionIcon } from 'lucide-svelte';
 
     let active_item = 'Mol2Vec';
 </script>
@@ -21,7 +22,10 @@
                                 <span class:active={active_item == 'Mol2Vec'}>Mol2Vec</span>
                             </li>
                             <li on:click={() => (active_item = 'VICGAE')}>
-                                <span class:active={active_item == 'VICGAE'}>VICGAE</span>
+                                <span class:active={active_item == 'VICGAE'}>
+                                    <span>VICGAE</span>
+                                    <ConstructionIcon />
+                                </span>
                             </li>
                             <li on:click={() => (active_item = 'PCA')}>
                                 <span class:active={active_item == 'PCA'}>PCA</span>
