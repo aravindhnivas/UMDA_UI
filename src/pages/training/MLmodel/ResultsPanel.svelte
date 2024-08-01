@@ -4,7 +4,7 @@
     import Plot from 'svelte-plotly.js';
 </script>
 
-<CustomPanel title="Results" open={true}>
+<CustomPanel title="Results {$results?.time ? `(completed in ${$results?.time})` : ''}" open={true}>
     <div class="grid gap-2">
         {#if $results}
             <div class="flex gap-2 items-center">
