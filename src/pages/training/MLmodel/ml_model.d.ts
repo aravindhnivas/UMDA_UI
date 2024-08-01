@@ -28,4 +28,5 @@ interface Results {
     timeframe: string;
     best_params?: Record<string, string | number | boolean | null>;
     best_score?: number;
+    time: string;
 }
