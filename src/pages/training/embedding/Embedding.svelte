@@ -125,13 +125,13 @@
                     toast.error('No data returned from python');
                     return;
                 }
-                const { invalid_smiles_file } = parsed_result;
-                const invalid_smiles = invalid_smiles_file ? await fs.readTextFile(invalid_smiles_file) : '';
-                dataFromPython = {};
-                dataFromPython.file_mode = {
-                    ...parsed_result,
-                    invalid_smiles: invalid_smiles.split('\n').filter((smiles: string) => smiles),
-                };
+                console.log({ parsed_result });
+                const { invalid_smiles_file } = parsed_result?.file_mode;
+                dataFromPython = parsed_result;
+                if (!dataFromPython?.file_mode) return;
+                const invalid_smiles = await fs.readTextFile(invalid_smiles_file);
+                console.log({ invalid_smiles });
+                dataFromPython.file_mode.invalid_smiles = invalid_smiles?.split('\n') || [];
                 console.log({ dataFromPython });
             } catch (error) {
                 if (error instanceof Error) toast.error(error.message);
@@ -144,7 +144,7 @@
         file_mode?: {
             name: string;
             shape: number;
-            invalid_smiles: number[];
+            invalid_smiles: string[];
             saved_file: string;
             computed_time: string;
         };
