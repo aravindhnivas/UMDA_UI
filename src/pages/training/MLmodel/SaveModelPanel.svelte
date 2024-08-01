@@ -6,7 +6,16 @@
     import { Checkbox } from '$lib/components';
 </script>
 
-<CustomPanel title="Save Model {$save_pretrained_model ? '' : '(NOT SAVING)'}">
+<CustomPanel>
+    <svelte:fragment slot="title">
+        <div class="flex-center">
+            <span>Save Model</span>
+
+            {#if !$save_pretrained_model}
+                <div class="badge badge-warning">NOT SAVING</div>
+            {/if}
+        </div>
+    </svelte:fragment>
     <div class="grid gap-2">
         <Checkbox bind:value={$save_pretrained_model} label="Save" check="checkbox" />
         <BrowseFile directory={true} bind:filename={$pre_trained_file_loc} label="Save trained model" />

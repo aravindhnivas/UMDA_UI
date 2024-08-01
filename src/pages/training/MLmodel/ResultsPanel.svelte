@@ -4,7 +4,20 @@
     import Plot from 'svelte-plotly.js';
 </script>
 
-<CustomPanel title="Results {$results?.time ? `(completed in ${$results?.time})` : ''}" open={true}>
+<CustomPanel open={true}>
+    <svelte:fragment slot="title">
+        <div class="flex-center">
+            <span>Results</span>
+            {#if $results}
+                <span class="badge badge-info">
+                    {$results?.time ? `completed in ${$results?.time}` : ''}
+                </span>
+            {:else}
+                <div class="badge badge-warning">NO RESULTS found</div>
+            {/if}
+        </div>
+    </svelte:fragment>
+
     <div class="grid gap-2">
         {#if $results}
             <div class="flex gap-2 items-center">
