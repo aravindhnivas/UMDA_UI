@@ -81,8 +81,10 @@
             if (!overwrite) return;
         }
 
+        const pyfile = 'training.embedd_data';
+
         dataFromPython = await computePy({
-            pyfile: 'training.embedd_data',
+            pyfile,
             args: {
                 test_mode,
                 key: $training_file.key,
@@ -101,7 +103,6 @@
         });
 
         console.log(dataFromPython);
-        // if (test_mode && !dataFromPython?.test_mode) return;
 
         if (test_mode && dataFromPython.test_mode) {
             let vec = dataFromPython.test_mode.embedded_vector;
@@ -114,6 +115,27 @@
                 test_result += '\n\t' + chunk.join(',\t');
             }
             test_result += '\n]';
+        } else {
+            try {
+                const results = await fs.readTextFile(pyfile + '.json', {
+                    dir: fs.BaseDirectory.AppLog,
+                });
+                const parsed_result = results ? JSON.parse(results) : null;
+                if (!parsed_result) {
+                    toast.error('No data returned from python');
+                    return;
+                }
+                const { invalid_smiles_file } = parsed_result;
+                const invalid_smiles = invalid_smiles_file ? await fs.readTextFile(invalid_smiles_file) : '';
+                dataFromPython = {};
+                dataFromPython.file_mode = {
+                    ...parsed_result,
+                    invalid_smiles: invalid_smiles.split('\n').filter((smiles: string) => smiles),
+                };
+                console.log({ dataFromPython });
+            } catch (error) {
+                if (error instanceof Error) toast.error(error.message);
+            }
         }
     };
 
