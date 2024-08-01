@@ -18,6 +18,7 @@
         cross_validation,
         bootstrap,
         test_size,
+        save_pretrained_model,
     } from './stores';
     import { embedding, use_PCA } from '../embedding/stores';
     import { NPARTITIONS } from '$lib/stores/system';
@@ -167,6 +168,7 @@
             scaleYdata: $scaleYdata,
             embedding: $embedding,
             pca: $use_PCA,
+            save_pretrained_model: $save_pretrained_model,
         };
 
         console.log(args);

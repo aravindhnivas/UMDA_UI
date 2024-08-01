@@ -53,6 +53,7 @@ export const bootstrap_nsamples = localWritable('bootstrap_nsamples', 800);
 export const bootstrap = localWritable('bootstrap', false);
 export const test_size = localWritable('test_size', 20);
 export const noise_scale = localWritable('noise_scale', 0.5);
+export const save_pretrained_model = localWritable('save_pretrained_model', true);
 
 export const pre_trained_file_loc = localWritable('pre_trained_file_loc', '');
 export const pre_trained_filename = localWritable('pre_trained_filename', '');
