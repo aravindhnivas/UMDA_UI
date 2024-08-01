@@ -81,8 +81,9 @@
             if (!overwrite) return;
         }
 
-        const pyfile = 'training.embedd_data';
+        dataFromPython = {};
 
+        const pyfile = 'training.embedd_data';
         dataFromPython = await computePy({
             pyfile,
             args: {
@@ -283,6 +284,7 @@
     .invalid_smi_list {
         list-style-type: none;
         max-height: 300px;
-        overflow-y: auto;
+        overflow: auto;
+        max-width: 60vw;
     }
 </style>
