@@ -132,7 +132,7 @@
                 if (!dataFromPython?.file_mode) return;
                 const invalid_smiles = await fs.readTextFile(invalid_smiles_file);
                 console.log({ invalid_smiles });
-                dataFromPython.file_mode.invalid_smiles = invalid_smiles?.split('\n') || [];
+                dataFromPython.file_mode.invalid_smiles = invalid_smiles?.split('\n').filter(Boolean) || [];
                 console.log({ dataFromPython });
             } catch (error) {
                 if (error instanceof Error) toast.error(error.message);
