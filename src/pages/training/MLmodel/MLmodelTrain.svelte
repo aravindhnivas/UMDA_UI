@@ -109,45 +109,43 @@
         let clonedValues: Record<string, string | boolean | number | null> = {};
         console.log({ values, $variable_type });
 
-        if (!$fine_tune_model) {
-            Object.entries(values).forEach(([key, value]) => {
-                if (typeof value !== 'string') {
-                    if (value === undefined) {
-                        clonedValues[key] = null;
-                        return;
-                    }
-                    clonedValues[key] = value;
+        Object.entries(values).forEach(([key, value]) => {
+            if (typeof value !== 'string') {
+                if (value === undefined) {
+                    clonedValues[key] = null;
                     return;
                 }
+                clonedValues[key] = value;
+                return;
+            }
 
-                if (value === 'float') {
-                    const input = document.getElementById(`${unique_id}_${key}`) as HTMLInputElement;
+            if (value === 'float') {
+                const input = document.getElementById(`${unique_id}_${key}`) as HTMLInputElement;
 
-                    if (!input) {
-                        toast.error(`Error: ${key} input not found`);
-                        return;
-                    }
-                    const val = parseFloat(input.value);
-
-                    if (isNaN(val)) {
-                        toast.error(`Error: ${key} input is not a number. Please enter a valid number`);
-                        return;
-                    }
-                    clonedValues[key] = val;
+                if (!input) {
+                    toast.error(`Error: ${key} input not found`);
+                    return;
                 }
+                const val = parseFloat(input.value);
 
-                if (value.trim() === '') {
-                    clonedValues[key] = null;
+                if (isNaN(val)) {
+                    toast.error(`Error: ${key} input is not a number. Please enter a valid number`);
+                    return;
                 }
+                clonedValues[key] = val;
+            }
 
-                if (!isNaN(Number(value))) {
-                    if ($variable_type[key] === 'float') clonedValues[key] = parseFloat(value);
-                    else if ($variable_type[key] === 'integer') clonedValues[key] = parseInt(value);
-                }
-            });
-        }
+            if (value.trim() === '') {
+                clonedValues[key] = null;
+            }
 
+            if (!isNaN(Number(value))) {
+                if ($variable_type[key] === 'float') clonedValues[key] = parseFloat(value);
+                else if ($variable_type[key] === 'integer') clonedValues[key] = parseInt(value);
+            }
+        });
         console.log({ clonedValues });
+
         const args = {
             model: $model,
             parameters: clonedValues,
