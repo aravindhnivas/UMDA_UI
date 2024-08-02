@@ -8,10 +8,10 @@
     export { className as class };
 </script>
 
-<div class="flex flex-col gap-1 min-w-[100px] max-w-lg">
+<div class="flex flex-col gap-1 {className}">
     <span class="text-xs pl-1">{label}</span>
 
-    <select class="select select-sm select-bordered w-max {className}" bind:value on:change {disabled}>
+    <select class="select select-sm select-bordered" bind:value on:change {disabled}>
         {#if !label}
             <option disabled selected>embedding</option>
         {/if}
