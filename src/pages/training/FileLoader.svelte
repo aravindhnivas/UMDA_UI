@@ -94,14 +94,7 @@
 </div>
 <div class="flex gap-1 items-end">
     <CustomSelect label="where" bind:value={rows.where} items={['head', 'tail']} />
-    <CustomInput
-        class="w-[150px]"
-        bind:value={rows.value}
-        label="# Rows"
-        type="number"
-        max={rows.max}
-        on:change={() => load_data()}
-    />
+    <CustomInput bind:value={rows.value} label="# Rows" type="number" max={rows.max} on:change={() => load_data()} />
     <Loadingbtn bind:loading name="load file" callback={load_data} />
 </div>
 

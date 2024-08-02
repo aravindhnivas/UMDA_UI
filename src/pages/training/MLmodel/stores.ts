@@ -49,7 +49,9 @@ export const scaleYdata = writable(true);
 
 export const cross_validation = localWritable('cross_validation', true);
 export const cv_fold = localWritable('cv_fold', 5);
-export const bootstrap_nsamples = localWritable('bootstrap_nsamples', 800);
+export const halving_factor = localWritable('halving_factor', 3);
+export const randomzied_gridsearch_niter = localWritable<number>('randomzied_gridsearch_niter', 10);
+export const bootstrap_nsamples = localWritable<number>('bootstrap_nsamples', 800);
 export const bootstrap = localWritable('bootstrap', false);
 export const test_size = localWritable('test_size', 20);
 export const grid_search_method = localWritable('grid_search_method', 'RandomizedSearchCV');

@@ -1,7 +1,7 @@
 import { training_file } from '../training_file/stores';
 
 export const embeddings = ['mol2vec', 'VICGAE'];
-export const embedding = writable<Embedding>('mol2vec');
+export const embedding = localWritable<Embedding>('embedding', 'mol2vec');
 export const embedd_savefile = writable<string>('');
 
 export const default_pretrained_modes = writable<{ [key: string]: boolean }>({

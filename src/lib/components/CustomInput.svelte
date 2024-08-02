@@ -6,13 +6,13 @@
     export { className as class };
 </script>
 
-<div class="flex flex-col gap-1">
+<div class="grid {className}">
     {#if label}
         <span class="text-xs pl-1">{label}</span>
     {/if}
 
-    <input class="input input-sm {className}" bind:value {...$$restProps} on:change />
+    <input class="input input-sm" bind:value {...$$restProps} on:change />
     {#if helper}
-        <span class="text-xs m-auto">{label}</span>
+        <span class="text-xs m-auto">{helper}</span>
     {/if}
 </div>

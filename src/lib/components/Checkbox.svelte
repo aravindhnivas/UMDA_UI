@@ -14,26 +14,17 @@
     }
 </script>
 
-<div class="comp__div form-control w-max {bordered && 'border-solid border-black border-1 rounded-md'} {className}">
-    <label class="label cursor-pointer gap-2 flex">
-        {#if text_position === 'left'}
-            <span class="label-text">{label}</span>
-        {/if}
-        <input type="checkbox" class={check} bind:checked={value} {disabled} />
-        {#if text_position === 'right'}
-            <span class="label-text">{label}</span>
-        {/if}
-    </label>
+<div class="flex gap-2 items-center {bordered ? 'border-solid border-black border-1 rounded-md' : ''} {className}">
+    {#if text_position === 'left'}
+        <span class="label-text">{label}</span>
+    {/if}
+    <input type="checkbox" class={check} bind:checked={value} {disabled} />
+    {#if text_position === 'right'}
+        <span class="label-text">{label}</span>
+    {/if}
 </div>
 
-<style lang="scss">
-    .comp__div {
-        justify-content: center;
-        label {
-            padding: 0 0.2rem;
-        }
-    }
-
+<style>
     input.checkbox {
         border: solid 1px #000;
     }

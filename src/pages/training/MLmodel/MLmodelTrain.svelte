@@ -20,6 +20,8 @@
         test_size,
         save_pretrained_model,
         grid_search_method,
+        randomzied_gridsearch_niter,
+        halving_factor,
     } from './stores';
     import { embedding, use_PCA } from '../embedding/stores';
     import { NPARTITIONS } from '$lib/stores/system';
@@ -34,6 +36,7 @@
     import SaveModelPanel from './SaveModelPanel.svelte';
     import ResultsPanel from './ResultsPanel.svelte';
     import Effects from './Effects.svelte';
+    import { Grid } from 'lucide-svelte';
 
     export let id: string = 'ml_model-train-container';
     export let display: string = 'none';
@@ -147,6 +150,11 @@
         });
         console.log({ clonedValues });
 
+        const grid_search_parameters = {
+            n_iter: Number($randomzied_gridsearch_niter),
+            halving_factor: Number($halving_factor),
+        };
+
         const args = {
             model: $model,
             parameters: clonedValues,
@@ -159,6 +167,7 @@
             cv_fold: Number($cv_fold),
             test_size: Number($test_size) / 100,
             grid_search_method: $grid_search_method,
+            grid_search_parameters,
             pre_trained_file,
             training_column_name_y: $training_column_name_y,
             training_file: $training_file,
