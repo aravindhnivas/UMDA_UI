@@ -27,7 +27,7 @@
 
         <div class="flex gap-2 items-center flex-wrap justify-items-end">
             <div class="flex flex-wrap gap-2">
-                {#if $cross_validation}
+                {#if $cross_validation || $fine_tune_model}
                     <Textfield bind:value={$cv_fold} input$min="2" label="CV (N-fold)" type="number" />
                 {/if}
 
