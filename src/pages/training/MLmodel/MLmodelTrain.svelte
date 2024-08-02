@@ -19,6 +19,7 @@
         bootstrap,
         test_size,
         save_pretrained_model,
+        grid_search_method,
     } from './stores';
     import { embedding, use_PCA } from '../embedding/stores';
     import { NPARTITIONS } from '$lib/stores/system';
@@ -157,6 +158,7 @@
             cross_validation: $cross_validation,
             cv_fold: Number($cv_fold),
             test_size: Number($test_size) / 100,
+            grid_search_method: $grid_search_method,
             pre_trained_file,
             training_column_name_y: $training_column_name_y,
             training_file: $training_file,

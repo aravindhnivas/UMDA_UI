@@ -9,10 +9,20 @@
         cross_validation,
         bootstrap,
         test_size,
+        grid_search_method,
     } from './stores';
-    import { Checkbox } from '$lib/components';
+    import { Checkbox, CustomSelect } from '$lib/components';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import Textfield from '@smui/textfield';
+
+    const grid_search_methods = [
+        'GridSearchCV',
+        'RandomizedSearchCV',
+        'HalvingGridSearchCV',
+        'HalvingRandomSearchCV',
+        'DaskGridSearchCV',
+        'DaskRandomSearchCV',
+    ];
 </script>
 
 <CustomPanel title="Control" open={true}>
@@ -27,6 +37,7 @@
 
         <div class="flex gap-2 items-center flex-wrap justify-items-end">
             <div class="flex flex-wrap gap-2">
+                <CustomSelect label="Grid search method" items={grid_search_methods} bind:value={$grid_search_method} />
                 {#if $cross_validation || $fine_tune_model}
                     <Textfield bind:value={$cv_fold} input$min="2" label="CV (N-fold)" type="number" />
                 {/if}
