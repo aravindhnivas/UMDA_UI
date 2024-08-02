@@ -34,7 +34,7 @@
         embedding_name: string,
         pca: boolean,
     ) => {
-        if (!$training_file.filename) return;
+        if (!filename) return;
         const name = await path.basename(filename);
         // console.log(name);
         $embedd_savefile =

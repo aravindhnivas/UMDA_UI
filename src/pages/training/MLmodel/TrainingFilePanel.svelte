@@ -22,10 +22,8 @@
         {/await}
 
         <div class="col-span-1">Column (train_y):</div>
-        {#await path.basename($training_column_name_y) then name}
-            <div class="badge col-span-3" class:bg-red={!$training_column_name_y}>
-                {name || 'Column not provided'}
-            </div>
-        {/await}
+        <div class="badge col-span-3" class:bg-red={!$training_column_name_y}>
+            {$training_column_name_y || 'Column not provided'}
+        </div>
     </div>
 </CustomPanel>
