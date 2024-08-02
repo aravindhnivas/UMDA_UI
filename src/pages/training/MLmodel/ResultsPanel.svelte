@@ -32,6 +32,7 @@
                 <span class="badge">RMSE: {$results.rmse}</span>
                 <span class="badge">MAE: {$results.mae}</span>
             </div>
+            <span class="badge badge-info"># data: {$results?.data_size}</span>
 
             {#if $results?.best_params}
                 <hr />

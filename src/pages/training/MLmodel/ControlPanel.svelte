@@ -4,7 +4,7 @@
         logYscale,
         cv_fold,
         bootstrap_nsamples,
-        noise_scale,
+        noise_percentage,
         scaleYdata,
         cross_validation,
         bootstrap,
@@ -47,12 +47,12 @@
                     <div class="flex gap-2">
                         <Textfield bind:value={$bootstrap_nsamples} label="Number of samples" type="number" />
                         <Textfield
-                            bind:value={$noise_scale}
-                            label="noise"
+                            bind:value={$noise_percentage}
+                            label="noise (%)"
                             type="number"
                             input$step="0.1"
                             input$min="0"
-                            input$max="1"
+                            input$max="100"
                         />
                     </div>
                 {/if}
