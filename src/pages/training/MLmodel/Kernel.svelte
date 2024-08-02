@@ -17,7 +17,7 @@
             length_scale: '1',
             nu: '1',
             length_scale_bounds: '1e-5, 1e5',
-            nu_bounds: '1e-5, 1e5',
+            // nu_bounds: '1e-5, 1e5',
         },
         RationalQuadratic: {
             length_scale: '1',
