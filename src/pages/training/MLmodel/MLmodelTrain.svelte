@@ -152,7 +152,7 @@
 
         const grid_search_parameters = {
             n_iter: Number($randomzied_gridsearch_niter),
-            halving_factor: Number($halving_factor),
+            factor: Number($halving_factor),
         };
 
         const args = {
