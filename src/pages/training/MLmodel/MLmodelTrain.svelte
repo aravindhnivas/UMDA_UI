@@ -170,10 +170,10 @@
             pca: $use_PCA,
             save_pretrained_model: $save_pretrained_model,
         };
-
         console.log(args);
         $results = null;
 
+        // return;
         const dataFromPython = await computePy({
             pyfile: 'training.ml_model',
             args,

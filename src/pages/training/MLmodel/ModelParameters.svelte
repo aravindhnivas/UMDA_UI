@@ -2,18 +2,23 @@
     import { current_model, default_param_values, fine_tune_model, fine_tuned_hyperparameters, model } from './stores';
     import { validateInput } from '$lib/utils';
     import { Checkbox, CustomSelect } from '$lib/components';
+    import Kernel from './Kernel.svelte';
 
     export let values: Record<string, any>;
     export let key: 'hyperparameters' | 'parameters';
+
     const unique_id = getContext<string>('unique_id');
     $: fine_tune_mode = $fine_tune_model && key === 'hyperparameters';
     $: console.log($fine_tuned_hyperparameters[$model]);
 </script>
 
-<div class="flex flex-col gap-4 hyperparameters__div">
+<div class="flex flex-col gap-4 hyperparameters__div px-2">
     {#each Object.keys($current_model[key]) as label (label)}
         {@const { value, description } = $current_model[key][label]}
-        {#if label in values}
+
+        {#if $model === 'gpr' && label === 'kernel'}
+            <Kernel bind:value={values[label]} />
+        {:else if label in values}
             {#if typeof value === 'boolean'}
                 <div class="grid gap-1">
                     {#if fine_tune_mode}
