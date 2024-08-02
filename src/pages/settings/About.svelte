@@ -31,23 +31,23 @@
             <li>
                 Platform: <span class="badge badge-info">{system_info.platform}-{system_info.arch}</span>
             </li>
-            <li class="text-sm">RAM: <span class="badge badge-info">{$RAM_SIZE} GB RAM</span></li>
-            <li class="text-sm">CPU: <span class="badge badge-info">{$CPU_COUNT} core</span></li>
+            <li class="text-sm">RAM: <span class="badge badge-info">{$RAM_SIZE.toFixed(0)} GB RAM</span></li>
+            <li class="text-sm">CPU: <span class="badge badge-info">{$CPU_COUNT.toFixed(0)} core</span></li>
             <hr />
 
             {#await getVersion() then value}
-                <li>UMDA_UI: <span class="badge badge-info">{value}</span></li>
+                <li>UMDA_UI: <span class="badge badge-info">v{value}</span></li>
             {/await}
 
             {#await getTauriVersion() then value}
-                <li>Tauri: <span class="badge badge-info">{value}</span></li>
+                <li>Tauri: <span class="badge badge-info">v{value}</span></li>
             {/await}
             <li>
                 Python: <span class="badge badge-info" class:badge-error={!$pyVersion}>{$pyVersion || 'unknown'}</span>
             </li>
             <li>
                 umdapy: <span class="badge badge-info" class:badge-error={!$umdapyVersion}
-                    >{$umdapyVersion || 'unknown'}</span
+                    >v{$umdapyVersion || 'unknown'}</span
                 >
             </li>
             <hr />
