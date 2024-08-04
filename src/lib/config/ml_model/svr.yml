@@ -22,7 +22,7 @@ hyperparameters:
                 float: 'must be non-negative'
         description: 'Kernel coefficient for rbf, poly and sigmoid.'
         fine_tune: 'scale, auto, 0.001, 0.01, 0.1, 1, 10, 100, 1000'
-        type: float
+        type: str
     C:
         value: 1.0
         description: 'Regularization parameter'

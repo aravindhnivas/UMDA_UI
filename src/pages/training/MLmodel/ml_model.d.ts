@@ -22,6 +22,8 @@ interface CurrentModel {
     parameters: ModelParameters;
 }
 
+type ParametersArgs = Record<string, Record<string, string | boolean | number | null>>;
+
 interface Results {
     embedding: Embedding;
     PCA: boolean;

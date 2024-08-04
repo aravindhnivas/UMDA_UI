@@ -22,6 +22,8 @@
         grid_search_method,
         randomzied_gridsearch_niter,
         halving_factor,
+        default_param_values,
+        default_parameter_mode,
     } from './stores';
     import { embedding, use_PCA } from '../embedding/stores';
     import { NPARTITIONS } from '$lib/stores/system';
@@ -36,7 +38,7 @@
     import SaveModelPanel from './SaveModelPanel.svelte';
     import ResultsPanel from './ResultsPanel.svelte';
     import Effects from './Effects.svelte';
-    import { Grid } from 'lucide-svelte';
+    import { difference } from 'lodash-es';
 
     export let id: string = 'ml_model-train-container';
     export let display: string = 'none';
@@ -110,10 +112,32 @@
         }
 
         const values = structuredClone({ ...$hyperparameters[$model], ...$parameters[$model] });
+        console.log({ values }, 'values length: ' + Object.keys(values).length);
         let clonedValues: Record<string, string | boolean | number | null> = {};
         console.log({ values, $variable_type });
 
-        Object.entries(values).forEach(([key, value]) => {
+        Object.entries(values).forEach(([key, value], ind) => {
+            console.log(ind, { key, value, type: $variable_type[key] });
+
+            if (typeof value === 'string' && $variable_type[key] === 'str' && value !== 'float') {
+                clonedValues[key] = value?.trim() || null;
+                return;
+            }
+
+            if (value === 'float') {
+                const input = document.getElementById(`${unique_id}_${key}`) as HTMLInputElement;
+                if (!input) {
+                    toast.error(`Error: ${key} input not found`);
+                    return;
+                }
+                const val = parseFloat(input.value);
+                if (isNaN(val)) {
+                    toast.error(`Error: ${key} input is not a number. Please enter a valid number`);
+                    return;
+                }
+                clonedValues[key] = val;
+            }
+
             if (typeof value !== 'string') {
                 if (value === undefined) {
                     clonedValues[key] = null;
@@ -123,32 +147,16 @@
                 return;
             }
 
-            if (value === 'float') {
-                const input = document.getElementById(`${unique_id}_${key}`) as HTMLInputElement;
-
-                if (!input) {
-                    toast.error(`Error: ${key} input not found`);
-                    return;
-                }
-                const val = parseFloat(input.value);
-
-                if (isNaN(val)) {
-                    toast.error(`Error: ${key} input is not a number. Please enter a valid number`);
-                    return;
-                }
-                clonedValues[key] = val;
-            }
-
-            if (value.trim() === '') {
-                clonedValues[key] = null;
-            }
-
             if (!isNaN(Number(value))) {
                 if ($variable_type[key] === 'float') clonedValues[key] = parseFloat(value);
                 else if ($variable_type[key] === 'integer') clonedValues[key] = parseInt(value);
             }
         });
-        console.log({ clonedValues });
+
+        console.log({ clonedValues }, 'values length: ' + Object.keys(clonedValues).length);
+        const diff = difference(Object.keys(values), Object.keys(clonedValues));
+        console.log(diff, 'diff length: ' + diff.length);
+        console.log(diff.map(f => ({ [f]: values[f] })));
 
         const grid_search_parameters = {
             n_iter: Number($randomzied_gridsearch_niter),
@@ -157,8 +165,8 @@
 
         const args = {
             model: $model,
-            parameters: clonedValues,
-            fine_tuned_hyperparameters: clonedFineTunedValues,
+            parameters: $default_parameter_mode ? {} : clonedValues,
+            fine_tuned_hyperparameters: $default_parameter_mode ? {} : clonedFineTunedValues,
             fine_tune_model: $fine_tune_model,
             bootstrap: $bootstrap,
             bootstrap_nsamples: Number($bootstrap_nsamples),

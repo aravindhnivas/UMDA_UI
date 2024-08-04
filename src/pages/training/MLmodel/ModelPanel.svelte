@@ -1,5 +1,12 @@
 <script lang="ts">
-    import { hyperparameters, parameters, model, default_param_values, current_model } from './stores';
+    import {
+        hyperparameters,
+        parameters,
+        model,
+        default_param_values,
+        current_model,
+        default_parameter_mode,
+    } from './stores';
     import supervised_ml_models from '$lib/config/ml_model/ml_models_parameters';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import { RotateCcw, Save, Upload } from 'lucide-svelte/icons';
@@ -7,6 +14,7 @@
     import TabBar from '@smui/tab-bar';
     import ModelParameters from './ModelParameters.svelte';
     import Notification from '$lib/components/Notification.svelte';
+    import { Checkbox } from '$lib/components';
 
     let savedfile: string;
     let uploadedfile: { fullname: string; name: string; model: string } | null = null;
@@ -103,7 +111,8 @@
                         <div class="badge badge-sm badge-info">loaded: {uploadedfile.name}</div>
                     {/if}
                 </h3>
-                <div class="ml-auto">
+                <div class="flex gap-2 ml-auto">
+                    <Checkbox bind:value={$default_parameter_mode} label="defaults" />
                     <button class="btn btn-sm" on:click={reset_parameters}>
                         <RotateCcw />
                         <span>Reset</span>

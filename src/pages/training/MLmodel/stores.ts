@@ -20,7 +20,7 @@ export const variable_type = derived(current_model, $current_model => {
 });
 
 export const get_params_from_current_model = (key: 'hyperparameters' | 'parameters', data: CurrentModel) => {
-    let values = {} as Record<string, string | boolean | number | null>;
+    let values = {} as ParametersArgs[number];
     Object.keys(data[key]).forEach(label => {
         if (!data) return;
         const { value } = data[key][label];
@@ -40,8 +40,8 @@ export const default_param_values = derived(current_model, $current_model => {
     return { hyperparameters, parameters };
 });
 
-export const hyperparameters = writable<ModelHyperParameters>({});
-export const parameters = writable<ModelParameters>({});
+export const hyperparameters = writable<ParametersArgs>({});
+export const parameters = writable<ParametersArgs>({});
 export const fine_tuned_hyperparameters = writable<{ [name: string]: Record<string, string> }>({});
 export const fine_tune_model = writable(false);
 export const logYscale = writable(false);
@@ -63,3 +63,4 @@ export const pre_trained_filename = localWritable('pre_trained_filename', '');
 
 export const results = writable<Results | null>(null);
 export const plot_data = writable<Partial<Plotly.PlotData>[]>([]);
+export const default_parameter_mode = localWritable('default_parameter_mode', true);

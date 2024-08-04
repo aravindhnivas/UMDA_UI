@@ -148,10 +148,7 @@ parameters:
         Random: 'Random'
     description: 'Feature border type'
     type: str
-  bayesian_matrix_reg:
-    value: 0.1
-    description: 'Bayesian matrix regularization'
-    type: float
+
   model_size_reg:
     value: 0.5
     description: 'Model size regularization'
@@ -172,18 +169,6 @@ parameters:
         L2: 'L2 distance'
     description: 'Score function'
     type: str
-  classes_count:
-    value: 0
-    description: 'Number of classes'
-    type: integer
-  auto_class_weights:
-    value:
-      default: 'None'
-      options:
-        None: 'No class weights'
-        Balanced: 'Balanced class weights'
-    description: 'Auto class weights'
-    type: str
   sparse_features_conflict_fraction:
     value: 0
     description: 'Sparse features conflict fraction'
@@ -200,10 +185,6 @@ parameters:
     value: 1
     description: 'Minimum number of trees for best model'
     type: integer
-  force_unit_auto_pair_weights:
-    value: false
-    description: 'If true, force unit auto pair weights'
-    type: bool
   eval_fraction:
     value: 0
     description: 'Evaluation fraction'
@@ -220,3 +201,24 @@ parameters:
         Ordered: 'Ordered boosting'
     description: 'Boosting type'
     type: str
+#   force_unit_auto_pair_weights:
+#     value: false
+#     description: 'If true, force unit auto pair weights'
+#     type: bool
+#   classes_count:
+#     value: 0
+#     description: 'Number of classes'
+#     type: integer
+#   bayesian_matrix_reg:
+#     value: 0.1
+#     description: 'Bayesian matrix regularization'
+#     type: float
+# auto_class_weights:
+#     value:
+#       default: 'None'
+#       options:
+#         None: 'No class weights'
+#         Balanced: 'Balanced class weights'
+#         SqrtBalanced: 'Square root balanced class weights'
+#     description: 'Auto class weights'
+#     type: str
