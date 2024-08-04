@@ -1,0 +1,84 @@
+name: 'Random Forest Regression'
+description: 'Random forests or random decision forests are an ensemble learning method for classification, regression and other tasks that operate by constructing a multitude of decision trees at training time and outputting the class that is the mode of the classes (classification) or mean prediction (regression) of the individual trees'
+hyperparameters:
+    n_estimators:
+        value: 100
+        description: 'Number of trees in the forest'
+        fine_tune: '10, 50, 100, 200, 500'
+        type: integer
+    max_leaf_nodes:
+        value: null
+        description: 'Grow trees with max_leaf_nodes in best-first fashion'
+        fine_tune: 'null, 5, 10, 20, 50, 100'
+        type: integer
+    min_samples_leaf:
+        value: 1
+        description: 'Minimum number of samples required to be at a leaf node'
+        fine_tune: '0.1, 0.3, 0.5, 0.7, 1'
+        type: float
+    max_depth:
+        value: null
+        description: 'Maximum depth of the tree'
+        fine_tune: '5, 10, 15, 20, 25'
+        type: integer
+parameters:
+    criterion:
+        value:
+            default: 'squared_error'
+            options:
+                squared_error: 'Mean squared error'
+                absolute_error: 'Mean absolute error'
+                friedman_mse: 'Mean squared error with improvement score by Friedman'
+                poisson: 'Mean squared error for Poisson distribution'
+        description: 'Function to measure the quality of a split'
+        type: str
+    min_samples_split:
+        value: 2
+        description: 'Minimum number of samples required to split an internal node'
+        type: integer
+    min_weight_fraction_leaf:
+        value: 0.0
+        description: 'Minimum weighted fraction of the sum total of weights required to be at a leaf node'
+        type: float
+    max_features:
+        value:
+            default: null
+            options:
+                log2: 'log2(n_features)'
+                sqrt: 'sqrt(n_features)'
+                null: 'n_features'
+                float: 'n_features'
+        description: 'Number of features to consider when looking for the best split'
+        type: str
+    min_impurity_decrease:
+        value: 0.0
+        description: 'A node will be split if this split induces a decrease of the impurity greater than or equal to this value'
+        type: float
+    bootstrap:
+        value: true
+        description: 'Whether bootstrap samples are used when building trees'
+        type: bool
+    oob_score:
+        value: false
+        description: 'Whether to use out-of-bag samples to estimate the R^2 on unseen data'
+        type: bool
+    verbose:
+        value: 0
+        description: 'Controls the verbosity when fitting and predicting'
+        type: integer
+    warm_start:
+        value: false
+        description: 'When set to True, reuse the solution of the previous call to fit and add more estimators to the ensemble'
+        type: bool
+    ccp_alpha:
+        value: 0.0
+        description: 'Complexity parameter used for Minimal Cost-Complexity Pruning'
+        type: float
+    max_samples:
+        value: null
+        description: 'If bootstrap is True, the number of samples to draw from X to train each base estimator'
+        type: null
+    # monotonic_cst:
+    #     value: null
+    #     description: 'List of constraints to impose monotonicity on features. 1: monotonically increasing, 0: no constraint, -1: monotonically decreasing'
+    #     type: null

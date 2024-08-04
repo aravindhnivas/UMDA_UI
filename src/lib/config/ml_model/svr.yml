@@ -1,0 +1,64 @@
+name: 'Support Vector Regression'
+description: 'Support Vector Regression (SVR) uses the same principles as the SVM for classification, with only a few minor differences'
+hyperparameters:
+    kernel:
+        value:
+            default: 'rbf'
+            options:
+                linear: 'Linear kernel'
+                poly: 'Polynomial kernel'
+                rbf: 'Radial Basis Function kernel'
+                sigmoid: 'Sigmoid kernel'
+                precomputed: 'Precomputed kernel'
+        description: 'Specifies the kernel type to be used in the algorithm'
+        fine_tune: 'linear, poly, rbf, sigmoid'
+        type: str
+    gamma:
+        value:
+            default: 'scale'
+            options:
+                scale: '1 / (n_features * X.var())'
+                auto: '1 / n_features'
+                float: 'must be non-negative'
+        description: 'Kernel coefficient for rbf, poly and sigmoid.'
+        fine_tune: 'scale, auto, 0.001, 0.01, 0.1, 1, 10, 100, 1000'
+        type: float
+    C:
+        value: 1.0
+        description: 'Regularization parameter'
+        fine_tune: '0.001, 0.01, 0.1, 1, 10, 100, 1000'
+        type: float
+    epsilon:
+        value: 0.1
+        description: 'Epsilon in the epsilon-SVR model'
+        fine_tune: '0.01, 0.1, 0.5, 1, 2, 5, 10'
+        type: float
+parameters:
+    degree:
+        value: 3
+        description: 'Degree of the polynomial kernel function (only for poly). Must be non-negative'
+        type: integer
+    coef0:
+        value: 0.0
+        description: 'Independent term in kernel function. It is only significant in poly and sigmoid.'
+        type: float
+    tol:
+        value: 1e-3
+        description: 'Tolerance for stopping criteria'
+        type: float
+    shrinking:
+        value: true
+        description: 'Specifies whether to use the shrinking heuristic'
+        type: bool
+    cache_size:
+        value: 200
+        description: 'Size of the kernel cache in MB'
+        type: integer
+    verbose:
+        value: false
+        description: 'Specifies whether to enable verbose output'
+        type: bool
+    max_iter:
+        value: -1
+        description: 'Hard limit on iterations within solver, or -1 for no limit'
+        type: integer

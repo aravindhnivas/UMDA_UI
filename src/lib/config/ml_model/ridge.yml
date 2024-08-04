@@ -1,0 +1,43 @@
+name: 'Ridge Regression'
+description: 'Ridge regression addresses some of the problems of Ordinary Least Squares by imposing a penalty on the size of the coefficients'
+hyperparameters:
+    alpha:
+        value: 1.0
+        description: 'Constant that multiplies the L2 term, controlling regularization strength; must be a positive float [0, Inf].  For numerical reasons, using alpha = 0 with the Ridge object is not advised. Instead, you should use the LinearRegression.'
+        fine_tune: '0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000'
+        type: float
+
+parameters:
+    fit_intercept:
+        value: true
+        description: 'Specifies whether to calculate the intercept for this model. If set to false, no intercept will be used in calculations (i.e. X and y are expected to be centered).'
+        type: bool
+    copy_X:
+        value: true
+        description: 'If True, X will be copied; else, it may be overwritten.'
+        type: bool
+    max_iter:
+        value: null
+        description: 'Maximum number of iterations for conjugate gradient solver'
+        type: integer
+    tol:
+        value: 1e-4
+        description: 'The precision of the solution (coef_) is determined by tol which specifies a different convergence criterion for each solver'
+        type: float
+    positive:
+        value: false
+        description: 'Specifies whether to enforce positive coefficients'
+        type: bool
+    solver:
+        value:
+            default: 'auto'
+            options:
+                auto: 'Automatic selection of the most appropriate solver for the data'
+                svd: 'Singular Value Decomposition'
+                cholesky: 'Cholesky decomposition'
+                lsqr: 'Least Squares solution'
+                sparse_cg: 'Conjugate Gradient solver'
+                sag: 'Stochastic Average Gradient descent'
+                saga: 'SAGA solver'
+        description: 'Solver to use in the computational routines'
+        type: str

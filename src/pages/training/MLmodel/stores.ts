@@ -1,9 +1,9 @@
-import supervised_ml_models from '$lib/config/supervised_ml_models.yml';
+import supervised_ml_models from '$lib/config/ml_model/ml_models_parameters';
 
-export const model = localWritable('ml_model', 'ridge');
+export const model = localWritable<MLModel>('ml_model', 'ridge');
 
 export const current_model = derived(model, $model => {
-    return supervised_ml_models[$model] as CurrentModel;
+    return supervised_ml_models[$model];
 });
 
 export const variable_type = derived(current_model, $current_model => {
@@ -40,8 +40,8 @@ export const default_param_values = derived(current_model, $current_model => {
     return { hyperparameters, parameters };
 });
 
-export const hyperparameters = writable<{ [name: string]: Record<string, string | boolean | number | null> }>({});
-export const parameters = writable<{ [name: string]: Record<string, string | boolean | number | null> }>({});
+export const hyperparameters = writable<ModelHyperParameters>({});
+export const parameters = writable<ModelParameters>({});
 export const fine_tuned_hyperparameters = writable<{ [name: string]: Record<string, string> }>({});
 export const fine_tune_model = writable(false);
 export const logYscale = writable(false);

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { hyperparameters, parameters, model, default_param_values, current_model } from './stores';
-    import supervised_ml_models from '$lib/config/supervised_ml_models.yml';
+    import supervised_ml_models from '$lib/config/ml_model/ml_models_parameters';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import { RotateCcw, Save, Upload } from 'lucide-svelte/icons';
     import Tab, { Label } from '@smui/tab';

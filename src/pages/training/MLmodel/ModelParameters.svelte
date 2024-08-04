@@ -9,7 +9,6 @@
 
     const unique_id = getContext<string>('unique_id');
     $: fine_tune_mode = $fine_tune_model && key === 'hyperparameters';
-    $: console.log($fine_tuned_hyperparameters[$model]);
 </script>
 
 <div class="flex flex-col gap-4 hyperparameters__div px-2">

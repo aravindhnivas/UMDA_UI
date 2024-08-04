@@ -1,0 +1,34 @@
+name: 'Gaussian Process Regression'
+description: 'Gaussian processes are a powerful, non-parametric approach to regression'
+hyperparameters:
+    alpha:
+        value: 1e-10
+        description: 'Value added to the diagonal of the kernel matrix during fitting'
+        fine_tune: '1e-10, 1e-9, 1e-8, 1e-7, 1e-6, 1e-5'
+        type: float
+    n_restarts_optimizer:
+        value: 0
+        description: 'The number of restarts of the optimizer for finding the kernel parameters'
+        fine_tune: '0, 1, 2, 3, 4, 5'
+        type: integer
+parameters:
+    kernel:
+        value: null
+        description: 'Kernel specifying the covariance function of the GP'
+        type: null
+    optimizer:
+        value: 'fmin_l_bfgs_b'
+        description: 'The optimizer to use for optimizing the kernel parameters'
+        type: str
+    normalize_y:
+        value: false
+        description: 'Whether to normalize the target values y by removing the mean and scaling to unit-variance. This is recommended for cases where zero-mean, unit-variance priors are used.'
+        type: bool
+    copy_X_train:
+        value: true
+        description: 'If True, a persistent copy of the training data is stored in the object. Otherwise, just a reference to the training data is stored, which might cause predictions to change if the data is modified externally.'
+        type: bool
+    n_targets:
+        value: null
+        description: 'The number of dimensions of the target values. Used to decide the number of outputs when sampling from the prior distributions (i.e. calling sample_y before fit). This parameter is ignored once fit has been called'
+        type: integer

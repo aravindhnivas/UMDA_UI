@@ -1,0 +1,106 @@
+name: 'Gradient Boosting Regression'
+description: 'Gradient Boosting builds an additive model in a forward stage-wise fashion; it allows for the optimization of arbitrary differentiable loss functions'
+hyperparameters:
+    learning_rate:
+        value: 0.1
+        description: 'Learning rate shrinks the contribution of each tree'
+        fine_tune: '0.001, 0.01, 0.1, 0.5, 1'
+        type: float
+    n_estimators:
+        value: 100
+        description: 'The number of boosting stages to perform'
+        fine_tune: '10, 50, 100, 200, 500'
+        type: integer
+    min_samples_split:
+        value: 2
+        description: 'Minimum number of samples required to split an internal node'
+        fine_tune: '0.1, 0.3, 0.5, 0.7, 1'
+        type: float
+    min_samples_leaf:
+        value: 1
+        description: 'Minimum number of samples required to be at a leaf node'
+        fine_tune: '0.1, 0.3, 0.5, 0.7, 1'
+        type: float
+    subsample:
+        value: 1.0
+        description: 'The fraction of samples to be used for fitting the individual base learners'
+        fine_tune: '0.1, 0.3, 0.5, 0.7, 1'
+        type: float
+    max_depth:
+        value: 3
+        description: 'Maximum depth of the individual regression estimators'
+        fine_tune: '3, 5, 7, 9, 11'
+        type: integer
+parameters:
+    loss:
+        value:
+            default: 'squared_error'
+            options:
+                squared_error: 'Least squares regression'
+                absolute_error: 'Least absolute deviation regression'
+                huber: 'Huber loss for robust regression'
+                quantile: 'Quantile regression'
+        description: 'Loss function to be optimized'
+        type: str
+    criterion:
+        value:
+            default: 'friedman_mse'
+            options:
+                friedman_mse: 'Mean squared error with improvement score by Friedman'
+                squared_error: 'Mean squared error'
+        description: 'Function to measure the quality of a split'
+        type: str
+    min_weight_fraction_leaf:
+        value: 0.0
+        description: 'Minimum weighted fraction of the sum total of weights required to be at a leaf node'
+        type: float
+    min_impurity_decrease:
+        value: 0.0
+        description: 'A node will be split if this split induces a decrease of the impurity greater than or equal to this value'
+        type: float
+    init:
+        value: null
+        description: 'An estimator object that is used to compute the initial predictions'
+        type: null
+    max_features:
+        value:
+            default: null
+            options:
+                log2: 'log2(n_features)'
+                sqrt: 'sqrt(n_features)'
+                null: 'n_features'
+                float: 'n_features'
+        description: 'Number of features to consider when looking for the best split'
+        type: str
+    alpha:
+        value: 0.9
+        description: 'The alpha-quantile of the huber loss function and the quantile loss function'
+        type: float
+    verbose:
+        value: 0
+        description: 'Controls the verbosity when fitting and predicting'
+        type: integer
+    max_leaf_nodes:
+        value: null
+        description: 'Grow trees with max_leaf_nodes in best-first fashion'
+        type: integer
+    warm_start:
+        value: false
+        description: 'When set to True, reuse the solution of the previous call to fit and add more estimators to the ensemble'
+        type: bool
+    validation_fraction:
+        value: 0.1
+        description: 'The proportion of training data to set aside as validation set for early stopping'
+        type: float
+    n_iter_no_change:
+        value: null
+        description: 'Number of iterations with no improvement to wait before early stopping'
+        type: integer
+    tol:
+        value: 1e-4
+        description: 'Tolerance for the early stopping criterion'
+        type: float
+    ccp_alpha:
+        value: 0.0
+        description: 'Complexity parameter used for Minimal Cost-Complexity Pruning'
+        type: float

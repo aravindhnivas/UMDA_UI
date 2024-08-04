@@ -1,0 +1,17 @@
+name: 'Linear Regression'
+description: 'Linear regression is a linear approach to modeling the relationship between a scalar response (or dependent variable) and one or more explanatory variables (or independent variables)'
+hyperparameters:
+    fit_intercept:
+        value: true
+        description: 'Specifies whether to calculate the intercept for this model'
+        fine_tune: 'true, false'
+        type: bool
+parameters:
+    copy_X:
+        value: true
+        description: 'If True, X will be copied; else, it may be overwritten'
+        type: bool
+    positive:
+        value: false
+        description: 'Specifies whether to enforce positive coefficients'
+        type: bool

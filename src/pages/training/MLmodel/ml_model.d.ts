@@ -1,10 +1,25 @@
-type ParamValue = string | number | boolean | null | { [key: string]: string };
+type MLModel = 'linear_regression' | 'ridge' | 'svr' | 'knn' | 'rfr' | 'gbr' | 'gpr' | 'xgboost';
+type MLParameterValue =
+    | string
+    | number
+    | boolean
+    | null
+    | {
+          default: string | number | boolean;
+          options: Record<string, string | number>;
+      };
+
+type ModelHyperParameters = Record<
+    string,
+    { value: MLParameterValue; description: string; fine_tune: string; type: string }
+>;
+type ModelParameters = Record<string, { value: MLParameterValue; description: string; type: string }>;
 
 interface CurrentModel {
     name: string;
     description: string;
-    hyperparameters: Record<string, { value: ParamValue; description: string; fine_tune: string; type: string }>;
-    parameters: Record<string, { value: ParamValue; description: string; type: string }>;
+    hyperparameters: ModelHyperParameters;
+    parameters: ModelParameters;
 }
 
 interface Results {
