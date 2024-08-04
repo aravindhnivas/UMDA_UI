@@ -98,7 +98,7 @@
     <Loadingbtn bind:loading name="load file" callback={load_data} />
 </div>
 
-<!-- <pre>{JSON.stringify(data?.nrows, null, 2)}</pre> -->
+<slot />
 
 {#if data}
     {#if data?.columns && data?.nrows}

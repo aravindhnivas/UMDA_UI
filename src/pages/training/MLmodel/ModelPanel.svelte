@@ -7,14 +7,12 @@
         current_model,
         default_parameter_mode,
     } from './stores';
-    import supervised_ml_models from '$lib/config/ml_model/ml_models_parameters';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import { RotateCcw, Save, Upload } from 'lucide-svelte/icons';
-    import Tab, { Label } from '@smui/tab';
-    import TabBar from '@smui/tab-bar';
     import ModelParameters from './ModelParameters.svelte';
     import Notification from '$lib/components/Notification.svelte';
     import { Checkbox } from '$lib/components';
+    import ModelTab from './ModelTab.svelte';
 
     let savedfile: string;
     let uploadedfile: { fullname: string; name: string; model: string } | null = null;
@@ -39,13 +37,10 @@
             4,
         );
         await fs.writeTextFile(savedfile, save_content);
-
-        // Show a success notification
         toast.success('Parameters saved successfully');
     };
 
     const upload_parameters = async () => {
-        // Upload the parameters from the backend
         const selected = await dialog.open({
             title: 'Upload parameters',
             filters: [{ name: 'JSON', extensions: ['json'] }],
@@ -53,16 +48,12 @@
         });
         let uploadloc = selected;
         if (Array.isArray(selected)) {
-            // user selected multiple files
             uploadloc = selected[0];
         } else if (selected === null) {
-            // user cancelled the selection
             return;
         } else {
-            // user selected a single file
             uploadloc = selected;
         }
-
         uploadedfile = null;
 
         const contents = await fs.readTextFile(uploadloc);
@@ -97,11 +88,7 @@
 
 <CustomPanel title="MODEL: {$current_model.name}" open={true}>
     <div class="grid gap-2">
-        <TabBar tabs={Object.keys(supervised_ml_models)} let:tab bind:active={$model}>
-            <Tab {tab}>
-                <Label><span class="text-black">{tab}</span></Label>
-            </Tab>
-        </TabBar>
+        <ModelTab />
         <span class="text-sm">{$current_model.description}</span>
         {#if $current_model}
             <div class="flex">
