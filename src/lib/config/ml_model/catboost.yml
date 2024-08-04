@@ -1,0 +1,222 @@
+name: 'CatBoost Regressor'
+description: 'CatBoost is a gradient boosting library that uses decision trees as base predictors. It''s particularly good at handling categorical features.'
+
+hyperparameters:
+  iterations:
+    value: 1000
+    description: 'The maximum number of trees that can be built'
+    fine_tune: '100, 500, 1000, 2000, 5000'
+    type: integer
+  learning_rate:
+    value: 0.05
+    description: 'Step size shrinkage used to prevent overfitting'
+    fine_tune: '0.001, 0.01, 0.03, 0.1, 0.3'
+    type: float
+  depth:
+    value: 6
+    description: 'Depth of the tree'
+    fine_tune: '4, 6, 8, 10'
+    type: integer
+  l2_leaf_reg:
+    value: 3
+    description: 'L2 regularization coefficient'
+    fine_tune: '1.0, 3.0, 5.0, 7.0, 9.0'
+    type: float
+  random_strength:
+    value: 1
+    description: 'Amount of randomness to use for scoring splits'
+    fine_tune: '0.1, 1.0, 10.0'
+    type: float
+  border_count:
+    value: 254
+    description: 'Number of splits for numerical features'
+    fine_tune: '32, 128, 254'
+    type: integer
+  subsample:
+    value: 0.8
+    description: 'Subsample ratio of the training instance'
+    fine_tune: '0.5, 0.8, 1.0'
+    type: float
+
+parameters:
+  nan_mode:
+    value:
+      default: 'Min'
+      options:
+        Min: 'Replace NaN with minimum value'
+        Max: 'Replace NaN with maximum value'
+        Forbidden: 'Forbidden NaN values'
+    description: 'The way to process NaN values in the learn set'
+    type: str
+  eval_metric:
+    value:
+      default: 'RMSE'
+      options:
+        RMSE: 'Root Mean Squared Error'
+        MAE: 'Mean Absolute Error'
+        Quantile: 'Quantile regression'
+        LogLinQuantile: 'Log Linear Quantile regression'
+        Poisson: 'Poisson regression'
+        MAPE: 'Mean Absolute Percentage Error'
+        Huber: 'Huber loss'
+    description: 'The metric used for overfitting detection and best model selection'
+    type: str
+  loss_function:
+    value:
+      default: 'RMSE'
+      options:
+        RMSE: 'Root Mean Squared Error'
+        MAE: 'Mean Absolute Error'
+        Quantile: 'Quantile regression'
+        LogLinQuantile: 'Log Linear Quantile regression'
+        Poisson: 'Poisson regression'
+        MAPE: 'Mean Absolute Percentage Error'
+        Huber: 'Huber loss'
+    description: 'The metric to use in training'
+    type: str
+  leaf_estimation_method:
+    value:
+      default: 'Newton'
+      options:
+        Newton: 'Newton method'
+        Gradient: 'Gradient method'
+    description: 'The method used to calculate the values in leaves'
+    type: str
+  grow_policy:
+    value:
+      default: 'SymmetricTree'
+      options:
+        SymmetricTree: 'Symmetric tree'
+        Depthwise: 'Depthwise'
+        Lossguide: 'Lossguide'
+    description: 'The tree growing policy'
+    type: str
+  bootstrap_type:
+    value:
+      default: 'MVS'
+      options:
+        Bayesian: 'Bayesian bootstrap'
+        Bernoulli: 'Bernoulli bootstrap'
+        MVS: 'MVS bootstrap'
+    description: 'Bootstrap type'
+    type: str
+  use_best_model:
+    value: false
+    description: 'If true, the best model is used after training'
+    type: bool
+  task_type:
+    value:
+      default: 'CPU'
+      options:
+        CPU: 'Train on CPU'
+        GPU: 'Train on GPU'
+    description: 'Whether to train on CPU or GPU'
+    type: str
+  random_seed:
+    value: 0
+    description: 'Random seed for training'
+    type: integer
+  posterior_sampling:
+    value: false
+    description: 'If true, use posterior sampling'
+    type: bool
+  model_shrink_mode:
+    value:
+      default: 'Constant'
+      options:
+        Constant: 'Constant model shrinkage'
+        Decreasing: 'Decreasing model shrinkage'
+    description: 'Model shrinkage mode'
+    type: str
+  model_shrink_rate:
+    value: 0
+    description: 'Model shrinkage rate'
+    type: float
+  min_data_in_leaf:
+    value: 1
+    description: 'Minimum number of data points in a leaf'
+    type: integer
+  max_leaves:
+    value: 64
+    description: 'Maximum number of leaves'
+    type: integer
+  feature_border_type:
+    value:
+      default: 'GreedyLogSum'
+      options:
+        GreedyLogSum: 'Greedy log sum'
+        Random: 'Random'
+    description: 'Feature border type'
+    type: str
+  bayesian_matrix_reg:
+    value: 0.1
+    description: 'Bayesian matrix regularization'
+    type: float
+  model_size_reg:
+    value: 0.5
+    description: 'Model size regularization'
+    type: float
+  sampling_frequency:
+    value:
+      default: 'PerTree'
+      options:
+        PerTree: 'Per tree'
+        PerTreeLevel: 'Per tree level'
+    description: 'Sampling frequency'
+    type: str
+  score_function:
+    value:
+      default: 'Cosine'
+      options:
+        Cosine: 'Cosine similarity'
+        L2: 'L2 distance'
+    description: 'Score function'
+    type: str
+  classes_count:
+    value: 0
+    description: 'Number of classes'
+    type: integer
+  auto_class_weights:
+    value:
+      default: 'None'
+      options:
+        None: 'No class weights'
+        Balanced: 'Balanced class weights'
+    description: 'Auto class weights'
+    type: str
+  sparse_features_conflict_fraction:
+    value: 0
+    description: 'Sparse features conflict fraction'
+    type: float
+  leaf_estimation_backtracking:
+    value:
+      default: 'AnyImprovement'
+      options:
+        AnyImprovement: 'Any improvement'
+        Armijo: 'Armijo rule'
+    description: 'Leaf estimation backtracking'
+    type: str
+  best_model_min_trees:
+    value: 1
+    description: 'Minimum number of trees for best model'
+    type: integer
+  force_unit_auto_pair_weights:
+    value: false
+    description: 'If true, force unit auto pair weights'
+    type: bool
+  eval_fraction:
+    value: 0
+    description: 'Evaluation fraction'
+    type: float
+  penalties_coefficient:
+    value: 1
+    description: 'Penalties coefficient'
+    type: float
+  boosting_type:
+    value:
+      default: 'Plain'
+      options:
+        Plain: 'Plain boosting'
+        Ordered: 'Ordered boosting'
+    description: 'Boosting type'
+    type: str
