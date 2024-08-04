@@ -201,18 +201,6 @@ parameters:
         Ordered: 'Ordered boosting'
     description: 'Boosting type'
     type: str
-#   force_unit_auto_pair_weights:
-#     value: false
-#     description: 'If true, force unit auto pair weights'
-#     type: bool
-#   classes_count:
-#     value: 0
-#     description: 'Number of classes'
-#     type: integer
-#   bayesian_matrix_reg:
-#     value: 0.1
-#     description: 'Bayesian matrix regularization'
-#     type: float
 # auto_class_weights:
 #     value:
 #       default: 'None'
@@ -222,3 +210,56 @@ parameters:
 #         SqrtBalanced: 'Square root balanced class weights'
 #     description: 'Auto class weights'
 #     type: str
+
+# loss_function
+# custom_metric
+# eval_metric
+# iterations
+# learning_rate
+# random_seed
+# l2_leaf_reg
+# bootstrap_type
+# bagging_temperature
+# subsample
+# sampling_frequency
+# sampling_unit
+# mvs_reg
+# random_strength
+# use_best_model
+# best_model_min_trees
+# depth
+# grow_policy
+# min_data_in_leaf
+# max_leaves
+# ignored_features
+# one_hot_max_size
+# has_time
+# rsm
+# nan_mode
+# input_borders
+# output_borders
+# fold_permutation_block
+# leaf_estimation_method
+# leaf_estimation_iterations
+# leaf_estimation_backtracking
+# fold_len_multiplier
+# approx_on_full_history
+# class_weights
+# class_names
+# auto_class_weights
+# scale_pos_weight
+# boosting_type
+# boost_from_average
+# langevin
+# diffusion_temperature
+# posterior_sampling
+# allow_const_label
+# score_function
+# monotone_constraints
+# feature_weights
+# first_feature_use_penalties
+# fixed_binary_splits
+# penalties_coefficient
+# per_object_feature_penalties
+# model_shrink_rate
+# model_shrink_mode
