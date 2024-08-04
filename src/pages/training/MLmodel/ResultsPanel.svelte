@@ -39,7 +39,7 @@
                 <div class="grid gap-2">
                     <h3>Best parameters</h3>
                     <span class="text-sm">Best score: {$results.best_score}</span>
-                    <div class="flex gap-2">
+                    <div class="flex gap-2 flex-wrap">
                         {#each Object.entries($results.best_params) as [key, value]}
                             <span class="badge badge-info">{key}: {value}</span>
                         {/each}
