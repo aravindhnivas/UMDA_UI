@@ -8,7 +8,7 @@ hyperparameters:
     fine_tune: '100, 500, 1000, 2000, 5000'
     type: integer
   learning_rate:
-    value: 0.05
+    value: 0.03
     description: 'Step size shrinkage used to prevent overfitting'
     fine_tune: '0.001, 0.01, 0.03, 0.1, 0.3'
     type: float
@@ -80,8 +80,13 @@ parameters:
       options:
         Newton: 'Newton method'
         Gradient: 'Gradient method'
+        Exact: 'Exact method'
     description: 'The method used to calculate the values in leaves'
     type: str
+  leaf_estimation_iterations:
+    value: null
+    description: 'Number of iterations to build the tree'
+    type: integer
   grow_policy:
     value:
       default: 'SymmetricTree'
@@ -98,6 +103,7 @@ parameters:
         Bayesian: 'Bayesian bootstrap'
         Bernoulli: 'Bernoulli bootstrap'
         MVS: 'MVS bootstrap'
+        No: 'No bootstrap'
     description: 'Bootstrap type'
     type: str
   use_best_model:
@@ -112,10 +118,6 @@ parameters:
         GPU: 'Train on GPU'
     description: 'Whether to train on CPU or GPU'
     type: str
-  random_seed:
-    value: 0
-    description: 'Random seed for training'
-    type: integer
   posterior_sampling:
     value: false
     description: 'If true, use posterior sampling'
@@ -137,7 +139,7 @@ parameters:
     description: 'Minimum number of data points in a leaf'
     type: integer
   max_leaves:
-    value: 64
+    value: 31
     description: 'Maximum number of leaves'
     type: integer
   feature_border_type:
@@ -155,7 +157,7 @@ parameters:
     type: float
   sampling_frequency:
     value:
-      default: 'PerTree'
+      default: 'PerTreeLevel'
       options:
         PerTree: 'Per tree'
         PerTreeLevel: 'Per tree level'
@@ -167,6 +169,8 @@ parameters:
       options:
         Cosine: 'Cosine similarity'
         L2: 'L2 distance'
+        NewtonCosine: 'Newton cosine similarity (do not use this score type with the Lossguide tree growing policy)'
+        NewtonL2: 'Newton L2 distance'
     description: 'Score function'
     type: str
   sparse_features_conflict_fraction:
@@ -177,12 +181,13 @@ parameters:
     value:
       default: 'AnyImprovement'
       options:
+        No: 'No backtracking'
         AnyImprovement: 'Any improvement'
         Armijo: 'Armijo rule'
     description: 'Leaf estimation backtracking'
     type: str
   best_model_min_trees:
-    value: 1
+    value: null
     description: 'Minimum number of trees for best model'
     type: integer
   eval_fraction:
@@ -201,6 +206,58 @@ parameters:
         Ordered: 'Ordered boosting'
     description: 'Boosting type'
     type: str
+  # boost_from_average:
+  #   value: false
+  #   description: 'Boost from average'
+  #   type: bool
+  bagging_temperature:
+    value: 1
+    description: 'Bagging temperature'
+    type: float
+  ignored_features:
+    value: null
+    description: 'Ignored features'
+    type: null
+  has_time:
+    value: false
+    description: 'Has time'
+    type: bool
+  rsm:
+    value: 1
+    description: 'Random subspace method'
+    type: float
+  input_borders:
+    value: null
+    description: 'Load Custom quantization borders and missing value modes from a file (do not generate them).'
+    type: str
+  output_borders:
+    value: null
+    description: 'Save quantization borders for the current dataset to a file.'
+    type: str
+  fold_permutation_block:
+    value: 1
+    description: 'Fold permutation block'
+    type: integer
+  fold_len_multiplier:
+    value: 2
+    description: 'Fold length multiplier'
+    type: integer
+  approx_on_full_history:
+    value: false
+    description: 'Approximate on full history'
+    type: bool
+  langevin:
+    value: false
+    description: 'Langevin'
+    type: bool
+  diffusion_temperature:
+    value: 10000
+    description: 'Diffusion temperature'
+    type: float
+  allow_const_label:
+    value: false
+    description: 'Allow constant label'
+    type: bool
 # auto_class_weights:
 #     value:
 #       default: 'None'
@@ -211,19 +268,31 @@ parameters:
 #     description: 'Auto class weights'
 #     type: str
 
-# loss_function
+# NOT USED
 # custom_metric
+# # random_seed
+# sampling_unit
+# mvs_reg
+# one_hot_max_size
+# class_weights
+# class_names
+# auto_class_weights
+# scale_pos_weight
+# monotone_constraints
+# feature_weights
+# first_feature_use_penalties
+# fixed_binary_splits
+# penalties_coefficient
+
+# loss_function
 # eval_metric
 # iterations
 # learning_rate
-# random_seed
 # l2_leaf_reg
 # bootstrap_type
 # bagging_temperature
 # subsample
 # sampling_frequency
-# sampling_unit
-# mvs_reg
 # random_strength
 # use_best_model
 # best_model_min_trees
@@ -232,7 +301,6 @@ parameters:
 # min_data_in_leaf
 # max_leaves
 # ignored_features
-# one_hot_max_size
 # has_time
 # rsm
 # nan_mode
@@ -244,10 +312,6 @@ parameters:
 # leaf_estimation_backtracking
 # fold_len_multiplier
 # approx_on_full_history
-# class_weights
-# class_names
-# auto_class_weights
-# scale_pos_weight
 # boosting_type
 # boost_from_average
 # langevin
@@ -255,11 +319,6 @@ parameters:
 # posterior_sampling
 # allow_const_label
 # score_function
-# monotone_constraints
-# feature_weights
-# first_feature_use_penalties
-# fixed_binary_splits
-# penalties_coefficient
 # per_object_feature_penalties
 # model_shrink_rate
 # model_shrink_mode
