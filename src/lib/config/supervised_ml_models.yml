@@ -411,3 +411,172 @@ gpr:
             value: null
             description: 'The number of dimensions of the target values. Used to decide the number of outputs when sampling from the prior distributions (i.e. calling sample_y before fit). This parameter is ignored once fit has been called'
             type: integer
+
+xgboost:
+    name: 'XGBoost Regression'
+    description: 'XGBoost is an optimized distributed gradient boosting library designed to be highly efficient, flexible and portable'
+    hyperparameters:
+        n_estimators:
+            value: 100
+            description: 'Number of boosting rounds'
+            fine_tune: '10, 50, 100, 200, 500'
+            type: integer
+        learning_rate:
+            value: 0.1
+            description: 'Boosting learning rate'
+            fine_tune: '0.001, 0.01, 0.1, 0.5, 1'
+            type: float
+        max_depth:
+            value: 3
+            description: 'Maximum tree depth for base learners'
+            fine_tune: '3, 5, 7, 9, 11'
+            type: integer
+        min_child_weight:
+            value: 1
+            description: 'Minimum sum of instance weight (hessian) needed in a child'
+            fine_tune: '1, 3, 5, 7, 9'
+            type: integer
+        subsample:
+            value: 1.0
+            description: 'Subsample ratio of the training instance'
+            fine_tune: '0.1, 0.3, 0.5, 0.7, 1'
+            type: float
+        colsample_bytree:
+            value: 1.0
+            description: 'Subsample ratio of columns when constructing each tree'
+            fine_tune: '0.1, 0.3, 0.5, 0.7, 1'
+            type: float
+        reg_alpha:
+            value: 0.0
+            description: 'L1 regularization term on weights'
+            fine_tune: '0.0, 0.1, 1.0, 10.0, 100.0'
+            type: float
+        reg_lambda:
+            value: 1.0
+            description: 'L2 regularization term on weights'
+            fine_tune: '0.0, 0.1, 1.0, 10.0, 100.0'
+            type: float
+        gamma:
+            value: 0.0
+            description: 'Minimum loss reduction required to make a further partition on a leaf node of the tree'
+            fine_tune: '0.0, 0.1, 1.0, 10.0, 100.0'
+            type: float
+    parameters:
+        objective:
+            value:
+                default: 'reg:squarederror'
+                options:
+                    reg:squarederror: 'Regression with squared loss'
+                    reg:squaredlogerror: 'Regression with squared log loss'
+                    reg:logistic: 'Logistic regression'
+                    reg:pseudohubererror: 'Pseudo Huber loss'
+                    binary:logistic: 'Binary classification with logistic loss'
+                    binary:logitraw: 'Binary classification with raw logistic loss'
+                    binary:hinge: 'Binary classification with hinge loss'
+                    multi:softmax: 'Multiclass classification with softmax'
+                    multi:softprob: 'Multiclass classification with softprob'
+                    rank:pairwise: 'Learning to rank with pairwise loss'
+                    rank:ndcg: 'Learning to rank with NDCG loss'
+                    rank:map: 'Learning to rank with MAP loss'
+            description: 'Specify the learning task and the corresponding learning objective'
+            type: str
+        booster:
+            value:
+                default: 'gbtree'
+                options:
+                    gbtree: 'Tree-based models'
+                    gblinear: 'Linear models'
+                    dart: 'Dropouts meet Multiple Additive Regression Trees'
+            description: 'Specify which booster to use'
+            type: str
+        verbosity:
+            value: 0
+            description: 'Verbosity of printing messages'
+            type: integer
+        importance_type:
+            value: ''
+            description: 'The feature importance type for the feature_importances_ property'
+            type: str
+        early_stopping_rounds:
+            value: null
+            description: 'Activates early stopping. Validation error needs to decrease at least every early_stopping_rounds to continue training'
+            type: integer
+        eval_metric:
+            value:
+                default: 'rmse'
+                options:
+                    rmse: 'Root Mean Squared Error'
+                    mae: 'Mean Absolute Error'
+                    logloss: 'Negative log-likelihood'
+                    error: 'Binary classification error rate'
+                    merror: 'Multiclass classification error rate'
+                    mlogloss: 'Multiclass logloss'
+                    auc: 'Area under the curve'
+            description: 'The metric to use for validation data'
+            type: str
+        tree_method:
+            value: null
+            description: 'The tree construction algorithm used in XGBoost'
+            type: str
+        scale_pos_weight:
+            value: 1
+            description: 'Control the balance of positive and negative weights, useful for unbalanced classes'
+            type: float
+        base_score:
+            value: 0.5
+            description: 'The initial prediction score of all instances, global bias'
+            type: float
+        # missing:
+        #     value: null
+        #     description: 'Value in the data which needs to be present as a missing value'
+        #     type: null
+        monotone_constraints:
+            value: null
+            description: 'Constraint of variable monotonicity. See tutorial for more information'
+            type: null
+        interaction_constraints:
+            value: null
+            description: 'Constraint of interaction group. See tutorial for more information'
+            type: null
+        max_delta_step:
+            value: 0
+            description: 'Maximum delta step we allow each tree’s weight estimation to be'
+            type: float
+        sampling_method:
+            value:
+                default: 'uniform'
+                options:
+                    uniform: 'Uniform sampling'
+                    gradient_based: 'Gradient-based sampling'
+            description: 'The method to use to sample the training data'
+            type: str
+        colsample_bylevel:
+            value: 1.0
+            description: 'Subsample ratio of columns for each level'
+            type: float
+        colsample_bynode:
+            value: 1.0
+            description: 'Subsample ratio of columns for each split'
+            type: float
+        num_parallel_tree:
+            value: 1
+            description: 'Used for boosting random forest'
+            type: integer
+        device:
+            value:
+                default: 'cpu'
+                options:
+                    cpu: 'Use CPU'
+                    gpu: 'Use GPU'
+                    cuda: 'Use CUDA'
+            description: 'Device ordinal or the special "cpu" string'
+            type: str
+        validate_parameters:
+            value: false
+            description: 'Check that the parameters are valid'
+            type: bool
+        multi_strategy:
+            value: 'one_output_per_tree'
+            description: 'The multi-class strategy if target is multi-class'
+            type: str
+        
