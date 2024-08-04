@@ -18,14 +18,17 @@ dependencies:
     specifier: ^5.5.0
     version: 5.5.0
   lucide-svelte:
-    specifier: 0.417.0
-    version: 0.417.0(svelte@4.2.18)
+    specifier: 0.424.0
+    version: 0.424.0(svelte@4.2.18)
   plotly.js-basic-dist-min:
     specifier: ^2.34.0
     version: 2.34.0
   smiles-drawer:
     specifier: ^2.1.7
     version: 2.1.7
+  tauri-plugin-websocket-api:
+    specifier: github:tauri-apps/tauri-plugin-websocket#v1
+    version: github.com/tauri-apps/tauri-plugin-websocket/c23ba8b03953e459fd9a56ea6113b12461b78026
 
 devDependencies:
   '@iconify/json':
@@ -137,8 +140,8 @@ devDependencies:
     specifier: ^7.0.0
     version: 7.0.0(svelte@4.2.18)(typescript@5.5.4)
   svelte-plotly.js:
-    specifier: 0.5.1
-    version: 0.5.1(plotly.js-dist@2.34.0)(svelte@4.2.18)
+    specifier: 1.0.0
+    version: 1.0.0(plotly.js-dist@2.34.0)(svelte@4.2.18)
   svelte-sonner:
     specifier: ^0.3.27
     version: 0.3.27(svelte@4.2.18)
@@ -3593,8 +3596,8 @@ packages:
       yallist: 3.1.1
     dev: true
 
-  /lucide-svelte@0.417.0(svelte@4.2.18):
-    resolution: {integrity: sha512-JizgL7FFw2vfYj0bkXUyivOvDx+rrbAdJrVzK2Yt/X2/OvUu/9IcOrcOyQcMxwztCvylS4q4MvxsAEnh2NZkLQ==}
+  /lucide-svelte@0.424.0(svelte@4.2.18):
+    resolution: {integrity: sha512-mrEapPPlH5PWGMI0zs3dctR/6NylLx1VM9avRmH4OHN5aaldk4QYd/wTooROD4H6OKlC+7XOdgz0zX1tSxFlXw==}
     peerDependencies:
       svelte: ^3 || ^4 || ^5.0.0-next.42
     dependencies:
@@ -4313,8 +4316,8 @@ packages:
       - typescript
     dev: true
 
-  /svelte-plotly.js@0.5.1(plotly.js-dist@2.34.0)(svelte@4.2.18):
-    resolution: {integrity: sha512-VYxG6v/CjxEK0JZU5wFUW42eEQmfN/k467XmJCKaaXr3qeX+2o3rfGVg30A+GkI02vBvx56ZvHmrSC7+n0LNrg==}
+  /svelte-plotly.js@1.0.0(plotly.js-dist@2.34.0)(svelte@4.2.18):
+    resolution: {integrity: sha512-JRF0IwW74l2n8Opf3iEfSdDn9896Lrxlga8zzXxeVuFqx1lnwUyk/dDaIiw+VVo0FgF0cg83Aruqes3QyhdnAw==}
     peerDependencies:
       plotly.js-dist: ^2.34.0
       svelte: ^4.2.0
@@ -4773,3 +4776,11 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  github.com/tauri-apps/tauri-plugin-websocket/c23ba8b03953e459fd9a56ea6113b12461b78026:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-websocket/tar.gz/c23ba8b03953e459fd9a56ea6113b12461b78026}
+    name: tauri-plugin-websocket-api
+    version: 0.0.0
+    dependencies:
+      '@tauri-apps/api': 1.6.0
+    dev: false

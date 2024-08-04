@@ -16,9 +16,10 @@
     "@tauri-apps/cli": "^1.6.0",
     "@xterm/addon-fit": "^0.10.0",
     "@xterm/xterm": "^5.5.0",
-    "lucide-svelte": "0.417.0",
+    "lucide-svelte": "0.424.0",
     "plotly.js-basic-dist-min": "^2.34.0",
-    "smiles-drawer": "^2.1.7"
+    "smiles-drawer": "^2.1.7",
+    "tauri-plugin-websocket-api": "github:tauri-apps/tauri-plugin-websocket#v1"
   },
   "devDependencies": {
     "@iconify/json": "^2.2.232",
@@ -57,7 +58,7 @@
     "svelte-check": "^3.8.5",
     "svelte-flatlist": "^0.2.6",
     "svelte-material-ui": "^7.0.0",
-    "svelte-plotly.js": "0.5.1",
+    "svelte-plotly.js": "1.0.0",
     "svelte-sonner": "^0.3.27",
     "svelte-splitpanes": "^8.0.5",
     "ts-try": "^0.2.0",
