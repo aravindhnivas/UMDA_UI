@@ -30,9 +30,10 @@ export const asset_name_prefix = 'umdapy';
 export const remove_asset_folder = async () => {
     const asset_folder = await path.join(await path.appLocalDataDir(), asset_name_prefix);
     if (!(await fs.exists(asset_folder))) return;
-    outputbox.warn('Trying to remove existing umdapy folder');
+    outputbox.warn(`Deleting the existing folder: ${asset_folder}`);
     const [err] = await oO(fs.removeDir(asset_folder, { recursive: true }));
     if (err) return Promise.reject(`Could not delete the existing umdapy folder\n ${JSON.stringify(err)}`);
+    outputbox.warn(`Deleted the existing folder: ${asset_folder}`);
 
     return Promise.resolve(asset_folder + ' folder deleted');
 };
