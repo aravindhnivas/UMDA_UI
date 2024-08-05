@@ -20,7 +20,7 @@ import { footerMsg } from '$lib/utils/initialise';
 import { auto_download_and_install_assets } from './assets-status';
 import { sleep } from '$lib/utils/initialise';
 import { Alert } from '$utils/stores';
-import { git_url} from '$lib/utils';
+import { git_url } from '$lib/utils';
 
 let assets_downloading = false;
 let assets_installing = false;
@@ -77,7 +77,7 @@ export async function downloadZIP() {
 
         outputbox.success(download_output as string);
         outputbox.warn(`Downloaded to: ${fileName}`);
-        
+
         const duration = performance.now() - startTime;
         outputbox.warn(`Time taken to download: ${round(duration, 0)} ms`);
         outputbox.success(`assets downloaded`);
@@ -130,7 +130,7 @@ export function unZIP(installation_request = true) {
 
         const args = {
             // win32: ['Expand-Archive', '-Path', asset_zipfile, '-DestinationPath', `${localdir}`, '-Force'],
-            win32: ['-xf', asset_zipfile, '-C', localdir],
+            win32: ['-xvf', asset_zipfile, '-C', localdir],
             darwin: [asset_zipfile, '-d', localdir],
             linux: [asset_zipfile, '-d', localdir],
         };

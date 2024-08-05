@@ -77,7 +77,7 @@
                         "name": "unzip-win32",
                         "cmd": "tar",
                         "args": [
-                            "-xf",
+                            "-xvf",
                             {
                                 "validator": "\\S+"
                             },
