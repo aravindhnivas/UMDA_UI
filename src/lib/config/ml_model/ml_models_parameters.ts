@@ -7,6 +7,7 @@ import gbr from './gbr.yml';
 import gpr from './gpr.yml';
 import xgboost from './xgboost.yml';
 import catboost from './catboost.yml';
+import lgbm from './lgbm.yml';
 
 export default {
     linear_regression,
@@ -18,4 +19,5 @@ export default {
     gpr,
     xgboost,
     catboost,
+    lgbm,
 } as Record<MLModel, CurrentModel>;

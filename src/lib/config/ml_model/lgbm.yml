@@ -1,0 +1,33 @@
+name: LightGBM
+description: 'LightGBM is a gradient boosting framework that uses tree based learning algorithms. It is designed to be distributed and efficient with the following advantages: Faster training speed and higher efficiency, Lower memory usage, Better accuracy, Support of parallel and GPU learning, Capable of handling large-scale data.'
+hyperparameters:
+  n_estimators:
+    value: 100
+    description: 'Number of boosting rounds'
+    fine_tune: '100, 200, 300'
+    type: integer
+  learning_rate:
+    value: 0.1
+    description: 'Boosting learning rate'
+    fine_tune: '0.01, 0.1, 0.3'
+    type: float
+  max_depth:
+    value: -1
+    description: 'Maximum tree depth for base learners, <=0 means no limit'
+    fine_tune: '3, 5, 7'
+    type: integer
+  num_leaves:
+    value: 31
+    description: 'Maximum number of leaves in one tree'
+    fine_tune: '31, 63, 127'
+    type: integer
+parameters:
+  objective:
+    value:
+      default: 'regression'
+      options:
+        regression: 'Regression task'
+        binary: 'Binary classification task'
+        multiclass: 'Multiclass classification task'
+    description: 'Type of task'
+    type: str
