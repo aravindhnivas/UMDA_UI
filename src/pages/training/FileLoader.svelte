@@ -30,6 +30,11 @@
             return;
         }
 
+        if (!(await fs.exists(filename))) {
+            toast.error('File does not exist');
+            return;
+        }
+
         if (filetype === 'hdf5' && !key) {
             toast.error('Please provide a key');
             return;
