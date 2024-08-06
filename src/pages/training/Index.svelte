@@ -3,6 +3,7 @@
     import { Pane } from 'svelte-splitpanes';
     import { Embedding, Mol2VecTrain, VICGAETrain, PCATrain, MLmodelTrain, TrainingFile } from '.';
     import { ConstructionIcon } from 'lucide-svelte';
+    import MlPredictions from './predictions/MlPredictions.svelte';
 
     let active_item = 'Mol2Vec';
 </script>
@@ -42,6 +43,9 @@
                 <li on:click={() => (active_item = 'ML_Model')}>
                     <span class:active={active_item == 'ML_Model'}>ML Model</span>
                 </li>
+                <li on:click={() => (active_item = 'ML_predictions')}>
+                    <span class:active={active_item == 'ML_predictions'}>ML Predictions</span>
+                </li>
             </ul>
         </Pane>
         <Pane minSize={80}>
@@ -52,6 +56,7 @@
                 <TrainingFile display={active_item.toLowerCase() === 'training_file' ? '' : 'none'} />
                 <Embedding display={active_item.toLowerCase() === 'embedding' ? '' : 'none'} />
                 <MLmodelTrain display={active_item.toLowerCase() === 'ml_model' ? '' : 'none'} />
+                <MlPredictions display={active_item.toLowerCase() === 'ml_predictions' ? '' : 'none'} />
             </div>
         </Pane>
     </svelte:fragment>
