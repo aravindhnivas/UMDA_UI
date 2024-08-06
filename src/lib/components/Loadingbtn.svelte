@@ -4,7 +4,6 @@
     import { X } from 'lucide-svelte/icons';
 
     export let name: string;
-    // export let callback: (e: MouseEvent) => Promise<T>;
     type Callback = { pyfile: string; args: Record<string, any> } | undefined;
     export let callback: () => Promise<Callback> | Callback;
 
@@ -14,7 +13,6 @@
     export let loading: boolean = false;
     export let subprocess = false;
     export let btn: HTMLButtonElement | null = null;
-    // export let source: CancelTokenSource | null = null;
 
     let source: CancelTokenSource;
     let process_count = 0;
@@ -34,28 +32,17 @@
 
         loading = true;
         if (subprocess) process_count += 1;
-        // const [err, result] = await oO(callback(e));
         const dataFromPython = await computePy<{ predicted_value: string }>({
             pyfile,
             args,
             general: subprocess,
             target: subprocess ? btn : undefined,
             cancelToken: source.token,
-            // target: e.target as HTMLButtonElement,
         });
         loading = false;
-        // console.log({ err, result, loading });
         if (subprocess) process_count -= 1;
 
         dispatch('result', { dataFromPython, pyfile, args });
-
-        // if (!dataFromPython) {
-        //     console.log('error!!');
-        //     dispatch('error', { pyfile, args });
-        // } else {
-        //     console.log('result!!');
-        //     dispatch('result', { dataFromPython, pyfile, args });
-        // }
         console.log('done!!');
     };
 </script>
@@ -68,11 +55,11 @@
     on:click={run_callback}
 > -->
 
-<div class="flex gap-2">
+<div class="flex gap-2 {className}">
     <button
         bind:this={btn}
         disabled={loading}
-        class="btn btn-sm ld-ext-right w-max {className} "
+        class="btn btn-sm ld-ext-right w-max"
         class:running={loading}
         on:click={run_callback}
     >
@@ -82,7 +69,7 @@
         {/if}
         <div class="ld ld-ring ld-spin" style="color: antiquewhite;"></div>
     </button>
-    {#if source && loading}
+    {#if source && loading && !subprocess}
         <button
             class="btn btn-sm btn-error"
             on:click={() => {
