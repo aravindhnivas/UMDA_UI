@@ -48,8 +48,8 @@
         const dataFromPython = await computePy<{ predicted_value: string }>({
             pyfile,
             args,
-            general: true,
-            target: e.target as HTMLButtonElement,
+            general: false,
+            // target: e.target as HTMLButtonElement,
         });
         console.log({ dataFromPython });
         if (!dataFromPython) {
@@ -86,8 +86,8 @@
 
     <div class="grid grid-cols-4 items-end gap-2">
         <CustomInput class="col-span-3" bind:value={$smiles} label="Enter molecular SMILES" />
+        <Loadingbtn name="Compute" callback={predict} />
         <!-- <Loadingbtn name="Compute" callback={predict} subprocess={true} /> -->
-        <Loadingbtn name="Compute" callback={predict} subprocess={true} />
     </div>
 
     <div class="flex items-start gap-1">
