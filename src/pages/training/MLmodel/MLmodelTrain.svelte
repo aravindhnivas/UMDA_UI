@@ -262,5 +262,6 @@
             <ResultsPanel />
         </Accordion>
     </div>
+
     <Loadingbtn class="w-lg m-auto " name="Compute" callback={fit_function} subprocess={true} />
 </div>

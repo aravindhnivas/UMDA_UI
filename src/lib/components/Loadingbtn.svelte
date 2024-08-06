@@ -18,14 +18,16 @@
         loading = true;
         if (subprocess) process_count += 1;
         const [err, result] = await oO(callback(e));
-        if (subprocess) process_count -= 1;
         loading = false;
+        console.log({ err, result, loading });
+        if (subprocess) process_count -= 1;
 
         if (err) {
             dispatch('error', err);
         } else {
             dispatch('result', result);
         }
+        console.log('done!!');
     };
 </script>
 
