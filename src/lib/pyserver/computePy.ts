@@ -9,10 +9,11 @@ interface Type {
     args: Object;
     target?: HTMLButtonElement | null;
     general?: boolean;
+    cancelToken?: any;
     e?: Event;
 }
 
-export default async function <T>({ e, target, pyfile, args, general }: Type) {
+export default async function <T>({ e, target, pyfile, args, general, cancelToken }: Type) {
     target ||= e?.target as HTMLButtonElement;
     let dataFromPython: T;
     let processDivGeneral;
@@ -61,6 +62,7 @@ export default async function <T>({ e, target, pyfile, args, general }: Type) {
                 general,
                 pyfile,
                 args,
+                cancelToken,
             });
             console.log(dataFromPython);
             if ((dataFromPython as any)?.warnings) {

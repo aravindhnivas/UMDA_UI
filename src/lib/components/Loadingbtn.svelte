@@ -1,5 +1,7 @@
 <script lang="ts" generics="T">
     import { pyServerReady } from '$lib/pyserver/stores';
+    import type { CancelTokenSource } from 'axios';
+    import { X } from 'lucide-svelte/icons';
 
     export let name: string;
     export let callback: (e: MouseEvent) => Promise<T>;
@@ -9,6 +11,8 @@
     export let loading: boolean = false;
     export let subprocess = false;
     export let btn: HTMLButtonElement | null = null;
+    export let source: CancelTokenSource | null = null;
+
     let process_count = 0;
 
     const dispatch = createEventDispatcher();
@@ -39,16 +43,28 @@
     on:click={run_callback}
 > -->
 
-<button
-    bind:this={btn}
-    disabled={loading}
-    class="btn btn-sm ld-ext-right w-max {className} "
-    class:running={loading}
-    on:click={run_callback}
->
-    {name}
-    {#if subprocess && process_count > 0}
-        <div class="badge">{process_count}</div>
+<div class="flex gap-2">
+    <button
+        bind:this={btn}
+        disabled={loading}
+        class="btn btn-sm ld-ext-right w-max {className} "
+        class:running={loading}
+        on:click={run_callback}
+    >
+        {name}
+        {#if subprocess && process_count > 0}
+            <div class="badge">{process_count}</div>
+        {/if}
+        <div class="ld ld-ring ld-spin" style="color: antiquewhite;"></div>
+    </button>
+    {#if source && loading}
+        <button
+            class="btn btn-sm btn-error"
+            on:click={() => {
+                if (!source) return toast.error('No operation to cancel');
+                source?.cancel('Operation canceled by the user.');
+                toast.error('Operation canceled');
+            }}><X /></button
+        >
     {/if}
-    <div class="ld ld-ring ld-spin" style="color: antiquewhite;"></div>
-</button>
+</div>

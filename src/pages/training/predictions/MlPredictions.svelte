@@ -5,9 +5,13 @@
     import CustomInput from '$lib/components/CustomInput.svelte';
     import { CustomSelect } from '$lib/components';
     import { embeddings, model_and_pipeline_files } from '../embedding/stores';
+    import axios, { type CancelTokenSource } from 'axios';
+    // import { X } from 'lucide-svelte/icons';
 
     export let id: string = 'ml-predictions';
     export let display: string = 'none';
+
+    let source: CancelTokenSource;
 
     const predict = async (e: Event) => {
         if (!$molecular_embedder) {
@@ -45,10 +49,13 @@
         };
         const pyfile = 'training.ml_prediction';
         // console.log(e.target);
+        const CancelToken = axios.CancelToken;
+        source = CancelToken.source();
         const dataFromPython = await computePy<{ predicted_value: string }>({
             pyfile,
             args,
             general: false,
+            cancelToken: source.token,
             // target: e.target as HTMLButtonElement,
         });
         console.log({ dataFromPython });
@@ -86,7 +93,7 @@
 
     <div class="grid grid-cols-4 items-end gap-2">
         <CustomInput class="col-span-3" bind:value={$smiles} label="Enter molecular SMILES" />
-        <Loadingbtn name="Compute" callback={predict} />
+        <Loadingbtn name="Compute" callback={predict} {source} />
         <!-- <Loadingbtn name="Compute" callback={predict} subprocess={true} /> -->
     </div>
 

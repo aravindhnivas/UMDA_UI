@@ -7,11 +7,18 @@ interface Type {
     args: Object;
     target?: HTMLButtonElement | null;
     general?: boolean;
+    cancelToken?: any;
 }
 
 const loading_class = 'running';
 
-export default async function <T>({ pyfile, args, target, general }: Type): Promise<T | string | undefined> {
+export default async function <T>({
+    pyfile,
+    args,
+    target,
+    general,
+    cancelToken,
+}: Type): Promise<T | string | undefined> {
     try {
         console.time('Computation took');
         console.warn({ pyfile, args, target, general });
@@ -35,8 +42,11 @@ export default async function <T>({ pyfile, args, target, general }: Type): Prom
                 headers: { 'Content-type': 'application/json' },
                 // timeout: 1000 * 60 * 5, // 5 minutes,
                 timeout: 0, // infinite timeout
+                cancelToken,
             },
         );
+        // console.log(source);
+        // source.cancel('Operation canceled by the user.');
 
         console.log({ response });
         if (target?.classList.contains(loading_class)) {
