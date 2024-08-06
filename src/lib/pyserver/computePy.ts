@@ -39,7 +39,7 @@ export default async function <T>({ e, target, pyfile, args, general }: Type) {
                 pyfile,
                 args,
             });
-
+            console.log(dataFromPython);
             // const saved_content = await fs.readTextFile(pyfile + '.json', {
             //     dir: fs.BaseDirectory.AppLog,
             // });
@@ -62,7 +62,7 @@ export default async function <T>({ e, target, pyfile, args, general }: Type) {
                 pyfile,
                 args,
             });
-
+            console.log(dataFromPython);
             if ((dataFromPython as any)?.warnings) {
                 Alert.warn((dataFromPython as any).warnings);
             }
