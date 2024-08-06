@@ -2,16 +2,40 @@
     import BrowseFile from '$lib/components/BrowseFile.svelte';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import Molecule from '$lib/components/Molecule.svelte';
+    import CustomInput from '$lib/components/CustomInput.svelte';
 
     export let id: string = 'ml-predictions';
     export let display: string = 'none';
 
     const predict = async () => {
-        console.log('predict');
-        predicted_value = Math.random().toFixed(2);
+        if (!(await fs.exists($molecular_embedder_file))) {
+            toast.error('molecular_embedder file not found');
+            return;
+        }
+        if (!(await fs.exists($pretrained_model_file))) {
+            toast.error('pretrained_model file not found');
+            return;
+        }
+        if (!$smiles) {
+            toast.error('Enter molecular SMILES');
+            return;
+        }
+        const args = {
+            smiles: $smiles,
+            molecular_embedder_file: $molecular_embedder_file,
+            pretrained_model_file: $pretrained_model_file,
+        };
+        const pyfile = 'ml_prediction';
+        const dataFromPython = await computePy<string | number>({
+            pyfile,
+            args,
+        });
+        if (!dataFromPython) return;
+        predicted_value = dataFromPython;
     };
 
-    let pretrained_model = '';
+    const pretrained_model_file = localWritable('ml_prediction_pretrained_model', '');
+    const molecular_embedder_file = localWritable('ml_prediction_molecular_embedder', '');
     const smiles = localWritable(
         'ml_prediction_molecular_smiles',
         'COP(=S)(OC)OC1=CC=C(C=C1)SC2=CC=C(C=C2)OP(=S)(OC)OC',
@@ -24,21 +48,11 @@
 
 <div class="grid content-start gap-2" {id} style:display>
     <h2>Predictions</h2>
-    <BrowseFile bind:filename={pretrained_model} label="pretrained_model" />
+    <BrowseFile bind:filename={$molecular_embedder_file} label="molecular_embedder" />
+    <BrowseFile bind:filename={$pretrained_model_file} label="pretrained_model" />
 
-    <div class="flex items-end gap-4">
-        <div class="flex flex-col gap-1">
-            <span class="text-xs pl-1">Enter molecular SMILES</span>
-            <input
-                type="text"
-                class="input input-sm w-xl"
-                bind:value={$smiles}
-                placeholder="Enter SMILES"
-                on:change={async () => {
-                    if (!$smiles) return;
-                }}
-            />
-        </div>
+    <div class="grid grid-cols-4 items-end gap-2">
+        <CustomInput class="col-span-3" bind:value={$smiles} label="Enter molecular SMILES" />
         <Loadingbtn name="Compute" callback={predict} />
     </div>
 
