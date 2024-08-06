@@ -27,7 +27,7 @@
 </script>
 
 <CustomPanel title="Control" open={true}>
-    <div class="grid grid-flow-col auto-cols-max gap-4">
+    <div class="flex flex-wrap gap-4">
         <div class="grid gap-1">
             <input class="range" type="range" min="5" max="95" step="5" bind:value={$test_size} />
             <span>split: {$test_size}% test : {100 - $test_size}% train</span>
