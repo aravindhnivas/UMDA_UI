@@ -32,8 +32,8 @@ dependencies:
 
 devDependencies:
   '@iconify/json':
-    specifier: ^2.2.232
-    version: 2.2.232
+    specifier: ^2.2.234
+    version: 2.2.234
   '@loadingio/loading.css':
     specifier: ^3.2.1
     version: 3.2.1
@@ -98,8 +98,8 @@ devDependencies:
     specifier: ^4.1.1
     version: 4.1.1
   axios:
-    specifier: ^1.7.2
-    version: 1.7.2
+    specifier: ^1.7.3
+    version: 1.7.3
   bulma:
     specifier: ^1.0.2
     version: 1.0.2
@@ -752,8 +752,8 @@ packages:
     dev: true
     optional: true
 
-  /@iconify/json@2.2.232:
-    resolution: {integrity: sha512-o1W5bNDuXTd3ugywfX9uRmhuJTKYOLhH4qk+eUpkR8WEYdTmMW+FSiFO5R2KqD94Tzoi8Ef8u/R7felU5xk3eQ==}
+  /@iconify/json@2.2.234:
+    resolution: {integrity: sha512-2z0+I0YhHelZ+MPX7wHsSGKv81PicsnVlRfCYNmhZ0s1tyPo7Kkvt8QWjytPZV6f/ypb111I5jpTFB+W7bcAgQ==}
     dependencies:
       '@iconify/types': 2.0.0
       pathe: 1.1.2
@@ -2821,8 +2821,8 @@ packages:
       postcss-value-parser: 4.2.0
     dev: true
 
-  /axios@1.7.2:
-    resolution: {integrity: sha512-2A8QhOMrbomlDuiLeK9XibIBzuHeRcqqNOHp0Cyp5EoJ1IFDh+XZH3A6BkXtv0K4gFGCI0Y4BM7B1wOEi0Rmgw==}
+  /axios@1.7.3:
+    resolution: {integrity: sha512-Ar7ND9pU99eJ9GpoGQKhKf58GpUOgnzuaB7ueNQ5BMi0p+LZ5oaEnfF999fAArcTIBwXTCHAmGcHOZJaWPq9Nw==}
     dependencies:
       follow-redirects: 1.15.6
       form-data: 4.0.0
