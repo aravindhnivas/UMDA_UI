@@ -1,5 +1,12 @@
 <script lang="ts">
-    import { embedding, embeddings, embedd_savefile, embedd_savefile_path, use_PCA } from './stores';
+    import {
+        embedding,
+        embeddings,
+        embedd_savefile,
+        embedd_savefile_path,
+        use_PCA,
+        model_and_pipeline_files,
+    } from './stores';
     import { training_file, training_column_name_X } from '../training_file/stores';
     import { NPARTITIONS } from '$lib/stores/system';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
@@ -14,12 +21,6 @@
     export let display: string = 'none';
 
     // $: console.log({ $embedd_savefile_path });
-    const model_and_pipeline_files = localWritable<{
-        [name: string]: {
-            model_file: string;
-            pipeline_file: string;
-        };
-    }>('model_and_pipeline_files', {});
 
     $: if ($embedding && !$model_and_pipeline_files[$embedding]) {
         $model_and_pipeline_files[$embedding] = {
@@ -99,7 +100,7 @@
                 PCA_pipeline_location: $use_PCA ? $model_and_pipeline_files[$embedding].pipeline_file : null,
                 embedd_savefile: $embedd_savefile,
             },
-            general: true && !test_mode,
+            general: !test_mode,
             target: e.target as HTMLButtonElement,
         });
 
