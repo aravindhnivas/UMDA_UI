@@ -4,33 +4,58 @@
     import { X } from 'lucide-svelte/icons';
 
     export let name: string;
-    export let callback: (e: MouseEvent) => Promise<T>;
+    // export let callback: (e: MouseEvent) => Promise<T>;
+    type Callback = { pyfile: string; args: Record<string, any> } | undefined;
+    export let callback: () => Promise<Callback> | Callback;
+
     let className = '';
     export { className as class };
 
     export let loading: boolean = false;
     export let subprocess = false;
     export let btn: HTMLButtonElement | null = null;
-    export let source: CancelTokenSource | null = null;
+    // export let source: CancelTokenSource | null = null;
 
+    let source: CancelTokenSource;
     let process_count = 0;
 
     const dispatch = createEventDispatcher();
 
     const run_callback = async (e: MouseEvent) => {
         if (!$pyServerReady) return toast.error('python server is not yet started');
+
+        const data = await callback();
+        if (!data) return;
+        // console.log({ data });
+
+        const { pyfile, args } = data;
+        const CancelToken = axios.CancelToken;
+        source = CancelToken.source();
+
         loading = true;
         if (subprocess) process_count += 1;
-        const [err, result] = await oO(callback(e));
+        // const [err, result] = await oO(callback(e));
+        const dataFromPython = await computePy<{ predicted_value: string }>({
+            pyfile,
+            args,
+            general: subprocess,
+            target: subprocess ? btn : undefined,
+            cancelToken: source.token,
+            // target: e.target as HTMLButtonElement,
+        });
         loading = false;
-        console.log({ err, result, loading });
+        // console.log({ err, result, loading });
         if (subprocess) process_count -= 1;
 
-        if (err) {
-            dispatch('error', err);
-        } else {
-            dispatch('result', result);
-        }
+        dispatch('result', { dataFromPython, pyfile, args });
+
+        // if (!dataFromPython) {
+        //     console.log('error!!');
+        //     dispatch('error', { pyfile, args });
+        // } else {
+        //     console.log('result!!');
+        //     dispatch('result', { dataFromPython, pyfile, args });
+        // }
         console.log('done!!');
     };
 </script>

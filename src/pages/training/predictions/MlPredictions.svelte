@@ -13,7 +13,7 @@
 
     let source: CancelTokenSource;
 
-    const predict = async (e: Event) => {
+    const predict = async () => {
         if (!$molecular_embedder) {
             toast.error('molecular_embedder not found');
             return;
@@ -48,22 +48,16 @@
             pretrained_model_file: $pretrained_model_file,
         };
         const pyfile = 'training.ml_prediction';
-        // console.log(e.target);
-        const CancelToken = axios.CancelToken;
-        source = CancelToken.source();
-        const dataFromPython = await computePy<{ predicted_value: string }>({
-            pyfile,
-            args,
-            general: false,
-            cancelToken: source.token,
-            // target: e.target as HTMLButtonElement,
-        });
-        console.log({ dataFromPython });
+        return { pyfile, args };
+    };
+
+    const onResult = (e: CustomEvent) => {
+        const { dataFromPython } = e.detail;
         if (!dataFromPython) {
             predicted_value = 'Error';
-            return;
+        } else {
+            predicted_value = dataFromPython.predicted_value;
         }
-        predicted_value = dataFromPython.predicted_value;
     };
 
     const pretrained_model_file = localWritable('ml_prediction_pretrained_model_file', '');
@@ -93,8 +87,8 @@
 
     <div class="grid grid-cols-4 items-end gap-2">
         <CustomInput class="col-span-3" bind:value={$smiles} label="Enter molecular SMILES" />
-        <Loadingbtn name="Compute" callback={predict} {source} />
-        <!-- <Loadingbtn name="Compute" callback={predict} subprocess={true} /> -->
+        <Loadingbtn name="Compute" callback={predict} on:result={onResult} />
+        <!-- <Loadingbtn name="Compute" callback={predict} on:result={onResult} subprocess={true} /> -->
     </div>
 
     <div class="flex items-start gap-1">

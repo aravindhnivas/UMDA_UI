@@ -44,8 +44,7 @@
             toast.error('Please provide a value less than or equal to ' + rows.max);
             return;
         }
-
-        const dataFromPython = await computePy<DataType>({
+        return {
             pyfile: 'training.read_data',
             args: {
                 filename,
@@ -53,16 +52,7 @@
                 key,
                 rows,
             },
-        });
-
-        if (!dataFromPython) {
-            data = null;
-            toast.error('Could not access pyfile');
-            return;
-        }
-        data = dataFromPython;
-        console.warn({ data, dataFromPython });
-        dispatch('load', data);
+        };
     };
     let loading = false;
     const rows = {
@@ -100,7 +90,17 @@
 <div class="flex gap-1 items-end">
     <CustomSelect label="where" bind:value={rows.where} items={['head', 'tail']} />
     <CustomInput bind:value={rows.value} label="# Rows" type="number" max={rows.max} on:change={() => load_data()} />
-    <Loadingbtn bind:loading name="load file" callback={load_data} />
+    <Loadingbtn
+        bind:loading
+        name="load file"
+        callback={load_data}
+        on:result={e => {
+            console.log(e.detail);
+            const { dataFromPython } = e.detail;
+            data = dataFromPython;
+            dispatch('load', data);
+        }}
+    />
 </div>
 
 <slot />

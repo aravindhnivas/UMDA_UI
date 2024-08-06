@@ -15,23 +15,22 @@
     let key = 'data';
     let vector_size = 300;
 
-    const generate_vec = async (e: MouseEvent) => {
-        return toast.error('Under construction');
+    const generate_vec = async () => {
+        toast.error('Under construction');
+        return { pyfile: 'training.vicgae', args: {} };
 
         if (!$filename) {
             toast.error('Please select a file');
             return;
         }
 
-        await computePy({
+        return {
             pyfile: 'training.vicgae',
             args: {
                 smi_file: $filename,
                 vector_size,
             },
-            general: true,
-            target: e.target as HTMLButtonElement,
-        });
+        };
     };
 </script>
 
@@ -44,5 +43,5 @@
     <h3>Generate a VICGAE embedder model</h3>
     <!-- under construction -->
     <p class="text-red-500">Under construction</p>
-    <Loadingbtn class="w-lg m-auto " name="Compute" callback={generate_vec} subprocess={true} />
+    <!-- <Loadingbtn class="w-lg m-auto " name="Compute" callback={generate_vec} subprocess={true} /> -->
 </div>

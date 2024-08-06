@@ -28,18 +28,12 @@
     ``;
     let min_count = 1;
 
-    const generate_mol2vec = async (e: MouseEvent) => {
+    const generate_mol2vec = async () => {
         if (!$filename) {
             toast.error('Please select a file');
             return;
         }
-
-        // if (n_jobs > max_allowed_cpu) {
-        //     toast.error('Max. allowed CPU core is ' + max_allowed_cpu);
-        //     return;
-        // }
-
-        await computePy({
+        return {
             pyfile: 'training.mol2vec',
             args: {
                 smi_file: $filename,
@@ -47,12 +41,9 @@
                 radius,
                 vector_size,
                 min_count,
-                // n_jobs,
                 corpus_file,
             },
-            general: true,
-            target: e.target as HTMLButtonElement,
-        });
+        };
     };
 </script>
 

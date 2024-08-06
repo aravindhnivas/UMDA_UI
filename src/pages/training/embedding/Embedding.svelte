@@ -50,7 +50,7 @@
     const test_smiles = localWritable('test_smiles', 'CCO');
     let test_result = '';
 
-    const embedd_data = async (e: MouseEvent) => {
+    const embedd_data = async () => {
         if (!test_mode && !$training_file.filename) {
             toast.error('Please select a file');
             return;
@@ -85,7 +85,7 @@
         dataFromPython = {};
 
         const pyfile = 'training.embedd_data';
-        dataFromPython = await computePy({
+        return {
             pyfile,
             args: {
                 test_mode,
@@ -100,11 +100,12 @@
                 PCA_pipeline_location: $use_PCA ? $model_and_pipeline_files[$embedding].pipeline_file : null,
                 embedd_savefile: $embedd_savefile,
             },
-            general: !test_mode,
-            target: e.target as HTMLButtonElement,
-        });
+        };
+    };
 
-        console.log(dataFromPython);
+    const onResult = async e => {
+        const { pyfile } = e.detail;
+        dataFromPython = e.detail.dataFromPython;
 
         if (test_mode && dataFromPython.test_mode) {
             let vec = dataFromPython.test_mode.embedded_vector;
@@ -209,11 +210,11 @@
                     placeholder="Enter SMILES"
                     on:change={async () => {
                         if (!$test_smiles) return;
-                        await embedd_data(new MouseEvent('click'));
+                        await embedd_data();
                     }}
                 />
             </div>
-            <Loadingbtn name="Compute" callback={embedd_data} />
+            <Loadingbtn name="Compute" callback={embedd_data} on:result={onResult} />
         </div>
 
         <div class="grid grid-cols-4 items-center gap-1">
@@ -249,7 +250,8 @@
                     {/await}
                 {/await}
             </div>
-            <Loadingbtn name="Compute" callback={embedd_data} subprocess={true} />
+            <!-- <Loadingbtn name="Compute" callback={embedd_data} subprocess={true} /> -->
+            <Loadingbtn name="Compute" callback={embedd_data} subprocess={true} on:result={onResult} />
         </div>
     {/if}
 

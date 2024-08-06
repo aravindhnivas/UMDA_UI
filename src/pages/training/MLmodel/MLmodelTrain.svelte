@@ -46,18 +46,21 @@
     const unique_id = getID();
     setContext('unique_id', unique_id);
 
-    const fit_function = async (e: Event) => {
+    const fit_function = async () => {
         const vectors_file = await $embedd_savefile_path;
         if (!(await fs.exists(vectors_file))) {
-            return toast.error('Error: Embeddings vector file not found');
+            toast.error('Error: Embeddings vector file not found');
+            return;
         }
 
         if (!(await fs.exists($training_file.filename))) {
-            return toast.error('Error: Training file not found');
+            toast.error('Error: Training file not found');
+            return;
         }
 
         if (!$training_column_name_y) {
-            return toast.error('Error: Column Y not provided. Set it in the training file');
+            toast.error('Error: Column Y not provided. Set it in the training file');
+            return;
         }
 
         let clonedFineTunedValues: Record<string, any> = {};
@@ -187,21 +190,15 @@
             pca: $use_PCA,
             save_pretrained_model: $save_pretrained_model,
         };
-        console.log(args);
         $results = null;
+        return { pyfile: 'training.ml_model', args };
+    };
 
-        // return;
-        const dataFromPython = await computePy({
-            pyfile: 'training.ml_model',
-            args,
-            general: true,
-            target: e.target as HTMLButtonElement,
-        });
-
-        console.log({ dataFromPython });
+    const onResult = async (e: CustomEvent) => {
+        const { args } = e.detail;
         console.log('Training completed');
 
-        const result_file = pre_trained_file + '.results.json';
+        const result_file = args.pre_trained_file + '.results.json';
 
         console.log('Pre-trained file', result_file);
         if (await fs.exists(result_file)) {
@@ -219,7 +216,7 @@
         } else {
             toast.error('Error: Model not saved');
         }
-        const data_file = pre_trained_file + '.dat.json';
+        const data_file = args.pre_trained_file + '.dat.json';
         if (await fs.exists(data_file)) {
             toast.success('Model trained successfully');
             try {
@@ -263,5 +260,5 @@
         </Accordion>
     </div>
 
-    <Loadingbtn class="w-lg m-auto " name="Compute" callback={fit_function} subprocess={true} />
+    <Loadingbtn class="w-lg m-auto " name="Compute" callback={fit_function} subprocess={true} on:result={onResult} />
 </div>

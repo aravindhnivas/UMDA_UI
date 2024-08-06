@@ -64,7 +64,7 @@
     let compute_kmeans = false;
     let original_model = embeddings[0];
 
-    const generate_pca = async (e: MouseEvent) => {
+    const generate_pca = async () => {
         if (!$pca_model_and_npy_files[original_model].model_file) {
             toast.error('Please select a model_file');
             return;
@@ -80,7 +80,7 @@
             return;
         }
 
-        await computePy({
+        return {
             pyfile: 'training.pca',
             args: {
                 pca_dim,
@@ -92,9 +92,7 @@
                 compute_kmeans,
                 original_model,
             },
-            general: true,
-            target: e.target as HTMLButtonElement,
-        });
+        };
     };
 
     $: if (original_model && !$pca_model_and_npy_files[original_model]) {
