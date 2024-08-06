@@ -3,13 +3,15 @@
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import Molecule from '$lib/components/Molecule.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
+    import { CustomSelect } from '$lib/components';
+    import { embeddings, model_and_pipeline_files } from '../embedding/stores';
 
     export let id: string = 'ml-predictions';
     export let display: string = 'none';
 
-    const predict = async () => {
-        if (!(await fs.exists($molecular_embedder_file))) {
-            toast.error('molecular_embedder file not found');
+    const predict = async (e: Event) => {
+        if (!$molecular_embedder) {
+            toast.error('molecular_embedder not found');
             return;
         }
         if (!(await fs.exists($pretrained_model_file))) {
@@ -20,22 +22,47 @@
             toast.error('Enter molecular SMILES');
             return;
         }
+
+        if (!(await fs.exists($model_and_pipeline_files[$molecular_embedder].model_file))) {
+            toast.error('Please select a pretrained model');
+            return;
+        }
+
+        if ($use_PCA && !(await fs.exists($model_and_pipeline_files[$molecular_embedder].pipeline_file))) {
+            toast.error('Please select a PCA pipeline');
+            return;
+        }
+
+        predicted_value = 'Computing...';
         const args = {
             smiles: $smiles,
-            molecular_embedder_file: $molecular_embedder_file,
+            molecular_embedder: {
+                name: $molecular_embedder,
+                file: $model_and_pipeline_files[$molecular_embedder].model_file,
+                pipeline_file: $use_PCA ? $model_and_pipeline_files[$molecular_embedder].pipeline_file : null,
+            },
             pretrained_model_file: $pretrained_model_file,
         };
-        const pyfile = 'ml_prediction';
-        const dataFromPython = await computePy<string | number>({
+        const pyfile = 'training.ml_prediction';
+        // console.log(e.target);
+        const dataFromPython = await computePy<{ predicted_value: string }>({
             pyfile,
             args,
+            general: true,
+            target: e.target as HTMLButtonElement,
         });
-        if (!dataFromPython) return;
-        predicted_value = dataFromPython;
+        console.log({ dataFromPython });
+        if (!dataFromPython) {
+            predicted_value = 'Error';
+            return;
+        }
+        predicted_value = dataFromPython.predicted_value;
     };
 
-    const pretrained_model_file = localWritable('ml_prediction_pretrained_model', '');
-    const molecular_embedder_file = localWritable('ml_prediction_molecular_embedder', '');
+    const pretrained_model_file = localWritable('ml_prediction_pretrained_model_file', '');
+    const molecular_embedder = localWritable('ml_prediction_molecular_embedder', 'VICGAE');
+    const use_PCA = localWritable('ml_prediction_use_PCA', false);
+
     const smiles = localWritable(
         'ml_prediction_molecular_smiles',
         'COP(=S)(OC)OC1=CC=C(C=C1)SC2=CC=C(C=C2)OP(=S)(OC)OC',
@@ -48,12 +75,19 @@
 
 <div class="grid content-start gap-2" {id} style:display>
     <h2>Predictions</h2>
-    <BrowseFile bind:filename={$molecular_embedder_file} label="molecular_embedder" />
-    <BrowseFile bind:filename={$pretrained_model_file} label="pretrained_model" />
+    <div class="flex gap-1 items-end">
+        <div class="flex-center border-1 border-solid border-rounded p-1">
+            <span>PCA</span>
+            <input type="checkbox" class="toggle" bind:checked={$use_PCA} />
+        </div>
+        <CustomSelect label="Embedder" bind:value={$molecular_embedder} items={embeddings} />
+        <BrowseFile bind:filename={$pretrained_model_file} label="Pre-trained model" />
+    </div>
 
     <div class="grid grid-cols-4 items-end gap-2">
         <CustomInput class="col-span-3" bind:value={$smiles} label="Enter molecular SMILES" />
-        <Loadingbtn name="Compute" callback={predict} />
+        <!-- <Loadingbtn name="Compute" callback={predict} subprocess={true} /> -->
+        <Loadingbtn name="Compute" callback={predict} subprocess={true} />
     </div>
 
     <div class="flex items-start gap-1">
