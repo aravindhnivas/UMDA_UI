@@ -6,7 +6,7 @@
         // "moduleResolution": "bundler",
         // Bundler mode
         "moduleResolution": "bundler",
-        "allowImportingTsExtensions": true,
+        // "allowImportingTsExtensions": true,
         "verbatimModuleSyntax": true,
         "noEmit": false,
         // Best practices
@@ -16,7 +16,7 @@
         // Some stricter flags
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "noPropertyAccessFromIndexSignature": true,
+        "noPropertyAccessFromIndexSignature": true
     },
     "include": [
         "vite.config.ts"
