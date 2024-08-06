@@ -216,9 +216,7 @@
         </div>
 
         <div class="grid grid-cols-4 items-center gap-1">
-            <div class="col-span-1 rounded-1" style="background-color: antiquewhite;">
-                <Molecule bind:smiles={$test_smiles} />
-            </div>
+            <Molecule bind:smiles={$test_smiles} show_controls={false} />
 
             <div class="col-span-3">
                 <span class="text-sm pl-1">Embedded vector</span>
