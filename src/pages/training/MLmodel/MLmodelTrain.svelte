@@ -260,5 +260,5 @@
         </Accordion>
     </div>
 
-    <Loadingbtn class="w-lg m-auto " name="Compute" callback={fit_function} subprocess={true} on:result={onResult} />
+    <Loadingbtn class="m-auto " name="Compute" callback={fit_function} subprocess={true} on:result={onResult} />
 </div>
