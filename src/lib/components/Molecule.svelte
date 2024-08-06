@@ -1,30 +1,35 @@
 <script lang="ts">
     import { afterUpdate } from 'svelte';
     import SmilesDrawer from 'smiles-drawer';
+    import CustomInput from './CustomInput.svelte';
 
     export let smiles = '';
+    export let width = 300;
+    export let height = 200;
+    export let show_controls = true;
 
-    const SETTINGS = {
-        width: 300,
-        height: 200,
-    };
-    let drawer = new SmilesDrawer.SvgDrawer(SETTINGS);
+    $: drawer = new SmilesDrawer.SvgDrawer({ width, height });
     let svgElement: SVGElement;
 
     afterUpdate(() => {
+        if (!smiles) return;
+        if (!drawer) return;
         SmilesDrawer.parse(smiles, function (tree) {
-            drawer.draw(tree, svgElement, 'light');
+            drawer?.draw(tree, svgElement, 'light');
         });
     });
 </script>
 
-<div class="flex-center">
-    <svg bind:this={svgElement} data-smiles={smiles} />
+<div class="grid gap-1">
+    <div class="text-sm">Molecular structure</div>
+    <div class="flex-center rounded-1" style="background-color: antiquewhite;">
+        <svg style:width style:height bind:this={svgElement} data-smiles={smiles} />
+    </div>
+    {#if show_controls}
+        <div class="flex items-end gap-2 flex-wrap">
+            <CustomInput placeholder="width" bind:value={width} label="width" type="number" />
+            <CustomInput placeholder="height" bind:value={height} label="height" type="number" />
+            <!-- <button class="btn btn-sm">Adjust</button> -->
+        </div>
+    {/if}
 </div>
-
-<style>
-    svg {
-        width: 300px;
-        height: 200px;
-    }
-</style>
