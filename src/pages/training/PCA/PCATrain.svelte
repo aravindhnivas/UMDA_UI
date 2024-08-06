@@ -154,7 +154,7 @@
             {/if}
         </div>
         <BrowseFile directory={true} bind:filename={$embeddings_save_loc} btn_name={'Browse Save location'} />
-        <Loadingbtn class="w-lg m-auto " name="Compute" callback={generate_pca} subprocess={true} />
+        <Loadingbtn class="m-auto " name="Compute" callback={generate_pca} subprocess={true} />
     {:else if $active === 'Analysis'}
         <!-- <div class="w-lg"> -->
         <BrowseFile

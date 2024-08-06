@@ -43,5 +43,5 @@
     <h3>Generate a VICGAE embedder model</h3>
     <!-- under construction -->
     <p class="text-red-500">Under construction</p>
-    <!-- <Loadingbtn class="w-lg m-auto " name="Compute" callback={generate_vec} subprocess={true} /> -->
+    <!-- <Loadingbtn class="m-auto " name="Compute" callback={generate_vec} subprocess={true} /> -->
 </div>
