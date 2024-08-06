@@ -4,6 +4,7 @@
     import { X } from 'lucide-svelte/icons';
 
     export let name: string;
+
     type Callback = { pyfile: string; args: Record<string, any> } | undefined;
     export let callback: () => Promise<Callback> | Callback;
 
@@ -19,7 +20,7 @@
 
     const dispatch = createEventDispatcher();
 
-    const run_callback = async (e: MouseEvent) => {
+    const run_callback = async () => {
         if (!$pyServerReady) return toast.error('python server is not yet started');
 
         const data = await callback();
