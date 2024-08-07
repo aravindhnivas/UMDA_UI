@@ -82,7 +82,11 @@
             <input type="checkbox" class="toggle" bind:checked={$use_PCA} />
         </div>
         <CustomSelect label="Embedder" bind:value={$molecular_embedder} items={embeddings} />
-        <BrowseFile bind:filename={$pretrained_model_file} label="Pre-trained model" />
+        <BrowseFile
+            bind:filename={$pretrained_model_file}
+            label="Pre-trained model"
+            filters={[{ name: 'Model files', extensions: ['pkl'] }]}
+        />
     </div>
 
     <div class="grid grid-cols-4 items-end gap-2">
