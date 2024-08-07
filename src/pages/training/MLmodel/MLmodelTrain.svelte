@@ -22,7 +22,9 @@
         grid_search_method,
         randomzied_gridsearch_niter,
         halving_factor,
-        default_param_values,
+        parallel_computation,
+        n_jobs,
+        parallel_computation_backend,
         default_parameter_mode,
     } from './stores';
     import { embedding, use_PCA } from '../embedding/stores';
@@ -189,6 +191,9 @@
             embedding: $embedding,
             pca: $use_PCA,
             save_pretrained_model: $save_pretrained_model,
+            parallel_computation: $parallel_computation,
+            n_jobs: Number($n_jobs),
+            parallel_computation_backend: $parallel_computation_backend,
         };
         $results = null;
         return { pyfile: 'training.ml_model', args };

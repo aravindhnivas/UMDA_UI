@@ -57,6 +57,12 @@ export const test_size = localWritable('test_size', 20);
 export const grid_search_method = localWritable('grid_search_method', 'RandomizedSearchCV');
 export const noise_percentage = localWritable('noise_percentage', 0.5);
 export const save_pretrained_model = localWritable('save_pretrained_model', true);
+export const parallel_computation = localWritable('parallel_computation', true);
+export const n_jobs = localWritable('n_jobs', -2);
+export const parallel_computation_backend = localWritable<ParallelComputationBackend>(
+    'parallel_processing_backend',
+    'loky',
+);
 
 export const pre_trained_file_loc = localWritable('pre_trained_file_loc', '');
 export const pre_trained_filename = localWritable('pre_trained_filename', '');

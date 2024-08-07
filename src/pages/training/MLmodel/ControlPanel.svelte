@@ -12,6 +12,9 @@
         grid_search_method,
         randomzied_gridsearch_niter,
         halving_factor,
+        parallel_computation,
+        n_jobs,
+        parallel_computation_backend,
     } from './stores';
     import { Checkbox, CustomSelect, CustomInput } from '$lib/components';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
@@ -24,6 +27,7 @@
         'DaskGridSearchCV',
         'DaskRandomSearchCV',
     ];
+    const backends: ParallelComputationBackend[] = ['loky', 'threading', 'multiprocessing', 'dask'];
 </script>
 
 <CustomPanel title="Control" open={true}>
@@ -83,6 +87,24 @@
                     min="0"
                     max="100"
                     disabled={!$bootstrap}
+                />
+            </div>
+        </div>
+        <div class="grid gap-1">
+            <Checkbox bind:value={$parallel_computation} label="Parallel computation" check="checkbox" />
+            <div class="flex gap-2 items-end">
+                <CustomInput
+                    label="n_jobs"
+                    bind:value={$n_jobs}
+                    type="number"
+                    step="1"
+                    disabled={!$parallel_computation}
+                />
+                <CustomSelect
+                    label="backend"
+                    items={backends}
+                    bind:value={$parallel_computation_backend}
+                    disabled={!$parallel_computation}
                 />
             </div>
         </div>

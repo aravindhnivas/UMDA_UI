@@ -47,3 +47,5 @@ interface Results {
     best_score?: number;
     time: string;
 }
+
+type ParallelComputationBackend = 'loky' | 'threading' | 'multiprocessing' | 'dask';
