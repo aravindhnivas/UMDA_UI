@@ -15,6 +15,7 @@
         parallel_computation,
         n_jobs,
         parallel_computation_backend,
+        backends,
     } from './stores';
     import { Checkbox, CustomSelect, CustomInput } from '$lib/components';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
@@ -27,7 +28,6 @@
         'DaskGridSearchCV',
         'DaskRandomSearchCV',
     ];
-    const backends: ParallelComputationBackend[] = ['loky', 'threading', 'multiprocessing', 'dask'];
 </script>
 
 <CustomPanel title="Control" open={true}>

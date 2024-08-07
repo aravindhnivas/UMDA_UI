@@ -49,3 +49,4 @@ interface Results {
 }
 
 type ParallelComputationBackend = 'loky' | 'threading' | 'multiprocessing' | 'dask';
+// type ParallelComputationBackend = 'threading' | 'dask';

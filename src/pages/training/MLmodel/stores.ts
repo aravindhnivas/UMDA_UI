@@ -59,9 +59,11 @@ export const noise_percentage = localWritable('noise_percentage', 0.5);
 export const save_pretrained_model = localWritable('save_pretrained_model', true);
 export const parallel_computation = localWritable('parallel_computation', true);
 export const n_jobs = localWritable('n_jobs', -2);
+// const backends: ParallelComputationBackend[] = ['loky', 'threading', 'multiprocessing', 'dask'];
+export const backends: ParallelComputationBackend[] = ['threading', 'dask'];
 export const parallel_computation_backend = localWritable<ParallelComputationBackend>(
     'parallel_processing_backend',
-    'loky',
+    'threading',
 );
 
 export const pre_trained_file_loc = localWritable('pre_trained_file_loc', '');
