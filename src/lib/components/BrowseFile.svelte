@@ -1,6 +1,6 @@
 <script lang="ts">
     import { isError } from 'ts-try';
-    import { HelpCircle } from 'lucide-svelte/icons';
+    import { HelpCircle, ExternalLink } from 'lucide-svelte/icons';
     import type { DialogFilter } from '@tauri-apps/api/dialog';
 
     export let filename = '';
@@ -67,5 +67,13 @@
         {#if callback}
             <button class="btn btn-sm join-item" on:click={load_callback}>load</button>
         {/if}
+        <button
+            class="btn btn-sm join-item"
+            on:click={async () => {
+                if (!filename) return toast.error('No file selected');
+                if (directory) await shell.open(filename);
+                else await shell.open(await path.dirname(filename));
+            }}><ExternalLink /></button
+        >
     </div>
 </div>
