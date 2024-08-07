@@ -1,20 +1,26 @@
 <script lang="ts">
     import { isError } from 'ts-try';
     import { HelpCircle } from 'lucide-svelte/icons';
+    import type { DialogFilter } from '@tauri-apps/api/dialog';
 
     export let filename = '';
     export let helper = '';
     export let label = '';
     export let directory = false;
+    export let filters: DialogFilter[] = [];
     export let btn_name = `Browse ${directory ? 'directory' : 'file'}`;
     export let callback: null | ((filename: string) => Promise<void>) = null;
+
     let className = '';
     export { className as class };
 
     const dispatch = createEventDispatcher();
 
     const browse_file = async () => {
-        const result = await dialog.open({ directory });
+        const result = await dialog.open({
+            directory,
+            filters,
+        });
         if (!result) return;
         if (typeof result === 'string') {
             filename = result;
