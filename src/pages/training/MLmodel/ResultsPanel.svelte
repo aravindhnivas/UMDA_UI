@@ -12,8 +12,6 @@
                 <span class="badge badge-info">
                     {$results?.time ? `completed in ${$results?.time}` : ''}
                 </span>
-            {:else}
-                <div class="badge badge-warning">NO RESULTS found</div>
             {/if}
         </div>
     </svelte:fragment>
