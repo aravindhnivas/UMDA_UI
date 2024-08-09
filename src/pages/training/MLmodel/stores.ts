@@ -72,3 +72,4 @@ export const pre_trained_filename = localWritable('pre_trained_filename', '');
 export const results = writable<Results | null>(null);
 export const plot_data = writable<Partial<Plotly.PlotData>[]>([]);
 export const default_parameter_mode = localWritable('default_parameter_mode', true);
+export const current_save_filekey = writable<string>('');

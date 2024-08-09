@@ -26,6 +26,7 @@
         n_jobs,
         parallel_computation_backend,
         default_parameter_mode,
+        current_save_filekey,
     } from './stores';
     import { embedding, use_PCA } from '../embedding/stores';
     import { NPARTITIONS } from '$lib/stores/system';
@@ -103,9 +104,9 @@
             return;
         }
 
-        const unique_spl_name = getID(5);
-
-        const filename = $pre_trained_filename.split('.pkl')[0] + `_${unique_spl_name}_`;
+        // const unique_spl_name = getID(5);
+        current_save_filekey.set(unique_id);
+        const filename = $pre_trained_filename.split('.pkl')[0] + `_${$current_save_filekey}_`;
         const pre_trained_file = await path.join($pre_trained_file_loc, filename);
 
         if (await fs.exists(pre_trained_file)) {

@@ -1,9 +1,11 @@
 <script lang="ts">
-    import { pre_trained_file_loc, pre_trained_filename, save_pretrained_model } from './stores';
+    import { pre_trained_file_loc, pre_trained_filename, save_pretrained_model, current_save_filekey } from './stores';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import BrowseFile from '$lib/components/BrowseFile.svelte';
     import Textfield from '@smui/textfield';
     import { Checkbox } from '$lib/components';
+
+    $: filename = $pre_trained_filename.split('.pkl')[0] + `_${$current_save_filekey}_`;
 </script>
 
 <CustomPanel>
@@ -13,6 +15,9 @@
 
             {#if !$save_pretrained_model}
                 <div class="badge badge-warning">NOT SAVING</div>
+                <!-- {/if} -->
+            {:else if $current_save_filekey}
+                <div class="badge badge-info">{filename}</div>
             {/if}
         </div>
     </svelte:fragment>
