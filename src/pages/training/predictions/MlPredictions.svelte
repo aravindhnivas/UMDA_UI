@@ -5,13 +5,9 @@
     import CustomInput from '$lib/components/CustomInput.svelte';
     import { CustomSelect } from '$lib/components';
     import { embeddings, model_and_pipeline_files } from '../embedding/stores';
-    import axios, { type CancelTokenSource } from 'axios';
-    // import { X } from 'lucide-svelte/icons';
 
     export let id: string = 'ml-predictions';
     export let display: string = 'none';
-
-    let source: CancelTokenSource;
 
     const predict = async () => {
         if (!$molecular_embedder) {
@@ -37,7 +33,12 @@
             return;
         }
 
-        predicted_value = 'Computing...';
+        if (use_test_file && !(await fs.exists($test_file))) {
+            toast.error('Please select a test file');
+            return;
+        }
+
+        if (!use_test_file) predicted_value = 'Computing...';
         const args = {
             smiles: $smiles,
             molecular_embedder: {
@@ -46,6 +47,7 @@
                 pipeline_file: $use_PCA ? $model_and_pipeline_files[$molecular_embedder].pipeline_file : null,
             },
             pretrained_model_file: $pretrained_model_file,
+            test_file: use_test_file ? $test_file : null,
         };
         const pyfile = 'training.ml_prediction';
         return { pyfile, args };
@@ -53,6 +55,16 @@
 
     const onResult = (e: CustomEvent) => {
         const { dataFromPython } = e.detail;
+        console.log(dataFromPython);
+        if (use_test_file) {
+            if (!dataFromPython.savedfile) {
+                toast.error('Error in prediction, check logs');
+                return;
+            }
+            toast.success('Prediction completed, file saved' + dataFromPython.savedfile);
+            return;
+        }
+
         if (!dataFromPython) {
             predicted_value = 'Error';
         } else {
@@ -61,6 +73,8 @@
     };
 
     const pretrained_model_file = localWritable('ml_prediction_pretrained_model_file', '');
+    const test_file = localWritable('ml_prediction_test_file', '');
+    let use_test_file = true;
     const molecular_embedder = localWritable('ml_prediction_molecular_embedder', 'VICGAE');
     const use_PCA = localWritable('ml_prediction_use_PCA', false);
 
@@ -88,20 +102,31 @@
             filters={[{ name: 'Model files', extensions: ['pkl'] }]}
         />
     </div>
+    <BrowseFile
+        bind:filename={$test_file}
+        label="upload test file"
+        filters={[{ name: 'SMILES files', extensions: ['smi', 'csv'] }]}
+    />
 
-    <div class="grid grid-cols-4 items-end gap-2">
-        <CustomInput class="col-span-3" bind:value={$smiles} label="Enter molecular SMILES" />
+    <div class="grid grid-cols-5 items-end gap-2">
+        <div class="flex-center border-1 border-solid border-rounded p-1">
+            <span>USE test-file</span>
+            <input type="checkbox" class="toggle" bind:checked={use_test_file} />
+        </div>
+        {#if !use_test_file}
+            <CustomInput class="col-span-3" bind:value={$smiles} label="Enter molecular SMILES" />
+        {/if}
         <Loadingbtn name="Compute" callback={predict} on:result={onResult} />
-        <!-- <Loadingbtn name="Compute" callback={predict} on:result={onResult} subprocess={true} /> -->
     </div>
-
-    <div class="flex items-start gap-1">
-        <Molecule bind:smiles={$smiles} bind:width={$width} bind:height={$height} />
-        <div class="grid gap-2">
-            <div class="text-sm">Predicted value</div>
-            <div class="rounded-1 p-1" style="background-color: antiquewhite;">
-                <span class="select-text">{predicted_value}</span>
+    {#if !use_test_file}
+        <div class="flex items-start gap-1">
+            <Molecule bind:smiles={$smiles} bind:width={$width} bind:height={$height} />
+            <div class="grid gap-2">
+                <div class="text-sm">Predicted value</div>
+                <div class="rounded-1 p-1" style="background-color: antiquewhite;">
+                    <span class="select-text">{predicted_value}</span>
+                </div>
             </div>
         </div>
-    </div>
+    {/if}
 </div>
