@@ -36,16 +36,6 @@
     </div>
 {/if}
 
-<!-- <h3>
-    Could not compute embeddings for
-    {$training_column_name_X}
-</h3>
-<ul class="invalid_smi_list px-4 select-text">
-    {#each Array(100) as item}
-        <li class="select-text">{item}</li>
-    {/each}
-</ul> -->
-
 <style>
     .invalid_smi_list {
         list-style-type: none;
