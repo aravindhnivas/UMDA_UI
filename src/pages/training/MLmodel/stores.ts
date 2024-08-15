@@ -73,3 +73,10 @@ export const results = writable<Results | null>(null);
 export const plot_data = writable<Partial<Plotly.PlotData>[]>([]);
 export const default_parameter_mode = localWritable('default_parameter_mode', true);
 export const current_save_filekey = writable<string>('');
+
+export const pre_trained_filename_unique = derived(
+    [current_save_filekey, pre_trained_filename],
+    ([$current_save_filekey, $pre_trained_filename]) => {
+        return $pre_trained_filename.split('.pkl')[0] + `_${$current_save_filekey}_`;
+    },
+);

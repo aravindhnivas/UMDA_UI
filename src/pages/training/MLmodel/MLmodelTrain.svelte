@@ -11,6 +11,7 @@
         noise_percentage,
         pre_trained_file_loc,
         pre_trained_filename,
+        pre_trained_filename_unique,
         results,
         plot_data,
         logYscale,
@@ -105,8 +106,9 @@
         }
 
         current_save_filekey.set(getID(5));
-        const filename = $pre_trained_filename.split('.pkl')[0] + `_${$current_save_filekey}_`;
-        const pre_trained_file = await path.join($pre_trained_file_loc, filename);
+        const pre_trained_file = await path.join($pre_trained_file_loc, $pre_trained_filename_unique);
+        // const filename = $pre_trained_filename.split('.pkl')[0] + `_${$current_save_filekey}_`;
+        // const pre_trained_file = await path.join($pre_trained_file_loc, filename);
 
         if (await fs.exists(pre_trained_file)) {
             const overwrite = await dialog.confirm(

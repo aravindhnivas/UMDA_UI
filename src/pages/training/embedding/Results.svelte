@@ -29,7 +29,7 @@
             </h3>
             <ul class="invalid_smi_list px-4 select-text">
                 {#each invalid_smiles as smiles, ind}
-                    <li class="select-text">{ind + 1}: <span class="text-wrap">{smiles}</span></li>
+                    <li>{ind + 1}: <span class="select-text text-wrap">{smiles}</span></li>
                 {/each}
             </ul>
         {/if}
