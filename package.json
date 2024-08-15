@@ -16,13 +16,13 @@
     "@tauri-apps/cli": "^1.6.0",
     "@xterm/addon-fit": "^0.10.0",
     "@xterm/xterm": "^5.5.0",
-    "lucide-svelte": "0.424.0",
+    "lucide-svelte": "0.427.0",
     "plotly.js-basic-dist-min": "^2.34.0",
     "smiles-drawer": "^2.1.7",
     "tauri-plugin-websocket-api": "github:tauri-apps/tauri-plugin-websocket#v1"
   },
   "devDependencies": {
-    "@iconify/json": "^2.2.234",
+    "@iconify/json": "^2.2.237",
     "@loadingio/loading.css": "^3.2.1",
     "@macfja/svelte-persistent-store": "^2.4.1",
     "@modyfi/vite-plugin-yaml": "^1.1.0",
@@ -39,12 +39,12 @@
     "@tsconfig/svelte": "^5.0.4",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "22.0.2",
-    "@unocss/extractor-svelte": "^0.61.9",
-    "@unocss/reset": "^0.61.9",
-    "@unocss/transformer-directives": "^0.61.9",
+    "@unocss/extractor-svelte": "0.62.1",
+    "@unocss/reset": "0.62.1",
+    "@unocss/transformer-directives": "0.62.1",
     "@zmotivat0r/o0": "^1.0.2",
     "animate.css": "^4.1.1",
-    "axios": "^1.7.3",
+    "axios": "^1.7.4",
     "bulma": "^1.0.2",
     "cooltipz-css": "^2.3.0",
     "daisyui": "^3.9.4",
@@ -64,9 +64,9 @@
     "ts-try": "^0.2.0",
     "tslib": "^2.6.3",
     "typescript": "^5.5.4",
-    "unocss": "^0.61.9",
+    "unocss": "0.62.1",
     "unocss-preset-daisy": "^7.0.0",
     "unplugin-auto-import": "^0.18.2",
-    "vite": "^5.3.5"
+    "vite": "^5.4.0"
   }
 }
