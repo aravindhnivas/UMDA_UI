@@ -2,7 +2,7 @@
     import { isError } from 'ts-try';
     import { HelpCircle, ExternalLink } from 'lucide-svelte/icons';
     import type { DialogFilter } from '@tauri-apps/api/dialog';
-
+    export let disabled = false;
     export let filename = '';
     export let helper = '';
     export let label = '';
@@ -63,7 +63,7 @@
     </div>
     <div class="join">
         <button class="btn btn-sm join-item" on:click={browse_file}>{btn_name}</button>
-        <input type="text" class="input input-sm join-item w-full" bind:value={filename} />
+        <input type="text" class="input input-sm join-item w-full" bind:value={filename} {disabled} />
         {#if callback}
             <button class="btn btn-sm join-item" on:click={load_callback}>load</button>
         {/if}
