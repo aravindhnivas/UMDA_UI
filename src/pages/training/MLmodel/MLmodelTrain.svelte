@@ -104,8 +104,7 @@
             return;
         }
 
-        // const unique_spl_name = getID(5);
-        current_save_filekey.set(unique_id);
+        current_save_filekey.set(getID(5));
         const filename = $pre_trained_filename.split('.pkl')[0] + `_${$current_save_filekey}_`;
         const pre_trained_file = await path.join($pre_trained_file_loc, filename);
 
