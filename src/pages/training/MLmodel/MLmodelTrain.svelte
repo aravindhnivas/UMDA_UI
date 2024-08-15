@@ -29,7 +29,7 @@
         current_save_filekey,
     } from './stores';
     import { embedding, use_PCA } from '../embedding/stores';
-    import { NPARTITIONS } from '$lib/stores/system';
+    import { NPARTITIONS, use_dask } from '$lib/stores/system';
     import { embedd_savefile_path } from '../embedding/stores';
     import { Loadingbtn } from '$lib/components';
     import Accordion from '@smui-extra/accordion';
@@ -195,6 +195,7 @@
             parallel_computation: $parallel_computation,
             n_jobs: Number($n_jobs),
             parallel_computation_backend: $parallel_computation_backend,
+            use_dask: $use_dask,
         };
         $results = null;
         return { pyfile: 'training.ml_model', args };
