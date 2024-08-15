@@ -1,10 +1,11 @@
 <script lang="ts">
+    import { embeddings, model_and_pipeline_files } from '../embedding/stores';
+    import { pre_trained_filename_unique, pre_trained_file_loc } from '../MLmodel/stores';
     import BrowseFile from '$lib/components/BrowseFile.svelte';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import Molecule from '$lib/components/Molecule.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
     import { CustomSelect } from '$lib/components';
-    import { embeddings, model_and_pipeline_files } from '../embedding/stores';
 
     export let id: string = 'ml-predictions';
     export let display: string = 'none';
@@ -86,6 +87,18 @@
 
     const width = localWritable('ml_prediction_molecular_svg_width', 500);
     const height = localWritable('ml_prediction_molecular_svg_height', 400);
+
+    const update_model_file = async (loc: string, filename: string) => {
+        const model_filename = await path.join(loc, filename + '.pkl');
+        // console.log(model_filename);
+        if (!(await fs.exists(model_filename))) {
+            console.warn('Model file not found');
+            return;
+        }
+        $pretrained_model_file = model_filename;
+        // console.log($pretrained_model_file);
+    };
+    $: update_model_file($pre_trained_file_loc, $pre_trained_filename_unique);
 </script>
 
 <div class="grid content-start gap-2" {id} style:display>
