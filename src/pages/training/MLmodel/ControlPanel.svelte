@@ -33,7 +33,7 @@
 <CustomPanel title="Control" open={true}>
     <div class="flex flex-wrap gap-4">
         <div class="grid gap-1">
-            <input class="range" type="range" min="5" max="95" step="5" bind:value={$test_size} />
+            <input class="range" type="range" min="0" max="100" step="5" bind:value={$test_size} />
             <span>split: {$test_size}% test : {100 - $test_size}% train</span>
             {#if $test_size > 50}
                 <div class="badge badge-sm badge-warning">Warning: Test split ratio is greater than 50%</div>
