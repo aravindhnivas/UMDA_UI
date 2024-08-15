@@ -1,11 +1,12 @@
 <script lang="ts">
-    import computePy from '$lib/pyserver/computePy';
+    import { use_dask } from '$lib/stores/system';
     import { dialog } from '@tauri-apps/api';
     import { Loadingbtn } from '$lib/components';
     import LinearProgress from '@smui/linear-progress';
     import DataTable, { Head, Body, Row, Cell } from '@smui/data-table';
     import CustomInput from '$lib/components/CustomInput.svelte';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
+    import Checkbox from '$lib/components/Checkbox.svelte';
 
     export let filetype = 'csv';
     export let key = 'data';
@@ -13,7 +14,6 @@
     export let filename: string;
     export let filetypes = ['csv', 'hdf', 'json', 'parquet'];
 
-    // const filename = localWritable('data_filename', '');
     interface DataType {
         columns: string[];
         nrows: {
@@ -51,9 +51,11 @@
                 filetype,
                 key,
                 rows,
+                use_dask: $use_dask,
             },
         };
     };
+
     let loading = false;
     const rows = {
         value: 10,
@@ -90,6 +92,8 @@
 <div class="flex gap-1 items-end">
     <CustomSelect label="where" bind:value={rows.where} items={['head', 'tail']} />
     <CustomInput bind:value={rows.value} label="# Rows" type="number" max={rows.max} on:change={() => load_data()} />
+    <Checkbox bind:value={$use_dask} label="Use dask" check="checkbox" />
+
     <Loadingbtn
         bind:loading
         name="load file"

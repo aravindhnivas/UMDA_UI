@@ -8,7 +8,7 @@
         model_and_pipeline_files,
     } from './stores';
     import { training_file, training_column_name_X } from '../training_file/stores';
-    import { NPARTITIONS } from '$lib/stores/system';
+    import { NPARTITIONS, use_dask } from '$lib/stores/system';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import computePy from '$lib/pyserver/computePy';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
@@ -16,6 +16,7 @@
     import BrowseFile from '$lib/components/BrowseFile.svelte';
     import Molecule from '$lib/components/Molecule.svelte';
     import Textfield from '@smui/textfield';
+    import { Checkbox } from '$lib/components';
 
     export let id: string = 'main-data-container';
     export let display: string = 'none';
@@ -99,6 +100,7 @@
                 pretrained_model_location: $model_and_pipeline_files[$embedding].model_file,
                 PCA_pipeline_location: $use_PCA ? $model_and_pipeline_files[$embedding].pipeline_file : null,
                 embedd_savefile: $embedd_savefile,
+                use_dask: $use_dask,
             },
         };
     };
