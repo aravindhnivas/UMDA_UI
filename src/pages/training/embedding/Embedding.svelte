@@ -10,18 +10,15 @@
     import { training_file, training_column_name_X } from '../training_file/stores';
     import { NPARTITIONS, use_dask } from '$lib/stores/system';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
-    import computePy from '$lib/pyserver/computePy';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
-    import { CheckCheck, TriangleAlert } from 'lucide-svelte/icons';
+    import { TriangleAlert } from 'lucide-svelte/icons';
     import BrowseFile from '$lib/components/BrowseFile.svelte';
     import Molecule from '$lib/components/Molecule.svelte';
     import Textfield from '@smui/textfield';
-    import { Checkbox } from '$lib/components';
+    import Results from './Results.svelte';
 
     export let id: string = 'main-data-container';
     export let display: string = 'none';
-
-    // $: console.log({ $embedd_savefile_path });
 
     $: if ($embedding && !$model_and_pipeline_files[$embedding]) {
         $model_and_pipeline_files[$embedding] = {
@@ -218,7 +215,6 @@
             </div>
             <Loadingbtn name="Compute" callback={embedd_data} on:result={onResult} />
         </div>
-
         <div class="grid grid-cols-4 items-center gap-1">
             <Molecule bind:smiles={$test_smiles} show_controls={false} />
 
@@ -252,42 +248,8 @@
                     {/await}
                 {/await}
             </div>
-            <!-- <Loadingbtn name="Compute" callback={embedd_data} subprocess={true} /> -->
             <Loadingbtn name="Compute" callback={embedd_data} subprocess={true} on:result={onResult} />
         </div>
     {/if}
-
-    {#if dataFromPython?.file_mode}
-        {@const { invalid_smiles, saved_file, computed_time } = dataFromPython.file_mode}
-
-        <div class=" flex flex-col gap-1">
-            {#if saved_file}
-                <div role="alert" class="alert alert-info p-2">
-                    <CheckCheck />
-                    <span class="text-sm">(Computed in {computed_time}) File saved to: {saved_file}</span>
-                </div>
-            {/if}
-
-            {#if invalid_smiles.length > 0}
-                <h3>
-                    Could not compute embeddings for {invalid_smiles.length}
-                    {$training_column_name_X}
-                </h3>
-                <ul class="invalid_smi_list px-4 select-text">
-                    {#each invalid_smiles as smiles}
-                        <li class="select-text">{smiles}</li>
-                    {/each}
-                </ul>
-            {/if}
-        </div>
-    {/if}
+    <Results data={dataFromPython?.file_mode} />
 </div>
-
-<style>
-    .invalid_smi_list {
-        list-style-type: none;
-        max-height: 300px;
-        overflow: auto;
-        max-width: 60vw;
-    }
-</style>
