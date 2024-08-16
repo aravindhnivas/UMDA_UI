@@ -1,6 +1,6 @@
 <script lang="ts">
     import Plot from 'svelte-plotly.js';
-    import FileLoader from '../FileLoader.svelte';
+    import FileLoader from '$lib/components/fileloader/FileLoader.svelte';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
 

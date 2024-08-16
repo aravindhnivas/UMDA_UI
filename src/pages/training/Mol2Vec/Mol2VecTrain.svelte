@@ -1,10 +1,10 @@
 <script lang="ts">
     import { CPU_COUNT } from '$lib/stores/system';
-    import FileLoader from './../FileLoader.svelte';
+    import FileLoader from '$lib/components/fileloader/FileLoader.svelte';
     import BrowseFile from '$lib/components/BrowseFile.svelte';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
-    import computePy from '$lib/pyserver/computePy';
+
     export let id: string = 'mol2vec-train-container';
     export let display: string = 'none';
 
@@ -22,10 +22,7 @@
     };
     let vector_size = 300;
     let radius = 1;
-    // convert decimal to int
-    const max_allowed_cpu = Math.floor($CPU_COUNT * 0.4);
-    // let n_jobs = Math.floor($CPU_COUNT * 0.2);
-    ``;
+
     let min_count = 1;
 
     const generate_mol2vec = async () => {

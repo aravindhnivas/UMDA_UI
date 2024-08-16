@@ -5,6 +5,7 @@
     export let helper: string = '';
     export let disabled = false;
     export let use_input = false;
+
     let className = '';
     export { className as class };
 

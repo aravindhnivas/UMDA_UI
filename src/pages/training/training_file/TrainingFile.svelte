@@ -2,7 +2,7 @@
     import { use_dask } from '$lib/stores/system';
     import { NPARTITIONS } from '$lib/stores/system';
     import { training_file, training_column_name_X, training_column_name_y } from './stores';
-    import FileLoader from '../FileLoader.svelte';
+    import FileLoader from '$lib/components/fileloader/FileLoader.svelte';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
 
     export let id: string = 'training-file-container';

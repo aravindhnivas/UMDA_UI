@@ -6,6 +6,7 @@
     import CustomInput from '$lib/components/CustomInput.svelte';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
     import Checkbox from '$lib/components/Checkbox.svelte';
+    import FileTable from './FileTable.svelte';
 
     export let filetype = 'csv';
     export let key = 'data';
@@ -108,35 +109,4 @@
 </div>
 
 <slot />
-
-{#if data}
-    {#if data?.columns && data?.nrows}
-        <div class="alert text-sm p-1">
-            <span>Total {data.shape} rows: {data?.nrows.length} rows are displayed below</span>
-        </div>
-        <div class="overflow-x-auto">
-            <DataTable style="width: 100%; max-height: 500px;">
-                <Head>
-                    <Row>
-                        <Cell></Cell>
-                        {#each data.columns as column}
-                            <Cell>{column}</Cell>
-                        {/each}
-                    </Row>
-                </Head>
-                <Body>
-                    {#each data.nrows as nrows, index}
-                        <Row class="hover:bg-orange-300">
-                            <Cell>{index}</Cell>
-                            {#each data.columns as column}
-                                <Cell>{nrows[column]}</Cell>
-                            {/each}
-                        </Row>
-                    {/each}
-                </Body>
-
-                <LinearProgress indeterminate closed={!loading} aria-label="Data is being loaded..." slot="progress" />
-            </DataTable>
-        </div>
-    {/if}
-{/if}
+<FileTable {data} {loading} />

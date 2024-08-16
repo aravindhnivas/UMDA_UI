@@ -1,9 +1,9 @@
 <script lang="ts">
-    import FileLoader from '../FileLoader.svelte';
-    import BrowseFile from '$lib/components/BrowseFile.svelte';
-    import CustomSelect from '$lib/components/CustomSelect.svelte';
-    import Loadingbtn from '$lib/components/Loadingbtn.svelte';
-    import computePy from '$lib/pyserver/computePy';
+    import FileLoader from '$lib/components/fileloader/FileLoader.svelte';
+    // import BrowseFile from '$lib/components/BrowseFile.svelte';
+    // import CustomSelect from '$lib/components/CustomSelect.svelte';
+    // import Loadingbtn from '$lib/components/Loadingbtn.svelte';
+    // import computePy from '$lib/pyserver/computePy';
 
     export let id: string = 'vicgae-train-container';
     export let display: string = 'none';
