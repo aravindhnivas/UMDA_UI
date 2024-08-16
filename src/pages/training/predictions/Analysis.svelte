@@ -15,6 +15,7 @@
     let columns: string[] = [];
 
     let data: Partial<Plotly.PlotData>[] = [];
+    let use_dask = false;
 
     const PredictionAnalysis = async () => {
         if (!columnX || !columnY) {
@@ -28,6 +29,7 @@
                 analysis_file: $analysis_test_file_for_prediction,
                 columnX,
                 columnY,
+                use_dask,
             },
         };
     };
@@ -81,6 +83,7 @@
         if (!e.detail.columns) return;
         columns = e.detail.columns;
     }}
+    bind:use_dask
 />
 
 <div class="flex gap-2 items-end">

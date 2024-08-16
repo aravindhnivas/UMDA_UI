@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { use_dask } from '$lib/stores/system';
     import { NPARTITIONS } from '$lib/stores/system';
     import { training_file, training_column_name_X, training_column_name_y } from './stores';
     import FileLoader from '../FileLoader.svelte';
@@ -18,6 +19,7 @@
 
     <h3>Load data file</h3>
     <FileLoader
+        bind:use_dask={$use_dask}
         bind:filename={$training_file['filename']}
         bind:filetype={$training_file['filetype']}
         bind:key={$training_file['key']}

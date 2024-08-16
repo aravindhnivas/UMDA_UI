@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { use_dask } from '$lib/stores/system';
     import { dialog } from '@tauri-apps/api';
     import { Loadingbtn } from '$lib/components';
     import LinearProgress from '@smui/linear-progress';
@@ -12,6 +11,7 @@
     export let key = 'data';
     export let data: DataType | null = null;
     export let filename: string;
+    export let use_dask = false;
     export let filetypes = ['csv', 'hdf', 'json', 'parquet'];
 
     interface DataType {
@@ -51,7 +51,7 @@
                 filetype,
                 key,
                 rows,
-                use_dask: $use_dask,
+                use_dask,
             },
         };
     };
@@ -92,7 +92,7 @@
 <div class="flex gap-1 items-end">
     <CustomSelect label="where" bind:value={rows.where} items={['head', 'tail']} />
     <CustomInput bind:value={rows.value} label="# Rows" type="number" max={rows.max} on:change={() => load_data()} />
-    <Checkbox bind:value={$use_dask} label="Use dask" check="checkbox" />
+    <Checkbox bind:value={use_dask} label="Use dask" check="checkbox" />
 
     <Loadingbtn
         bind:loading
