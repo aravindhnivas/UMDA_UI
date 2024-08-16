@@ -18,10 +18,8 @@
     <svelte:fragment slot="title">
         <div class="flex-center">
             <span>Save Model</span>
-
             {#if !$save_pretrained_model}
                 <div class="badge badge-warning">NOT SAVING</div>
-                <!-- {/if} -->
             {:else if $current_save_filekey}
                 <div class="badge badge-info">{$pre_trained_filename_unique}</div>
             {/if}

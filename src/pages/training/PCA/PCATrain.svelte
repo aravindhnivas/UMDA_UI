@@ -1,7 +1,6 @@
 <script lang="ts">
     import BrowseFile from '$lib/components/BrowseFile.svelte';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
-    import computePy from '$lib/pyserver/computePy';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
     import { embeddings } from '../embedding/stores';
     import Tab, { Label } from '@smui/tab';
