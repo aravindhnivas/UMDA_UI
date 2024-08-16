@@ -42,29 +42,18 @@
             {/if}
         </div>
         <div class="flex items-end gap-1">
-            {#if auto_fetch_columns}
-                <CustomSelect label="column X" bind:value={$training_column_name_X} items={data?.columns || []} />
-                <CustomSelect label="column Y" bind:value={$training_column_name_y} items={data?.columns || []} />
-            {:else}
-                <div class="flex flex-col gap-1">
-                    <span class="text-xs pl-1">Enter column X</span>
-                    <input
-                        type="text"
-                        class="input input-sm"
-                        bind:value={$training_column_name_X}
-                        placeholder="Enter column X"
-                    />
-                </div>
-                <div class="flex flex-col gap-1">
-                    <span class="text-xs pl-1">Enter column Y</span>
-                    <input
-                        type="text"
-                        class="input input-sm"
-                        bind:value={$training_column_name_y}
-                        placeholder="Enter column Y"
-                    />
-                </div>
-            {/if}
+            <CustomSelect
+                use_input={!auto_fetch_columns}
+                label="column X"
+                bind:value={$training_column_name_X}
+                items={data?.columns || []}
+            />
+            <CustomSelect
+                use_input={!auto_fetch_columns}
+                label="column Y"
+                bind:value={$training_column_name_y}
+                items={data?.columns || []}
+            />
             <div class="flex flex-col gap-1">
                 <span class="text-xs pl-1">npartitions disk</span>
                 <input
