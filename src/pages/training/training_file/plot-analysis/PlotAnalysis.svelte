@@ -4,13 +4,23 @@
     import Tab, { Label } from '@smui/tab';
     import TabBar from '@smui/tab-bar';
     import Plot from 'svelte-plotly.js';
+
     const tab_items = ['size_distribution', 'structural_distribution', 'elemental_distribution'] as const;
     let active_tab: (typeof tab_items)[number] = 'size_distribution';
+    let data: {
+        size_distribution: Partial<Plotly.PlotData>[];
+        structural_distribution: Partial<Plotly.PlotData>[];
+        elemental_distribution: Partial<Plotly.PlotData>[];
+    } = {
+        size_distribution: [],
+        structural_distribution: [],
+        elemental_distribution: [],
+    };
 
-    const components = {
-        size_distribution: SizeDistribution,
-        structural_distribution: StructuralDistribution,
-        elemental_distribution: ElementalDistribution,
+    const onPlot = async (name: (typeof tab_items)[number]) => {
+        console.log(name);
+
+        const csv_file = $post_analysis_files[name];
     };
 </script>
 
@@ -33,11 +43,11 @@
                 label="{name}.csv file"
                 filters={[{ name: name, extensions: ['csv'] }]}
             />
-            <button class="btn btn-sm">Plot</button>
+            <button class="btn btn-sm" on:click={() => onPlot(name)}>Plot</button>
         </div>
         <div class="h-lg min-w-xl">
             <Plot
-                data={[]}
+                data={data[name]}
                 layout={{
                     xaxis: { title: 'True value' },
                     yaxis: { title: 'Predicted value' },
