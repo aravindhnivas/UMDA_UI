@@ -73,6 +73,7 @@
     const pretrained_model_file = localWritable('ml_prediction_pretrained_model_file', '');
     const test_file = localWritable('ml_prediction_test_file', '');
     let use_test_file = true;
+
     const molecular_embedder = localWritable('ml_prediction_molecular_embedder', 'VICGAE');
     const use_PCA = localWritable('ml_prediction_use_PCA', false);
 
@@ -86,11 +87,8 @@
     const height = localWritable('ml_prediction_molecular_svg_height', 400);
 
     const update_model_file = async (loc: string, filename: string) => {
+        await tick();
         const model_filename = await path.join(loc, filename + '.pkl');
-        if (!(await fs.exists(model_filename))) {
-            console.warn('Model file not found');
-            return;
-        }
         $pretrained_model_file = model_filename;
     };
     $: update_model_file($pre_trained_file_loc, $pre_trained_filename_unique);
