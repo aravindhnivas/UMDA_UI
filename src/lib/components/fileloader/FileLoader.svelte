@@ -1,8 +1,6 @@
 <script lang="ts">
     import { dialog } from '@tauri-apps/api';
     import { Loadingbtn } from '$lib/components';
-    import LinearProgress from '@smui/linear-progress';
-    import DataTable, { Head, Body, Row, Cell } from '@smui/data-table';
     import CustomInput from '$lib/components/CustomInput.svelte';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
     import Checkbox from '$lib/components/Checkbox.svelte';
@@ -56,8 +54,8 @@
             },
         };
     };
-
     let loading = false;
+
     const rows = {
         value: 10,
         min: 10,

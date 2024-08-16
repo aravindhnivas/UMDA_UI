@@ -1,68 +1,28 @@
 <script lang="ts">
-    import { use_dask } from '$lib/stores/system';
-    import { NPARTITIONS } from '$lib/stores/system';
-    import { training_file, training_column_name_X, training_column_name_y } from './stores';
-    import FileLoader from '$lib/components/fileloader/FileLoader.svelte';
-    import CustomSelect from '$lib/components/CustomSelect.svelte';
+    import Tab, { Label } from '@smui/tab';
+    import TabBar from '@smui/tab-bar';
+    import AnalysisData from './AnalysisData.svelte';
+    import LoadData from './LoadData.svelte';
 
     export let id: string = 'training-file-container';
     export let display: string = 'none';
 
-    let auto_fetch_columns = false;
-    let data: DataType;
+    const tab_items = ['load_data', 'analysis_data'] as const;
+    let active_tab: (typeof tab_items)[number] = 'load_data';
 </script>
 
 <div class="grid content-start gap-2" {id} style:display>
-    <div class="flex justify-between">
-        <h2>Embeddings</h2>
+    <div class="w-max">
+        <TabBar tabs={[...tab_items]} let:tab bind:active={active_tab}>
+            <Tab {tab}>
+                <Label>{tab}</Label>
+            </Tab>
+        </TabBar>
     </div>
-
-    <h3>Load data file</h3>
-    <FileLoader
-        bind:use_dask={$use_dask}
-        bind:filename={$training_file['filename']}
-        bind:filetype={$training_file['filetype']}
-        bind:key={$training_file['key']}
-        on:load={e => {
-            if (!e.detail) return;
-            data = e.detail;
-            auto_fetch_columns = true;
-        }}
-    >
-        <div class="flex flex-col gap-1">
-            <div class="flex-center">
-                <div class="flex-center border-1 border-solid border-rounded p-1">
-                    <span>Auto-fetch column name</span>
-                    <input type="checkbox" class="toggle" bind:checked={auto_fetch_columns} />
-                </div>
-            </div>
-
-            {#if auto_fetch_columns && !data?.columns.length}
-                <span class="text-sm">Load file first!</span>
-            {/if}
-        </div>
-        <div class="flex items-end gap-1">
-            <CustomSelect
-                use_input={!auto_fetch_columns}
-                label="column X"
-                bind:value={$training_column_name_X}
-                items={data?.columns || []}
-            />
-            <CustomSelect
-                use_input={!auto_fetch_columns}
-                label="column Y"
-                bind:value={$training_column_name_y}
-                items={data?.columns || []}
-            />
-            <div class="flex flex-col gap-1">
-                <span class="text-xs pl-1">npartitions disk</span>
-                <input
-                    bind:value={$NPARTITIONS}
-                    type="number"
-                    class="input input-sm"
-                    placeholder="Enter dask npartitions"
-                />
-            </div>
-        </div>
-    </FileLoader>
+    <div class="grid gap-2" class:hidden={active_tab !== 'load_data'}>
+        <LoadData />
+    </div>
+    <div class="grid gap-2" class:hidden={active_tab !== 'analysis_data'}>
+        <AnalysisData />
+    </div>
 </div>

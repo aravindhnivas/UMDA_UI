@@ -102,7 +102,7 @@
         };
     };
 
-    const onResult = async e => {
+    const onResult = async (e: CustomEvent) => {
         const { pyfile } = e.detail;
         dataFromPython = e.detail.dataFromPython;
 

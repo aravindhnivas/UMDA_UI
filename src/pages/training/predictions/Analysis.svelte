@@ -47,7 +47,7 @@
 
     let data_from_python: DataType;
 
-    const onResult = e => {
+    const onResult = (e: CustomEvent) => {
         if (!e.detail) return;
         const { dataFromPython } = e.detail as { dataFromPython: DataType };
         if (!dataFromPython) return;

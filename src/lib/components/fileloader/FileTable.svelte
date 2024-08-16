@@ -37,7 +37,6 @@
                         </Row>
                     {/each}
                 </Body>
-
                 <LinearProgress indeterminate closed={!loading} aria-label="Data is being loaded..." slot="progress" />
             </DataTable>
         </div>
