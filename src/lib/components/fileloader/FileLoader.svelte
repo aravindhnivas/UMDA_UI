@@ -107,6 +107,5 @@
         }}
     />
 </div>
-
 <slot />
 <FileTable {data} {loading} />
