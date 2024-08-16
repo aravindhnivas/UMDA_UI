@@ -1,6 +1,6 @@
 <script lang="ts">
     import { isError } from 'ts-try';
-    import { HelpCircle, ExternalLink } from 'lucide-svelte/icons';
+    import { HelpCircle, ExternalLink, Lock, UnlockKeyhole, LockKeyhole } from 'lucide-svelte/icons';
     import type { DialogFilter } from '@tauri-apps/api/dialog';
 
     export let disabled = false;
@@ -11,6 +11,7 @@
     export let filters: DialogFilter[] = [];
     export let btn_name = `Browse ${directory ? 'directory' : 'file'}`;
     export let callback: null | ((filename: string) => Promise<void>) = null;
+    export let lock: boolean = false;
 
     let className = '';
     export { className as class };
@@ -48,6 +49,13 @@
 
 <div class="flex flex-col gap-1 w-full {className}">
     <div class="flex">
+        <button class="btn btn-xs" on:click={() => (lock = !lock)}>
+            {#if lock}
+                <LockKeyhole size="20" class="text-gray-500" />
+            {:else}
+                <UnlockKeyhole size="20" />
+            {/if}
+        </button>
         {#if label}
             <span class="text-sm pl-1"
                 >{label} (<em>{filename.split('/').at(-1) || `Choose a ${directory ? 'directory' : 'file'}`}</em>)</span
@@ -63,8 +71,8 @@
         {/if}
     </div>
     <div class="join">
-        <button class="btn btn-sm join-item" on:click={browse_file}>{btn_name}</button>
-        <input type="text" class="input input-sm join-item w-full" bind:value={filename} {disabled} />
+        <button class="btn btn-sm join-item" on:click={browse_file} disabled={lock}>{btn_name}</button>
+        <input type="text" class="input input-sm join-item w-full" bind:value={filename} disabled={disabled || lock} />
         {#if callback}
             <button class="btn btn-sm join-item" on:click={load_callback}>load</button>
         {/if}
