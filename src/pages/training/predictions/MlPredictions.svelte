@@ -3,8 +3,10 @@
     import TabBar from '@smui/tab-bar';
     import Predictions from './Predictions.svelte';
     import Analysis from './Analysis.svelte';
+
     export let id: string = 'ml-predictions';
     export let display: string = 'none';
+
     let active_tab = 'Predictions';
 </script>
 
@@ -16,9 +18,10 @@
             </Tab>
         </TabBar>
     </div>
-    {#if active_tab === 'Predictions'}
+    <div class="grid gap-2" class:hidden={active_tab !== 'Predictions'}>
         <Predictions />
-    {:else if active_tab === 'Analysis'}
+    </div>
+    <div class="grid gap-2" class:hidden={active_tab !== 'Analysis'}>
         <Analysis />
-    {/if}
+    </div>
 </div>
