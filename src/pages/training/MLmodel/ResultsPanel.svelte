@@ -46,7 +46,7 @@
                 <hr />
             {/if}
 
-            <div class="plot h-lg min-w-xl">
+            <div class="h-lg min-w-xl">
                 <Plot
                     data={$plot_data}
                     layout={{
