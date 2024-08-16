@@ -3,6 +3,7 @@
     import CustomInput from '$lib/components/CustomInput.svelte';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import { use_dask } from '$lib/stores/system';
+    import PlotAnalysis from './plot-analysis/PlotAnalysis.svelte';
     import { training_column_name_X, training_file } from './stores';
 
     const MolecularAnalysis = async () => {
@@ -64,3 +65,5 @@
     callback={MolecularAnalysis}
     on:result={onResult}
 />
+<hr />
+<PlotAnalysis />

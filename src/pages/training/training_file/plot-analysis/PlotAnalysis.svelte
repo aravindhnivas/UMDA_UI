@@ -1,0 +1,45 @@
+<script lang="ts">
+    import BrowseFile from '$lib/components/BrowseFile.svelte';
+    import { post_analysis_files } from './stores';
+    import Tab, { Label } from '@smui/tab';
+    import TabBar from '@smui/tab-bar';
+    import SizeDistribution from './SizeDistribution.svelte';
+    import StructuralDistribution from './StructuralDistribution.svelte';
+    import ElementalDistribution from './ElementalDistribution.svelte';
+
+    const tab_items = ['size_distribution', 'structural_distribution', 'elemental_distribution'] as const;
+    let active_tab: (typeof tab_items)[number] = 'size_distribution';
+
+    const components = {
+        size_distribution: SizeDistribution,
+        structural_distribution: StructuralDistribution,
+        elemental_distribution: ElementalDistribution,
+    };
+</script>
+
+<h3>Analysis plots</h3>
+
+<div class="w-max">
+    <TabBar tabs={[...tab_items]} let:tab bind:active={active_tab}>
+        <Tab {tab}>
+            <Label>{tab}</Label>
+        </Tab>
+    </TabBar>
+</div>
+
+{#each tab_items as name}
+    <div class="grid gap-2 items-end" class:hidden={active_tab !== name}>
+        <div class="grid grid-cols-5 items-end gap-2">
+            <BrowseFile
+                class="col-span-4"
+                bind:filename={$post_analysis_files[name]}
+                label="{name}.csv file"
+                filters={[{ name: name, extensions: ['csv'] }]}
+            />
+            <button class="btn btn-sm">Plot</button>
+        </div>
+        <div class="h-lg min-w-xl">
+            <svelte:component this={components[name]} />
+        </div>
+    </div>
+{/each}
