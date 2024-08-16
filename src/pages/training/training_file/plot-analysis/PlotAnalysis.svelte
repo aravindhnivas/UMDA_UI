@@ -4,10 +4,6 @@
     import Tab, { Label } from '@smui/tab';
     import TabBar from '@smui/tab-bar';
     import Plot from 'svelte-plotly.js';
-    import SizeDistribution from './SizeDistribution.svelte';
-    import StructuralDistribution from './StructuralDistribution.svelte';
-    import ElementalDistribution from './ElementalDistribution.svelte';
-
     const tab_items = ['size_distribution', 'structural_distribution', 'elemental_distribution'] as const;
     let active_tab: (typeof tab_items)[number] = 'size_distribution';
 
@@ -40,7 +36,6 @@
             <button class="btn btn-sm">Plot</button>
         </div>
         <div class="h-lg min-w-xl">
-            <!-- <svelte:component this={components[name]} /> -->
             <Plot
                 data={[]}
                 layout={{
