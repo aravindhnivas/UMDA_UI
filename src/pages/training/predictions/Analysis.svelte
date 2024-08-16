@@ -98,7 +98,7 @@
     </div>
 {/if}
 
-<div class="plot w-xl h-lg">
+<div class="h-lg min-w-xl">
     <Plot
         {data}
         layout={{
