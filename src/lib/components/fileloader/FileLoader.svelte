@@ -5,6 +5,7 @@
     import CustomSelect from '$lib/components/CustomSelect.svelte';
     import Checkbox from '$lib/components/Checkbox.svelte';
     import FileTable from './FileTable.svelte';
+    import { ExternalLink } from 'lucide-svelte/icons';
 
     export let filetype = 'csv';
     export let key = 'data';
@@ -87,6 +88,13 @@
     {#if filetype === 'hdf'}
         <input class="input input-sm input-bordered join-item" placeholder="Enter key" bind:value={key} />
     {/if}
+    <button
+        class="btn btn-sm join-item"
+        on:click={async () => {
+            if (!filename) return toast.error('No file selected');
+            await shell.open(await path.dirname(filename));
+        }}><ExternalLink /></button
+    >
 </div>
 <div class="flex gap-1 items-end">
     <CustomSelect label="where" bind:value={rows.where} items={['head', 'tail']} />
