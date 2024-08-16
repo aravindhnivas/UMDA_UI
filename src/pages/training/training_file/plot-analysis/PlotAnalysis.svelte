@@ -3,6 +3,7 @@
     import { post_analysis_files } from './stores';
     import Tab, { Label } from '@smui/tab';
     import TabBar from '@smui/tab-bar';
+    import Plot from 'svelte-plotly.js';
     import SizeDistribution from './SizeDistribution.svelte';
     import StructuralDistribution from './StructuralDistribution.svelte';
     import ElementalDistribution from './ElementalDistribution.svelte';
@@ -39,7 +40,17 @@
             <button class="btn btn-sm">Plot</button>
         </div>
         <div class="h-lg min-w-xl">
-            <svelte:component this={components[name]} />
+            <!-- <svelte:component this={components[name]} /> -->
+            <Plot
+                data={[]}
+                layout={{
+                    xaxis: { title: 'True value' },
+                    yaxis: { title: 'Predicted value' },
+                    margin: { t: 0 },
+                }}
+                fillParent={true}
+                debounce={250}
+            />
         </div>
     </div>
 {/each}
