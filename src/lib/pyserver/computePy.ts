@@ -36,15 +36,10 @@ export default async function <T>({ e, target, pyfile, args, general, cancelToke
             }
             dataFromPython = await computefromSubprocess<T>({
                 target,
-                general,
                 pyfile,
                 args,
             });
             console.log(dataFromPython);
-            // const saved_content = await fs.readTextFile(pyfile + '.json', {
-            //     dir: fs.BaseDirectory.AppLog,
-            // });
-            // return JSON.parse(saved_content);
         } else {
             if (!get(pyServerReady)) {
                 await fetchServerROOT();
