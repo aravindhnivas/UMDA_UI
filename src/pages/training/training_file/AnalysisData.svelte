@@ -1,12 +1,30 @@
 <script lang="ts">
-    import BrowseFile from '$lib/components/BrowseFile.svelte';
-    import CustomInput from '$lib/components/CustomInput.svelte';
+    import { atoms_bin_size, post_analysis_files_directory } from './plot-analysis/stores';
+    import { training_column_name_X, training_file } from './stores';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import { use_dask } from '$lib/stores/system';
     import PlotAnalysis from './plot-analysis/PlotAnalysis.svelte';
-    import { training_column_name_X, training_file } from './stores';
+    import Checkbox from '$lib/components/Checkbox.svelte';
+    import CheckFileStatus from './CheckFileStatus.svelte';
 
     const MolecularAnalysis = async () => {
+        const analysis_file = await path.join(await $post_analysis_files_directory, analysis_filename);
+        const analysis_file_exists = await fs.exists(analysis_file);
+
+        if (!analysis_file_exists) {
+            use_analysis_file = false;
+        }
+
+        if (analysis_file_exists && !use_analysis_file) {
+            const val = await dialog.confirm(
+                `${analysis_file} file exists. Do you want to use it?`,
+                'Analysis file exists',
+            );
+            if (val) {
+                use_analysis_file = true;
+            }
+        }
+
         return {
             pyfile: 'training.molecular_analysis',
             args: {
@@ -15,7 +33,7 @@
                 key: $training_file.key,
                 use_dask: $use_dask,
                 smiles_column_name: $training_column_name_X,
-                analysis_file: lock_analysis_file ? null : $analysis_file,
+                analysis_file: use_analysis_file ? analysis_file : null,
                 atoms_bin_size: $atoms_bin_size,
             },
         };
@@ -29,9 +47,8 @@
     };
 
     let loading = false;
-    const analysis_file = localWritable('molecular_analysis_file', '');
-    let lock_analysis_file = false;
-    const atoms_bin_size = localWritable('atoms_bin_size', 10);
+    let use_analysis_file = true;
+    let analysis_filename = 'molecule_analysis_results.csv';
 </script>
 
 {#if $training_column_name_X.toLocaleLowerCase() !== 'smiles'}
@@ -41,26 +58,16 @@
     </div>
 {:else}
     <div class="badge badge-info">
-        Using {$training_column_name_X} column for molecular structure in file: {$training_file.filename}
+        Using {$training_column_name_X} column for molecular structure
     </div>
 {/if}
-
-<BrowseFile
-    bind:filename={$analysis_file}
-    bind:lock={lock_analysis_file}
-    btn_name={'Browse analysis file'}
-    label="Optional. Choose analysis file if you have one!"
-    filters={[{ name: 'molecule_analysis_results', extensions: ['csv'] }]}
-/>
-
-<div class="flex">
-    <CustomInput label="Atoms bin size" bind:value={$atoms_bin_size} type="number" placeholder="Enter atoms bin size" />
-</div>
+<Checkbox bind:value={use_analysis_file} label="Use analysis file" check="checkbox" />
+<CheckFileStatus name={analysis_filename} />
 
 <Loadingbtn
     class="m-auto"
     bind:loading
-    name="Begin analysis"
+    name="Begin full analysis"
     subprocess={true}
     callback={MolecularAnalysis}
     on:result={onResult}

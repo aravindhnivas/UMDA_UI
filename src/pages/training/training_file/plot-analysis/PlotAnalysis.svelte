@@ -1,9 +1,11 @@
 <script lang="ts">
-    import BrowseFile from '$lib/components/BrowseFile.svelte';
-    import { post_analysis_files } from './stores';
+    import { post_analysis_files_directory, atoms_bin_size } from './stores';
+    import { CustomInput } from '$lib/components';
     import Tab, { Label } from '@smui/tab';
     import TabBar from '@smui/tab-bar';
+    import { ChartColumnBig } from 'lucide-svelte';
     import Plot from 'svelte-plotly.js';
+    import CheckFileStatus from '../CheckFileStatus.svelte';
 
     const tab_items = ['size_distribution', 'structural_distribution', 'elemental_distribution'] as const;
     let active_tab: (typeof tab_items)[number] = 'size_distribution';
@@ -23,7 +25,6 @@
         const lines = contents.split('\n');
         const columns = lines[0].split(',');
         const data = lines.slice(1).map(line => line.split(','));
-        // .filter(line => line.length === columns.length);
         return { columns, data };
     };
 
@@ -48,24 +49,16 @@
     };
 
     const onPlot = async (name: (typeof tab_items)[number]) => {
-        console.log(name);
-
-        const csv_file = $post_analysis_files[name];
+        // const csv_file = $post_analysis_files[name];
+        const csv_file = await path.join(await $post_analysis_files_directory, `${name}.csv`);
+        // console.log(csv_file);
         if (!(await fs.exists(csv_file))) {
             toast.error(`File ${csv_file} does not exist`);
             return;
         }
 
         const { columns, data } = await parse_csv_file(csv_file);
-        if (plot_type[name] !== 'pie') {
-            plotData[name] = [
-                {
-                    x: data.map(row => row[0]),
-                    y: data.map(row => row[1]),
-                    type: plot_type[name],
-                },
-            ];
-        } else {
+        if (plot_type[name] === 'pie') {
             plotData[name] = [
                 {
                     labels: data.map(row => row[0]),
@@ -77,9 +70,19 @@
                     // insidetextorientation: 'radial',
                 },
             ];
+            return;
         }
+
+        plotData[name] = [
+            {
+                x: data.map(row => row[0]),
+                y: data.map(row => row[1]),
+                type: plot_type[name],
+            },
+        ];
         console.log({ columns, data, plotData });
     };
+    let recheck_files = false;
 </script>
 
 <h3>Analysis plots</h3>
@@ -93,15 +96,32 @@
 </div>
 
 {#each tab_items as name}
+    {@const csv_file = name + '.csv'}
     <div class="grid gap-2 items-end" class:hidden={active_tab !== name}>
-        <div class="grid grid-cols-5 items-end gap-2">
-            <BrowseFile
-                class="col-span-4"
-                bind:filename={$post_analysis_files[name]}
-                label="{name}.csv file"
-                filters={[{ name: name, extensions: ['csv'] }]}
+        <CheckFileStatus name={csv_file} />
+        <div class="flex gap-2 items-end">
+            <CustomInput
+                label="Atoms bin size"
+                bind:value={$atoms_bin_size}
+                type="number"
+                placeholder="Enter atoms bin size"
             />
-            <button class="btn btn-sm" on:click={() => onPlot(name)}>Plot</button>
+            <button
+                class=" btn btn-sm"
+                on:click={async () => {
+                    if (await fs.exists(await path.join(await $post_analysis_files_directory, csv_file))) {
+                        const overwrite = await dialog.confirm(
+                            `${csv_file} file already exists. Do you want to overwrite it?`,
+                            'File exists',
+                        );
+                        if (!overwrite) return;
+                    }
+                }}>Begin Analyse</button
+            >
+            <button class=" btn btn-sm" on:click={() => onPlot(name)}>
+                <span>Plot</span>
+                <ChartColumnBig />
+            </button>
         </div>
         <div class="h-lg min-w-xl">
             <Plot data={plotData[name]} layout={layout[name]} fillParent={true} debounce={250} />

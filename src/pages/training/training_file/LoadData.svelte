@@ -1,4 +1,5 @@
 <script lang="ts">
+    // import { post_analysis_files_directory } from './plot-analysis/stores';
     import { use_dask } from '$lib/stores/system';
     import { NPARTITIONS } from '$lib/stores/system';
     import { training_file, training_column_name_X, training_column_name_y } from './stores';
@@ -7,6 +8,9 @@
 
     let auto_fetch_columns = false;
     let data: DataType;
+    // $: if($training_file?.['filename']) {
+    //     $post_analysis_files_directory = $training_file['filename'];
+    // }
 </script>
 
 <FileLoader
