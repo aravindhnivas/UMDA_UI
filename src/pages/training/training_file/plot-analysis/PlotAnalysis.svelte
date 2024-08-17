@@ -98,12 +98,24 @@
                 `${csv_file} file already exists. Do you want to overwrite it?`,
                 'File exists',
             );
-            if (!overwrite) return;
+            if (!overwrite) {
+                onPlot(name);
+                return;
+            }
         }
         console.log('running', name);
         return await MolecularAnalysis(name);
     };
     let recheck_files = false;
+    onMount(async () => {
+        recheck_files = !recheck_files;
+        tab_items.forEach(async name => {
+            const csv_file = `${name}.csv`;
+            if (await fs.exists(await path.join(await $post_analysis_files_directory, csv_file))) {
+                onPlot(name);
+            }
+        });
+    });
 </script>
 
 <h3>Analysis plots</h3>
@@ -132,6 +144,7 @@
                 subprocess={true}
                 on:result={() => {
                     recheck_files = !recheck_files;
+                    onPlot(name);
                 }}
             />
             <button class=" btn btn-sm" on:click={() => onPlot(name)}>
