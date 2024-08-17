@@ -3,7 +3,7 @@
     import { AlertCircle, CheckCheck } from 'lucide-svelte';
 
     export let name: string;
-    let recheck_files = false;
+    export let recheck_files = false;
 </script>
 
 <div class="flex gap-2">
