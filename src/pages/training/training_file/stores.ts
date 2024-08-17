@@ -7,5 +7,8 @@ export const training_file = localWritable<{
     filetype: 'csv',
     key: 'data',
 });
+
 export const training_column_name_X = writable<string>('SMILES');
 export const training_column_name_y = writable<string>('');
+
+export const analysis_filename = 'molecule_analysis_results.csv';

@@ -1,13 +1,16 @@
 <script lang="ts">
     import { atoms_bin_size, post_analysis_files_directory } from './plot-analysis/stores';
-    import { training_column_name_X, training_file } from './stores';
+    import { training_column_name_X, training_file, analysis_filename } from './stores';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import { use_dask } from '$lib/stores/system';
     import PlotAnalysis from './plot-analysis/PlotAnalysis.svelte';
     import Checkbox from '$lib/components/Checkbox.svelte';
     import CheckFileStatus from './CheckFileStatus.svelte';
 
-    const MolecularAnalysis = async () => {
+    const MolecularAnalysis = async (
+        mode: 'all' | 'size_distribution' | 'structural_distribution' | 'elemental_distribution' = 'all',
+    ) => {
+        console.log('MolecularAnalysis');
         const analysis_file = await path.join(await $post_analysis_files_directory, analysis_filename);
         const analysis_file_exists = await fs.exists(analysis_file);
 
@@ -35,6 +38,7 @@
                 smiles_column_name: $training_column_name_X,
                 analysis_file: use_analysis_file ? analysis_file : null,
                 atoms_bin_size: $atoms_bin_size,
+                mode,
             },
         };
     };
@@ -48,7 +52,6 @@
 
     let loading = false;
     let use_analysis_file = true;
-    let analysis_filename = 'molecule_analysis_results.csv';
 </script>
 
 {#if $training_column_name_X.toLocaleLowerCase() !== 'smiles'}
@@ -69,8 +72,9 @@
     bind:loading
     name="Begin full analysis"
     subprocess={true}
-    callback={MolecularAnalysis}
+    callback={() => MolecularAnalysis('all')}
     on:result={onResult}
 />
 <hr />
-<PlotAnalysis />
+
+<PlotAnalysis {MolecularAnalysis} />

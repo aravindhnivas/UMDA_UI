@@ -1,11 +1,14 @@
 <script lang="ts">
     import { post_analysis_files_directory, atoms_bin_size } from './stores';
-    import { CustomInput } from '$lib/components';
+    import { CustomInput, Loadingbtn } from '$lib/components';
     import Tab, { Label } from '@smui/tab';
     import TabBar from '@smui/tab-bar';
     import { ChartColumnBig } from 'lucide-svelte';
     import Plot from 'svelte-plotly.js';
     import CheckFileStatus from '../CheckFileStatus.svelte';
+    import { analysis_filename } from '../stores';
+
+    export let MolecularAnalysis: (mode: string) => Promise<{ pyfile: string; args: Record<string, any> }>;
 
     const tab_items = ['size_distribution', 'structural_distribution', 'elemental_distribution'] as const;
     let active_tab: (typeof tab_items)[number] = 'size_distribution';
@@ -82,7 +85,24 @@
         ];
         console.log({ columns, data, plotData });
     };
-    let recheck_files = false;
+
+    const RunAnalysis = async (name: (typeof tab_items)[number]) => {
+        if (!(await fs.exists(await path.join(await $post_analysis_files_directory, analysis_filename)))) {
+            toast.error(`${analysis_filename} file does not exist`);
+            return;
+        }
+
+        const csv_file = `${name}.csv`;
+        if (await fs.exists(await path.join(await $post_analysis_files_directory, csv_file))) {
+            const overwrite = await dialog.confirm(
+                `${csv_file} file already exists. Do you want to overwrite it?`,
+                'File exists',
+            );
+            if (!overwrite) return;
+        }
+        console.log('running', name);
+        return await MolecularAnalysis(name);
+    };
 </script>
 
 <h3>Analysis plots</h3>
@@ -96,9 +116,8 @@
 </div>
 
 {#each tab_items as name}
-    {@const csv_file = name + '.csv'}
     <div class="grid gap-2 items-end" class:hidden={active_tab !== name}>
-        <CheckFileStatus name={csv_file} />
+        <CheckFileStatus name={name + '.csv'} />
         <div class="flex gap-2 items-end">
             <CustomInput
                 label="Atoms bin size"
@@ -106,18 +125,7 @@
                 type="number"
                 placeholder="Enter atoms bin size"
             />
-            <button
-                class=" btn btn-sm"
-                on:click={async () => {
-                    if (await fs.exists(await path.join(await $post_analysis_files_directory, csv_file))) {
-                        const overwrite = await dialog.confirm(
-                            `${csv_file} file already exists. Do you want to overwrite it?`,
-                            'File exists',
-                        );
-                        if (!overwrite) return;
-                    }
-                }}>Begin Analyse</button
-            >
+            <Loadingbtn name="Run analysis" callback={async () => await RunAnalysis(name)} subprocess={true} />
             <button class=" btn btn-sm" on:click={() => onPlot(name)}>
                 <span>Plot</span>
                 <ChartColumnBig />
