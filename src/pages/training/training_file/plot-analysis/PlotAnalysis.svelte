@@ -103,6 +103,7 @@
         console.log('running', name);
         return await MolecularAnalysis(name);
     };
+    let recheck_files = false;
 </script>
 
 <h3>Analysis plots</h3>
@@ -117,7 +118,7 @@
 
 {#each tab_items as name}
     <div class="grid gap-2 items-end" class:hidden={active_tab !== name}>
-        <CheckFileStatus name={name + '.csv'} />
+        <CheckFileStatus name={name + '.csv'} bind:recheck_files />
         <div class="flex gap-2 items-end">
             <CustomInput
                 label="Atoms bin size"
@@ -125,7 +126,14 @@
                 type="number"
                 placeholder="Enter atoms bin size"
             />
-            <Loadingbtn name="Run analysis" callback={async () => await RunAnalysis(name)} subprocess={true} />
+            <Loadingbtn
+                name="Run analysis"
+                callback={async () => await RunAnalysis(name)}
+                subprocess={true}
+                on:result={() => {
+                    recheck_files = !recheck_files;
+                }}
+            />
             <button class=" btn btn-sm" on:click={() => onPlot(name)}>
                 <span>Plot</span>
                 <ChartColumnBig />
