@@ -7,6 +7,7 @@
     import Plot from 'svelte-plotly.js';
     import CheckFileStatus from '../CheckFileStatus.svelte';
     import { analysis_filename } from '../stores';
+    import Slider from '@smui/slider';
 
     export let MolecularAnalysis: (mode: string) => Promise<{ pyfile: string; args: Record<string, any> }>;
 
@@ -51,21 +52,39 @@
         elemental_distribution: 'bar',
     };
 
+    let atomic_size_range = [1, 200];
+    let min_atomic_number = 1;
+    let max_atomic_number = 50;
+
     const onPlot = async (name: (typeof tab_items)[number]) => {
-        // const csv_file = $post_analysis_files[name];
         const csv_file = await path.join(await $post_analysis_files_directory, `${name}.csv`);
-        // console.log(csv_file);
         if (!(await fs.exists(csv_file))) {
             toast.error(`File ${csv_file} does not exist`);
             return;
         }
 
         const { columns, data } = await parse_csv_file(csv_file);
+
+        const x = data.map(row => row[0]).filter(Boolean);
+        const y = data
+            .map(row => row[1])
+            .filter(Boolean)
+            .map(Number);
+
+        console.log({ x, y });
+
+        if (name === 'size_distribution') {
+            const max = Number(x.at(-1).split('-')[1]);
+            max_atomic_number = max;
+            atomic_size_range = [1, max];
+            console.log({ atomic_size_range, max_atomic_number });
+        }
+
         if (plot_type[name] === 'pie') {
             plotData[name] = [
                 {
-                    labels: data.map(row => row[0]),
-                    values: data.map(row => row[1]),
+                    labels: x,
+                    values: y,
                     type: 'pie',
                     textinfo: 'label+percent',
                     textposition: 'outside',
@@ -76,14 +95,7 @@
             return;
         }
 
-        plotData[name] = [
-            {
-                x: data.map(row => row[0]),
-                y: data.map(row => row[1]),
-                type: plot_type[name],
-            },
-        ];
-        console.log({ columns, data, plotData });
+        plotData[name] = [{ x, y, type: plot_type[name] }];
     };
 
     const RunAnalysis = async (name: (typeof tab_items)[number]) => {
@@ -106,6 +118,7 @@
         console.log('running', name);
         return await MolecularAnalysis(name);
     };
+
     let recheck_files = false;
     onMount(async () => {
         recheck_files = !recheck_files;
@@ -128,7 +141,7 @@
     </TabBar>
 </div>
 
-{#each tab_items as name}
+{#each tab_items as name (name)}
     <div class="grid gap-2 items-end" class:hidden={active_tab !== name}>
         <CheckFileStatus name={name + '.csv'} bind:recheck_files />
         <div class="flex gap-2 items-end">
@@ -155,5 +168,20 @@
         <div class="h-lg min-w-xl">
             <Plot data={plotData[name]} layout={layout[name]} fillParent={true} debounce={250} />
         </div>
+
+        <h3>Filtering data</h3>
+        {#if name === 'size_distribution'}
+            <pre class="status">Atomic size range: {min_atomic_number} - {max_atomic_number}</pre>
+            <Slider
+                range
+                bind:start={min_atomic_number}
+                bind:end={max_atomic_number}
+                min={atomic_size_range[0]}
+                max={atomic_size_range[1]}
+                step={1}
+                minRange={1}
+                input$aria-label="Range slider"
+            />
+        {/if}
     </div>
 {/each}
