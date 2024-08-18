@@ -81,7 +81,6 @@
         } else {
             plotData[name] = [{ x, y, type: plot_type[name] }];
         }
-
         dispatch('plot', { x, y });
     };
 
@@ -109,10 +108,10 @@
     let recheck_files = false;
     onMount(async () => {
         recheck_files = !recheck_files;
-        const csv_file = `${name}.csv`;
-        if (await fs.exists(await path.join(await $post_analysis_files_directory, csv_file))) {
-            onPlot(name);
-        }
+        // const csv_file = `${name}.csv`;
+        // if (await fs.exists(await path.join(await $post_analysis_files_directory, csv_file))) {
+        //     onPlot(name);
+        // }
     });
 </script>
 
@@ -129,9 +128,9 @@
             name="Run analysis"
             callback={async () => await RunAnalysis(name)}
             subprocess={true}
-            on:result={() => {
+            on:result={async () => {
                 recheck_files = !recheck_files;
-                onPlot(name);
+                await onPlot(name);
             }}
         />
         <button class=" btn btn-sm" on:click={() => onPlot(name)}>
@@ -139,6 +138,7 @@
             <ChartColumnBig />
         </button>
     </div>
+    <slot name="before-plot" />
     <div class="h-lg min-w-xl">
         <Plot data={plotData[name]} layout={layout[name]} fillParent={true} debounce={250} />
     </div>
