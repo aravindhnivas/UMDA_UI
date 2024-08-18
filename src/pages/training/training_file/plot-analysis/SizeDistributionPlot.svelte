@@ -1,34 +1,55 @@
 <script lang="ts">
     import { active_tab } from './stores';
     import BaseLayout from './BaseLayout.svelte';
-    import Slider from '@smui/slider';
-
+    import CustomInput from '$lib/components/CustomInput.svelte';
+    import { Ampersand, ChevronLeft, ChevronRight, Equal } from 'lucide-svelte';
+    // import SegmentedButton, { Segment, Icon, Label } from '@smui/segmented-button';
     const name = 'size_distribution';
 
-    let atomic_size_range = [1, 200];
-    let min_atomic_number = 1;
-    let max_atomic_number = 50;
+    let min_atomic_number: string = '1';
+    let max_atomic_number: string;
+    let count_threshold: number;
+    let x: string[] = [];
+    let y: number[] = [];
 
+    let plotted = false;
     const on_plot = (e: CustomEvent) => {
+        plotted = true;
         console.log(e.detail);
-        const { x } = e.detail as { x: string[] };
-        const max = Number(x.at(-1)?.split('-')[1] ?? 0);
-        max_atomic_number = max;
-        atomic_size_range = [1, max];
-        console.log({ atomic_size_range, max_atomic_number });
+        x = e.detail.x as string[];
+        y = e.detail.y as number[];
+        count_threshold = y[0] ?? 0;
+        min_atomic_number = x[0]?.split('-')[0] ?? '1';
+        if (min_atomic_number == '0') min_atomic_number = '1';
+        max_atomic_number = x.at(-1)?.split('-')[1] ?? '';
     };
 </script>
 
 <BaseLayout {name} hidden={$active_tab !== name} on:plot={on_plot}>
-    <pre class="status">Atomic size range: {min_atomic_number} - {max_atomic_number}</pre>
-    <Slider
-        range
-        bind:start={min_atomic_number}
-        bind:end={max_atomic_number}
-        min={atomic_size_range[0]}
-        max={atomic_size_range[1]}
-        step={1}
-        minRange={1}
-        input$aria-label="Range slider"
-    />
+    <svelte:fragment slot="before-plot">
+        <!-- {#if plotted} -->
+        <h3>Filtering</h3>
+        <div class="flex gap-3 items-end">
+            <button class="flex border border-solid border-1 border-rounded">
+                <ChevronRight />
+                <Equal />
+            </button>
+            <CustomInput bind:value={min_atomic_number} label="Min" />
+            <div class="flex">
+                <ChevronLeft />
+                <Equal />
+            </div>
+            <CustomInput bind:value={max_atomic_number} label="Max" />
+            <Ampersand />
+            <CustomInput bind:value={count_threshold} label="count threshold" />
+        </div>
+        <!-- {/if} -->
+    </svelte:fragment>
 </BaseLayout>
+
+<!-- 
+<SegmentedButton segments={['1', '2']} let:segment>
+    <Segment {segment}>
+        <Label>{segment}</Label>
+    </Segment>
+</SegmentedButton> -->
