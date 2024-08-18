@@ -12,7 +12,7 @@
     export let data: DataType | null = null;
     export let filename: string;
     export let use_dask = false;
-    export let filetypes = ['csv', 'hdf', 'json', 'parquet'];
+    export let filetypes = ['csv', 'smi', 'hdf', 'json', 'parquet'];
 
     interface DataType {
         columns: string[];
@@ -75,7 +75,10 @@
     <button
         class="btn btn-sm join-item rounded-0"
         on:click={async () => {
-            const result = await dialog.open();
+            const result = await dialog.open({
+                filters: [{ name: filetype, extensions: [filetype] }],
+                multiple: false,
+            });
             if (!result) return;
             if (typeof result === 'string') {
                 filename = result;
