@@ -14,3 +14,4 @@ export const post_analysis_files = localWritable('post_analysis_files', {
 });
 
 export const atoms_bin_size = localWritable('atoms_bin_size', 10);
+export const active_tab = localWritable<AnalysisItemsType>('training_file_plot_active_tab_item', 'size_distribution');

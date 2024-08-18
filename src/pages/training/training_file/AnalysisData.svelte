@@ -37,11 +37,13 @@
                 use_dask: $use_dask,
                 smiles_column_name: $training_column_name_X,
                 analysis_file: use_analysis_file ? analysis_file : null,
-                atoms_bin_size: $atoms_bin_size,
+                atoms_bin_size: Number($atoms_bin_size),
                 mode,
             },
         };
     };
+
+    setContext('MolecularAnalysis', MolecularAnalysis);
 
     const onResult = (e: CustomEvent) => {
         console.log(e.detail);
@@ -77,4 +79,4 @@
 />
 <hr />
 
-<PlotAnalysis {MolecularAnalysis} />
+<PlotAnalysis />
