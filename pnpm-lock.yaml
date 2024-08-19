@@ -48,6 +48,9 @@ importers:
       '@smui-extra/accordion':
         specifier: ^7.0.0
         version: 7.0.0(svelte@4.2.18)(typescript@5.5.4)
+      '@smui/chips':
+        specifier: ^7.0.0
+        version: 7.0.0(svelte@4.2.18)(typescript@5.5.4)
       '@smui/data-table':
         specifier: 7.0.0-beta.18
         version: 7.0.0-beta.18(svelte@4.2.18)(typescript@5.5.4)
