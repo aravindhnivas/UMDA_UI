@@ -3,7 +3,8 @@
     import BaseLayout from './BaseLayout.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
     import { Ampersand, ChevronLeft, ChevronRight, Equal } from 'lucide-svelte';
-    // import SegmentedButton, { Segment, Icon, Label } from '@smui/segmented-button';
+    import Chip, { Set, Text } from '@smui/chips';
+
     const name = 'size_distribution';
 
     let min_atomic_number: string = '1';
@@ -30,9 +31,17 @@
         max_atomic_number: false,
         count_threshold: false,
     };
+
+    let choices: string[] = ['min', 'max', 'count threshold'];
+    let selected: string[] = [];
 </script>
 
 <BaseLayout {name} hidden={$active_tab !== name} on:plot={on_plot}>
+    <Set chips={choices} let:chip filter bind:selected>
+        <Chip {chip} touch>
+            <Text>{chip}</Text>
+        </Chip>
+    </Set>
     {#if plotted}
         <h3>Filtering</h3>
         <div class="flex gap-3 items-end">
