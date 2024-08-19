@@ -14,7 +14,7 @@
     let select_all = true;
 
     const layout: Partial<Plotly.Layout> = {
-        xaxis: { title: 'Element' },
+        xaxis: { title: 'Element containing molecules' },
         yaxis: { title: 'Count', type: 'log' },
         margin: { t: 0 },
     };
