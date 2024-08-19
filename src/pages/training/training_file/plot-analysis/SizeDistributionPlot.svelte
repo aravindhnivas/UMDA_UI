@@ -6,31 +6,26 @@
 
     const name = 'size_distribution';
 
-    let min_atomic_number: string = '1';
-    let max_atomic_number: string;
+    let min_atomic_number: number;
+    let max_atomic_number: number;
     let count_threshold: number;
 
     const layout: Partial<Plotly.Layout> = {
         xaxis: { title: 'No. of atoms' },
         yaxis: { title: 'Count', type: 'log' },
-        margin: {
-            // l: 50,
-            // r: 50,
-            // b: 100,
-            // t: 100,
-            pad: 4,
-        },
     };
     let plotData: Partial<Plotly.PlotData>[] = [];
 
     let plotted = false;
-    const GetData = getContext<(name: string) => Promise<{ x: string[]; y: number[] }>>('GetData');
+    const GetData = getContext<(name: string) => Promise<{ x: number[]; y: number[] }>>('GetData');
 
     const plot_data = async () => {
         const { x, y } = await GetData(`${name}.csv`);
 
         min_atomic_number = x[0];
-        max_atomic_number = x?.at(-1) ?? '';
+        max_atomic_number = x?.at(-1) ?? 0;
+        // if (layout.xaxis) layout.xaxis.range = [min_atomic_number * -1.1, max_atomic_number * 1.1];
+        // console.log(layout.xaxis?.range);
         count_threshold = y.at(-1) ?? 0;
         plotData = [{ x, y }];
         plotted = true;
