@@ -26,55 +26,35 @@
         max_atomic_number = x.at(-1)?.split('-')[1] ?? '';
     };
 
-    let activate = {
-        min_atomic_number: false,
-        max_atomic_number: false,
-        count_threshold: false,
+    let filter_locked = {
+        min_atomic_number: true,
+        max_atomic_number: true,
+        count_threshold: true,
     };
-
-    let choices: string[] = ['min', 'max', 'count threshold'];
-    let selected: string[] = [];
 </script>
 
 <BaseLayout {name} hidden={$active_tab !== name} on:plot={on_plot}>
-    <Set chips={choices} let:chip filter bind:selected>
-        <Chip {chip} touch>
-            <Text>{chip}</Text>
-        </Chip>
-    </Set>
     {#if plotted}
         <h3>Filtering</h3>
         <div class="flex gap-3 items-end">
-            <button
-                class="icon-button hover:bg-white"
-                class:bg-white={activate.min_atomic_number}
-                on:click={() => (activate.min_atomic_number = !activate.min_atomic_number)}
-            >
-                <ChevronRight />
-                <Equal />
-            </button>
-
-            <CustomInput bind:value={min_atomic_number} label="Min" />
-
-            <button
-                class="icon-button hover:bg-white"
-                class:bg-white={activate.max_atomic_number}
-                on:click={() => (activate.max_atomic_number = !activate.max_atomic_number)}
-            >
-                <ChevronLeft />
-                <Equal />
-            </button>
-
-            <CustomInput bind:value={max_atomic_number} label="Max" />
-
-            <button
-                class="icon-button hover:bg-white"
-                class:bg-white={activate.count_threshold}
-                on:click={() => (activate.count_threshold = !activate.count_threshold)}
-            >
-                <Ampersand />
-            </button>
-            <CustomInput bind:value={count_threshold} label="count threshold" />
+            <CustomInput
+                bind:value={min_atomic_number}
+                label="Min"
+                enabled_lock_mode
+                bind:lock={filter_locked.min_atomic_number}
+            />
+            <CustomInput
+                bind:value={max_atomic_number}
+                label="Max"
+                enabled_lock_mode
+                bind:lock={filter_locked.max_atomic_number}
+            />
+            <CustomInput
+                bind:value={count_threshold}
+                label="count threshold"
+                enabled_lock_mode
+                bind:lock={filter_locked.count_threshold}
+            />
         </div>
     {/if}
 </BaseLayout>
