@@ -1,14 +1,14 @@
 <script lang="ts">
-    import { active_tab } from './stores';
+    import { active_tab, sizeDistributionFilter } from './stores';
     import BaseLayout from './BaseLayout.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
     import Plot from 'svelte-plotly.js';
 
     const name = 'size_distribution';
 
-    let min_atomic_number: number;
-    let max_atomic_number: number;
-    let count_threshold: number;
+    let min_atomic_number: number | null = null;
+    let max_atomic_number: number | null = null;
+    let count_threshold: number | null = null;
 
     const layout: Partial<Plotly.Layout> = {
         xaxis: { title: 'No. of atoms' },
@@ -24,41 +24,40 @@
 
         min_atomic_number = x[0];
         max_atomic_number = x?.at(-1) ?? 0;
-        // if (layout.xaxis) layout.xaxis.range = [min_atomic_number * -1.1, max_atomic_number * 1.1];
-        // console.log(layout.xaxis?.range);
         count_threshold = y.at(-1) ?? 0;
         plotData = [{ x, y }];
         plotted = true;
     };
 
-    let filter_locked = {
-        min_atomic_number: true,
-        max_atomic_number: true,
-        count_threshold: true,
-    };
+    $: if (!$sizeDistributionFilter.min_atomic_number.lock && min_atomic_number !== null)
+        $sizeDistributionFilter.min_atomic_number.value = min_atomic_number;
+    $: if (!$sizeDistributionFilter.max_atomic_number.lock && max_atomic_number !== null)
+        $sizeDistributionFilter.max_atomic_number.value = max_atomic_number;
+    $: if (!$sizeDistributionFilter.count_threshold.lock && count_threshold !== null)
+        $sizeDistributionFilter.count_threshold.value = count_threshold;
 </script>
 
 <BaseLayout {name} hidden={$active_tab !== name} on:plot={plot_data}>
-    {#if plotted}
+    {#if plotted && min_atomic_number !== null && max_atomic_number !== null && count_threshold !== null}
         <h3>Filtering</h3>
         <div class="flex gap-3 items-end">
             <CustomInput
                 bind:value={min_atomic_number}
                 label="Min"
                 enabled_lock_mode
-                bind:lock={filter_locked.min_atomic_number}
+                bind:lock={$sizeDistributionFilter.min_atomic_number.lock}
             />
             <CustomInput
                 bind:value={max_atomic_number}
                 label="Max"
                 enabled_lock_mode
-                bind:lock={filter_locked.max_atomic_number}
+                bind:lock={$sizeDistributionFilter.max_atomic_number.lock}
             />
             <CustomInput
                 bind:value={count_threshold}
                 label="count threshold"
                 enabled_lock_mode
-                bind:lock={filter_locked.count_threshold}
+                bind:lock={$sizeDistributionFilter.count_threshold.lock}
             />
         </div>
     {/if}

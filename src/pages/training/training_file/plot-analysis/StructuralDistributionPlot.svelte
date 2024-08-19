@@ -1,8 +1,9 @@
 <script lang="ts">
-    import { active_tab } from './stores';
+    import { active_tab, structuralDistributionFilter } from './stores';
     import BaseLayout from './BaseLayout.svelte';
     import Chip, { Set, Text } from '@smui/chips';
     import Plot from 'svelte-plotly.js';
+    import { difference } from 'lodash-es';
 
     const name = 'structural_distribution';
 
@@ -34,6 +35,11 @@
         ];
         plotted = true;
     };
+
+    $: filter_structures = difference(choices, selected);
+    $: if (filter_structures) {
+        $structuralDistributionFilter.filter_structures = [...filter_structures];
+    }
 </script>
 
 <BaseLayout {name} hidden={$active_tab !== name} on:plot={plot_data}>

@@ -1,5 +1,11 @@
 <script lang="ts">
-    import { atoms_bin_size, post_analysis_files_directory } from './plot-analysis/stores';
+    import {
+        atoms_bin_size,
+        post_analysis_files_directory,
+        structuralDistributionFilter,
+        elementalDistributionFilter,
+        sizeDistributionFilter,
+    } from './plot-analysis/stores';
     import { training_column_name_X, training_file, analysis_filename } from './stores';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import { use_dask } from '$lib/stores/system';
@@ -52,8 +58,55 @@
         console.log(dataFromPython);
     };
 
-    let loading = false;
     let use_analysis_file = true;
+
+    const ApplyFilterForMolecularAnalysis = async () => {
+        console.log('ApplyFilterForMolecularAnalysis');
+        const analysis_file = await path.join(await $post_analysis_files_directory, analysis_filename);
+        const analysis_file_exists = await fs.exists(analysis_file);
+        if (!analysis_file_exists) {
+            toast.error(`${analysis_file} file does not exist`);
+            return;
+        }
+
+        console.log($structuralDistributionFilter, $elementalDistributionFilter, $sizeDistributionFilter);
+
+        let min_atomic_number = null;
+        if (!$sizeDistributionFilter.min_atomic_number.lock) {
+            min_atomic_number = $sizeDistributionFilter.min_atomic_number.value;
+        }
+
+        let max_atomic_number = null;
+        if (!$sizeDistributionFilter.max_atomic_number.lock) {
+            max_atomic_number = $sizeDistributionFilter.max_atomic_number.value;
+        }
+
+        let size_count_threshold = null;
+        if (!$sizeDistributionFilter.count_threshold.lock) {
+            size_count_threshold = $sizeDistributionFilter.count_threshold.value;
+        }
+
+        let elemental_count_threshold = null;
+        if (!$elementalDistributionFilter.count_threshold.lock) {
+            elemental_count_threshold = $elementalDistributionFilter.count_threshold.value;
+        }
+
+        const filter_elements = $elementalDistributionFilter.filter_elements;
+        const filter_structures = $structuralDistributionFilter.filter_structures;
+
+        const args = {
+            analysis_file,
+            min_atomic_number,
+            max_atomic_number,
+            size_count_threshold,
+            elemental_count_threshold,
+            filter_elements,
+            filter_structures,
+        };
+        const pyfile = 'training.apply_filter_for_molecular_analysis';
+        // console.log(args, pyfile);
+        return { pyfile, args };
+    };
 </script>
 
 {#if $training_column_name_X.toLocaleLowerCase() !== 'smiles'}
@@ -69,14 +122,23 @@
 <Checkbox bind:value={use_analysis_file} label="Use analysis file" check="checkbox" />
 <CheckFileStatus name={analysis_filename} />
 
-<Loadingbtn
-    class="m-auto"
-    bind:loading
-    name="Begin full analysis"
-    subprocess={true}
-    callback={() => MolecularAnalysis('all')}
-    on:result={onResult}
-/>
+<div class="flex gap-2 m-auto">
+    <Loadingbtn
+        name="Begin full analysis"
+        subprocess={true}
+        callback={() => MolecularAnalysis('all')}
+        on:result={onResult}
+    />
+
+    <Loadingbtn
+        name="Apply filters"
+        subprocess={true}
+        callback={() => ApplyFilterForMolecularAnalysis()}
+        on:result={e => console.log(e.detail)}
+    />
+    <!-- <button class="btn btn-sm" on:click={ApplyFilterForMolecularAnalysis}>Apply filters</button> -->
+</div>
+
 <hr />
 
 <PlotAnalysis />
