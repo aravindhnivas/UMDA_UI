@@ -9,37 +9,6 @@
     export let hidden: boolean = false;
 
     const MolecularAnalysis = getContext<MolecularAnalysisFunction>('MolecularAnalysis');
-
-    // let plotData: {
-    //     size_distribution: Partial<Plotly.PlotData>[];
-    //     structural_distribution: Partial<Plotly.PieData>[];
-    //     elemental_distribution: Partial<Plotly.PlotData>[];
-    // } = {
-    //     size_distribution: [],
-    //     structural_distribution: [],
-    //     elemental_distribution: [],
-    // };
-
-    // const layout: Record<AnalysisItemsType, Partial<Plotly.Layout>> = {
-    //     size_distribution: {
-    //         xaxis: { title: 'No. of atoms' },
-    //         yaxis: { title: 'Count', type: 'log' },
-    //         margin: { t: 0 },
-    //     },
-    //     structural_distribution: {},
-    //     elemental_distribution: {
-    //         xaxis: { title: 'Element' },
-    //         yaxis: { title: 'Count', type: 'log' },
-    //         margin: { t: 0 },
-    //     },
-    // };
-
-    // const plot_type: Record<AnalysisItemsType, 'bar' | 'pie'> = {
-    //     size_distribution: 'bar',
-    //     structural_distribution: 'pie',
-    //     elemental_distribution: 'bar',
-    // };
-
     const dispatch = createEventDispatcher();
 
     const RunAnalysis = async (name: AnalysisItemsType) => {
