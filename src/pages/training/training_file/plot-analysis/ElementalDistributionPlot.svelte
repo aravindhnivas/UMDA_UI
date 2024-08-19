@@ -2,6 +2,7 @@
     import { active_tab } from './stores';
     import BaseLayout from './BaseLayout.svelte';
     import Chip, { Set, Text } from '@smui/chips';
+    import { CustomInput } from '$lib/components';
 
     const name = 'elemental_distribution';
 
@@ -19,24 +20,31 @@
         await tick();
         selected = [...choices];
         select_all = true;
+
+        count_threshold = e.detail.y[0] as number;
     };
+
+    let count_threshold: number = 0;
 </script>
 
 <BaseLayout {name} hidden={$active_tab !== name} on:plot={on_plot}>
-    {#if plotted}
-        <h3>Filtering</h3>
+    <!-- {#if plotted} -->
+    <h3>Filtering</h3>
+    <div class="flex gap-2 items-end justify-between">
         <button
             class="btn btn-sm w-max"
             on:click={() => {
-                selected = select_all ? [...choices] : [];
+                selected = select_all ? [] : [...choices];
                 select_all = !select_all;
-            }}>Select {select_all ? 'all' : 'none'}</button
+            }}>Select {select_all ? 'none' : 'all'}</button
         >
-        <Set chips={choices} let:chip filter bind:selected>
-            <Chip {chip} touch>
-                <Text>{chip}</Text>
-            </Chip>
-        </Set>
-        <pre class="status">Selected: {selected.length} elements</pre>
-    {/if}
+        <CustomInput bind:value={count_threshold} label="count threshold" />
+    </div>
+    <Set chips={choices} let:chip filter bind:selected>
+        <Chip {chip} touch>
+            <Text>{chip}</Text>
+        </Chip>
+    </Set>
+    <pre class="status">Selected: {selected.length} elements</pre>
+    <!-- {/if} -->
 </BaseLayout>
