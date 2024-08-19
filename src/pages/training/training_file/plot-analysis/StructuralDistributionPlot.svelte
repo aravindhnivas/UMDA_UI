@@ -50,7 +50,7 @@
                 <Text>{chip}</Text>
             </Chip>
         </Set>
-        <pre class="status">Selected: {selected.length} categories</pre>
+        <pre class="status">Selected: {selected.length} / {choices.length} categories</pre>
     {/if}
     <div class="h-lg min-w-xl">
         <Plot data={plotData} fillParent={true} debounce={250} />
