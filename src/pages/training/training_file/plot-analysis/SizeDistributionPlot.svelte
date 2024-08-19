@@ -2,8 +2,6 @@
     import { active_tab } from './stores';
     import BaseLayout from './BaseLayout.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
-    import { Ampersand, ChevronLeft, ChevronRight, Equal } from 'lucide-svelte';
-    import Chip, { Set, Text } from '@smui/chips';
 
     const name = 'size_distribution';
 
