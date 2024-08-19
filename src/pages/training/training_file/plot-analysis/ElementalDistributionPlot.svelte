@@ -30,7 +30,15 @@
         select_all = true;
 
         count_threshold = y.at(-1) ?? 0;
-        plotData = [{ x, y, type: 'bar' }];
+        plotData = [
+            {
+                x,
+                y,
+                type: 'bar',
+                text: y.map(String),
+                textposition: 'auto',
+            },
+        ];
         plotted = true;
     };
 
