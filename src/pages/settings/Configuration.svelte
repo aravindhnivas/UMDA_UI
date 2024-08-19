@@ -10,7 +10,7 @@
     } from '$lib/pyserver/stores';
     import { BrowseBtn, Checkbox } from '$components/index';
     import Layout from './comp/Layout.svelte';
-    import { fetchServerROOT } from '$lib/pyserver/umdapyServer';
+    import { fetchServerROOT, start_and_check_umdapy_with_toast } from '$lib/pyserver/umdapyServer';
     import { getPyVersion } from './utils/checkPython';
     import { install_umdapy_from_zipfile } from './utils/download-assets';
     import { check_umdapy_assets_status } from './utils/assets-status';
@@ -49,9 +49,11 @@
                 }
             }
         }
-    });
 
-    let panel1Open = true;
+        if (import.meta.env.PROD) {
+            if (!$pyServerReady) await start_and_check_umdapy_with_toast();
+        }
+    });
 </script>
 
 <Layout id="Configuration">
