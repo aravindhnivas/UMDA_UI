@@ -57,3 +57,11 @@ export function validateInput(event: KeyboardEvent) {
         event.preventDefault();
     }
 }
+
+export const parse_csv_file = async (csv_file: string) => {
+    const contents = await fs.readTextFile(csv_file);
+    const lines = contents.split('\n');
+    const columns = lines[0].split(',');
+    const data = lines.slice(1).map(line => line.split(','));
+    return { columns, data };
+};
