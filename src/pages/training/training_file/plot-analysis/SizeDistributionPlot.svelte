@@ -1,9 +1,8 @@
 <script lang="ts">
-    import { active_tab, post_analysis_files_directory } from './stores';
+    import { active_tab } from './stores';
     import BaseLayout from './BaseLayout.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
     import Plot from 'svelte-plotly.js';
-    import { parse_csv_file } from '$lib/utils/index';
 
     const name = 'size_distribution';
 
@@ -19,32 +18,14 @@
     let plotData: Partial<Plotly.PlotData>[] = [];
 
     let plotted = false;
+    const GetData = getContext<(name: string) => Promise<{ x: string[]; y: number[] }>>('GetData');
 
     const plot_data = async () => {
-        // const csv_file = await path.join(await $post_analysis_files_directory, `${name}.csv`);
-        const csv_file = await path.join(await $post_analysis_files_directory, `full_${name}.csv`);
-        if (!(await fs.exists(csv_file))) {
-            toast.error(`File ${csv_file} does not exist`);
-            return;
-        }
-
-        const { columns, data } = await parse_csv_file(csv_file);
-
-        const x = data.map(row => row[0]).filter(Boolean);
-        const y = data
-            .map(row => row[1])
-            .filter(Boolean)
-            .map(Number);
+        const { x, y } = await GetData(`full_${name}.csv`);
 
         min_atomic_number = x[0];
         max_atomic_number = x?.at(-1) ?? '';
         count_threshold = y.at(-1) ?? 0;
-
-        // count_threshold = y.at(-1) ?? 0;
-        // min_atomic_number = x[0]?.split('-')[0] ?? '1';
-        // if (min_atomic_number == '0') min_atomic_number = '1';
-        // max_atomic_number = x.at(-1)?.split('-')[1] ?? '';
-        // plotData = [{ x, y, type: 'bar' }];
         plotData = [{ x, y }];
         plotted = true;
     };

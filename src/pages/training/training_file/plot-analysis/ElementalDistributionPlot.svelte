@@ -1,10 +1,9 @@
 <script lang="ts">
-    import { active_tab, post_analysis_files_directory } from './stores';
+    import { active_tab } from './stores';
     import BaseLayout from './BaseLayout.svelte';
     import Chip, { Set, Text } from '@smui/chips';
     import { CustomInput } from '$lib/components';
     import Plot from 'svelte-plotly.js';
-    import { parse_csv_file } from '$lib/utils/index';
 
     const name = 'elemental_distribution';
 
@@ -19,21 +18,10 @@
         margin: { t: 0 },
     };
     let plotData: Partial<Plotly.PlotData>[] = [];
+    const GetData = getContext<(name: string) => Promise<{ x: string[]; y: number[] }>>('GetData');
 
-    const on_plot = async () => {
-        const csv_file = await path.join(await $post_analysis_files_directory, `${name}.csv`);
-        if (!(await fs.exists(csv_file))) {
-            toast.error(`File ${csv_file} does not exist`);
-            return;
-        }
-
-        const { columns, data } = await parse_csv_file(csv_file);
-
-        const x = data.map(row => row[0]).filter(Boolean);
-        const y = data
-            .map(row => row[1])
-            .filter(Boolean)
-            .map(Number);
+    const plot_data = async () => {
+        const { x, y } = await GetData(`${name}.csv`);
 
         choices = x;
         await tick();
@@ -51,7 +39,7 @@
     };
 </script>
 
-<BaseLayout {name} hidden={$active_tab !== name} on:plot={on_plot}>
+<BaseLayout {name} hidden={$active_tab !== name} on:plot={plot_data}>
     <!-- {#if plotted} -->
     <h3>Filtering</h3>
     <div class="flex gap-2 items-end justify-between">

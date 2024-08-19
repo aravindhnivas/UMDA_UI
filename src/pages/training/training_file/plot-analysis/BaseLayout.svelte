@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { post_analysis_files_directory, atoms_bin_size } from './stores';
+    import { post_analysis_files_directory } from './stores';
     import { Loadingbtn } from '$lib/components';
     import { ChartColumnBig } from 'lucide-svelte';
     import CheckFileStatus from '../CheckFileStatus.svelte';
@@ -31,7 +31,6 @@
         console.log('running', name);
         return await MolecularAnalysis(name);
     };
-
     let recheck_files = false;
     onMount(async () => {
         recheck_files = !recheck_files;
