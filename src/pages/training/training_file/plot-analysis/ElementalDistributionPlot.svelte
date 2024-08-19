@@ -9,7 +9,6 @@
     let plotted = false;
     let choices: string[] = [];
     let selected: string[] = [];
-
     let select_all = true;
 
     const on_plot = async (e: CustomEvent) => {
