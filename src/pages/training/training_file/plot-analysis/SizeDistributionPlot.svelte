@@ -13,7 +13,13 @@
     const layout: Partial<Plotly.Layout> = {
         xaxis: { title: 'No. of atoms' },
         yaxis: { title: 'Count', type: 'log' },
-        margin: { t: 0 },
+        margin: {
+            // l: 50,
+            // r: 50,
+            // b: 100,
+            // t: 100,
+            pad: 4,
+        },
     };
     let plotData: Partial<Plotly.PlotData>[] = [];
 
@@ -21,7 +27,7 @@
     const GetData = getContext<(name: string) => Promise<{ x: string[]; y: number[] }>>('GetData');
 
     const plot_data = async () => {
-        const { x, y } = await GetData(`full_${name}.csv`);
+        const { x, y } = await GetData(`${name}.csv`);
 
         min_atomic_number = x[0];
         max_atomic_number = x?.at(-1) ?? '';
