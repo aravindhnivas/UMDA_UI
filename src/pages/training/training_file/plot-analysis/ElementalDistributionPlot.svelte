@@ -25,6 +25,9 @@
     };
 
     let count_threshold: number = 0;
+    let filter_locked = {
+        count_threshold: true,
+    };
 </script>
 
 <BaseLayout {name} hidden={$active_tab !== name} on:plot={on_plot}>
@@ -38,7 +41,12 @@
                 select_all = !select_all;
             }}>Select {select_all ? 'none' : 'all'}</button
         >
-        <CustomInput bind:value={count_threshold} label="count threshold" />
+        <CustomInput
+            bind:value={count_threshold}
+            label="count threshold"
+            enabled_lock_mode
+            bind:lock={filter_locked.count_threshold}
+        />
     </div>
     <Set chips={choices} let:chip filter bind:selected>
         <Chip {chip} touch>
@@ -46,5 +54,4 @@
         </Chip>
     </Set>
     <pre class="status">Selected: {selected.length} elements</pre>
-    <!-- {/if} -->
 </BaseLayout>
