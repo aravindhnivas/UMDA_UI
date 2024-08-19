@@ -96,12 +96,12 @@
 
         const args = {
             analysis_file,
-            min_atomic_number,
-            max_atomic_number,
-            size_count_threshold,
-            elemental_count_threshold,
-            filter_elements,
-            filter_structures,
+            min_atomic_number: Number(min_atomic_number),
+            max_atomic_number: Number(max_atomic_number),
+            size_count_threshold: Number(size_count_threshold),
+            elemental_count_threshold: Number(elemental_count_threshold),
+            filter_elements: filter_elements.filter(Boolean),
+            filter_structures: filter_structures.filter(Boolean),
         };
         const pyfile = 'training.apply_filter_for_molecular_analysis';
         // console.log(args, pyfile);
