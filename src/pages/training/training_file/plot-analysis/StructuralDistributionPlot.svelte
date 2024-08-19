@@ -27,7 +27,7 @@
                 labels: x,
                 values: y,
                 type: 'pie',
-                textinfo: 'label+percent',
+                textinfo: 'label+value+percent',
                 textposition: 'outside',
                 automargin: true,
                 // insidetextorientation: 'radial',
