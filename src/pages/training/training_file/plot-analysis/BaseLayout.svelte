@@ -138,11 +138,8 @@
             <ChartColumnBig />
         </button>
     </div>
-
-    <slot name="before-plot" />
-
+    <slot />
     <div class="h-lg min-w-xl">
         <Plot data={plotData[name]} layout={layout[name]} fillParent={true} debounce={250} />
     </div>
-    <slot />
 </div>

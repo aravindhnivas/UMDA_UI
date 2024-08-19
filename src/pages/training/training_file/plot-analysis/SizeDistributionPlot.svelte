@@ -33,8 +33,7 @@
 </script>
 
 <BaseLayout {name} hidden={$active_tab !== name} on:plot={on_plot}>
-    <svelte:fragment slot="before-plot">
-        <!-- {#if plotted} -->
+    {#if plotted}
         <h3>Filtering</h3>
         <div class="flex gap-3 items-end">
             <button
@@ -68,8 +67,7 @@
             </button>
             <CustomInput bind:value={count_threshold} label="count threshold" />
         </div>
-        <!-- {/if} -->
-    </svelte:fragment>
+    {/if}
 </BaseLayout>
 
 <style lang="scss">
