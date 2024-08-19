@@ -75,10 +75,9 @@
     <button
         class="btn btn-sm join-item rounded-0"
         on:click={async () => {
-            const result = await dialog.open({
-                filters: [{ name: filetype, extensions: [filetype] }],
-                multiple: false,
-            });
+            const filters = [{ name: filetype, extensions: [filetype] }];
+            console.log(filters);
+            const result = await dialog.open({ filters, multiple: false });
             if (!result) return;
             if (typeof result === 'string') {
                 filename = result;
