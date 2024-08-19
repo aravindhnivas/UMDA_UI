@@ -18,7 +18,7 @@
         console.log(e.detail);
         x = e.detail.x as string[];
         y = e.detail.y as number[];
-        count_threshold = y[0] ?? 0;
+        count_threshold = y.at(-1) ?? 0;
         min_atomic_number = x[0]?.split('-')[0] ?? '1';
         if (min_atomic_number == '0') min_atomic_number = '1';
         max_atomic_number = x.at(-1)?.split('-')[1] ?? '';

@@ -20,7 +20,7 @@
         selected = [...choices];
         select_all = true;
 
-        count_threshold = e.detail.y[0] as number;
+        count_threshold = e.detail.y.at(-1) as number;
     };
 
     let count_threshold: number = 0;
