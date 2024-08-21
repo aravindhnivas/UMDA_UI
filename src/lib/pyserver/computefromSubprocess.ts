@@ -119,9 +119,10 @@ export default async function <T>({
                 resolve(undefined);
                 return Alert.error(dataFromPython);
             }
-            console.info('Data parsed successfully');
+
+            toast.info('Data parsed successfully');
             console.log('Data received from python: ', dataFromPython);
-            console.info('Process closed');
+            toast.success('Process Completed');
             return resolve(dataFromPython);
         });
 
