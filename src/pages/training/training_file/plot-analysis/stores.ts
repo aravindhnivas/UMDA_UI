@@ -1,10 +1,8 @@
-import { training_file } from '../stores';
+import { molecule_analysis_filename } from '../stores';
 
-export const post_analysis_files_directory = derived(training_file, async $training_file => {
-    const dir = await path.dirname($training_file.filename);
-    const name = await path.basename($training_file.filename);
-    const folder = await path.join(dir, name.split('.')[0] + '_analysis');
-    return folder;
+export const post_analysis_files_directory = derived(molecule_analysis_filename, async $molecule_analysis_filename => {
+    const dir = await path.dirname($molecule_analysis_filename);
+    return dir;
 });
 
 export const post_analysis_files = localWritable('post_analysis_files', {

@@ -3,7 +3,7 @@
     import { Loadingbtn } from '$lib/components';
     import { ChartColumnBig } from 'lucide-svelte';
     import CheckFileStatus from '../CheckFileStatus.svelte';
-    import { analysis_filename } from '../stores';
+    import { molecule_analysis_filename } from '../stores';
 
     export let name: AnalysisItemsType;
     export let hidden: boolean = false;
@@ -12,8 +12,8 @@
     const dispatch = createEventDispatcher();
 
     const RunAnalysis = async (name: AnalysisItemsType) => {
-        if (!(await fs.exists(await path.join(await $post_analysis_files_directory, analysis_filename)))) {
-            toast.error(`${analysis_filename} file does not exist`);
+        if (!(await fs.exists($molecule_analysis_filename))) {
+            toast.error(`${$molecule_analysis_filename} file does not exist`);
             return;
         }
 

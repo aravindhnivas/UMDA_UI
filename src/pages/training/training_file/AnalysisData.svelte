@@ -6,32 +6,28 @@
         elementalDistributionFilter,
         sizeDistributionFilter,
     } from './plot-analysis/stores';
-    import { training_column_name_X, training_file, analysis_filename } from './stores';
+    import { training_column_name_X, training_file, molecule_analysis_filename } from './stores';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import { use_dask } from '$lib/stores/system';
     import PlotAnalysis from './plot-analysis/PlotAnalysis.svelte';
     import Checkbox from '$lib/components/Checkbox.svelte';
-    import CheckFileStatus from './CheckFileStatus.svelte';
+    import BrowseFile from '$lib/components/BrowseFile.svelte';
 
     const MolecularAnalysis = async (
         mode: 'all' | 'size_distribution' | 'structural_distribution' | 'elemental_distribution' = 'all',
     ) => {
         console.log('MolecularAnalysis');
-        const analysis_file = await path.join(await $post_analysis_files_directory, analysis_filename);
-        const analysis_file_exists = await fs.exists(analysis_file);
+        const analysis_file_exists = await fs.exists($molecule_analysis_filename);
 
         if (!analysis_file_exists) {
             use_analysis_file = false;
         }
 
         if (analysis_file_exists && !use_analysis_file) {
-            const val = await dialog.confirm(
-                `${analysis_file} file exists. Do you want to use it?`,
+            use_analysis_file = await dialog.confirm(
+                `${$molecule_analysis_filename} file exists. Do you want to use it?`,
                 'Analysis file exists',
             );
-            if (val) {
-                use_analysis_file = true;
-            }
         }
 
         return {
@@ -42,7 +38,7 @@
                 key: $training_file.key,
                 use_dask: $use_dask,
                 smiles_column_name: $training_column_name_X,
-                analysis_file: use_analysis_file ? analysis_file : null,
+                analysis_file: use_analysis_file ? $molecule_analysis_filename : null,
                 atoms_bin_size: Number($atoms_bin_size),
                 mode,
             },
@@ -62,10 +58,9 @@
 
     const ApplyFilterForMolecularAnalysis = async () => {
         console.log('ApplyFilterForMolecularAnalysis');
-        const analysis_file = await path.join(await $post_analysis_files_directory, analysis_filename);
-        const analysis_file_exists = await fs.exists(analysis_file);
+        const analysis_file_exists = await fs.exists($molecule_analysis_filename);
         if (!analysis_file_exists) {
-            toast.error(`${analysis_file} file does not exist`);
+            toast.error(`${$molecule_analysis_filename} file does not exist`);
             return;
         }
 
@@ -95,7 +90,7 @@
         const filter_structures = $structuralDistributionFilter.filter_structures;
 
         const args = {
-            analysis_file,
+            analysis_file: $molecule_analysis_filename,
             min_atomic_number,
             max_atomic_number,
             size_count_threshold,
@@ -109,6 +104,17 @@
     };
 </script>
 
+<BrowseFile
+    label="Analysis file"
+    bind:filename={$molecule_analysis_filename}
+    filters={[
+        {
+            name: 'CSV',
+            extensions: ['csv'],
+        },
+    ]}
+/>
+
 {#if $training_column_name_X.toLocaleLowerCase() !== 'smiles'}
     <div class="alert alert-error">
         The column X is not 'SMILES'. Please make sure the column X name is 'SMILES' for molecular structure in the
@@ -120,7 +126,6 @@
     </div>
 {/if}
 <Checkbox bind:value={use_analysis_file} label="Use analysis file" check="checkbox" />
-<CheckFileStatus name={analysis_filename} />
 
 <div class="flex gap-2 m-auto">
     <Loadingbtn
@@ -129,14 +134,12 @@
         callback={() => MolecularAnalysis('all')}
         on:result={onResult}
     />
-
     <Loadingbtn
         name="Apply filters"
         subprocess={true}
         callback={() => ApplyFilterForMolecularAnalysis()}
         on:result={e => console.log(e.detail)}
     />
-    <!-- <button class="btn btn-sm" on:click={ApplyFilterForMolecularAnalysis}>Apply filters</button> -->
 </div>
 
 <hr />
