@@ -143,7 +143,7 @@
         callback={() => ApplyFilterForMolecularAnalysis()}
         on:result={e => console.log(e.detail)}
     />
-    <CustomInput bind:value={filtered_filename} label="filtered filename" />
+    <CustomInput bind:value={filtered_filename} label="Enter filter name" />
 </div>
 
 <hr />
