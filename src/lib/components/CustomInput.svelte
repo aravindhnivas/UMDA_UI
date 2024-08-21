@@ -24,7 +24,14 @@
             <span class="text-xs pl-1">{label}</span>
         {/if}
     </div>
-    <input class="input input-sm" bind:value {...$$restProps} on:change disabled={enabled_lock_mode && lock} />
+    <input
+        class="input input-sm"
+        bind:value
+        {...$$restProps}
+        on:change
+        disabled={enabled_lock_mode && lock}
+        autocomplete="off"
+    />
     {#if helper}
         <span class="text-xs m-auto">{helper}</span>
     {/if}

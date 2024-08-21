@@ -12,6 +12,7 @@
     import PlotAnalysis from './plot-analysis/PlotAnalysis.svelte';
     import Checkbox from '$lib/components/Checkbox.svelte';
     import BrowseFile from '$lib/components/BrowseFile.svelte';
+    import CustomInput from '$lib/components/CustomInput.svelte';
 
     const MolecularAnalysis = async (
         mode: 'all' | 'size_distribution' | 'structural_distribution' | 'elemental_distribution' = 'all',
@@ -97,11 +98,13 @@
             elemental_count_threshold,
             filter_elements: filter_elements.filter(Boolean),
             filter_structures: filter_structures.filter(Boolean),
+            filtered_filename,
         };
         const pyfile = 'training.apply_filter_for_molecular_analysis';
         // console.log(args, pyfile);
         return { pyfile, args };
     };
+    let filtered_filename = 'filtered';
 </script>
 
 <BrowseFile
@@ -127,7 +130,7 @@
 {/if}
 <Checkbox bind:value={use_analysis_file} label="Use analysis file" check="checkbox" />
 
-<div class="flex gap-2 m-auto">
+<div class="flex gap-2 m-auto items-end">
     <Loadingbtn
         name="Begin full analysis"
         subprocess={true}
@@ -140,6 +143,7 @@
         callback={() => ApplyFilterForMolecularAnalysis()}
         on:result={e => console.log(e.detail)}
     />
+    <CustomInput bind:value={filtered_filename} label="filtered filename" />
 </div>
 
 <hr />
