@@ -4371,7 +4371,7 @@ dependencies = [
 
 [[package]]
 name = "umda_ui"
-version = "1.4.0"
+version = "1.4.1"
 dependencies = [
  "error-chain",
  "futures-util",
