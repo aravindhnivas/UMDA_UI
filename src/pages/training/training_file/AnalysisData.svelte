@@ -1,6 +1,7 @@
 <script lang="ts">
     import {
         atoms_bin_size,
+        filtered_dir,
         post_analysis_files_directory,
         structuralDistributionFilter,
         elementalDistributionFilter,
@@ -18,7 +19,19 @@
         mode: 'all' | 'size_distribution' | 'structural_distribution' | 'elemental_distribution' = 'all',
     ) => {
         console.log('MolecularAnalysis');
-        const analysis_file_exists = await fs.exists($molecule_analysis_filename);
+
+        let analysis_file: string;
+        if ($filtered_dir === 'default') {
+            analysis_file = $molecule_analysis_filename;
+        } else {
+            analysis_file = await path.join(
+                await $post_analysis_files_directory,
+                'filtered',
+                $filtered_dir,
+                'molecule_analysis_results.csv',
+            );
+        }
+        const analysis_file_exists = await fs.exists(analysis_file);
 
         if (!analysis_file_exists) {
             use_analysis_file = false;
@@ -26,7 +39,7 @@
 
         if (analysis_file_exists && !use_analysis_file) {
             use_analysis_file = await dialog.confirm(
-                `${$molecule_analysis_filename} file exists. Do you want to use it?`,
+                `${analysis_file} file exists. Do you want to use it?`,
                 'Analysis file exists',
             );
         }
@@ -39,7 +52,7 @@
                 key: $training_file.key,
                 use_dask: $use_dask,
                 smiles_column_name: $training_column_name_X,
-                analysis_file: use_analysis_file ? $molecule_analysis_filename : null,
+                analysis_file: use_analysis_file ? analysis_file : null,
                 atoms_bin_size: Number($atoms_bin_size),
                 mode,
             },

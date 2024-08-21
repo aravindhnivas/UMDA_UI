@@ -61,3 +61,5 @@ export const elementalDistributionFilter = writable<{
         lock: true,
     },
 });
+
+export const filtered_dir = writable('default');

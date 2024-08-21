@@ -11,4 +11,4 @@ export const training_file = localWritable<{
 export const training_column_name_X = writable<string>('SMILES');
 export const training_column_name_y = writable<string>('');
 
-export const molecule_analysis_filename = localWritable('molecule_analysis_filename', 'molecule_analysis_results.csv');
+export const molecule_analysis_filename = localWritable('molecule_analysis_filename', '');
