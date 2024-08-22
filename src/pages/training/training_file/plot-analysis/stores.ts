@@ -1,23 +1,15 @@
-import { molecule_analysis_filename } from '../stores';
+import { load_analysis_dir } from '../stores';
 
 export const filtered_dir = writable('default');
 
-export const original_post_analysis_files_directory = derived(
-    molecule_analysis_filename,
-    async $molecule_analysis_filename => {
-        const dir = await path.dirname($molecule_analysis_filename);
-        return dir;
-    },
-);
-
 export const current_post_analysis_files_directory = derived(
-    [molecule_analysis_filename, filtered_dir],
-    async ([$molecule_analysis_filename, $filtered_dir]) => {
+    [load_analysis_dir, filtered_dir],
+    async ([$load_analysis_dir, $filtered_dir]) => {
         if ($filtered_dir === 'default') {
-            const dir = await path.dirname($molecule_analysis_filename);
+            const dir = await $load_analysis_dir;
             return dir;
         }
-        const original_analysis_dir = await path.dirname($molecule_analysis_filename);
+        const original_analysis_dir = await $load_analysis_dir;
         const original_analysis_dirname = await path.basename(original_analysis_dir);
         const dir = await path.join(
             original_analysis_dir,
@@ -26,6 +18,13 @@ export const current_post_analysis_files_directory = derived(
             original_analysis_dirname.replace('_analysis', `_${$filtered_dir.toLocaleLowerCase()}_filtered_analysis`),
         );
         return dir;
+    },
+);
+
+export const current_analysis_file = derived(
+    current_post_analysis_files_directory,
+    async $current_post_analysis_files_directory => {
+        return await path.join(await $current_post_analysis_files_directory, 'molecule_analysis_results.csv');
     },
 );
 

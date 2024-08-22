@@ -5,35 +5,21 @@
         structuralDistributionFilter,
         elementalDistributionFilter,
         sizeDistributionFilter,
-        current_post_analysis_files_directory,
+        current_analysis_file,
     } from './plot-analysis/stores';
-    import { training_column_name_X, training_file, molecule_analysis_filename } from './stores';
+    import { training_column_name_X, training_file, molecule_analysis_file } from './stores';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import { use_dask } from '$lib/stores/system';
     import PlotAnalysis from './plot-analysis/PlotAnalysis.svelte';
-    import Checkbox from '$lib/components/Checkbox.svelte';
-    import BrowseFile from '$lib/components/BrowseFile.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
 
     const MolecularAnalysis = async (
         mode: 'all' | 'size_distribution' | 'structural_distribution' | 'elemental_distribution' = 'all',
     ) => {
         console.log('MolecularAnalysis', { $filtered_dir });
-        const analysis_dir = await $current_post_analysis_files_directory;
-        const analysis_file = await path.join(analysis_dir, 'molecule_analysis_results.csv');
+        const analysis_file = await $current_analysis_file;
         const analysis_file_exists = await fs.exists(analysis_file);
         console.log('Checking analysis file', analysis_file, analysis_file_exists);
-
-        if (!analysis_file_exists) {
-            use_analysis_file = false;
-        }
-
-        if (analysis_file_exists && !use_analysis_file) {
-            use_analysis_file = await dialog.confirm(
-                `${analysis_file} file exists. Do you want to use it?`,
-                'Analysis file exists',
-            );
-        }
 
         return {
             pyfile: 'training.molecular_analysis',
@@ -43,7 +29,7 @@
                 key: $training_file.key,
                 use_dask: $use_dask,
                 smiles_column_name: $training_column_name_X,
-                analysis_file: use_analysis_file ? analysis_file : null,
+                analysis_file: analysis_file_exists ? analysis_file : null,
                 atoms_bin_size: Number($atoms_bin_size),
                 mode,
             },
@@ -59,13 +45,17 @@
         console.log(dataFromPython);
     };
 
-    let use_analysis_file = true;
-
     const ApplyFilterForMolecularAnalysis = async () => {
         console.log('ApplyFilterForMolecularAnalysis');
-        const analysis_file_exists = await fs.exists($molecule_analysis_filename);
+
+        if ($filtered_dir !== 'default') {
+            toast.error('Filters can only be applied to the default directory');
+            return;
+        }
+        const analysis_file = await $molecule_analysis_file;
+        const analysis_file_exists = await fs.exists(analysis_file);
         if (!analysis_file_exists) {
-            toast.error(`${$molecule_analysis_filename} file does not exist`);
+            toast.error(`${analysis_file} file does not exist`);
             return;
         }
 
@@ -95,7 +85,7 @@
         const filter_structures = $structuralDistributionFilter.filter_structures;
 
         const args = {
-            analysis_file: $molecule_analysis_filename,
+            analysis_file,
             min_atomic_number,
             max_atomic_number,
             size_count_threshold,
@@ -105,22 +95,14 @@
             filtered_filename,
         };
         const pyfile = 'training.apply_filter_for_molecular_analysis';
-        // console.log(args, pyfile);
         return { pyfile, args };
     };
     let filtered_filename = 'filtered';
 </script>
 
-<BrowseFile
-    label="Analysis file"
-    bind:filename={$molecule_analysis_filename}
-    filters={[
-        {
-            name: 'CSV',
-            extensions: ['csv'],
-        },
-    ]}
-/>
+{#await $molecule_analysis_file then value}
+    <div class="badge badge-info">{value}</div>
+{/await}
 
 {#if $training_column_name_X.toLocaleLowerCase() !== 'smiles'}
     <div class="alert alert-error">
@@ -132,7 +114,6 @@
         Using {$training_column_name_X} column for molecular structure
     </div>
 {/if}
-<Checkbox bind:value={use_analysis_file} label="Use analysis file" check="checkbox" />
 
 <div class="flex gap-2 m-auto items-end">
     <Loadingbtn

@@ -1,10 +1,6 @@
 <script lang="ts">
-    import {
-        active_tab,
-        filtered_dir,
-        original_post_analysis_files_directory,
-        current_post_analysis_files_directory,
-    } from './stores';
+    import { active_tab, filtered_dir, current_post_analysis_files_directory } from './stores';
+    import { load_analysis_dir } from '../stores';
     import SizeDistributionPlot from './SizeDistributionPlot.svelte';
     import StructuralDistributionPlot from './StructuralDistributionPlot.svelte';
     import ElementalDistributionPlot from './ElementalDistributionPlot.svelte';
@@ -39,9 +35,14 @@
     setContext('GetData', GetData);
     let dir_items_for_plotting: string[] = ['default'];
 
-    const fetch_analysis_dir = async () => {
-        const analysis_dir = await $original_post_analysis_files_directory;
+    const fetch_analysis_dir = async ({ warn = true } = {}) => {
+        const analysis_dir = await $load_analysis_dir;
         const search_dir = await path.join(analysis_dir, 'filtered');
+        if (!(await fs.exists(search_dir))) {
+            if (warn) toast.error(`Directory ${search_dir} does not exist`);
+            $filtered_dir = 'default';
+            return;
+        }
         const dirs = await fs.readDir(search_dir);
         if (isEmpty(dirs)) {
             toast.error(`No directories found in ${search_dir}`);
@@ -49,17 +50,19 @@
         }
         const dir_items = dirs.filter(dir => isArray(dir.children)).map(dir => dir.name as string);
         dir_items_for_plotting = ['default', ...dir_items.filter(Boolean)];
-        console.log(dir_items);
+        // console.log(dir_items);
     };
 
-    onMount(fetch_analysis_dir);
+    onMount(async () => {
+        await fetch_analysis_dir({ warn: false });
+    });
 </script>
 
 <h3>Analysis plots</h3>
 
 <div class="flex gap-2 items-end">
-    <button class="btn btn-sm" on:click={fetch_analysis_dir}>
-        <RefreshCcw />
+    <button class="btn btn-xs" on:click={async () => await fetch_analysis_dir()}>
+        <RefreshCcw size="20" />
     </button>
     <CustomSelect label="Select analysis directory" bind:value={$filtered_dir} items={dir_items_for_plotting} />
 </div>

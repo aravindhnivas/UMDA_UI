@@ -1,9 +1,8 @@
 <script lang="ts">
-    import { current_post_analysis_files_directory } from './stores';
+    import { current_post_analysis_files_directory, current_analysis_file } from './stores';
     import { Loadingbtn } from '$lib/components';
     import { ChartColumnBig } from 'lucide-svelte';
     import CheckFileStatus from '../CheckFileStatus.svelte';
-    import { molecule_analysis_filename } from '../stores';
 
     export let name: AnalysisItemsType;
     export let hidden: boolean = false;
@@ -12,15 +11,16 @@
     const dispatch = createEventDispatcher();
 
     const RunAnalysis = async (name: AnalysisItemsType) => {
-        if (!(await fs.exists($molecule_analysis_filename))) {
-            toast.error(`${$molecule_analysis_filename} file does not exist`);
+        const analysis_file = await $current_analysis_file;
+        if (!(await fs.exists(analysis_file))) {
+            toast.error(`${analysis_file} file does not exist`);
             return;
         }
 
-        const csv_file = `${name}.csv`;
-        if (await fs.exists(await path.join(await $current_post_analysis_files_directory, csv_file))) {
+        const csv_filename = `${name}.csv`;
+        if (await fs.exists(await path.join(await $current_post_analysis_files_directory, csv_filename))) {
             const overwrite = await dialog.confirm(
-                `${csv_file} file already exists. Do you want to overwrite it?`,
+                `${csv_filename} file already exists. Do you want to overwrite it?`,
                 'File exists',
             );
             if (!overwrite) {
