@@ -8,6 +8,7 @@
         model_and_pipeline_files,
     } from './stores';
     import { training_file, training_column_name_X } from '../training_file/stores';
+    import { load_training_file, use_filtered_data_for_training } from '../training_file/plot-analysis/stores';
     import { NPARTITIONS, use_dask } from '$lib/stores/system';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
@@ -28,28 +29,27 @@
     }
 
     const get_embedd_savefile = async (
-        filename: string,
+        use_filtered_filename: boolean,
         column_X_name: string,
         embedding_name: string,
         pca: boolean,
     ) => {
+        const filename = await load_training_file(use_filtered_filename);
         if (!filename) return;
         const name = await path.basename(filename);
-        // console.log(name);
         $embedd_savefile =
             name.split('.').slice(0, -1).join('.') +
             `_${column_X_name}_${embedding_name}_embeddings${pca ? '_with_PCA' : ''}`;
     };
 
-    $: get_embedd_savefile($training_file.filename, $training_column_name_X, $embedding, $use_PCA);
+    $: get_embedd_savefile($use_filtered_data_for_training, $training_column_name_X, $embedding, $use_PCA);
 
     let test_mode = import.meta.env.DEV;
-    // let test_mode = true;
     const test_smiles = localWritable('test_smiles', 'CCO');
     let test_result = '';
 
     const embedd_data = async () => {
-        if (!test_mode && !$training_file.filename) {
+        if (!test_mode && !(await fs.exists(await load_training_file($use_filtered_data_for_training)))) {
             toast.error('Please select a file');
             return;
         }
@@ -83,13 +83,14 @@
         dataFromPython = {};
 
         const pyfile = 'training.embedd_data';
+        const final_training_file = await load_training_file($use_filtered_data_for_training);
         return {
             pyfile,
             args: {
                 test_mode,
                 key: $training_file.key,
                 filetype: $training_file.filetype,
-                filename: $training_file.filename,
+                filename: final_training_file,
                 df_column: $training_column_name_X,
                 embedding: $embedding,
                 npartitions: $NPARTITIONS,
@@ -164,13 +165,14 @@
 
     {#if !test_mode}
         <hr />
-
         <h3>Loaded training file</h3>
         <div class="flex-center">
             <span class="text-sm">File: </span>
-            <div class="badge bg-indigo" class:bg-red={!$training_file.filename}>
-                {$training_file.filename || 'No file selected'}
-            </div>
+            {#await load_training_file($use_filtered_data_for_training) then name}
+                <div class="badge bg-indigo" class:bg-red={!name}>
+                    {name || 'No file selected'}
+                </div>
+            {/await}
         </div>
         <div class="flex-center">
             <span class="text-sm">Column:</span>

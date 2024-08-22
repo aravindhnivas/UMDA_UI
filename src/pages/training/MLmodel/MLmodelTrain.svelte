@@ -43,6 +43,7 @@
     import ResultsPanel from './ResultsPanel.svelte';
     import Effects from './Effects.svelte';
     import { difference } from 'lodash-es';
+    import { load_training_file, use_filtered_data_for_training } from '../training_file/plot-analysis/stores';
 
     export let id: string = 'ml_model-train-container';
     export let display: string = 'none';
@@ -52,12 +53,13 @@
 
     const fit_function = async () => {
         const vectors_file = await $embedd_savefile_path;
+        console.log({ vectors_file });
         if (!(await fs.exists(vectors_file))) {
             toast.error('Error: Embeddings vector file not found');
             return;
         }
 
-        if (!(await fs.exists($training_file.filename))) {
+        if (!(await fs.exists(await load_training_file($use_filtered_data_for_training)))) {
             toast.error('Error: Training file not found');
             return;
         }
@@ -169,9 +171,16 @@
             n_iter: Number($randomzied_gridsearch_niter),
             factor: Number($halving_factor),
         };
+        const final_training_file = await load_training_file($use_filtered_data_for_training);
 
         const args = {
             model: $model,
+            training_file: {
+                key: $training_file.key,
+                filetype: $training_file.filetype,
+                filename: final_training_file,
+            },
+            training_column_name_y: $training_column_name_y,
             parameters: $default_parameter_mode ? {} : clonedValues,
             fine_tuned_hyperparameters: $default_parameter_mode ? {} : clonedFineTunedValues,
             fine_tune_model: $fine_tune_model,
@@ -184,8 +193,6 @@
             grid_search_method: $grid_search_method,
             grid_search_parameters,
             pre_trained_file,
-            training_column_name_y: $training_column_name_y,
-            training_file: $training_file,
             npartitions: Number($NPARTITIONS),
             vectors_file,
             logYscale: $logYscale,

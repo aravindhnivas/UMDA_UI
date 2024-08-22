@@ -1,5 +1,11 @@
 <script lang="ts">
-    import { active_tab, filtered_dir, current_post_analysis_files_directory } from './stores';
+    import {
+        active_tab,
+        filtered_dir,
+        current_post_analysis_files_directory,
+        current_training_data_file,
+        use_filtered_data_for_training,
+    } from './stores';
     import { load_analysis_dir } from '../stores';
     import SizeDistributionPlot from './SizeDistributionPlot.svelte';
     import StructuralDistributionPlot from './StructuralDistributionPlot.svelte';
@@ -10,8 +16,15 @@
     import CustomSelect from '$lib/components/CustomSelect.svelte';
     import { RefreshCcw } from 'lucide-svelte';
     import { isArray } from 'lodash-es';
+    import FileLoader from '$lib/components/fileloader/FileLoader.svelte';
+    import Checkbox from '$lib/components/Checkbox.svelte';
 
-    const tab_items = ['size_distribution', 'structural_distribution', 'elemental_distribution'] as const;
+    const tab_items = [
+        'size_distribution',
+        'structural_distribution',
+        'elemental_distribution',
+        'load filtered data',
+    ] as const;
 
     const GetData = async <T = string | number,>(name: string) => {
         const analysis_dir = await $current_post_analysis_files_directory;
@@ -50,8 +63,11 @@
         }
         const dir_items = dirs.filter(dir => isArray(dir.children)).map(dir => dir.name as string);
         dir_items_for_plotting = ['default', ...dir_items.filter(Boolean)];
-        toast.success(`Analysis directories loaded successfully: ${dir_items_for_plotting.length - 1} folders found`);
-        // console.log(dir_items);
+        if (warn) {
+            toast.success(
+                `Analysis directories loaded successfully: ${dir_items_for_plotting.length - 1} folders found`,
+            );
+        }
     };
 
     onMount(async () => {
@@ -79,3 +95,14 @@
 <SizeDistributionPlot />
 <StructuralDistributionPlot />
 <ElementalDistributionPlot />
+<div class:hidden={$active_tab !== 'load filtered data'} class="grid gap-2">
+    <Checkbox bind:value={$use_filtered_data_for_training} label="use filtered data for training" check="checkbox" />
+    {#await $current_training_data_file then value}
+        <FileLoader
+            filename={value}
+            on:load={e => {
+                if (!e.detail) return;
+            }}
+        />
+    {/await}
+</div>

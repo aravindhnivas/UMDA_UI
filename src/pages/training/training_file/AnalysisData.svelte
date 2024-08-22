@@ -106,8 +106,7 @@
 
 {#if $training_column_name_X.toLocaleLowerCase() !== 'smiles'}
     <div class="alert alert-error">
-        The column X is not 'SMILES'. Please make sure the column X name is 'SMILES' for molecular structure in the
-        loaded file: {$training_file.filename}
+        The column X is not 'SMILES'. Please make sure the column X name is 'SMILES' for molecular structure.
     </div>
 {:else}
     <div class="badge badge-info">

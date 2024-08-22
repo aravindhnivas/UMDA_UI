@@ -1,4 +1,4 @@
-import { load_analysis_dir } from '../stores';
+import { load_analysis_dir, training_file } from '../stores';
 
 export const filtered_dir = writable('default');
 
@@ -21,6 +21,16 @@ export const current_post_analysis_files_directory = derived(
     },
 );
 
+export const current_training_data_file = derived(
+    [current_post_analysis_files_directory],
+    async ([$current_post_analysis_files_directory]) => {
+        const name = await path.basename(await $current_post_analysis_files_directory);
+        const dirname = await path.dirname(await $current_post_analysis_files_directory);
+        const training_data_file = await path.join(dirname, name.replace('_analysis', '.csv'));
+        return training_data_file;
+    },
+);
+
 export const current_analysis_file = derived(
     current_post_analysis_files_directory,
     async $current_post_analysis_files_directory => {
@@ -35,7 +45,17 @@ export const post_analysis_files = localWritable('post_analysis_files', {
 });
 
 export const atoms_bin_size = localWritable('atoms_bin_size', 10);
-export const active_tab = localWritable<AnalysisItemsType>('training_file_plot_active_tab_item', 'size_distribution');
+export const active_tab = localWritable<AnalysisItemsType | 'load filtered data'>(
+    'training_file_plot_active_tab_item',
+    'size_distribution',
+);
+export const use_filtered_data_for_training = writable(false);
+
+export const load_training_file = async (use_filtered = false) => {
+    const load_file = use_filtered ? await get(current_training_data_file) : get(training_file).filename;
+    // console.log('load_file', load_file);
+    return load_file;
+};
 
 export const sizeDistributionFilter = writable<{
     min_atomic_number: {

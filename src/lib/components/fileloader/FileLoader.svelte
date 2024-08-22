@@ -97,6 +97,7 @@
         }}><ExternalLink /></button
     >
 </div>
+
 <div class="flex gap-1 items-end">
     <CustomSelect label="where" bind:value={rows.where} items={['head', 'tail']} />
     <CustomInput bind:value={rows.value} label="# Rows" type="number" max={rows.max} on:change={() => load_data()} />
@@ -114,5 +115,6 @@
         }}
     />
 </div>
+
 <slot />
 <FileTable {data} {loading} />
