@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { post_analysis_files_directory } from './plot-analysis/stores';
+    import { current_post_analysis_files_directory } from './plot-analysis/stores';
     import { AlertCircle, CheckCheck } from 'lucide-svelte';
 
     export let name: string;
@@ -9,7 +9,7 @@
 <div class="flex gap-2">
     <button class="btn btn-xs" on:click={() => (recheck_files = !recheck_files)}>check file status</button>
     {#key recheck_files}
-        {#await $post_analysis_files_directory then dir}
+        {#await $current_post_analysis_files_directory then dir}
             {#await path.join(dir, name) then file}
                 {#if file}
                     {#await fs.exists(file) then value}

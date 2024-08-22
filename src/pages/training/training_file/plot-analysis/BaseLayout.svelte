@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { post_analysis_files_directory } from './stores';
+    import { current_post_analysis_files_directory } from './stores';
     import { Loadingbtn } from '$lib/components';
     import { ChartColumnBig } from 'lucide-svelte';
     import CheckFileStatus from '../CheckFileStatus.svelte';
@@ -18,7 +18,7 @@
         }
 
         const csv_file = `${name}.csv`;
-        if (await fs.exists(await path.join(await $post_analysis_files_directory, csv_file))) {
+        if (await fs.exists(await path.join(await $current_post_analysis_files_directory, csv_file))) {
             const overwrite = await dialog.confirm(
                 `${csv_file} file already exists. Do you want to overwrite it?`,
                 'File exists',

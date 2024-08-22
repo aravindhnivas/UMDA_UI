@@ -2,10 +2,10 @@
     import {
         atoms_bin_size,
         filtered_dir,
-        post_analysis_files_directory,
         structuralDistributionFilter,
         elementalDistributionFilter,
         sizeDistributionFilter,
+        current_post_analysis_files_directory,
     } from './plot-analysis/stores';
     import { training_column_name_X, training_file, molecule_analysis_filename } from './stores';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
@@ -18,20 +18,11 @@
     const MolecularAnalysis = async (
         mode: 'all' | 'size_distribution' | 'structural_distribution' | 'elemental_distribution' = 'all',
     ) => {
-        console.log('MolecularAnalysis');
-
-        let analysis_file: string;
-        if ($filtered_dir === 'default') {
-            analysis_file = $molecule_analysis_filename;
-        } else {
-            analysis_file = await path.join(
-                await $post_analysis_files_directory,
-                'filtered',
-                $filtered_dir,
-                'molecule_analysis_results.csv',
-            );
-        }
+        console.log('MolecularAnalysis', { $filtered_dir });
+        const analysis_dir = await $current_post_analysis_files_directory;
+        const analysis_file = await path.join(analysis_dir, 'molecule_analysis_results.csv');
         const analysis_file_exists = await fs.exists(analysis_file);
+        console.log('Checking analysis file', analysis_file, analysis_file_exists);
 
         if (!analysis_file_exists) {
             use_analysis_file = false;

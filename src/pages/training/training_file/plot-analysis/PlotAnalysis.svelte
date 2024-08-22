@@ -1,5 +1,10 @@
 <script lang="ts">
-    import { active_tab, post_analysis_files_directory, filtered_dir } from './stores';
+    import {
+        active_tab,
+        filtered_dir,
+        original_post_analysis_files_directory,
+        current_post_analysis_files_directory,
+    } from './stores';
     import SizeDistributionPlot from './SizeDistributionPlot.svelte';
     import StructuralDistributionPlot from './StructuralDistributionPlot.svelte';
     import ElementalDistributionPlot from './ElementalDistributionPlot.svelte';
@@ -13,15 +18,9 @@
     const tab_items = ['size_distribution', 'structural_distribution', 'elemental_distribution'] as const;
 
     const GetData = async <T = string | number,>(name: string) => {
-        let csv_file: string;
-        const analysis_dir = await $post_analysis_files_directory;
-        if ($filtered_dir === 'default') {
-            csv_file = await path.join(analysis_dir, name);
-        } else {
-            csv_file = await path.join(analysis_dir, 'filtered', $filtered_dir, name);
-        }
+        const analysis_dir = await $current_post_analysis_files_directory;
+        const csv_file = await path.join(analysis_dir, name);
         console.log(csv_file);
-        // csv_file = await path.join(analysis_dir, name);
         if (!(await fs.exists(csv_file))) {
             toast.error(`File ${csv_file} does not exist`);
             return;
@@ -41,7 +40,7 @@
     let dir_items_for_plotting: string[] = ['default'];
 
     const fetch_analysis_dir = async () => {
-        const analysis_dir = await $post_analysis_files_directory;
+        const analysis_dir = await $original_post_analysis_files_directory;
         const search_dir = await path.join(analysis_dir, 'filtered');
         const dirs = await fs.readDir(search_dir);
         if (isEmpty(dirs)) {

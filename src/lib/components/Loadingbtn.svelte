@@ -25,7 +25,7 @@
 
         const data = await callback();
         if (!data) return;
-        console.log({ data });
+        console.log(data);
 
         const { pyfile, args } = data;
         const CancelToken = axios.CancelToken;
