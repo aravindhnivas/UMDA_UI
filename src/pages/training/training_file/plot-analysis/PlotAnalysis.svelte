@@ -50,7 +50,7 @@
         }
         const dir_items = dirs.filter(dir => isArray(dir.children)).map(dir => dir.name as string);
         dir_items_for_plotting = ['default', ...dir_items.filter(Boolean)];
-        toast.success(`Analysis directories loaded successfully: ${dir_items_for_plotting.length} folders found`);
+        toast.success(`Analysis directories loaded successfully: ${dir_items_for_plotting.length - 1} folders found`);
         // console.log(dir_items);
     };
 
