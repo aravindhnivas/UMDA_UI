@@ -120,7 +120,7 @@
     {#if !use_test_file}
         <CustomInput class="col-span-3" bind:value={$smiles} label="Enter molecular SMILES" />
     {/if}
-    <Loadingbtn name="Compute" callback={predict} on:result={onResult} />
+    <Loadingbtn name="Compute" callback={predict} on:result={onResult} subprocess={use_test_file} />
 </div>
 {#if !use_test_file}
     <div class="flex items-start gap-1">
