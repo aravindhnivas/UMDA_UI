@@ -50,7 +50,6 @@ export const use_filtered_data_for_training = writable(false);
 
 export const load_training_file = async (use_filtered = false) => {
     const load_file = use_filtered ? await get(current_training_data_file) : get(training_file).filename;
-    // console.log('load_file', load_file);
     return load_file;
 };
 
