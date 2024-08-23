@@ -19,12 +19,7 @@
     import FileLoader from '$lib/components/fileloader/FileLoader.svelte';
     import Checkbox from '$lib/components/Checkbox.svelte';
 
-    const tab_items = [
-        'size_distribution',
-        'structural_distribution',
-        'elemental_distribution',
-        'load filtered data',
-    ] as const;
+    const tab_items = ['size_distribution', 'structural_distribution', 'elemental_distribution'] as const;
 
     const GetData = async <T = string | number,>(name: string) => {
         const analysis_dir = await $current_post_analysis_files_directory;
@@ -73,29 +68,39 @@
     onMount(async () => {
         await fetch_analysis_dir({ warn: false });
     });
+
+    let current_active_analysis_tab = 'analysis_plots';
 </script>
 
-<h3>Analysis plots</h3>
-
-<div class="flex gap-2 items-end">
-    <button class="btn btn-xs" on:click={async () => await fetch_analysis_dir()}>
-        <RefreshCcw size="20" />
-    </button>
-    <CustomSelect label="Select analysis directory" bind:value={$filtered_dir} items={dir_items_for_plotting} />
-</div>
-
 <div class="w-max">
-    <TabBar tabs={[...tab_items]} let:tab bind:active={$active_tab}>
+    <TabBar tabs={['analysis_plots', 'load_filtered_data']} let:tab bind:active={current_active_analysis_tab}>
         <Tab {tab}>
             <Label>{tab}</Label>
         </Tab>
     </TabBar>
 </div>
+<div class:hidden={current_active_analysis_tab !== 'analysis_plots'} class="grid gap-2">
+    <div class="flex gap-2 items-end">
+        <button class="btn btn-xs" on:click={async () => await fetch_analysis_dir()}>
+            <RefreshCcw size="20" />
+        </button>
+        <CustomSelect label="Select analysis directory" bind:value={$filtered_dir} items={dir_items_for_plotting} />
+    </div>
 
-<SizeDistributionPlot />
-<StructuralDistributionPlot />
-<ElementalDistributionPlot />
-<div class:hidden={$active_tab !== 'load filtered data'} class="grid gap-2">
+    <div class="w-max">
+        <TabBar tabs={[...tab_items]} let:tab bind:active={$active_tab}>
+            <Tab {tab}>
+                <Label>{tab}</Label>
+            </Tab>
+        </TabBar>
+    </div>
+
+    <SizeDistributionPlot />
+    <StructuralDistributionPlot />
+    <ElementalDistributionPlot />
+</div>
+
+<div class:hidden={current_active_analysis_tab !== 'load_filtered_data'} class="grid gap-2">
     <Checkbox bind:value={$use_filtered_data_for_training} label="use filtered data for training" check="checkbox" />
     {#await $current_training_data_file then value}
         <FileLoader
