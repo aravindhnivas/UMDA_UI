@@ -1,5 +1,6 @@
 <script lang="ts">
     import { use_dask } from '$lib/stores/system';
+    import { use_filtered_data_for_training, filtered_dir } from './plot-analysis/stores';
     import { NPARTITIONS } from '$lib/stores/system';
     import { training_file, training_column_name_X, training_column_name_y } from './stores';
     import FileLoader from '$lib/components/fileloader/FileLoader.svelte';
@@ -8,6 +9,12 @@
     let auto_fetch_columns = false;
     let data: DataType;
 </script>
+
+{#if $use_filtered_data_for_training}
+    <div class="badge badge-info m-auto">
+        NOTE: using filtered training dataset ({$filtered_dir}). Change it in Analysis_data -> Load filtered data.
+    </div>
+{/if}
 
 <FileLoader
     bind:use_dask={$use_dask}
