@@ -42,7 +42,9 @@
             `_${column_X_name}_${embedding_name}_embeddings${pca ? '_with_PCA' : ''}`;
     };
 
-    $: get_embedd_savefile($use_filtered_data_for_training, $training_column_name_X, $embedding, $use_PCA);
+    $: if ($training_file.filename) {
+        get_embedd_savefile($use_filtered_data_for_training, $training_column_name_X, $embedding, $use_PCA);
+    }
 
     let test_mode = import.meta.env.DEV;
     const test_smiles = localWritable('test_smiles', 'CCO');
