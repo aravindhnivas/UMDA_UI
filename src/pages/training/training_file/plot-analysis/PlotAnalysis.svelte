@@ -79,14 +79,15 @@
         </Tab>
     </TabBar>
 </div>
-<div class:hidden={current_active_analysis_tab !== 'analysis_plots'} class="grid gap-2">
-    <div class="flex gap-2 items-end">
-        <button class="btn btn-xs" on:click={async () => await fetch_analysis_dir()}>
-            <RefreshCcw size="20" />
-        </button>
-        <CustomSelect label="Select analysis directory" bind:value={$filtered_dir} items={dir_items_for_plotting} />
-    </div>
 
+<div class="flex gap-2 items-end">
+    <button class="btn btn-xs" on:click={async () => await fetch_analysis_dir()}>
+        <RefreshCcw size="20" />
+    </button>
+    <CustomSelect label="Select analysis directory" bind:value={$filtered_dir} items={dir_items_for_plotting} />
+</div>
+
+<div class:hidden={current_active_analysis_tab !== 'analysis_plots'} class="grid gap-2">
     <div class="w-max">
         <TabBar tabs={[...tab_items]} let:tab bind:active={$active_tab}>
             <Tab {tab}>
@@ -103,11 +104,6 @@
 <div class:hidden={current_active_analysis_tab !== 'load_filtered_data'} class="grid gap-2">
     <Checkbox bind:value={$use_filtered_data_for_training} label="use filtered data for training" check="checkbox" />
     {#await $current_training_data_file then value}
-        <FileLoader
-            filename={value}
-            on:load={e => {
-                if (!e.detail) return;
-            }}
-        />
+        <FileLoader filename={value} />
     {/await}
 </div>
