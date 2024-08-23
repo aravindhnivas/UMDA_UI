@@ -49,6 +49,7 @@
         if (!(await fs.exists(search_dir))) {
             if (warn) toast.error(`Directory ${search_dir} does not exist`);
             $filtered_dir = 'default';
+            dir_items_for_plotting = ['default'];
             return;
         }
         const dirs = await fs.readDir(search_dir);
