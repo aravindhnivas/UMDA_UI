@@ -21,8 +21,8 @@ importers:
         specifier: ^5.5.0
         version: 5.5.0
       lucide-svelte:
-        specifier: 0.427.0
-        version: 0.427.0(svelte@4.2.18)
+        specifier: 0.435.0
+        version: 0.435.0(svelte@4.2.18)
       plotly.js-basic-dist-min:
         specifier: ^2.34.0
         version: 2.34.0
@@ -1648,8 +1648,8 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  lucide-svelte@0.427.0:
-    resolution: {integrity: sha512-l0IJqYVBTxMkJPvZqyIMyVFlbZ18Mjg0n6p7Zo9bSQNvsmeviTyOxYmYdp/G5gXcSHaOGL6YoQW7fmbFklbW/w==}
+  lucide-svelte@0.435.0:
+    resolution: {integrity: sha512-AuD/q2Z2gj7FqwF7AL5RXQrPzp5mG40NJysmFYxCi9iiF0rhBjMphx/Lo1FjlQr97lEPBkWShMhV1kS7sz9JCw==}
     peerDependencies:
       svelte: ^3 || ^4 || ^5.0.0-next.42
 
@@ -4563,7 +4563,7 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lucide-svelte@0.427.0(svelte@4.2.18):
+  lucide-svelte@0.435.0(svelte@4.2.18):
     dependencies:
       svelte: 4.2.18
 
