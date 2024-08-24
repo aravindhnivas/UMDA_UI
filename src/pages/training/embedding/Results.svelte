@@ -10,11 +10,13 @@
         invalid_smiles: string[];
         saved_file: string;
     } | null = null;
+
+    console.log(data);
 </script>
 
 {#if data}
     {@const { invalid_smiles, saved_file } = data}
-    {@const invalid_smiles_indexed = invalid_smiles?.map((smiles, ind) => ({ smiles, ind })) || []}
+
     <button class="btn btn-sm btn-error w-max ml-auto" on:click={() => (data = null)}>X</button>
     <div class=" flex flex-col gap-1">
         {#if saved_file}
@@ -25,6 +27,7 @@
         {/if}
 
         {#if invalid_smiles.length > 0}
+            {@const invalid_smiles_indexed = invalid_smiles.map((smiles, ind) => ({ smiles, ind }))}
             <pre class="status text-red-6">
                 {invalid_smiles.length} invalid smiles or could not compute embeddings for the following {$training_column_name_X}:
             </pre>
