@@ -25,10 +25,9 @@
         {/if}
 
         {#if invalid_smiles.length > 0}
-            <h3>
-                Could not compute embeddings for {invalid_smiles.length}
-                {$training_column_name_X}
-            </h3>
+            <pre class="status text-red-6">
+                {invalid_smiles.length} invalid smiles or could not compute embeddings for the following {$training_column_name_X}:
+            </pre>
             <VirtualList height="300px" items={invalid_smiles_indexed} let:item>
                 <span class="select-text text-wrap break-all">{item.ind + 1}: {item.smiles}</span>
             </VirtualList>
