@@ -2,17 +2,17 @@
     import { CheckCheck } from 'lucide-svelte/icons';
     import { training_column_name_X } from '../training_file/stores';
 
+    export let computed_time: string;
     export let data: {
         name: string;
         shape: number;
         invalid_smiles: string[];
         saved_file: string;
-        computed_time: string;
     } | null = null;
 </script>
 
 {#if data}
-    {@const { invalid_smiles, saved_file, computed_time } = data}
+    {@const { invalid_smiles, saved_file } = data}
     <button class="btn btn-sm btn-error w-max ml-auto" on:click={() => (data = null)}>X</button>
     <div class=" flex flex-col gap-1">
         {#if saved_file}
