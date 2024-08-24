@@ -153,6 +153,7 @@
             saved_file: string;
             computed_time: string;
         };
+        computed_time: string;
     };
 </script>
 
@@ -255,5 +256,5 @@
             <Loadingbtn name="Compute" callback={embedd_data} subprocess={true} on:result={onResult} />
         </div>
     {/if}
-    <Results data={dataFromPython?.file_mode} />
+    <Results data={dataFromPython?.file_mode} computed_time={dataFromPython?.computed_time} />
 </div>
