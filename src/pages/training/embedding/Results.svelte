@@ -30,7 +30,7 @@
             </pre>
             <VirtualList height="300px" items={invalid_smiles_indexed} let:item>
                 <div>
-                    <span>{item.ind + 1}:</span><span class="select-text text-wrap break-all"> {item.smiles}</span>
+                    <span>{item.ind + 1}: </span><span class="select-text text-wrap break-all"> {item.smiles}</span>
                 </div>
             </VirtualList>
         {/if}
