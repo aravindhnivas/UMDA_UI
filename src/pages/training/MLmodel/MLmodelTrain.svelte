@@ -59,7 +59,7 @@
             return;
         }
 
-        if (!(await fs.exists(await load_training_file($use_filtered_data_for_training)))) {
+        if (!(await fs.exists(await load_training_file($use_filtered_data_for_training, $training_file.filename)))) {
             toast.error('Error: Training file not found');
             return;
         }
@@ -171,7 +171,7 @@
             n_iter: Number($randomzied_gridsearch_niter),
             factor: Number($halving_factor),
         };
-        const final_training_file = await load_training_file($use_filtered_data_for_training);
+        const final_training_file = await load_training_file($use_filtered_data_for_training, $training_file.filename);
 
         const args = {
             model: $model,

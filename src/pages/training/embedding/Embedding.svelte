@@ -34,7 +34,7 @@
         embedding_name: string,
         pca: boolean,
     ) => {
-        const filename = await load_training_file(use_filtered_filename);
+        const filename = await load_training_file(use_filtered_filename, $training_file.filename);
         if (!filename) return;
         const name = await path.basename(filename);
         $embedd_savefile =
@@ -51,7 +51,10 @@
     let test_result = '';
 
     const embedd_data = async () => {
-        if (!test_mode && !(await fs.exists(await load_training_file($use_filtered_data_for_training)))) {
+        if (
+            !test_mode &&
+            !(await fs.exists(await load_training_file($use_filtered_data_for_training, $training_file.filename)))
+        ) {
             toast.error('Please select a file');
             return;
         }
@@ -85,7 +88,7 @@
         dataFromPython = {};
 
         const pyfile = 'training.embedd_data';
-        const final_training_file = await load_training_file($use_filtered_data_for_training);
+        const final_training_file = await load_training_file($use_filtered_data_for_training, $training_file.filename);
         return {
             pyfile,
             args: {
