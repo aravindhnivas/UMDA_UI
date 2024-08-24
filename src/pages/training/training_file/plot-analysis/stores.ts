@@ -48,8 +48,8 @@ export const atoms_bin_size = localWritable('atoms_bin_size', 10);
 export const active_tab = localWritable<AnalysisItemsType>('training_file_plot_active_tab_item', 'size_distribution');
 export const use_filtered_data_for_training = writable(false);
 
-export const load_training_file = async (use_filtered = false) => {
-    const load_file = use_filtered ? await get(current_training_data_file) : get(training_file).filename;
+export const load_training_file = async (use_filtered = false, loaded_training_file: string) => {
+    const load_file = use_filtered ? await get(current_training_data_file) : loaded_training_file;
     return load_file;
 };
 

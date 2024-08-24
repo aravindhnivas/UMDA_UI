@@ -171,7 +171,7 @@
         <h3>Loaded training file</h3>
         <div class="flex-center">
             <span class="text-sm">File: </span>
-            {#await load_training_file($use_filtered_data_for_training) then name}
+            {#await load_training_file($use_filtered_data_for_training, $training_file.filename) then name}
                 <div class="badge bg-indigo" class:bg-red={!name}>
                     {name || 'No file selected'}
                 </div>
