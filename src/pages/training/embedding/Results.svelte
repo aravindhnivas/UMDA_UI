@@ -29,7 +29,9 @@
                 {invalid_smiles.length} invalid smiles or could not compute embeddings for the following {$training_column_name_X}:
             </pre>
             <VirtualList height="300px" items={invalid_smiles_indexed} let:item>
-                <span class="select-text text-wrap break-all">{item.ind + 1}: {item.smiles}</span>
+                <div>
+                    <span>{item.ind + 1}:</span><span class="select-text text-wrap break-all"> {item.smiles}</span>
+                </div>
             </VirtualList>
         {/if}
     </div>
