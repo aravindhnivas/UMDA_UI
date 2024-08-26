@@ -57,6 +57,7 @@ export const test_size = localWritable('test_size', 20);
 export const grid_search_method = localWritable('grid_search_method', 'RandomizedSearchCV');
 export const noise_percentage = localWritable('noise_percentage', 0.5);
 export const save_pretrained_model = localWritable('save_pretrained_model', true);
+export const save_pretrained_model_include_unique_key = writable(false);
 export const parallel_computation = localWritable('parallel_computation', true);
 export const n_jobs = localWritable('n_jobs', -2);
 export const backends: ParallelComputationBackend[] = ['loky', 'threading', 'multiprocessing', 'dask'];
@@ -68,15 +69,16 @@ export const parallel_computation_backend = localWritable<ParallelComputationBac
 
 export const pre_trained_file_loc = localWritable('pre_trained_file_loc', '');
 export const pre_trained_filename = localWritable('pre_trained_filename', '');
+export const pre_trained_filename_unique = writable('');
+export const current_save_filekey = writable<string>('');
+// export const pre_trained_filename_unique = derived(
+//     [current_save_filekey, pre_trained_filename],
+//     ([$current_save_filekey, $pre_trained_filename]) => {
+//         console.log($current_save_filekey, $pre_trained_filename);
+//         return $pre_trained_filename.split('.pkl')[0] + ($current_save_filekey ? `_${$current_save_filekey}_` : '');
+//     },
+// );
 
 export const results = writable<Record<MLModel[number], Results | null>>({});
 export const plot_data = writable<Record<MLModel[number], Partial<Plotly.PlotData>[]>>({});
 export const default_parameter_mode = localWritable('default_parameter_mode', true);
-export const current_save_filekey = writable<string>('');
-
-export const pre_trained_filename_unique = derived(
-    [current_save_filekey, pre_trained_filename],
-    ([$current_save_filekey, $pre_trained_filename]) => {
-        return $pre_trained_filename.split('.pkl')[0] + `_${$current_save_filekey}_`;
-    },
-);

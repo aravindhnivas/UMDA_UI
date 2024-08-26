@@ -18,7 +18,7 @@
     {#if text_position === 'left'}
         <span class="label-text">{label}</span>
     {/if}
-    <input type="checkbox" class={check} bind:checked={value} {disabled} />
+    <input type="checkbox" class={check} bind:checked={value} {disabled} on:change />
     {#if text_position === 'right'}
         <span class="label-text">{label}</span>
     {/if}

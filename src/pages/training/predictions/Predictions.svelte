@@ -91,6 +91,7 @@
         const model_filename = await path.join(loc, filename + '.pkl');
         $pretrained_model_file = model_filename;
     };
+
     $: update_model_file($pre_trained_file_loc, $pre_trained_filename_unique);
 </script>
 

@@ -28,6 +28,7 @@
         parallel_computation_backend,
         default_parameter_mode,
         current_save_filekey,
+        save_pretrained_model_include_unique_key,
     } from './stores';
     import { embedding, use_PCA } from '../embedding/stores';
     import { NPARTITIONS, use_dask } from '$lib/stores/system';
@@ -96,25 +97,27 @@
                 toast.error('Error: Fine tuned hyperparameters not found');
                 return;
             }
-            // return;
         }
 
-        $pre_trained_filename = $pre_trained_filename.trim();
         $pre_trained_file_loc = $pre_trained_file_loc.trim();
-
         if (!(await fs.exists($pre_trained_file_loc))) {
             toast.error('Error: Save location does not exist');
             return;
         }
 
-        current_save_filekey.set(getID(5));
+        $pre_trained_filename = $pre_trained_filename.trim();
+        if ($save_pretrained_model_include_unique_key) {
+            $current_save_filekey = getID(5);
+            $pre_trained_filename_unique = $pre_trained_filename.split('.pkl')[0] + `_${$current_save_filekey}_`;
+        } else {
+            $pre_trained_filename_unique = $pre_trained_filename.split('.pkl')[0];
+        }
+
         const pre_trained_file = await path.join($pre_trained_file_loc, $pre_trained_filename_unique);
-        // const filename = $pre_trained_filename.split('.pkl')[0] + `_${$current_save_filekey}_`;
-        // const pre_trained_file = await path.join($pre_trained_file_loc, filename);
 
         if (await fs.exists(pre_trained_file)) {
             const overwrite = await dialog.confirm(
-                $pre_trained_filename + ': Pre trained model file already exists. Do you want to overwrite it?',
+                pre_trained_file + ': Pre trained model file already exists. Do you want to overwrite it?',
                 'Overwrite file',
             );
             if (!overwrite) return;
@@ -126,7 +129,7 @@
         console.log({ values, $variable_type });
 
         Object.entries(values).forEach(([key, value], ind) => {
-            console.log(ind, { key, value, type: $variable_type[key] });
+            // console.log(ind, { key, value, type: $variable_type[key] });
 
             if (typeof value === 'string' && $variable_type[key] === 'str' && value !== 'float') {
                 clonedValues[key] = value?.trim() || null;
