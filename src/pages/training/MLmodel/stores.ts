@@ -1,5 +1,5 @@
 import supervised_ml_models from '$lib/config/ml_model/ml_models_parameters';
-
+export const model_names = Object.keys(supervised_ml_models) as MLModel[];
 export const model = localWritable<MLModel>('ml_model', 'ridge');
 
 export const current_model = derived(model, $model => {
@@ -69,8 +69,8 @@ export const parallel_computation_backend = localWritable<ParallelComputationBac
 export const pre_trained_file_loc = localWritable('pre_trained_file_loc', '');
 export const pre_trained_filename = localWritable('pre_trained_filename', '');
 
-export const results = writable<Results | null>(null);
-export const plot_data = writable<Partial<Plotly.PlotData>[]>([]);
+export const results = writable<Record<MLModel[number], Results | null>>({});
+export const plot_data = writable<Record<MLModel[number], Partial<Plotly.PlotData>[]>>({});
 export const default_parameter_mode = localWritable('default_parameter_mode', true);
 export const current_save_filekey = writable<string>('');
 

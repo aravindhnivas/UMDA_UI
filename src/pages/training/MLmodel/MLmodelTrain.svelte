@@ -205,7 +205,7 @@
             parallel_computation_backend: $parallel_computation_backend,
             use_dask: $use_dask,
         };
-        $results = null;
+        $results[$model] = null;
         return { pyfile: 'training.ml_model', args };
     };
 
@@ -220,8 +220,8 @@
             toast.success('Model trained successfully');
             try {
                 const saved_file_contents = await fs.readTextFile(result_file);
-                $results = JSON.parse(saved_file_contents);
-                if (!$results) {
+                $results[$model] = JSON.parse(saved_file_contents);
+                if (!$results[$model]) {
                     toast.error('Error: Results not found');
                     return;
                 }
@@ -237,7 +237,7 @@
             try {
                 const saved_file_contents = await fs.readTextFile(data_file);
                 const parsed = JSON.parse(saved_file_contents);
-                $plot_data = [
+                $plot_data[$model] = [
                     {
                         x: parsed.y_true,
                         y: parsed.y_pred,
