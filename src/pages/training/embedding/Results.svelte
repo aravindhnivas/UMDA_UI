@@ -8,6 +8,7 @@
         name: string;
         shape: number;
         invalid_smiles: string[];
+        invalid_smiles_file: string;
         saved_file: string;
     } | null = null;
 
@@ -28,14 +29,23 @@
 
         {#if invalid_smiles.length > 0}
             {@const invalid_smiles_indexed = invalid_smiles.map((smiles, ind) => ({ smiles, ind }))}
-            <pre class="status text-red-6">
-                {invalid_smiles.length} invalid smiles or could not compute embeddings for the following {$training_column_name_X}:
-            </pre>
-            <VirtualList height="300px" items={invalid_smiles_indexed} let:item>
-                <div>
-                    <span>{item.ind + 1}: </span><span class="select-text text-wrap break-all"> {item.smiles}</span>
+
+            <div class="border border-solid border-2 border-rounded p-2 grid gap-1">
+                <pre class="status text-red-6">
+                    <span class="underline"
+                        >{invalid_smiles.length} invalid smiles or could not compute embeddings for the following {$training_column_name_X}:</span
+                    >
+                </pre>
+                <div class="flex gap-1">
+                    <!-- <span>Invalid smiles file: </span> -->
+                    <span class="badge badge-info text-wrap break-all">{data.invalid_smiles_file}</span>
                 </div>
-            </VirtualList>
+                <VirtualList height="300px" items={invalid_smiles_indexed} let:item>
+                    <div>
+                        <span>{item.ind + 1}: </span><span class="select-text text-wrap break-all"> {item.smiles}</span>
+                    </div>
+                </VirtualList>
+            </div>
         {/if}
     </div>
 {/if}
