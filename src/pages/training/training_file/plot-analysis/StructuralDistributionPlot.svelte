@@ -29,7 +29,6 @@
                 type: 'pie',
                 textinfo: 'label+value+percent',
                 textposition: 'outside',
-                automargin: true,
                 // insidetextorientation: 'radial',
             },
         ];
