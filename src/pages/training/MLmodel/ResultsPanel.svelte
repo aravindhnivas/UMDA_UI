@@ -2,23 +2,17 @@
     import { plot_data, results, model_names, model } from './stores';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import Plot from 'svelte-plotly.js';
-
-    // $: console.log($plot_data);
-    // $: console.log($results);
-    // $: console.log($results[$model]?.time);
-    // $: console.log($model);
 </script>
 
-<CustomPanel open={true}>
+<CustomPanel open={true} title="Results">
     <div class="grid gap-2">
         {#if $results[$model]}
             {@const r = $results[$model]}
-
             <div class="flex gap-2 items-center">
                 <span class="badge">R<sup>2</sup>: {r.r2}</span>
-                {#if r?.cross_validation && r?.cv_scores}
+                {#if r.cross_validation && r.cv_scores}
                     <span class="badge"
-                        >{r?.cv_fold}-fold CV - R<sup>2</sup>: {r.cv_scores.mean} ({r.cv_scores.std})</span
+                        >{r.cv_fold}-fold CV - R<sup>2</sup>: {r.cv_scores.mean} ({r.cv_scores.std})</span
                     >
                 {/if}
                 <span class="badge">MSE: {r.mse}</span>
@@ -29,9 +23,9 @@
                 <span class="badge badge-primary">
                     {r.time ? `completed in ${$results[$model].time}` : ''}
                 </span>
-                <span class="badge badge-info"># data: {r?.data_size}</span>
+                <span class="badge badge-info"># data: {r.data_size}</span>
             </div>
-            {#if r?.best_params}
+            {#if r.best_params}
                 <hr />
                 <div class="grid gap-2">
                     <h3>Best parameters</h3>
