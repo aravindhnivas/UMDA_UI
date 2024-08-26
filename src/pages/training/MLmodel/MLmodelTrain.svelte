@@ -277,5 +277,5 @@
             <ResultsPanel />
         </Accordion>
     </div>
-    <Loadingbtn class="m-auto " name="Compute" callback={fit_function} subprocess={true} on:result={onResult} />
+    <Loadingbtn class="m-auto " name="Begin training" callback={fit_function} subprocess={true} on:result={onResult} />
 </div>
