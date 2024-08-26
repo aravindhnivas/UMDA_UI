@@ -4,7 +4,7 @@
     import Plot from 'svelte-plotly.js';
 </script>
 
-<CustomPanel open={true} title="Results">
+<CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
     <div class="grid gap-2">
         {#if $results[$model]}
             {@const r = $results[$model]}
