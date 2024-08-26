@@ -10,7 +10,7 @@
     let data: DataType;
 </script>
 
-{#if $use_filtered_data_for_training}
+{#if $use_filtered_data_for_training && $filtered_dir !== 'default'}
     <div class="badge badge-info m-auto">
         NOTE: using filtered training dataset ({$filtered_dir}). Change it in Analysis_data -> Load filtered data.
     </div>
