@@ -50,11 +50,13 @@
         try {
             if (log) outputbox.info('Checking for updates...');
             download_progress = 0;
-
             const update = await checkUpdate();
-            if (log) outputbox.info(update);
+            if (log) outputbox.info(JSON.stringify(update));
 
-            if (import.meta.env.DEV) return window.createToast('Update installation is skipped in dev mode', 'danger');
+            if (import.meta.env.DEV) {
+                toast.error('Update installation is skipped in dev mode');
+                return;
+            }
 
             if (import.meta.env.PROD && update.shouldUpdate) {
                 const newVersion = update.manifest?.version;
@@ -70,8 +72,9 @@
 
                 if (install_promted) {
                     await stopServer();
+                    if (!update.manifest?.body) return outputbox.error('Update manifest is empty');
                     outputbox.success(
-                        `Installing update ${newVersion}, ${update.manifest?.date}, ${update.manifest.body}`,
+                        `Installing update ${newVersion}, ${update.manifest.date}, ${update.manifest.body}`,
                     );
 
                     await installUpdate();
@@ -79,7 +82,7 @@
                 }
             }
         } catch (error) {
-            $updateError = error;
+            $updateError = error instanceof Error ? error.message : String(error);
         }
     };
 
