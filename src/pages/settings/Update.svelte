@@ -22,6 +22,7 @@
     import TerminalBox from '$lib/components/TerminalBox.svelte';
     import { Checkbox } from '$lib/components';
     import { toggle_loading } from '$utils/index';
+    import CustomInput from '$lib/components/CustomInput.svelte';
 
     let install_dialog_active = false;
     export const check_for_update = async (log = false) => {
@@ -176,14 +177,7 @@
                 >
 
                 <div class="ml-auto">
-                    <Textfield
-                        input$type="number"
-                        variant="outlined"
-                        width="10px"
-                        class="ml-auto"
-                        bind:value={$updateInterval}
-                        label="update interval (in min)"
-                    />
+                    <CustomInput bind:value={$updateInterval} label="update interval (in min)" type="number" />
                 </div>
             </div>
 
