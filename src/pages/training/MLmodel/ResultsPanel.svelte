@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { plot_data, results, model_names, model } from './stores';
+    import { plot_data, results, model_names, model, test_size } from './stores';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import Plot from 'svelte-plotly.js';
 </script>
@@ -23,7 +23,7 @@
                 <span class="badge badge-primary">
                     {r.time ? `completed in ${$results[$model].time}` : ''}
                 </span>
-                <span class="badge badge-info"># data: {r.data_size}</span>
+                <span class="badge badge-info"># y_test_data_size ({$test_size}%): {r.y_test_data_size}</span>
             </div>
             {#if r.best_params}
                 <hr />

@@ -62,6 +62,8 @@ interface RunningProcess {
     completed?: boolean;
     aborted?: boolean;
     logs?: string;
+    start_time?: string;
+    end_time?: string;
 }
 
 export const create_running_processes_store = () => {
@@ -71,11 +73,11 @@ export const create_running_processes_store = () => {
 
     const add = (pid: number, obj: RunningProcess) => {
         update(p => {
-            p[pid] = obj;
+            p[pid] = { ...obj, start_time: new Date().toLocaleString() };
 
-            if (Object.keys(p).length > 100) {
-                // delete the first 50 keys
-                const keys = Object.keys(p).slice(0, 50);
+            if (Object.keys(p).length > 25) {
+                // delete the first 5 keys
+                const keys = Object.keys(p).slice(0, 5);
                 for (const key of keys) {
                     delete p[key];
                 }
@@ -94,6 +96,7 @@ export const create_running_processes_store = () => {
     const mark_aborted = (pid: number) => {
         update(p => {
             p[pid].aborted = true;
+            p[pid].end_time = new Date().toLocaleString();
             return p;
         });
     };
@@ -101,6 +104,7 @@ export const create_running_processes_store = () => {
     const mark_completed = (pid: number) => {
         update(p => {
             p[pid].completed = true;
+            p[pid].end_time = new Date().toLocaleString();
             return p;
         });
     };

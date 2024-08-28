@@ -4,7 +4,20 @@
     import { fade } from 'svelte/transition';
     import MenuSurface from '@smui/menu-surface';
     import { CheckCheck, ChevronUpCircle, CircleOff, CircleX, ScanSearch } from 'lucide-svelte/icons';
+
     let surface: MenuSurface; // MenuSurfaceComponentDev
+
+    // Function to compute duration in minutes
+    function computeDuration(start?: string, end?: string) {
+        if (!start || !end) return '-';
+
+        const startTime = new Date(start);
+        const endTime = new Date(end);
+        const durationMs = Number(endTime) - Number(startTime);
+        // const durationMinutes = Math.floor(durationMs / 60000);
+        const durationMinutes = (durationMs / 60000).toFixed(2);
+        return durationMinutes;
+    }
 </script>
 
 {#if $running_processes_pids.length > 0}
@@ -23,6 +36,9 @@
                         <th>pyfile</th>
                         <th>status</th>
                         <th>logs</th>
+                        <th>start_time</th>
+                        <th>end_time</th>
+                        <th>duration (mins)</th>
                         <th>close</th>
                     </tr>
                 </thead>
@@ -57,6 +73,9 @@
                                     <ScanSearch />
                                 </div>
                             </td>
+                            <td>{process.start_time || '-'}</td>
+                            <td>{process.end_time || '-'}</td>
+                            <td>{computeDuration(process.start_time, process.end_time)}</td>
                             {#if process.completed}
                                 <td
                                     class="flex cursor-pointer justify-center"
