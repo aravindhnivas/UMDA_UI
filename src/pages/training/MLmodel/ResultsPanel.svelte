@@ -46,7 +46,7 @@
                     <Plot
                         data={$plot_data[model_name]}
                         layout={{
-                            title: model_name,
+                            title: `${model_name.toLocaleUpperCase()} Regressor`,
                             xaxis: { title: 'y_true' },
                             yaxis: { title: 'y_pred' },
                             // margin: { t: 0 },

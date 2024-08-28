@@ -16,6 +16,7 @@
         n_jobs,
         parallel_computation_backend,
         backends,
+        skip_invalid_y_values,
     } from './stores';
     import { Checkbox, CustomSelect, CustomInput } from '$lib/components';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
@@ -45,6 +46,7 @@
         </div>
         <div class="grid grid-cols-2 gap-1 items-end">
             <Checkbox bind:value={$fine_tune_model} label="Grid search" check="checkbox" />
+
             <Checkbox bind:value={$cross_validation} label="Cross validation" check="checkbox" />
             <CustomSelect items={grid_search_methods} bind:value={$grid_search_method} disabled={!$fine_tune_model} />
             <CustomInput
@@ -107,6 +109,7 @@
                     disabled={!$parallel_computation}
                 />
             </div>
+            <Checkbox bind:value={$skip_invalid_y_values} label="skip_invalid_y_values" check="checkbox" />
         </div>
     </div>
 </CustomPanel>

@@ -71,14 +71,9 @@ export const pre_trained_file_loc = localWritable('pre_trained_file_loc', '');
 export const pre_trained_filename = localWritable('pre_trained_filename', '');
 export const pre_trained_filename_unique = writable('');
 export const current_save_filekey = writable<string>('');
-// export const pre_trained_filename_unique = derived(
-//     [current_save_filekey, pre_trained_filename],
-//     ([$current_save_filekey, $pre_trained_filename]) => {
-//         console.log($current_save_filekey, $pre_trained_filename);
-//         return $pre_trained_filename.split('.pkl')[0] + ($current_save_filekey ? `_${$current_save_filekey}_` : '');
-//     },
-// );
 
 export const results = writable<Record<MLModel[number], Results | null>>({});
 export const plot_data = writable<Record<MLModel[number], Partial<Plotly.PlotData>[]>>({});
 export const default_parameter_mode = localWritable('default_parameter_mode', true);
+
+export const skip_invalid_y_values = localWritable('skip_invalid_y_values', false);

@@ -29,6 +29,7 @@
         default_parameter_mode,
         current_save_filekey,
         save_pretrained_model_include_unique_key,
+        skip_invalid_y_values,
     } from './stores';
     import { embedding, use_PCA } from '../embedding/stores';
     import { NPARTITIONS, use_dask } from '$lib/stores/system';
@@ -207,6 +208,7 @@
             n_jobs: Number($n_jobs),
             parallel_computation_backend: $parallel_computation_backend,
             use_dask: $use_dask,
+            skip_invalid_y_values: $skip_invalid_y_values,
         };
         $results[$model] = null;
         return { pyfile: 'training.ml_model', args };
