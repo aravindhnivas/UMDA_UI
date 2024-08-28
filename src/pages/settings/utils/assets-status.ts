@@ -28,8 +28,12 @@ export const check_umdapy_assets_status = async ({ installation_request = false 
             await install_umdapy_from_zipfile();
             // outputbox.warn('Python assets are missing.')
         }
-    } catch (error) {
-        outputbox.error(error);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            outputbox.error(error.message);
+        } else {
+            outputbox.error('An unknown error occurred');
+        }
     }
 };
 
