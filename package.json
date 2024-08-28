@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "tauri": "tauri",
-    "format": "prettier --write  --plugin prettier-plugin-svelte ."
+    "format": "prettier --write  --plugin prettier-plugin-svelte .",
+    "lint": "oxlint"
   },
   "dependencies": {
     "@tauri-apps/api": "^1.6.0",
@@ -53,6 +54,7 @@
     "hover.css": "^2.3.2",
     "ldbutton": "^2.0.4",
     "lodash-es": "^4.17.21",
+    "oxlint": "^0.9.0",
     "prettier": "^3.3.3",
     "prettier-plugin-svelte": "^3.2.6",
     "sass": "^1.77.8",
