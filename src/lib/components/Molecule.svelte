@@ -12,10 +12,9 @@
     let svgElement: SVGElement;
 
     afterUpdate(() => {
-        if (!smiles) return;
-        if (!drawer) return;
-        SmilesDrawer.parse(smiles, function (tree) {
-            drawer?.draw(tree, svgElement, 'light');
+        if (!smiles || !drawer) return;
+        SmilesDrawer.parse(smiles, function (tree: any) {
+            drawer.draw(tree, svgElement, 'light');
         });
     });
 </script>
