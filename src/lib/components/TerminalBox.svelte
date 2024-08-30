@@ -5,10 +5,6 @@
     export let height = '400px';
     let className = '';
     export { className as class };
-    onMount(() => {
-        const date = new Date().toLocaleTimeString();
-        terminal = [{ type: 'info', message: `${date} Terminal initialized` }];
-    });
 </script>
 
 <button
