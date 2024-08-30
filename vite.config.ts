@@ -56,12 +56,10 @@ export default defineConfig(async () => ({
     envPrefix: ['VITE_'],
     build: {
         chunkSizeWarningLimit: 2000,
-        rollupOptions: {
-            output: {
-                manualChunks: {
-                    xterm: ['@xterm/xterm'],
-                },
-            },
-        },
+        // rollupOptions: {
+        //     output: {
+        //         manualChunks: {},
+        //     },
+        // },
     },
 }));

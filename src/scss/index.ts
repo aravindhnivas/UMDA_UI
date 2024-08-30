@@ -4,7 +4,6 @@ import './splitpane.theme.scss';
 import 'hover.css';
 import 'cooltipz-css';
 import 'animate.css';
-import '@xterm/xterm/css/xterm.css';
 import 'ldbutton/index.min.css';
 import '@loadingio/loading.css/loading.min.css';
 import './bulma.scss';
