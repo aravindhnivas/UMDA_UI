@@ -211,7 +211,7 @@
             <Loadingbtn class="col-span-2" name="Compute" callback={embedd_data} on:result={onResult} />
         </div>
 
-        <div class="grid items-center gap-1">
+        <div class="grid items-center gap-1 overflow-auto">
             <Molecule bind:smiles={$test_smiles} show_controls={false} />
             <div>
                 <span class="text-sm pl-1">Embedded vector</span>
