@@ -4,8 +4,8 @@
     import CustomInput from './CustomInput.svelte';
 
     export let smiles = '';
-    export let width = 900;
-    export let height = 500;
+    export let width = 700;
+    export let height = 400;
     export let show_controls = true;
 
     $: drawer = new SmilesDrawer.SvgDrawer({ width, height });
