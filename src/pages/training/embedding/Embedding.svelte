@@ -212,9 +212,9 @@
         </div>
 
         <div class="grid items-center gap-1 overflow-auto">
-            <Molecule bind:smiles={$test_smiles} show_controls={false} />
+            <Molecule bind:smiles={$test_smiles} show_controls={true} />
             <div>
-                <span class="text-sm pl-1">Embedded vector</span>
+                <span class="text-lg pl-1">Embedded vector</span>
                 <textarea
                     class="textarea textarea-bordered h-[300px] w-full select-text"
                     placeholder="Embedded vector will be shown"
