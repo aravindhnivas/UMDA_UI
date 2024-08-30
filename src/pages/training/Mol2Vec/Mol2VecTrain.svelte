@@ -4,7 +4,7 @@
     import BrowseFile from '$lib/components/BrowseFile.svelte';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
-
+    import CustomInput from '$lib/components/CustomInput.svelte';
     export let id: string = 'mol2vec-train-container';
     export let display: string = 'none';
 
@@ -52,32 +52,28 @@
 
     <h3>Generate a Mol2Vec embedder model</h3>
 
-    <div class="flex gap-1">
+    <div class="flex flex-wrap gap-1">
         <CustomSelect
             label="sentence_type"
             bind:value={sentence_type}
             items={['all', 'alt', 'individual']}
             helper={sentence_type_info[sentence_type]}
         />
-        <div class="flex flex-col gap-1">
-            <span class="text-xs pl-1">radius</span>
-            <input type="number" class="input input-sm" bind:value={radius} />
-            <span class="text-xs pl-1 m-auto">Radius of morgan fingerprint</span>
-        </div>
+        <CustomInput label="radius" type="number" bind:value={radius} helper="Radius of morgan fingerprint" />
 
-        <div class="flex flex-col gap-1">
-            <span class="text-xs pl-1">vector_size</span>
-            <input type="number" class="input input-sm" bind:value={vector_size} />
-            <span class="text-xs pl-1 m-auto">Number of dimensions of vector</span>
-        </div>
+        <CustomInput
+            label="vector_size"
+            type="number"
+            bind:value={vector_size}
+            helper="Number of dimensions of vector"
+        />
 
-        <div class="flex flex-col gap-1">
-            <span class="text-xs pl-1">min_count</span>
-            <input type="number" class="input input-sm" bind:value={min_count} />
-            <span class="text-xs pl-1 m-auto">
-                Number of occurrences a word should have to be considered in training</span
-            >
-        </div>
+        <CustomInput
+            label="min_count"
+            type="number"
+            bind:value={min_count}
+            helper="Number of occurrences a word should have to be considered in training"
+        />
     </div>
 
     <BrowseFile
