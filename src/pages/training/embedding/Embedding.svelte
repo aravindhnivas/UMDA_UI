@@ -211,9 +211,9 @@
             <Loadingbtn class="col-span-2" name="Compute" callback={embedd_data} on:result={onResult} />
         </div>
 
-        <div class="grid grid-cols-4 items-center gap-1">
+        <div class="grid items-center gap-1">
             <Molecule bind:smiles={$test_smiles} show_controls={false} />
-            <div class="col-span-3">
+            <div>
                 <span class="text-sm pl-1">Embedded vector</span>
                 <textarea
                     class="textarea textarea-bordered h-[300px] w-full select-text"
