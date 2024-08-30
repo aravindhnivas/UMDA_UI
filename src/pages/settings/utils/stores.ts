@@ -8,6 +8,11 @@ export const logger_store = () => {
 
     function add(type: 'info' | 'warning' | 'error' | 'success', message: string, prefix?: '>' | '>>' | '$') {
         update(logger => {
+            // limit logger to 500 items
+            if (logger.length > 500) {
+                logger = logger.slice(0, 500);
+            }
+
             const time = new Date().toLocaleTimeString();
             message = `${time} ${message}`;
             if (!prefix) prefix = '>';
