@@ -33,6 +33,6 @@
         autocomplete="off"
     />
     {#if helper}
-        <span class="text-xs m-auto">{helper}</span>
+        <span class="text-xs m-auto text-wrap break-words max-w-[200px]">{helper}</span>
     {/if}
 </div>
