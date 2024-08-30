@@ -1,4 +1,4 @@
-export const logger_store = () => {
+export const logger_store = (message: string, length: number = 500) => {
     const { subscribe, set, update } = writable<LoggerStore[]>([]);
 
     function clear() {
@@ -8,9 +8,8 @@ export const logger_store = () => {
 
     function add(type: 'info' | 'warning' | 'error' | 'success', message: string, prefix?: '>' | '>>' | '$') {
         update(logger => {
-            // limit logger to 500 items
-            if (logger.length > 500) {
-                logger = logger.slice(0, 500);
+            if (logger.length > length) {
+                logger = logger.slice(0, length);
             }
 
             const time = new Date().toLocaleTimeString();
@@ -21,6 +20,11 @@ export const logger_store = () => {
             return logger;
         });
     }
+
+    // initialize the logger with the message
+    const date = new Date().toLocaleTimeString();
+    set([{ type: 'info', message: `${date} ${message}` }]);
+
     return {
         subscribe,
         set,
@@ -35,9 +39,9 @@ export const logger_store = () => {
     };
 };
 
-export const serverInfo = logger_store();
-export const terminal_log = logger_store();
-export const outputbox = logger_store();
+export const serverInfo = logger_store('Server console initialized', 500);
+export const terminal_log = logger_store('Terminal console initialized', 1000);
+export const outputbox = logger_store('Update console initialized', 500);
 
 export const asset_download_required = writable(false);
 export const assets_version_available = writable('');
