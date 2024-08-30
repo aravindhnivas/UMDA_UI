@@ -188,8 +188,7 @@ export function unZIP(installation_request = true) {
 let current_release_data = {};
 
 const get_assets_url = async () => {
-    const [_err1, response] = await oO(axios<{ tag_name: string }>(git_url.py.latest()));
-    if (_err1) return outputbox.error(_err1);
+    const response = await axios<{ tag_name: string }>(git_url.py.latest());
     if (!response) return;
 
     if (response.status !== 200) return outputbox.error('Could not download the assets');
@@ -286,14 +285,10 @@ export const install_umdapy_from_zipfile = async () => {
         const localdir = await path.appLocalDataDir();
         const asset_zipfile = await path.join(localdir, asset_name);
 
-        const [_err] = await oO(fs.copyFile(result, asset_zipfile));
-        if (_err) {
-            serverInfo.error(_err);
-        } else {
-            serverInfo.warn('file copied');
-        }
+        await fs.copyFile(result, asset_zipfile);
+        serverInfo.warn('file copied');
         python_asset_ready_to_install.set(true);
-        await oO(unZIP(false));
+        await unZIP(false);
     } catch (error) {
         if (error instanceof Error) Alert.error(error);
     }
