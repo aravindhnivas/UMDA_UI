@@ -12,6 +12,8 @@
     import { NPARTITIONS, use_dask } from '$lib/stores/system';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
+    import CustomInput from '$lib/components/CustomInput.svelte';
+    import Checkbox from '$lib/components/Checkbox.svelte';
     import { TriangleAlert } from 'lucide-svelte/icons';
     import BrowseFile from '$lib/components/BrowseFile.svelte';
     import Molecule from '$lib/components/Molecule.svelte';
@@ -202,30 +204,15 @@
     {/if}
 
     {#if test_mode}
-        <div class="flex items-end gap-4">
-            <div class="flex-center border-1 border-solid border-rounded p-1">
-                <span>PCA</span>
-                <input type="checkbox" class="toggle" bind:checked={$use_PCA} />
-            </div>
+        <div class="grid grid-cols-5 items-end gap-2">
+            <Checkbox label="PCA" bind:value={$use_PCA} />
             <CustomSelect label="embedding" bind:value={$embedding} items={embeddings} />
-            <div class="flex flex-col gap-1">
-                <span class="text-xs pl-1">Enter SMILES</span>
-                <input
-                    type="text"
-                    class="input input-sm w-xl"
-                    bind:value={$test_smiles}
-                    placeholder="Enter SMILES"
-                    on:change={async () => {
-                        if (!$test_smiles) return;
-                        await embedd_data();
-                    }}
-                />
-            </div>
+            <CustomInput class="col-span-2" label="Enter SMILES" bind:value={$test_smiles} placeholder="Enter SMILES" />
             <Loadingbtn name="Compute" callback={embedd_data} on:result={onResult} />
         </div>
+
         <div class="grid grid-cols-4 items-center gap-1">
             <Molecule bind:smiles={$test_smiles} show_controls={false} />
-
             <div class="col-span-3">
                 <span class="text-sm pl-1">Embedded vector</span>
                 <textarea
