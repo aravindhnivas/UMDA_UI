@@ -22,12 +22,12 @@
 <div class="grid gap-1">
     <div class="text-lg">Molecular structure</div>
     {#if show_controls}
-        <div class="flex gap-2 w-full">
-            <div class="flex items-center gap-2">
+        <div class="grid grid-cols-5 gap-2">
+            <div class="col-span-2 grid gap-1">
                 <span class="text-sm">Width: {width}px</span>
                 <input type="range" bind:value={width} min="100" max="1000" step="10" class="range" />
             </div>
-            <div class="flex items-center gap-2">
+            <div class="grid gap-1 col-span-2">
                 <span class="text-sm">Height: {height}px</span>
                 <input type="range" bind:value={height} min="100" max="1000" step="10" class="range" />
             </div>
