@@ -101,7 +101,7 @@
 </script>
 
 {#await $molecule_analysis_file then value}
-    <div class="badge badge-info">{value}</div>
+    <div class="badge badge-info h-10">{value}</div>
 {/await}
 
 {#if $training_column_name_X.toLocaleLowerCase() !== 'smiles'}
