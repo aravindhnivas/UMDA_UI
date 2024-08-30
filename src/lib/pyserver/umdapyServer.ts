@@ -25,7 +25,6 @@ export async function startServer() {
     if (!get(developerMode) && !get(python_asset_ready)) return serverInfo.error('python asset not ready');
     if (get(pyServerReady)) return toast.warning('server already running');
     serverInfo.warn('starting umdapy server at port: ' + get(pyServerPORT));
-    console.warn(get(serverInfo));
     if (get(currentPortPID).length > 0) {
         const killedports = await killPID(get(currentPortPID));
         if (typeof killedports === 'object') currentPortPID.set(killedports);
