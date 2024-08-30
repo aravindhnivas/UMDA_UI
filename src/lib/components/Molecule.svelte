@@ -20,15 +20,27 @@
 </script>
 
 <div class="grid gap-1">
-    <div class="text-sm">Molecular structure</div>
-    <div class="flex-center rounded-1" style="background-color: antiquewhite;">
-        <svg style:width style:height bind:this={svgElement} data-smiles={smiles} />
-    </div>
+    <div class="text-lg">Molecular structure</div>
     {#if show_controls}
-        <div class="flex items-end gap-2 flex-wrap">
-            <CustomInput placeholder="width" bind:value={width} label="width" type="number" />
-            <CustomInput placeholder="height" bind:value={height} label="height" type="number" />
-            <!-- <button class="btn btn-sm">Adjust</button> -->
+        <div class="flex gap-2 w-full">
+            <div class="flex items-center gap-2">
+                <span class="text-sm">Width: {width}px</span>
+                <input type="range" bind:value={width} min="100" max="1000" step="10" class="range" />
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-sm">Height: {height}px</span>
+                <input type="range" bind:value={height} min="100" max="1000" step="10" class="range" />
+            </div>
+            <button class="btn btn-sm btn-outline" on:click={() => ((width = 700), (height = 400))}>Restore</button>
         </div>
     {/if}
+    <div class="flex-center rounded-1">
+        <svg
+            style:width
+            style:height
+            style="background-color: antiquewhite;"
+            bind:this={svgElement}
+            data-smiles={smiles}
+        />
+    </div>
 </div>
