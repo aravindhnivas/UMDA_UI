@@ -204,11 +204,11 @@
     {/if}
 
     {#if test_mode}
-        <div class="grid grid-cols-5 items-end gap-2">
+        <div class="grid grid-cols-6 items-end gap-2">
             <Checkbox label="PCA" bind:value={$use_PCA} />
             <CustomSelect label="embedding" bind:value={$embedding} items={embeddings} />
             <CustomInput class="col-span-2" label="Enter SMILES" bind:value={$test_smiles} placeholder="Enter SMILES" />
-            <Loadingbtn name="Compute" callback={embedd_data} on:result={onResult} />
+            <Loadingbtn class="col-span-2" name="Compute" callback={embedd_data} on:result={onResult} />
         </div>
 
         <div class="grid grid-cols-4 items-center gap-1">
