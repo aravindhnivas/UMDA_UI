@@ -1,7 +1,6 @@
 import { serverInfo } from './stores';
 import { platform } from '@tauri-apps/api/os';
 import { toast } from 'svelte-sonner';
-import { Alert } from '$utils/stores';
 
 const fail = (err: string | Object) => {
     serverInfo.error('failed to check network status');
@@ -12,7 +11,6 @@ const fail = (err: string | Object) => {
 
 export const checkNetstat_execution = async (port: number) => {
     serverInfo.warn(`Checking network status for port: ${port}`);
-
     const args = {
         win32: ['-ano', '-p', 'tcp'],
         darwin: ['-i', `:${port}`],
@@ -20,7 +18,7 @@ export const checkNetstat_execution = async (port: number) => {
     };
     const currentplatform = (await platform()) as 'win32' | 'darwin' | 'linux';
     console.log({ args, currentplatform });
-    serverInfo.warn(`Running netstat-${currentplatform}: ${args[currentplatform].join(' ')}`);
+    serverInfo.prompt(`netstat-${currentplatform}: ${args[currentplatform].join(' ')}`);
     return new shell.Command(`netstat-${currentplatform}`, args[currentplatform]).execute();
 };
 
@@ -65,28 +63,22 @@ export const killPID = async (fullports: string[]) => {
 
         const currentplatform = (await platform()) as 'win32' | 'darwin' | 'linux';
         const command = currentplatform === 'win32' ? `taskkill-${await platform()}` : 'taskkill-darwin';
-        // console.log(command, args[currentplatform]);
         const [_err, output] = await oO(new shell.Command(command, args[currentplatform]).execute());
 
         if (_err) {
-            // Alert.error(_err);
             serverInfo.error(JSON.stringify(_err, null, 2));
             return;
         }
-        // currentPortPID.update(ports => ports.filter(p => p !== port));
         fullports = fullports.filter(p => p !== port);
 
         if (!output) return;
         if (output.stderr) {
             return serverInfo.error(output.stdout);
         }
-
         serverInfo.success(output.stdout);
     };
-
     for (const port of fullports) {
         await kill(port);
     }
-
     return fullports;
 };

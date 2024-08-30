@@ -4,10 +4,7 @@
     import { checkNetstat, killPID } from '../utils/network';
     import { serverInfo } from '../utils/stores';
     import { connect_websocket, socket } from '$lib/ws';
-    // import TerminalBox from '$lib/components/TerminalBox.svelte';
-    // import { LOGGER } from '$lib/utils/logger';
 
-    // export let terminal: LOGGER;
     export let port: number;
     export let serverReady: boolean = false;
     export let pids: string[] = [];
@@ -73,5 +70,4 @@
         />
         <button class="btn btn-sm btn-error" on:click={killpids}>kill PID</button>
     </div>
-    <!-- <TerminalBox bind:terminal /> -->
 </div>

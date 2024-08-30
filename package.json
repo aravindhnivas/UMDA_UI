@@ -15,9 +15,7 @@
   "dependencies": {
     "@tauri-apps/api": "^1.6.0",
     "@tauri-apps/cli": "^1.6.1",
-    "@xterm/addon-fit": "^0.10.0",
-    "@xterm/xterm": "^5.5.0",
-    "lucide-svelte": "0.435.0",
+    "lucide-svelte": "0.436.0",
     "plotly.js-basic-dist-min": "^2.34.0",
     "smiles-drawer": "^2.1.7",
     "tauri-plugin-websocket-api": "github:tauri-apps/tauri-plugin-websocket#v1"

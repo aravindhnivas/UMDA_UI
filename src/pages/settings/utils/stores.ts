@@ -1,45 +1,38 @@
-import { LOGGER } from '$lib/utils/logger';
+export const logger_store = () => {
+    const { subscribe, set, update } = writable<LoggerStore[]>([]);
 
-export function xterm_logger_store() {
-    const { subscribe, set } = writable<LOGGER>();
-
-    function info(message: string) {
-        subscribe(logger => {
-            logger?.info(message);
-        })();
+    function clear() {
+        const date = new Date().toLocaleTimeString();
+        set([{ type: 'info', message: `${date} Terminal cleared by user!!` }]);
     }
 
-    function warn(message: string) {
-        subscribe(logger => {
-            logger?.warn(message);
-        })();
+    function add(type: 'info' | 'warning' | 'error' | 'success', message: string, prefix?: '>' | '>>' | '$') {
+        update(logger => {
+            const time = new Date().toLocaleTimeString();
+            message = `${time} ${message}`;
+            if (!prefix) prefix = '>';
+            const log = { type, message, prefix };
+            logger = [log, ...logger];
+            return logger;
+        });
     }
-
-    function error(message: string) {
-        subscribe(logger => {
-            logger?.error(message);
-        })();
-    }
-
-    function success(message: string) {
-        subscribe(logger => {
-            logger?.success(message);
-        })();
-    }
-
     return {
-        set,
         subscribe,
-        info,
-        warn,
-        error,
-        success,
+        set,
+        clear,
+        info: (message: string) => add('info', message),
+        warn: (message: string) => add('warning', message),
+        error: (message: string) => add('error', message),
+        success: (message: string) => add('success', message),
+        prompt: (message: string) => add('info', message, '$'),
+        cmd: (message: string) => add('info', message, '>'),
+        subcmd: (message: string) => add('info', message, '>>'),
     };
-}
+};
 
-export const serverInfo = xterm_logger_store();
-export const terminal_log = xterm_logger_store();
-export const outputbox = xterm_logger_store();
+export const serverInfo = logger_store();
+export const terminal_log = logger_store();
+export const outputbox = logger_store();
 
 export const asset_download_required = writable(false);
 export const assets_version_available = writable('');

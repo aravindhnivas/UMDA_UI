@@ -1,23 +1,28 @@
 <script lang="ts">
-    import { LOGGER } from '$lib/utils/logger';
+    import VirtualList from '@sveltejs/svelte-virtual-list';
 
-    export let terminal: LOGGER;
+    export let terminal: LoggerStore[];
+    export let height = '400px';
     let className = '';
     export { className as class };
-
-    const mount = (node: HTMLElement) => {
-        terminal = new LOGGER(node, { fontSize: 14, fontFamily: 'monospace' });
-        terminal.fitAddon.fit();
-    };
-    onDestroy(() => terminal?.term.dispose());
+    onMount(() => {
+        const date = new Date().toLocaleTimeString();
+        terminal = [{ type: 'info', message: `${date} Terminal initialized` }];
+    });
 </script>
 
 <button
     class="btn btn-sm ml-auto"
     on:click={() => {
         if (!terminal) return toast.error('Terminal not initialized');
-        terminal.term.clear();
-        terminal.warn('Terminal cleared by user!!');
+        const date = new Date().toLocaleTimeString();
+        terminal = [{ type: 'warning', message: `${date} Terminal cleared by user!!` }];
     }}>Clear</button
 >
-<div class="{className} w-full" use:mount></div>
+<div class="mockup-code {className}" style:height>
+    <VirtualList height="90%" items={terminal} let:item>
+        <pre data-prefix={item.prefix || '>'} class="text-{item.type}"><code class="select-text text-wrap break-words"
+                >{item.message}</code
+            ></pre>
+    </VirtualList>
+</div>
