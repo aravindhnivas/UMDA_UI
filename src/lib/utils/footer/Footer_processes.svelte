@@ -73,6 +73,7 @@
                                     <ScanSearch />
                                 </div>
                             </td>
+
                             <td>{process.start_time || '-'}</td>
                             <td>{process.end_time || '-'}</td>
                             <td>{computeDuration(process.start_time, process.end_time)}</td>
