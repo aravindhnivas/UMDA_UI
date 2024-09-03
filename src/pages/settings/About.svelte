@@ -10,9 +10,13 @@
 
     onMount(async () => {
         console.log('About page mounted');
-        const [err, result] = await oO(axios(`${git_url.py.usercontent()}/src/requirements.txt`));
-        if (err) return toast.error(err);
-        py_modules = result?.data.split('\n') ?? '';
+        try {
+            const response = await axios.get(`${git_url.py.usercontent()}/src/requirements.txt`);
+            py_modules = response.data.split('\n').filter(Boolean);
+        } catch (error) {
+            console.error('Error fetching requirements:', error);
+            toast.error('Failed to fetch Python modules');
+        }
 
         system_info.platform = await platform();
         system_info.arch = await arch();
