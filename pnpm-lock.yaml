@@ -28,8 +28,8 @@ importers:
         version: https://codeload.github.com/tauri-apps/tauri-plugin-websocket/tar.gz/c23ba8b03953e459fd9a56ea6113b12461b78026
     devDependencies:
       '@iconify/json':
-        specifier: ^2.2.242
-        version: 2.2.242
+        specifier: ^2.2.243
+        version: 2.2.243
       '@loadingio/loading.css':
         specifier: ^3.2.1
         version: 3.2.1
@@ -100,8 +100,8 @@ importers:
         specifier: ^4.1.1
         version: 4.1.1
       axios:
-        specifier: ^1.7.5
-        version: 1.7.5
+        specifier: ^1.7.7
+        version: 1.7.7
       bulma:
         specifier: ^1.0.2
         version: 1.0.2
@@ -603,8 +603,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@iconify/json@2.2.242':
-    resolution: {integrity: sha512-cS6eYdx1C1GhqaZm25ztH5yoghCaTXGJBeseUkS259GxxX9obtGLLk0yy+twxpNCD5/F9gjbgxh46BjNWsHtwg==}
+  '@iconify/json@2.2.243':
+    resolution: {integrity: sha512-92pXEKdjDmH8sV3fZwJTxifKpJtp3ie8KD7oCqHRJh/Z+CoGm3bzDcK5UnWs5G5EDbu00kYVcSGM4jRnY9HgGQ==}
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
@@ -1310,8 +1310,8 @@ packages:
     peerDependencies:
       postcss: ^8.1.0
 
-  axios@1.7.5:
-    resolution: {integrity: sha512-fZu86yCo+svH3uqJ/yTdQ0QHpQu5oL+/QE+QPSv6BZSkDAoky9vytxp7u5qk83OJFS3kEBcesWni9WTZAv3tSw==}
+  axios@1.7.7:
+    resolution: {integrity: sha512-S4kL7XrjgBmvdGut0sN3yJxqYzrDOnivkBiN0OFs6hLiUam3UPvswUo0kqGyhqUZGEOytHyumEdXsAkgCOUf3Q==}
 
   axobject-query@4.1.0:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
@@ -2739,7 +2739,7 @@ snapshots:
   '@esbuild/win32-x64@0.23.1':
     optional: true
 
-  '@iconify/json@2.2.242':
+  '@iconify/json@2.2.243':
     dependencies:
       '@iconify/types': 2.0.0
       pathe: 1.1.2
@@ -4273,7 +4273,7 @@ snapshots:
       postcss: 8.4.41
       postcss-value-parser: 4.2.0
 
-  axios@1.7.5:
+  axios@1.7.7:
     dependencies:
       follow-redirects: 1.15.6
       form-data: 4.0.0

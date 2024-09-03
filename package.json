@@ -21,7 +21,7 @@
     "tauri-plugin-websocket-api": "github:tauri-apps/tauri-plugin-websocket#v1"
   },
   "devDependencies": {
-    "@iconify/json": "^2.2.242",
+    "@iconify/json": "^2.2.243",
     "@loadingio/loading.css": "^3.2.1",
     "@macfja/svelte-persistent-store": "^2.4.1",
     "@modyfi/vite-plugin-yaml": "^1.1.0",
@@ -45,7 +45,7 @@
     "@unocss/transformer-directives": "0.62.1",
     "@zmotivat0r/o0": "^1.0.2",
     "animate.css": "^4.1.1",
-    "axios": "^1.7.5",
+    "axios": "^1.7.7",
     "bulma": "^1.0.2",
     "cooltipz-css": "^2.3.0",
     "daisyui": "^3.9.4",
