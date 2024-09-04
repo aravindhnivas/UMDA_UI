@@ -3,20 +3,20 @@
     import { pyVersion, umdapyVersion } from '$lib/pyserver/stores';
     import { getVersion, getTauriVersion } from '@tauri-apps/api/app';
     import Layout from './comp/Layout.svelte';
-    import { git_url } from '$lib/utils/index';
     import { arch, platform } from '@tauri-apps/api/os';
+    // import { git_url } from '$lib/utils/index';
 
-    let py_modules: string[] = [];
+    // let py_modules: string[] = [];
 
     onMount(async () => {
         console.log('About page mounted');
-        try {
-            const response = await axios.get(`${git_url.py.usercontent()}/src/requirements.txt`);
-            py_modules = response.data.split('\n').filter(Boolean);
-        } catch (error) {
-            console.error('Error fetching requirements:', error);
-            toast.error('Failed to fetch Python modules');
-        }
+        // try {
+        //     const response = await axios.get(`${git_url.py.usercontent()}/src/requirements.txt`);
+        //     py_modules = response.data.split('\n').filter(Boolean);
+        // } catch (error) {
+        //     console.error('Error fetching requirements:', error);
+        //     toast.error('Failed to fetch Python modules');
+        // }
 
         system_info.platform = await platform();
         system_info.arch = await arch();
@@ -56,14 +56,14 @@
             </li>
             <hr />
 
-            {#if $umdapyVersion && py_modules.length > 0}
+            <!-- {#if $umdapyVersion && py_modules.length > 0}
                 <h3>Python libraries</h3>
                 {#each py_modules as module}
                     {#if module}
                         <li>{module}</li>
                     {/if}
                 {/each}
-            {/if}
+            {/if} -->
         </ul>
     </div>
 </Layout>
