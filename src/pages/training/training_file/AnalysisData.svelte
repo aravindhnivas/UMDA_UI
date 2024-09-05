@@ -44,6 +44,27 @@
         if (!dataFromPython) return;
         console.log(dataFromPython);
     };
+    let deduplicated_filename = '';
+    const onRemoveDuplicatesOnXColumn = (e: CustomEvent) => {
+        console.log(e.detail);
+        const { dataFromPython } = e.detail as {
+            dataFromPython: {
+                deduplicated_filename: string;
+                duplicates: number;
+            };
+        };
+        if (!dataFromPython) return;
+
+        if (dataFromPython.duplicates > 0) {
+            deduplicated_filename = dataFromPython.deduplicated_filename;
+            toast.success(
+                `${dataFromPython.duplicates} duplicates removed. Filename: ${dataFromPython.deduplicated_filename}`,
+            );
+        } else {
+            toast.warning('No duplicates found');
+            deduplicated_filename = '';
+        }
+    };
 
     const ApplyFilterForMolecularAnalysis = async () => {
         console.log('ApplyFilterForMolecularAnalysis');
@@ -131,7 +152,7 @@
         name="Remove duplicates on X column"
         subprocess={true}
         callback={() => CheckDuplicatesOnXColumn()}
-        on:result={onResult}
+        on:result={onRemoveDuplicatesOnXColumn}
     />
     <Loadingbtn
         name="Begin full analysis"
@@ -147,7 +168,14 @@
     />
     <CustomInput bind:value={filtered_filename} label="Enter filter name" />
 </div>
+{#if deduplicated_filename}
+    <div class="badge badge-warning">
+        Duplicates removed filename: {deduplicated_filename}
+    </div>
 
+    <code class="bg-warning text-warning-content"
+        >Browse the deduplicated file and load data again to use it for training</code
+    >
+{/if}
 <hr />
-
 <PlotAnalysis />
