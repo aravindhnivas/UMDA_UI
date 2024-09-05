@@ -54,7 +54,6 @@ export async function startServer() {
 
     py.on('close', () => {
         pyServerReady.set(false);
-
         currentPortPID.update(ports => ports.filter(p => p !== `${get(pyChildProcess)?.pid}`)); // remove pid from list
         serverInfo.warn('server closed');
     });
