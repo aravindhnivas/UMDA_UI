@@ -5,6 +5,11 @@
     export let height = '400px';
     let className = '';
     export { className as class };
+
+    onMount(() => {
+        console.log('TerminalBox mounted');
+        terminal = [{ type: 'info', message: 'Terminal mounted' }];
+    });
 </script>
 
 <button
