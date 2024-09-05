@@ -46,10 +46,9 @@ export async function startServer() {
         toast.error(err);
         return Promise.reject(err);
     }
-    if (!pyChild) return;
+    if (!pyChild) return Promise.reject('pyChild not found');
 
     pyChildProcess.set(pyChild);
-    pyServerReady.set(true);
     currentPortPID.update(ports => [...ports, `${pyChild.pid}`]);
 
     py.on('close', () => {
@@ -61,11 +60,24 @@ export async function startServer() {
     py.on('error', error => {
         Alert.error(error);
         serverInfo.error(error);
+        pyServerReady.set(false);
+        return Promise.reject(error);
     });
 
-    py.stderr.on('data', stderr => {
+    py.stderr.on('data', async stderr => {
         if (!stderr.trim()) return;
         serverInfo.warn(stderr.trim());
+
+        if (stderr.includes('Server running')) {
+            pyServerReady.set(true);
+            serverInfo.info(`PID: ${JSON.stringify(get(currentPortPID))}`);
+            await updateServerInfo(1500);
+            if (get(pyServerReady)) {
+                const [err] = await oO(getPyVersion());
+                // if (err) return Promise.reject(err);
+            }
+            // return Promise.resolve(get(pyServerReady));
+        }
     });
 
     py.stdout.on('data', stdout => {
@@ -186,15 +198,15 @@ export const start_and_check_umdapy = () => {
                 }
             }
 
-            const out = await startServer();
-            if (typeof out === 'string') serverInfo.info(out);
-            serverInfo.info(`PID: ${JSON.stringify(get(currentPortPID))}`);
-            await updateServerInfo(1500);
-            if (get(pyServerReady)) {
-                const [err] = await oO(getPyVersion());
-                if (err) return reject(err);
-            }
+            await startServer();
             resolve(get(pyServerReady));
+            // serverInfo.info(`PID: ${JSON.stringify(get(currentPortPID))}`);
+            // await updateServerInfo(1500);
+            // if (get(pyServerReady)) {
+            //     const [err] = await oO(getPyVersion());
+            //     if (err) return reject(err);
+            // }
+            // resolve(get(pyServerReady));
         } catch (error) {
             if (error instanceof Error) {
                 reject(error);
@@ -205,9 +217,17 @@ export const start_and_check_umdapy = () => {
 };
 
 export const start_and_check_umdapy_with_toast = () => {
-    toast.promise(start_and_check_umdapy(), {
-        loading: 'starting umdapy server',
-        success: 'umdapy server started',
-        error: 'failed to start umdapy server',
+    return new Promise(async (resolve, reject) => {
+        try {
+            const result = await start_and_check_umdapy();
+            resolve(result);
+        } catch (error) {
+            reject(error);
+        }
     });
+    // toast.promise(start_and_check_umdapy(), {
+    //     loading: 'starting umdapy server',
+    //     success: 'umdapy server started',
+    //     error: 'failed to start umdapy server',
+    // });
 };
