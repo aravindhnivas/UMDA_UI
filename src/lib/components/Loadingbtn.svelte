@@ -33,13 +33,15 @@
 
         loading = true;
         if (subprocess) process_count += 1;
-        const dataFromPython = await computePy<{ predicted_value: string }>({
+
+        const dataFromPython = await computePy({
             pyfile,
             args,
             general: subprocess,
             target: subprocess ? btn : undefined,
             cancelToken: source.token,
         });
+
         loading = false;
         if (subprocess) process_count -= 1;
 
