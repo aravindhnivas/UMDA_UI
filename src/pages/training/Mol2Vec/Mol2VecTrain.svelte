@@ -61,14 +61,12 @@
             helper={sentence_type_info[sentence_type]}
         />
         <CustomInput label="radius" type="number" bind:value={radius} helper="Radius of morgan fingerprint" />
-
         <CustomInput
             label="vector_size"
             type="number"
             bind:value={vector_size}
             helper="Number of dimensions of vector"
         />
-
         <CustomInput
             label="min_count"
             type="number"
