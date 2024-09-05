@@ -112,6 +112,7 @@
             const { dataFromPython } = e.detail;
             data = dataFromPython;
             dispatch('load', data);
+            toast.success(`${filename} loaded successfully`);
         }}
     />
 </div>
