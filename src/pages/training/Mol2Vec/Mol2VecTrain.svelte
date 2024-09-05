@@ -10,7 +10,8 @@
 
     const filename = localWritable('data_filename', '');
     let data: DataType | null = null;
-    let filetype = 'csv';
+
+    let filetype = 'smi';
     let key = 'data';
 
     let corpus_file = '';
@@ -48,7 +49,7 @@
     <h2>Mol2Vec - embedder</h2>
 
     <h3>Load data file</h3>
-    <FileLoader bind:filename={$filename} bind:data bind:filetype bind:key filetypes={['csv']} />
+    <FileLoader bind:filename={$filename} bind:data bind:filetype bind:key filetypes={['smi']} />
 
     <h3>Generate a Mol2Vec embedder model</h3>
 
