@@ -21,9 +21,11 @@
     }}>Clear</button
 >
 <div class="mockup-code {className}" style:height>
-    <VirtualList height="90%" items={terminal} let:item>
-        <pre data-prefix={item.prefix || '>'} class="text-{item.type}"><code class="select-text text-wrap break-words"
-                >{item.message}</code
-            ></pre>
-    </VirtualList>
+    {#if terminal.length > 0}
+        <VirtualList height="90%" items={terminal} let:item>
+            <pre data-prefix={item.prefix || '>'} class="text-{item.type}"><code
+                    class="select-text text-wrap break-words">{item.message}</code
+                ></pre>
+        </VirtualList>
+    {/if}
 </div>
