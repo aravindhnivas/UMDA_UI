@@ -80,7 +80,7 @@ export default async function <T>({
             running_processes.mark_completed(pyChild.pid);
 
             if (error) {
-                console.warn(error, typeof error);
+                // console.warn(error, typeof error);
                 if (error.includes('Traceback') || error.includes('ERROR')) {
                     resolve(undefined);
                     running_processes.mark_aborted(pyChild.pid);
