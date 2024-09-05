@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { CPU_COUNT } from '$lib/stores/system';
+    // import { CPU_COUNT } from '$lib/stores/system';
     import FileLoader from '$lib/components/fileloader/FileLoader.svelte';
     import BrowseFile from '$lib/components/BrowseFile.svelte';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
@@ -48,7 +48,7 @@
 <div class="grid content-start gap-2" {id} style:display>
     <h2>Mol2Vec - embedder</h2>
 
-    <h3>Load data file</h3>
+    <h3>Load file containing SMILES</h3>
     <FileLoader bind:filename={$filename} bind:data bind:filetype bind:key filetypes={['smi']} />
 
     <h3>Generate a Mol2Vec embedder model</h3>
