@@ -74,15 +74,15 @@ export default async function <T>({
 
         py.on('close', async () => {
             console.warn('Before closing process');
-
             dispatchEvent(target, { py, pyfile, dataReceived, error }, 'pyEventClosed');
             console.info('PyEventClosed dispatched');
 
             running_processes.mark_completed(pyChild.pid);
 
             if (error) {
-                resolve(undefined);
-                if (error.includes('Traceback')) {
+                console.warn(error, typeof error);
+                if (error.includes('Traceback') || error.includes('ERROR')) {
+                    resolve(undefined);
                     running_processes.mark_aborted(pyChild.pid);
                     running_processes.add_logs(pyChild.pid, error);
                     return Alert.error(error);
@@ -110,13 +110,19 @@ export default async function <T>({
             toast.info('Data parsed successfully');
             console.log('Data received from python: ', dataFromPython);
             toast.success('Process Completed');
+            console.warn('Process completed and returning data');
             return resolve(dataFromPython);
         });
 
         py.stderr.on('data', errorString => {
-            error += errorString;
-            dispatchEvent(target, { py, pyfile, error }, 'pyEventStderr');
-            terminal_log.warn(errorString);
+            if (errorString.includes('ERROR') || errorString.includes('Traceback')) {
+                error += errorString;
+                dispatchEvent(target, { py, pyfile, error }, 'pyEventStderr');
+            }
+            if (errorString.includes('INFO')) terminal_log.info(errorString);
+            else if (errorString.includes('WARNING')) terminal_log.warn(errorString);
+            else if (errorString.includes('ERROR')) terminal_log.error(errorString);
+            else terminal_log.info(errorString);
         });
 
         py.stdout.on('data', dataString => {
