@@ -13,9 +13,10 @@ interface Type {
     e?: Event;
 }
 
-export default async function <T>({ e, target, pyfile, args, general, cancelToken }: Type) {
+export default async function <T extends Record<string, any>>({ e, target, pyfile, args, general, cancelToken }: Type) {
     target ||= e?.target as HTMLButtonElement;
-    let dataFromPython: T;
+
+    let dataFromPython: T & { done: boolean; error: boolean; computed_time: string };
     let processDivGeneral;
     let processDivGeneralNum = 0;
 
