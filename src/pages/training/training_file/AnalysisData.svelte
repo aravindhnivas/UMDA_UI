@@ -97,6 +97,18 @@
         const pyfile = 'training.apply_filter_for_molecular_analysis';
         return { pyfile, args };
     };
+
+    const CheckDuplicatesOnXColumn = async () => {
+        const args = {
+            filename: $training_file.filename,
+            filetype: $training_file.filetype,
+            key: $training_file.key,
+            use_dask: $use_dask,
+            smiles_column_name: $training_column_name_X,
+        };
+        const pyfile = 'training.check_duplicates_on_x_column';
+        return { pyfile, args };
+    };
     let filtered_filename = 'filtered';
 </script>
 
@@ -115,6 +127,12 @@
 {/if}
 
 <div class="flex gap-2 m-auto items-end">
+    <Loadingbtn
+        name="Remove duplicates on X column"
+        subprocess={true}
+        callback={() => CheckDuplicatesOnXColumn()}
+        on:result={onResult}
+    />
     <Loadingbtn
         name="Begin full analysis"
         subprocess={true}
