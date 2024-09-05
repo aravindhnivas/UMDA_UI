@@ -172,10 +172,12 @@ export const updateServerInfo = async (delay = 0) => {
     if (!status) {
         return serverCurrentStatus.set({ value: 'server closed', type: 'error' });
     }
+
     await fetchServerROOT(delay);
 };
-export const start_and_check_umdapy = () =>
-    new Promise(async (resolve, reject) => {
+
+export const start_and_check_umdapy = () => {
+    return new Promise(async (resolve, reject) => {
         try {
             if (!get(developerMode) && !get(python_asset_ready)) {
                 await check_umdapy_assets_status();
@@ -186,7 +188,7 @@ export const start_and_check_umdapy = () =>
             }
 
             const out = await startServer();
-            if (out) serverInfo.info(out);
+            if (typeof out === 'string') serverInfo.info(out);
             serverInfo.info(`PID: ${JSON.stringify(get(currentPortPID))}`);
             await updateServerInfo(1500);
             if (get(pyServerReady)) {
@@ -201,6 +203,7 @@ export const start_and_check_umdapy = () =>
             }
         }
     });
+};
 
 export const start_and_check_umdapy_with_toast = () => {
     toast.promise(start_and_check_umdapy(), {
