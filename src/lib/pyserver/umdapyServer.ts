@@ -71,7 +71,7 @@ export async function startServer() {
         if (stderr.includes('Server running')) {
             pyServerReady.set(true);
             serverInfo.info(`PID: ${JSON.stringify(get(currentPortPID))}`);
-            await updateServerInfo(1500);
+            await updateServerInfo();
             if (get(pyServerReady)) {
                 const [err] = await oO(getPyVersion());
                 // if (err) return Promise.reject(err);
