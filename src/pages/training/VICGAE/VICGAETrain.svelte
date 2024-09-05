@@ -11,7 +11,7 @@
     const filename = localWritable('data_filename', '');
     let data: DataType | null = null;
 
-    let filetype = 'csv';
+    let filetype = 'smi';
     let key = 'data';
     let vector_size = 300;
 
@@ -38,7 +38,7 @@
     <h2>VICGAE - embedder</h2>
 
     <h3>Load file containing SMILES</h3>
-    <FileLoader bind:filename={$filename} bind:data bind:filetype bind:key filetypes={['csv']} />
+    <FileLoader bind:filename={$filename} bind:data bind:filetype bind:key filetypes={['smi']} />
 
     <h3>Generate a VICGAE embedder model</h3>
     <!-- under construction -->
