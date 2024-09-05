@@ -115,10 +115,8 @@ export default async function <T>({
         });
 
         py.stderr.on('data', errorString => {
-            if (errorString.includes('ERROR') || errorString.includes('Traceback')) {
-                error += errorString;
-                dispatchEvent(target, { py, pyfile, error }, 'pyEventStderr');
-            }
+            error += errorString;
+            dispatchEvent(target, { py, pyfile, error }, 'pyEventStderr');
             if (errorString.includes('INFO')) terminal_log.info(errorString);
             else if (errorString.includes('WARNING')) terminal_log.warn(errorString);
             else if (errorString.includes('ERROR')) terminal_log.error(errorString);
