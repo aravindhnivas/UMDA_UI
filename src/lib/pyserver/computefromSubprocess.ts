@@ -33,10 +33,6 @@ export default async function <T>({
     return new Promise(async resolve => {
         target ||= button || (e?.target as HTMLButtonElement);
 
-        if (pyfile === 'server') {
-            pyServerReady.set(false);
-        }
-
         if (!get(pyVersion)) {
             Alert.error('Python is not valid. Fix it in Settings --> Configuration');
             return;
@@ -57,21 +53,18 @@ export default async function <T>({
         const py = new shell.Command(get(pyProgram), pyArgs);
         const pyChild = await py.spawn();
 
-        if (pyfile !== 'server') {
-            const current_process = {
-                pyfile,
-                close: {
-                    name: 'X',
-                    cb: async () => await pyChild.kill(),
-                    style: 'display:flex; justify-content: center; cursor: pointer; background-color: red;',
-                },
-            };
-            running_processes.add(pyChild.pid, current_process);
-        }
+        const current_process = {
+            pyfile,
+            close: {
+                name: 'X',
+                cb: async () => await pyChild.kill(),
+                style: 'display:flex; justify-content: center; cursor: pointer; background-color: red;',
+            },
+        };
+        running_processes.add(pyChild.pid, current_process);
 
         py.on('error', err => {
             Alert.error(err);
-            if (pyfile === 'server') return;
             running_processes.mark_aborted(pyChild.pid);
         });
 
@@ -81,16 +74,11 @@ export default async function <T>({
 
         py.on('close', async () => {
             console.warn('Before closing process');
-            if (pyfile === 'server') {
-                pyServerReady.set(false);
-            }
 
             dispatchEvent(target, { py, pyfile, dataReceived, error }, 'pyEventClosed');
             console.info('PyEventClosed dispatched');
 
-            if (pyfile !== 'server') {
-                running_processes.mark_completed(pyChild.pid);
-            }
+            running_processes.mark_completed(pyChild.pid);
 
             if (error) {
                 resolve(undefined);
@@ -104,7 +92,6 @@ export default async function <T>({
 
             if (!(await fs.exists(outputFile))) {
                 console.warn(`${outputFile} file doesn't exists`);
-                // Alert.error(`${outputFile} file doesn't exists`);
                 return resolve(undefined);
             }
 
@@ -127,21 +114,13 @@ export default async function <T>({
         });
 
         py.stderr.on('data', errorString => {
-            if (pyfile === 'server') {
-                error = errorString;
-            } else {
-                error += errorString;
-            }
+            error += errorString;
             dispatchEvent(target, { py, pyfile, error }, 'pyEventStderr');
             terminal_log.warn(errorString);
         });
 
         py.stdout.on('data', dataString => {
-            if (pyfile === 'server') {
-                dataReceived = dataString;
-            } else {
-                dataReceived += dataString;
-            }
+            dataReceived += dataString;
 
             const match = dataString.match(/(\d+)% Completed/);
             if (match) {
@@ -152,9 +131,5 @@ export default async function <T>({
             }
             dispatchEvent(target, { py, pyfile, dataReceived, stdout: dataString }, 'pyEventData');
         });
-
-        if (pyfile === 'server') {
-            pyServerReady.set(true);
-        }
     });
 }
