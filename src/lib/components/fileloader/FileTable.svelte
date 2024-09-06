@@ -23,7 +23,7 @@
                     <Row>
                         <Cell></Cell>
                         {#each data.columns as column}
-                            <Cell>{column}</Cell>
+                            <Cell><span class="select-text">{column}</span></Cell>
                         {/each}
                     </Row>
                 </Head>

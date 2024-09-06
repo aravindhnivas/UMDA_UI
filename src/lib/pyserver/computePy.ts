@@ -80,6 +80,6 @@ export default async function <T extends Record<string, any>>({ e, target, pyfil
                 processDivGeneral.textContent = '';
             }
         }
-        console.log('COMPLETED');
+        toast.success('COMPLETED');
     }
 }

@@ -2,12 +2,30 @@
     import { use_dask } from '$lib/stores/system';
     import { use_filtered_data_for_training, filtered_dir } from './plot-analysis/stores';
     import { NPARTITIONS } from '$lib/stores/system';
-    import { training_file, training_column_name_X, training_column_name_y } from './stores';
+    import {
+        training_file,
+        training_column_name_X,
+        training_column_name_y,
+        training_column_name_index,
+    } from './stores';
     import FileLoader from '$lib/components/fileloader/FileLoader.svelte';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
+    import { CustomInput, Loadingbtn } from '$lib/components';
 
     let auto_fetch_columns = false;
     let data: DataType;
+
+    async function MakeIndexAndSaveFile() {
+        const args = {
+            filename: $training_file.filename,
+            filetype: $training_file.filetype,
+            key: $training_file.key,
+            use_dask: $use_dask,
+            index_column_name: $training_column_name_index,
+        };
+        const pyfile = 'training.make_index_and_save_file';
+        return { pyfile, args };
+    }
 </script>
 
 {#if $use_filtered_data_for_training && $filtered_dir !== 'default'}
@@ -52,14 +70,29 @@
             bind:value={$training_column_name_y}
             items={data?.columns || []}
         />
-        <div class="flex flex-col gap-1">
-            <span class="text-xs pl-1">npartitions disk</span>
-            <input
-                bind:value={$NPARTITIONS}
-                type="number"
-                class="input input-sm"
-                placeholder="Enter dask npartitions"
-            />
-        </div>
+        <CustomInput
+            label="npartitions disk"
+            bind:value={$NPARTITIONS}
+            type="number"
+            placeholder="Enter dask npartitions"
+        />
+    </div>
+
+    <div class="flex items-end gap-1">
+        <CustomInput label="Enter INDEX column name" bind:value={$training_column_name_index} />
+        <!-- <button class="btn btn-sm">Make INDEX and save file</button> -->
+        <Loadingbtn
+            name="Make INDEX and save file"
+            callback={MakeIndexAndSaveFile}
+            on:result={e => {
+                console.log(e.detail);
+            }}
+        />
+        <span class="text-sm my-2">OR</span>
+        <CustomSelect
+            label="Choose INDEX column"
+            bind:value={$training_column_name_index}
+            items={data?.columns || []}
+        />
     </div>
 </FileLoader>
