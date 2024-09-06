@@ -4,8 +4,8 @@
     import FlatList from 'svelte-flatlist';
     import { SearchIcon } from 'lucide-svelte/icons';
 
-    let active = true;
-    // let active = false;
+    // let active = true;
+    let active = false;
     function openModal() {
         active = true;
         $Alert.open = false;
@@ -62,6 +62,7 @@
         maxWidth="80vw"
         on:close={() => {
             active = false;
+            searchText = '';
         }}
         bind:visible={active}
         style={{
