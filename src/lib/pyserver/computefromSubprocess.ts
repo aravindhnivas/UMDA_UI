@@ -86,8 +86,9 @@ export default async function <T>({
                     running_processes.mark_aborted(pyChild.pid);
                     running_processes.add_logs(pyChild.pid, error);
                     // use error value from the string 'Traceback'
-                    let traceback_error = 'Traceback' + error.split('Traceback')[1];
-                    return Alert.error(traceback_error);
+                    return Alert.error(error);
+                    // let traceback_error = 'Traceback' + error.split('Traceback')[1];
+                    // return Alert.error(traceback_error);
                 }
                 running_processes.add_logs(pyChild.pid, error + '\n\n' + dataReceived);
             }
