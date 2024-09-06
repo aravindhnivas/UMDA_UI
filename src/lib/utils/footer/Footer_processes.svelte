@@ -1,23 +1,12 @@
 <script lang="ts">
-    import { running_processes, running_processes_pids, running_processes_count } from '$settings/utils/stores';
-    import { Alert } from '$utils/stores';
+    import { running_processes_pids, running_processes_count } from '$settings/utils/stores';
+
     import { fade } from 'svelte/transition';
     import MenuSurface from '@smui/menu-surface';
-    import { CheckCheck, ChevronUpCircle, CircleOff, CircleX, ScanSearch } from 'lucide-svelte/icons';
+    import { CheckCheck, ChevronUpCircle, CircleOff } from 'lucide-svelte/icons';
+    import ProcessTable from './ProcessTable.svelte';
 
     let surface: MenuSurface; // MenuSurfaceComponentDev
-
-    // Function to compute duration in minutes
-    function computeDuration(start?: string, end?: string) {
-        if (!start || !end) return '-';
-
-        const startTime = new Date(start);
-        const endTime = new Date(end);
-        const durationMs = Number(endTime) - Number(startTime);
-        // const durationMinutes = Math.floor(durationMs / 60000);
-        const durationMinutes = (durationMs / 60000).toFixed(2);
-        return durationMinutes;
-    }
 </script>
 
 {#if $running_processes_pids.length > 0}
@@ -28,76 +17,7 @@
         anchorMargin={{ top: 0, right: 50, bottom: 0, left: 0 }}
     >
         <div class="overflow-x-auto">
-            <table class="table table-xs">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>pid</th>
-                        <th>pyfile</th>
-                        <th>status</th>
-                        <th>start_time</th>
-                        <th>end_time</th>
-                        <th>duration (mins)</th>
-                        <th>logs</th>
-                        <th>close</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {#each $running_processes_pids as pid, i}
-                        {@const process = $running_processes[pid]}
-                        <tr>
-                            <th>{i}</th>
-                            <td>{pid}</td>
-                            <td>{process.pyfile}</td>
-                            <td>
-                                {#if process.aborted}
-                                    <span style="color: red;">Error/Aborted</span>
-                                {:else if process.completed}
-                                    <span style="color: green;">completed</span>
-                                {:else}
-                                    {process?.progress ? `(${process?.progress} %)` : 'running...'}
-                                {/if}
-                            </td>
-
-                            <td>{process.start_time || '-'}</td>
-                            <td>{process.end_time || '-'}</td>
-                            <td>{computeDuration(process.start_time, process.end_time)}</td>
-                            <td
-                                on:click={() => {
-                                    console.warn('logs', process.logs, process.aborted);
-                                    if (!process.logs) return Alert.info('No logs available');
-                                    if (process.aborted) {
-                                        Alert.error(process.logs);
-                                    } else {
-                                        Alert.info(process.logs);
-                                    }
-                                }}
-                            >
-                                <div
-                                    class="flex justify-center cursor-pointer hvr-grow hover:bg-gray-200 border-rounded"
-                                >
-                                    <ScanSearch />
-                                </div>
-                            </td>
-                            {#if process.completed}
-                                <td
-                                    class="flex cursor-pointer justify-center hover:bg-red-400 border-rounded"
-                                    on:click={() => running_processes.remove(pid)}
-                                >
-                                    <CircleX />
-                                </td>
-                            {:else}
-                                <td
-                                    style={process?.close?.style}
-                                    on:click={() => {
-                                        process?.close?.cb();
-                                    }}>{process.close?.name}</td
-                                >
-                            {/if}
-                        </tr>
-                    {/each}
-                </tbody>
-            </table>
+            <ProcessTable />
         </div>
     </MenuSurface>
     <div
