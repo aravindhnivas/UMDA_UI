@@ -7,6 +7,7 @@
         training_column_name_X,
         training_column_name_y,
         training_column_name_index,
+        index_column_valid,
     } from './stores';
     import FileLoader from '$lib/components/fileloader/FileLoader.svelte';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
@@ -26,6 +27,7 @@
         const pyfile = 'training.make_index_and_save_file';
         return { pyfile, args };
     }
+    $: $index_column_valid = data?.columns.includes($training_column_name_index) ?? false;
 </script>
 
 {#if $use_filtered_data_for_training && $filtered_dir !== 'default'}

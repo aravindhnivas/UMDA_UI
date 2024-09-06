@@ -8,6 +8,7 @@ export const training_file = localWritable<{
     key: 'data',
 });
 export const training_column_name_index = writable<string>('INDEX');
+export const index_column_valid = writable<boolean>(false);
 export const training_column_name_X = writable<string>('SMILES');
 export const training_column_name_y = writable<string>('');
 

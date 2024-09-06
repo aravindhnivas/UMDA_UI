@@ -7,7 +7,7 @@
         sizeDistributionFilter,
         current_analysis_file,
     } from './plot-analysis/stores';
-    import { training_column_name_X, training_file, molecule_analysis_file } from './stores';
+    import { training_column_name_X, training_file, molecule_analysis_file, index_column_valid } from './stores';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import { use_dask } from '$lib/stores/system';
     import PlotAnalysis from './plot-analysis/PlotAnalysis.svelte';
@@ -133,48 +133,54 @@
     let filtered_filename = 'filtered';
 </script>
 
-{#await $molecule_analysis_file then value}
-    <div class="badge badge-info h-10">{value}</div>
-{/await}
+{#if $index_column_valid}
+    {#await $molecule_analysis_file then value}
+        <div class="badge badge-info h-10">{value}</div>
+    {/await}
 
-{#if $training_column_name_X.toLocaleLowerCase() !== 'smiles'}
-    <div class="alert alert-error">
-        The column X is not 'SMILES'. Please make sure the column X name is 'SMILES' for molecular structure.
+    {#if $training_column_name_X.toLocaleLowerCase() !== 'smiles'}
+        <div class="alert alert-error">
+            The column X is not 'SMILES'. Please make sure the column X name is 'SMILES' for molecular structure.
+        </div>
+    {:else}
+        <div class="badge badge-info">
+            Using {$training_column_name_X} column for molecular structure
+        </div>
+    {/if}
+
+    <div class="flex gap-2 m-auto items-end">
+        <Loadingbtn
+            name="Remove duplicates on X column"
+            subprocess={true}
+            callback={() => CheckDuplicatesOnXColumn()}
+            on:result={onRemoveDuplicatesOnXColumn}
+        />
+        <Loadingbtn
+            name="Begin full analysis"
+            subprocess={true}
+            callback={() => MolecularAnalysis('all')}
+            on:result={onResult}
+        />
+        <Loadingbtn
+            name="Apply filters"
+            subprocess={true}
+            callback={() => ApplyFilterForMolecularAnalysis()}
+            on:result={e => console.log(e.detail)}
+        />
+        <CustomInput bind:value={filtered_filename} label="Enter filter name" />
     </div>
+    {#if deduplicated_filename}
+        <div class="badge badge-warning">
+            Duplicates removed filename: {deduplicated_filename}
+        </div>
+
+        <code class="bg-warning text-warning-content"
+            >Browse the FIXED-DUPLICATES file and load to use it for training</code
+        >
+    {/if}
+
+    <hr />
+    <PlotAnalysis />
 {:else}
-    <div class="badge badge-info">
-        Using {$training_column_name_X} column for molecular structure
-    </div>
+    <div class="badge badge-error">Make sure INDEX column is valid and available in the training file</div>
 {/if}
-
-<div class="flex gap-2 m-auto items-end">
-    <Loadingbtn
-        name="Remove duplicates on X column"
-        subprocess={true}
-        callback={() => CheckDuplicatesOnXColumn()}
-        on:result={onRemoveDuplicatesOnXColumn}
-    />
-    <Loadingbtn
-        name="Begin full analysis"
-        subprocess={true}
-        callback={() => MolecularAnalysis('all')}
-        on:result={onResult}
-    />
-    <Loadingbtn
-        name="Apply filters"
-        subprocess={true}
-        callback={() => ApplyFilterForMolecularAnalysis()}
-        on:result={e => console.log(e.detail)}
-    />
-    <CustomInput bind:value={filtered_filename} label="Enter filter name" />
-</div>
-{#if deduplicated_filename}
-    <div class="badge badge-warning">
-        Duplicates removed filename: {deduplicated_filename}
-    </div>
-
-    <code class="bg-warning text-warning-content">Browse the FIXED-DUPLICATES file and load to use it for training</code
-    >
-{/if}
-<hr />
-<PlotAnalysis />
