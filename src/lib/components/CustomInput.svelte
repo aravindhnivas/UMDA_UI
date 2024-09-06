@@ -30,8 +30,9 @@
         {...$$restProps}
         on:change
         disabled={enabled_lock_mode && lock}
-        autocomplete="on"
-        autocapitalize="on"
+        autocomplete="off"
+        autocapitalize="off"
+        autocorrect="off"
     />
     {#if helper}
         <span class="text-xs m-auto">{helper}</span>
