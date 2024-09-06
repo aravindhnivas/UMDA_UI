@@ -4,8 +4,8 @@
     import FlatList from 'svelte-flatlist';
     import { SearchIcon, Delete } from 'lucide-svelte/icons';
 
-    let active = true;
-    // let active = false;
+    // let active = true;
+    let active = false;
     function openModal() {
         active = true;
         $Alert.open = false;
