@@ -16,23 +16,34 @@
             items = [value];
         }
     });
+
+    const toggle_select = (e: MouseEvent) => {
+        e.stopPropagation();
+        if (e.altKey && e.shiftKey) {
+            use_input = !use_input;
+        }
+    };
 </script>
 
-{#if use_input}
-    <div class="flex flex-col gap-1">
-        <span class="text-xs pl-1">Enter {label}</span>
-        <input type="text" class="input input-sm" bind:value placeholder="Enter {label}" />
-    </div>
-{:else}
-    <div class="flex flex-col gap-1 {className}">
-        <span class="text-xs pl-1">{label}</span>
-        <select class="select select-sm select-bordered" bind:value on:change {disabled}>
-            {#each items as item}
-                <option>{item}</option>
-            {/each}
-        </select>
-        {#if helper}
-            <span class="text-xs pl-1 m-auto">{helper}</span>
-        {/if}
-    </div>
-{/if}
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div on:click={toggle_select}>
+    {#if use_input}
+        <div class="flex flex-col gap-1">
+            <span class="text-xs pl-1">Enter {label}</span>
+            <input type="text" class="input input-sm" bind:value placeholder="Enter {label}" />
+        </div>
+    {:else}
+        <div class="flex flex-col gap-1 {className}">
+            <span class="text-xs pl-1">{label}</span>
+            <select class="select select-sm select-bordered" bind:value on:change {disabled}>
+                {#each items as item}
+                    <option>{item}</option>
+                {/each}
+            </select>
+            {#if helper}
+                <span class="text-xs pl-1 m-auto">{helper}</span>
+            {/if}
+        </div>
+    {/if}
+</div>
