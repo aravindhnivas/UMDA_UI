@@ -2,7 +2,7 @@
     import { onDestroy } from 'svelte';
     import { Alert } from '$utils/stores';
     import FlatList from 'svelte-flatlist';
-    import { SearchIcon } from 'lucide-svelte';
+    import { SearchIcon } from 'lucide-svelte/icons';
 
     let active = true;
     // let active = false;
