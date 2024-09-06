@@ -4,6 +4,7 @@ interface DataType {
         [key: string]: string | number;
     }[];
     shape: number;
+    index_name: string;
 }
 
 interface EmbeddingResult {

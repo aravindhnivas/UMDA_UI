@@ -20,6 +20,7 @@
             [key: string]: string | number;
         }[];
         shape: number;
+        index_name: string;
     }
 
     const dispatch = createEventDispatcher();
@@ -56,7 +57,7 @@
         };
     };
     let loading = false;
-
+    let load_btn: HTMLButtonElement;
     const rows = {
         value: 10,
         min: 10,
@@ -102,8 +103,8 @@
     <CustomSelect label="where" bind:value={rows.where} items={['head', 'tail']} />
     <CustomInput bind:value={rows.value} label="# Rows" type="number" max={rows.max} on:change={() => load_data()} />
     <Checkbox bind:value={use_dask} label="Use dask" check="checkbox" />
-
     <Loadingbtn
+        bind:btn={load_btn}
         bind:loading
         name="load file"
         callback={load_data}
@@ -117,5 +118,5 @@
     />
 </div>
 
-<slot />
+<slot {load_btn} />
 <FileTable {data} {loading} />

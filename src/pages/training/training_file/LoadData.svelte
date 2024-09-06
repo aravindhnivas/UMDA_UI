@@ -45,54 +45,63 @@
         auto_fetch_columns = true;
     }}
 >
-    <div class="flex flex-col gap-1">
-        <div class="flex-center">
-            <div class="flex-center border-1 border-solid border-rounded p-1">
-                <span>Auto-fetch column name</span>
-                <input type="checkbox" class="toggle" bind:checked={auto_fetch_columns} />
+    <svelte:fragment let:load_btn>
+        <div class="flex flex-col gap-1">
+            <div class="flex-center">
+                <div class="flex-center border-1 border-solid border-rounded p-1">
+                    <span>Auto-fetch column name</span>
+                    <input type="checkbox" class="toggle" bind:checked={auto_fetch_columns} />
+                </div>
             </div>
+
+            {#if auto_fetch_columns && !data?.columns.length}
+                <span class="text-sm">Load file first!</span>
+            {/if}
+        </div>
+        <div class="flex items-end gap-1">
+            <CustomSelect
+                use_input={!auto_fetch_columns}
+                label="column X"
+                bind:value={$training_column_name_X}
+                items={data?.columns || []}
+            />
+            <CustomSelect
+                use_input={!auto_fetch_columns}
+                label="column Y"
+                bind:value={$training_column_name_y}
+                items={data?.columns || []}
+            />
+            <CustomInput
+                label="npartitions disk"
+                bind:value={$NPARTITIONS}
+                type="number"
+                placeholder="Enter dask npartitions"
+            />
         </div>
 
-        {#if auto_fetch_columns && !data?.columns.length}
-            <span class="text-sm">Load file first!</span>
-        {/if}
-    </div>
-    <div class="flex items-end gap-1">
-        <CustomSelect
-            use_input={!auto_fetch_columns}
-            label="column X"
-            bind:value={$training_column_name_X}
-            items={data?.columns || []}
-        />
-        <CustomSelect
-            use_input={!auto_fetch_columns}
-            label="column Y"
-            bind:value={$training_column_name_y}
-            items={data?.columns || []}
-        />
-        <CustomInput
-            label="npartitions disk"
-            bind:value={$NPARTITIONS}
-            type="number"
-            placeholder="Enter dask npartitions"
-        />
-    </div>
-
-    <div class="flex items-end gap-1">
-        <CustomInput label="Enter INDEX column name" bind:value={$training_column_name_index} />
-        <!-- <button class="btn btn-sm">Make INDEX and save file</button> -->
-        <Loadingbtn
-            name="Make INDEX and save file"
-            callback={MakeIndexAndSaveFile}
-            on:result={e => {
-                console.log(e.detail);
-            }}
-        />
-        <span class="text-sm my-2">OR</span>
-        <CustomSelect
-            label="Choose INDEX column"
-            bind:value={$training_column_name_index}
-            items={data?.columns || []}
-        />
-    </div>
+        <div class="flex items-end gap-1">
+            <span class="badge badge-info" class:badge-error={!data?.columns.includes($training_column_name_index)}>
+                {#if data?.columns.includes($training_column_name_index)}
+                    Index available
+                {:else}
+                    Index not available
+                {/if}
+            </span>
+            <CustomInput label="Enter INDEX column name" bind:value={$training_column_name_index} />
+            <Loadingbtn
+                name="Make INDEX and save file"
+                callback={MakeIndexAndSaveFile}
+                on:result={e => {
+                    console.log(e.detail);
+                    load_btn?.click();
+                }}
+            />
+            <span class="text-sm my-2">OR</span>
+            <CustomSelect
+                label="Choose INDEX column"
+                bind:value={$training_column_name_index}
+                items={data?.columns || []}
+            />
+        </div>
+    </svelte:fragment>
 </FileLoader>
