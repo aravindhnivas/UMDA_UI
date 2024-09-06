@@ -173,8 +173,7 @@
         Duplicates removed filename: {deduplicated_filename}
     </div>
 
-    <code class="bg-warning text-warning-content"
-        >Browse the deduplicated file and load data again to use it for training</code
+    <code class="bg-warning text-warning-content">Browse the FIXED-DUPLICATES file and load to use it for training</code
     >
 {/if}
 <hr />
