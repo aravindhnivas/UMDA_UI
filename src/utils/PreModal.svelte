@@ -72,7 +72,7 @@
                 {title[$Alert.type]}
             </h1>
             <hr />
-            <code class="select-text" style="white-space: pre-wrap;">
+            <code class="select-text" style="white-space: pre-wrap; overflow: auto;">
                 {#if $Alert.content instanceof Error}
                     {$Alert.content.stack}
                 {:else}
