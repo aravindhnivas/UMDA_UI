@@ -16,71 +16,73 @@
     }
 </script>
 
-<table class="table table-xs">
-    <thead>
-        <tr>
-            <th></th>
-            <th>PID</th>
-            <th>PYFILE</th>
-            <th>START_TIME</th>
-            <th>END_TIME</th>
-            <th>DURATION (MINS)</th>
-            <th>STATUS</th>
-            <th>LOGS</th>
-            <th>CLOSE</th>
-        </tr>
-    </thead>
-    <tbody>
-        {#each $running_processes_pids as pid, i}
-            {@const process = $running_processes[pid]}
+<div class="overflow-x-auto">
+    <table class="table table-xs">
+        <thead>
             <tr>
-                <th>{i + 1}</th>
-                <td>{pid}</td>
-                <td>{process.pyfile}</td>
-
-                <td>{process.start_time || '-'}</td>
-                <td>{process.end_time || '-'}</td>
-                <td class="text-center">{computeDuration(process.start_time, process.end_time)}</td>
-                <td class="text-center">
-                    {#if process.aborted}
-                        <span style="color: red;"><CircleAlert /></span>
-                    {:else if process.completed}
-                        <span style="color: green;"><CircleCheck /></span>
-                    {:else}
-                        {process?.progress ? `(${process?.progress} %)` : 'running...'}
-                    {/if}
-                </td>
-                <td
-                    on:click={() => {
-                        console.warn('logs', process.logs, process.aborted);
-                        if (!process.logs) return Alert.info('No logs available');
-                        if (process.aborted) {
-                            Alert.error(process.logs);
-                        } else {
-                            Alert.info(process.logs);
-                        }
-                    }}
-                >
-                    <div class="flex justify-center cursor-pointer hvr-grow hover:bg-gray-200 border-rounded">
-                        <ScanSearch />
-                    </div>
-                </td>
-                {#if process.completed}
-                    <td
-                        class="flex cursor-pointer justify-center hover:bg-red-400 border-rounded"
-                        on:click={() => running_processes.remove(pid)}
-                    >
-                        <CircleX />
-                    </td>
-                {:else}
-                    <td
-                        style={process?.close?.style}
-                        on:click={() => {
-                            process?.close?.cb();
-                        }}>{process.close?.name}</td
-                    >
-                {/if}
+                <th></th>
+                <th>PID</th>
+                <th>PYFILE</th>
+                <th>START_TIME</th>
+                <th>END_TIME</th>
+                <th>DURATION (MINS)</th>
+                <th>STATUS</th>
+                <th>LOGS</th>
+                <th>CLOSE</th>
             </tr>
-        {/each}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {#each $running_processes_pids as pid, i}
+                {@const process = $running_processes[pid]}
+                <tr>
+                    <th>{i + 1}</th>
+                    <td>{pid}</td>
+                    <td>{process.pyfile}</td>
+
+                    <td>{process.start_time || '-'}</td>
+                    <td>{process.end_time || '-'}</td>
+                    <td class="text-center">{computeDuration(process.start_time, process.end_time)}</td>
+                    <td class="text-center">
+                        {#if process.aborted}
+                            <span style="color: red;"><CircleAlert /></span>
+                        {:else if process.completed}
+                            <span style="color: green;"><CircleCheck /></span>
+                        {:else}
+                            {process?.progress ? `(${process?.progress} %)` : 'running...'}
+                        {/if}
+                    </td>
+                    <td
+                        on:click={() => {
+                            console.warn('logs', process.logs, process.aborted);
+                            if (!process.logs) return Alert.info('No logs available');
+                            if (process.aborted) {
+                                Alert.error(process.logs);
+                            } else {
+                                Alert.info(process.logs);
+                            }
+                        }}
+                    >
+                        <div class="flex justify-center cursor-pointer hvr-grow hover:bg-gray-200 border-rounded">
+                            <ScanSearch />
+                        </div>
+                    </td>
+                    {#if process.completed}
+                        <td
+                            class="flex cursor-pointer justify-center hover:bg-red-400 border-rounded"
+                            on:click={() => running_processes.remove(pid)}
+                        >
+                            <CircleX />
+                        </td>
+                    {:else}
+                        <td
+                            style={process?.close?.style}
+                            on:click={() => {
+                                process?.close?.cb();
+                            }}>{process.close?.name}</td
+                        >
+                    {/if}
+                </tr>
+            {/each}
+        </tbody>
+    </table>
+</div>
