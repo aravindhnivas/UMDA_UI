@@ -35,10 +35,10 @@
                         <th>pid</th>
                         <th>pyfile</th>
                         <th>status</th>
-                        <th>logs</th>
                         <th>start_time</th>
                         <th>end_time</th>
                         <th>duration (mins)</th>
+                        <th>logs</th>
                         <th>close</th>
                     </tr>
                 </thead>
@@ -58,6 +58,10 @@
                                     {process?.progress ? `(${process?.progress} %)` : 'running...'}
                                 {/if}
                             </td>
+
+                            <td>{process.start_time || '-'}</td>
+                            <td>{process.end_time || '-'}</td>
+                            <td>{computeDuration(process.start_time, process.end_time)}</td>
                             <td
                                 on:click={() => {
                                     console.warn('logs', process.logs, process.aborted);
@@ -69,17 +73,15 @@
                                     }
                                 }}
                             >
-                                <div class="flex justify-center cursor-pointer">
+                                <div
+                                    class="flex justify-center cursor-pointer hvr-grow hover:bg-gray-200 border-rounded"
+                                >
                                     <ScanSearch />
                                 </div>
                             </td>
-
-                            <td>{process.start_time || '-'}</td>
-                            <td>{process.end_time || '-'}</td>
-                            <td>{computeDuration(process.start_time, process.end_time)}</td>
                             {#if process.completed}
                                 <td
-                                    class="flex cursor-pointer justify-center"
+                                    class="flex cursor-pointer justify-center hover:bg-red-400 border-rounded"
                                     on:click={() => running_processes.remove(pid)}
                                 >
                                     <CircleX />
