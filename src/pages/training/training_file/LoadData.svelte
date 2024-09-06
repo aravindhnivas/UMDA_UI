@@ -82,9 +82,6 @@
         </div>
 
         <div class="flex items-end gap-1">
-            <span class="badge badge-info" class:badge-error={!$index_column_valid}>
-                {$index_column_valid ? 'Index available' : 'Index not available'}
-            </span>
             <CustomInput label="Enter INDEX column name" bind:value={$training_column_name_index} />
             <Loadingbtn
                 name="Make INDEX and save file"
@@ -100,6 +97,9 @@
                 bind:value={$training_column_name_index}
                 items={data?.columns || []}
             />
+            <span class="badge badge-info ml-auto" class:badge-error={!$index_column_valid}>
+                {$index_column_valid ? 'Index available' : 'Index not available'}
+            </span>
         </div>
     </svelte:fragment>
 </FileLoader>
