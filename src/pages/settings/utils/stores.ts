@@ -141,8 +141,7 @@ export const create_running_processes_store = () => {
 export const running_processes = create_running_processes_store();
 
 export const running_processes_pids = derived(running_processes, $running_processes => {
-    // sort the pids by the start time - most recent first
-    return Object.keys($running_processes).map(Number).reverse();
+    return Object.keys($running_processes).map(Number);
 });
 
 export const running_processes_count = derived(running_processes, $running_processes => {
