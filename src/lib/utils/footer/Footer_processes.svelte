@@ -16,9 +16,7 @@
         anchorCorner="BOTTOM_START"
         anchorMargin={{ top: 0, right: 50, bottom: 0, left: 0 }}
     >
-        <div class="overflow-x-auto">
-            <ProcessTable />
-        </div>
+        <ProcessTable />
     </MenuSurface>
     <div
         transition:fade
