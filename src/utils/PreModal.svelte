@@ -12,7 +12,6 @@
     $: if ($Alert.open) {
         openModal();
     }
-    // $: console.log($Alert)
     let headerBackground = '#453b1c5c';
     const background_colors: {
         [key: string]: string;
@@ -54,6 +53,7 @@
 
 {#if active}
     <FlatList
+        maxWidth="80vw"
         on:close={() => {
             active = false;
         }}
@@ -72,13 +72,13 @@
                 {title[$Alert.type]}
             </h1>
             <hr />
-            <div class="select-text" style="white-space: pre-wrap;">
+            <code class="select-text" style="white-space: pre-wrap;">
                 {#if $Alert.content instanceof Error}
                     {$Alert.content.stack}
                 {:else}
                     {$Alert.content}
                 {/if}
-            </div>
+            </code>
         </div>
     </FlatList>
 {/if}
