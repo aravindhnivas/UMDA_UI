@@ -35,7 +35,7 @@
             {#each $running_processes_pids as pid, i}
                 {@const process = $running_processes[pid]}
                 <tr>
-                    <th>{i + 1}</th>
+                    <th>{i}</th>
                     <td>{pid}</td>
                     <td>{process.pyfile}</td>
 
