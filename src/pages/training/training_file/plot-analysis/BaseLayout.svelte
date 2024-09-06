@@ -49,7 +49,13 @@
                     dispatch('plot');
                 }}
             />
-            <button class=" btn btn-sm" on:click={() => dispatch('plot')}>
+            <button
+                class=" btn btn-sm"
+                on:click={() => {
+                    recheck_files = !recheck_files;
+                    dispatch('plot');
+                }}
+            >
                 <span>Plot</span>
                 <ChartColumnBig />
             </button>
