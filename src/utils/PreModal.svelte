@@ -2,10 +2,10 @@
     import { onDestroy } from 'svelte';
     import { Alert } from '$utils/stores';
     import FlatList from 'svelte-flatlist';
-    import { SearchIcon } from 'lucide-svelte/icons';
+    import { SearchIcon, Delete } from 'lucide-svelte/icons';
 
-    // let active = true;
-    let active = false;
+    let active = true;
+    // let active = false;
     function openModal() {
         active = true;
         $Alert.open = false;
@@ -79,12 +79,24 @@
             <!-- search text -->
 
             <div class="flex items-center gap-2 ml-auto min-w-xl">
-                <input
-                    class="input input-xs input-bordered w-full"
-                    type="text"
-                    bind:value={searchText}
-                    placeholder="Search"
-                />
+                <div class="relative w-full">
+                    <input
+                        class="input input-xs input-bordered w-full pr-8"
+                        type="text"
+                        bind:value={searchText}
+                        placeholder="Search"
+                        autocomplete="on"
+                        autocapitalize="on"
+                    />
+                    {#if searchText}
+                        <button
+                            class="absolute right-2 top-1/2 transform -translate-y-1/2"
+                            on:click={() => (searchText = '')}
+                        >
+                            <Delete size={16} />
+                        </button>
+                    {/if}
+                </div>
                 <SearchIcon size={20} />
             </div>
 
