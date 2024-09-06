@@ -82,8 +82,8 @@
         </div>
 
         <div class="flex items-end gap-1">
-            <span class="badge badge-info" class:badge-error={!data?.columns.includes($training_column_name_index)}>
-                {#if data?.columns.includes($training_column_name_index)}
+            <span class="badge badge-info" class:badge-error={!$index_column_valid}>
+                {#if $index_column_valid}
                     Index available
                 {:else}
                     Index not available
