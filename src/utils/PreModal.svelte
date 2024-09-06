@@ -2,8 +2,10 @@
     import { onDestroy } from 'svelte';
     import { Alert } from '$utils/stores';
     import FlatList from 'svelte-flatlist';
+    import { SearchIcon } from 'lucide-svelte';
 
-    let active = false;
+    let active = true;
+    // let active = false;
     function openModal() {
         active = true;
         $Alert.open = false;
@@ -47,6 +49,10 @@
     }
 
     onDestroy(() => (active = false));
+    let searchText = '';
+    function highlightSearchText(text: string, searchText: string) {
+        return text.replace(new RegExp(searchText, 'gi'), match => `<span class="bg-yellow-200">${match}</span>`);
+    }
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
@@ -68,15 +74,25 @@
         }}
     >
         <div class="contents">
-            <h1 style="text-align: center;">
-                {title[$Alert.type]}
-            </h1>
+            <h1 style="text-align: center;">{title[$Alert.type]}</h1>
+            <!-- search text -->
+
+            <div class="flex items-center gap-2 ml-auto min-w-xl">
+                <input
+                    class="input input-xs input-bordered w-full"
+                    type="text"
+                    bind:value={searchText}
+                    placeholder="Search"
+                />
+                <SearchIcon size={20} />
+            </div>
+
             <hr />
             <code class="select-text" style="white-space: pre-wrap; overflow: auto;">
                 {#if $Alert.content instanceof Error}
                     {$Alert.content.stack}
                 {:else}
-                    {$Alert.content}
+                    {@html highlightSearchText($Alert.content, searchText)}
                 {/if}
             </code>
         </div>
