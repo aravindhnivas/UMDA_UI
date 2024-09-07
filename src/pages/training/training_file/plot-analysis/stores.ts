@@ -51,11 +51,6 @@ export const post_analysis_files = localWritable('post_analysis_files', {
 export const atoms_bin_size = localWritable('atoms_bin_size', 10);
 export const active_tab = localWritable<AnalysisItemsType>('training_file_plot_active_tab_item', 'size_distribution');
 
-export const load_training_file = async (use_filtered = false, loaded_training_file: string) => {
-    const load_file = use_filtered ? await get(current_training_data_file) : loaded_training_file;
-    return load_file;
-};
-
 export const sizeDistributionFilter = writable<{
     min_atomic_number: {
         value: number;
