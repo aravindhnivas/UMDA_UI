@@ -51,6 +51,8 @@
     onDestroy(() => (active = false));
     let searchText = '';
     function highlightSearchText(text: string, searchText: string) {
+        if (!searchText) return text;
+        if (!text) return '';
         return text.replace(new RegExp(searchText, 'gi'), match => `<span class="bg-yellow-200">${match}</span>`);
     }
 </script>
