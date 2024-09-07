@@ -45,11 +45,7 @@
     import ResultsPanel from './ResultsPanel.svelte';
     import Effects from './Effects.svelte';
     import { difference } from 'lodash-es';
-    import {
-        current_training_data_file,
-        load_training_file,
-        use_filtered_data_for_training,
-    } from '../training_file/plot-analysis/stores';
+    import { current_training_data_file } from '../training_file/plot-analysis/stores';
 
     export let id: string = 'ml_model-train-container';
     export let display: string = 'none';
