@@ -7,7 +7,13 @@
         sizeDistributionFilter,
         current_analysis_file,
     } from './plot-analysis/stores';
-    import { training_column_name_X, training_file, molecule_analysis_file, index_column_valid } from './stores';
+    import {
+        training_column_name_X,
+        training_file,
+        molecule_analysis_file,
+        index_column_valid,
+        training_column_name_index,
+    } from './stores';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import { use_dask } from '$lib/stores/system';
     import PlotAnalysis from './plot-analysis/PlotAnalysis.svelte';
@@ -32,6 +38,7 @@
                 analysis_file: analysis_file_exists ? analysis_file : null,
                 atoms_bin_size: Number($atoms_bin_size),
                 mode,
+                index_column_name: $training_column_name_index,
             },
         };
     };
@@ -114,6 +121,7 @@
             filter_elements: filter_elements.filter(Boolean),
             filter_structures: filter_structures.filter(Boolean),
             filtered_filename,
+            index_column_name: $training_column_name_index,
         };
         const pyfile = 'training.apply_filter_for_molecular_analysis';
         return { pyfile, args };
@@ -126,6 +134,7 @@
             key: $training_file.key,
             use_dask: $use_dask,
             smiles_column_name: $training_column_name_X,
+            index_column_name: $training_column_name_index,
         };
         const pyfile = 'training.check_duplicates_on_x_column';
         return { pyfile, args };
