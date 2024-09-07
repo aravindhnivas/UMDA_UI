@@ -8,7 +8,11 @@
         model_and_pipeline_files,
     } from './stores';
     import { training_file, training_column_name_X } from '../training_file/stores';
-    import { load_training_file, use_filtered_data_for_training } from '../training_file/plot-analysis/stores';
+    import {
+        filtered_dir,
+        load_training_file,
+        use_filtered_data_for_training,
+    } from '../training_file/plot-analysis/stores';
     import { NPARTITIONS, use_dask } from '$lib/stores/system';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
@@ -44,7 +48,7 @@
             `_${column_X_name}_${embedding_name}_embeddings${pca ? '_with_PCA' : ''}`;
     };
 
-    $: if ($training_file.filename) {
+    $: if ($training_file.filename || $filtered_dir) {
         get_embedd_savefile($use_filtered_data_for_training, $training_column_name_X, $embedding, $use_PCA);
     }
 
