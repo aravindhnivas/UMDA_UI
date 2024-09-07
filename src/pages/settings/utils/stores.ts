@@ -22,8 +22,8 @@ export const logger_store = (message: string, length: number = 500) => {
     }
 
     // initialize the logger with the message
-    const date = new Date().toLocaleTimeString();
-    set([{ type: 'info', message: `${date} ${message}` }]);
+    // const date = new Date().toLocaleTimeString();
+    // set([{ type: 'info', message: `${date} ${message}` }]);
 
     return {
         subscribe,
