@@ -1,6 +1,7 @@
 import { load_analysis_dir, training_file } from '../stores';
 
 export const filtered_dir = writable('default');
+export const use_filtered_data_for_training = writable(false);
 
 export const current_post_analysis_files_directory = derived(
     [load_analysis_dir, filtered_dir],
@@ -22,10 +23,13 @@ export const current_post_analysis_files_directory = derived(
 );
 
 export const current_training_data_file = derived(
-    [current_post_analysis_files_directory],
-    async ([$current_post_analysis_files_directory]) => {
-        const name = await path.basename(await $current_post_analysis_files_directory);
-        const dirname = await path.dirname(await $current_post_analysis_files_directory);
+    [current_post_analysis_files_directory, use_filtered_data_for_training],
+    async ([$current_post_analysis_files_directory, $use_filtered_data_for_training]) => {
+        if (!$use_filtered_data_for_training) return get(training_file).filename;
+
+        const analysis_dir = await $current_post_analysis_files_directory;
+        const name = await path.basename(analysis_dir);
+        const dirname = await path.dirname(analysis_dir);
         const training_data_file = await path.join(dirname, name.replace('_analysis', '.csv'));
         return training_data_file;
     },
@@ -46,7 +50,6 @@ export const post_analysis_files = localWritable('post_analysis_files', {
 
 export const atoms_bin_size = localWritable('atoms_bin_size', 10);
 export const active_tab = localWritable<AnalysisItemsType>('training_file_plot_active_tab_item', 'size_distribution');
-export const use_filtered_data_for_training = writable(false);
 
 export const load_training_file = async (use_filtered = false, loaded_training_file: string) => {
     const load_file = use_filtered ? await get(current_training_data_file) : loaded_training_file;

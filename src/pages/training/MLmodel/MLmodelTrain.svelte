@@ -45,7 +45,11 @@
     import ResultsPanel from './ResultsPanel.svelte';
     import Effects from './Effects.svelte';
     import { difference } from 'lodash-es';
-    import { load_training_file, use_filtered_data_for_training } from '../training_file/plot-analysis/stores';
+    import {
+        current_training_data_file,
+        load_training_file,
+        use_filtered_data_for_training,
+    } from '../training_file/plot-analysis/stores';
 
     export let id: string = 'ml_model-train-container';
     export let display: string = 'none';
@@ -61,7 +65,7 @@
             return;
         }
 
-        if (!(await fs.exists(await load_training_file($use_filtered_data_for_training, $training_file.filename)))) {
+        if (!(await fs.exists(await $current_training_data_file))) {
             toast.error('Error: Training file not found');
             return;
         }
@@ -175,8 +179,8 @@
             n_iter: Number($randomzied_gridsearch_niter),
             factor: Number($halving_factor),
         };
-        const final_training_file = await load_training_file($use_filtered_data_for_training, $training_file.filename);
-
+        const final_training_file = await $current_training_data_file;
+        console.log({ final_training_file });
         const args = {
             model: $model,
             training_file: {
