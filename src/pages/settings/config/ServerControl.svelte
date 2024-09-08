@@ -4,6 +4,8 @@
     import { checkNetstat, killPID } from '../utils/network';
     import { serverInfo } from '../utils/stores';
     import { connect_websocket, socket } from '$lib/ws';
+    import { AxiosError } from 'axios';
+    import { message } from '@tauri-apps/api/dialog';
 
     export let port: number;
     export let serverReady: boolean = false;
@@ -51,7 +53,16 @@
     </div>
     <div class="flex gap-1 items-center">
         {#if connection === 'http'}
-            <button class="btn btn-sm" on:click={async () => await fetchServerROOT()}>Check Server connection</button>
+            <button
+                class="btn btn-sm"
+                on:click={async () => {
+                    const [err] = await oO(fetchServerROOT());
+                    if (err instanceof AxiosError) {
+                        console.log(err);
+                        serverInfo.error(err.code || 'unknown network error');
+                    }
+                }}>Check Server connection</button
+            >
         {:else}
             <button class="btn btn-sm" on:click={connect_websocket}>Check ws connection</button>
         {/if}

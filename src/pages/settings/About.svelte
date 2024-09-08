@@ -4,11 +4,19 @@
     import { getVersion, getTauriVersion } from '@tauri-apps/api/app';
     import Layout from './comp/Layout.svelte';
     import { arch, platform } from '@tauri-apps/api/os';
+    import { asset_name_prefix } from './utils/download-assets';
 
     onMount(async () => {
         console.log('About page mounted');
         system_info.platform = await platform();
         system_info.arch = await arch();
+
+        const asset_folder = await path.join(await path.appLocalDataDir(), asset_name_prefix);
+        const umdapy_version_file = await path.join(asset_folder, '_internal', 'umdalib', '__version__.dat');
+        if (!(await fs.exists(umdapy_version_file))) return;
+        const umdapy_version_file_content = await fs.readTextFile(umdapy_version_file);
+        if (!umdapy_version_file_content) return;
+        $umdapyVersion = umdapy_version_file_content;
     });
 
     const system_info = {

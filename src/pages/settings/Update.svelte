@@ -124,14 +124,22 @@
     });
 
     let currentVersion = '';
+    let unlisten_check_for_update: ReturnType<typeof setInterval>;
     onMount(async () => {
+        console.log('Update page mounted');
         currentVersion = await getVersion();
         if (import.meta.env.PROD) {
-            await check_for_update();
+            unlisten_check_for_update = setInterval(
+                async () => {
+                    await check_for_update();
+                },
+                $updateInterval * 60 * 1000,
+            );
         }
     });
 
     onDestroy(async () => {
+        if (unlisten_check_for_update) clearInterval(unlisten_check_for_update);
         const unlisten1 = await unlisten_download_asset_event;
         unlisten1();
         const unlisten2 = await listen_download_progress;

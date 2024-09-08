@@ -31,6 +31,8 @@ export const checkNetstat = async (port: number) => {
         output.stdout.split('\n').forEach(ln => {
             serverInfo.warn(ln);
         });
+    } else {
+        serverInfo.error('No output from netstat');
     }
 
     if (err || output.stderr) return fail(err || output.stderr);
