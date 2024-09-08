@@ -5,7 +5,6 @@
     import { serverInfo } from '../utils/stores';
     import { connect_websocket, socket } from '$lib/ws';
     import { AxiosError } from 'axios';
-    import { message } from '@tauri-apps/api/dialog';
 
     export let port: number;
     export let serverReady: boolean = false;
@@ -14,6 +13,7 @@
     export let stopServer: () => void;
     export let connection: 'ws' | 'http' = 'http';
 
+    let starting_server = false;
     const killpids = async () => {
         if (!pids.length) return serverInfo.error('No PID to kill');
         await killPID(pids);
@@ -48,8 +48,21 @@
             <i on:click={() => (port_lock = true)} class="i-material-symbols-lock-open-right-outline"></i>
         {/if}
 
-        <button disabled={serverReady} class="btn btn-sm" on:click={startServer}>Start Server</button>
-        <button class="btn btn-sm btn-error" on:click={stopServer}>Stop Server</button>
+        <button
+            disabled={serverReady || starting_server}
+            class="btn btn-sm"
+            on:click={async () => {
+                starting_server = true;
+                await startServer();
+            }}>Start Server</button
+        >
+        <button
+            class="btn btn-sm btn-error"
+            on:click={async () => {
+                await stopServer();
+                starting_server = false;
+            }}>Stop Server</button
+        >
     </div>
     <div class="flex gap-1 items-center">
         {#if connection === 'http'}
