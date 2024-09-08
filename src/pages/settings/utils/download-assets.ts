@@ -171,16 +171,18 @@ export function unZIP(installation_request = true) {
         cmd.on('error', error => {
             err = error;
             outputbox.error('Error whiile UNZIPing assets');
-            outputbox.error(error);
+            // outputbox.error(error);
         });
 
         cmd.stderr.on('data', stderr => {
             err = stderr;
-            outputbox.error(stderr);
+            // outputbox.error(stderr);
+            outputbox.warn('Please wait while assets are being installed...');
         });
 
         cmd.stdout.on('data', stdout => {
-            outputbox.info(stdout);
+            // outputbox.info(stdout);
+            outputbox.info('Please wait while assets are being installed...');
         });
     });
 }
