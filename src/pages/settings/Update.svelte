@@ -14,7 +14,12 @@
     import { outputbox } from '$settings/utils/stores';
     import Textfield from '@smui/textfield';
     import { footerMsg } from '$lib/utils/initialise';
-    import { download_assets, check_assets_update, unZIP } from '$pages/settings/utils/download-assets';
+    import {
+        download_assets,
+        check_assets_update,
+        unZIP,
+        asset_name_prefix,
+    } from '$pages/settings/utils/download-assets';
     import { updateInterval } from '$utils/stores';
     import Layout from './comp/Layout.svelte';
     import { getVersion } from '@tauri-apps/api/app';
@@ -23,6 +28,7 @@
     import { Checkbox } from '$lib/components';
     import { toggle_loading } from '$utils/index';
     import CustomInput from '$lib/components/CustomInput.svelte';
+    import { umdapyVersion } from '$lib/pyserver/stores';
 
     let install_dialog_active = false;
     export const check_for_update = async (log = false) => {
@@ -124,17 +130,40 @@
     });
 
     let currentVersion = '';
+    let umdapy_folder: string = '';
+
+    const get_umdapy_version = async () => {
+        if (!(await fs.exists(umdapy_folder))) return;
+        const umdapy_version_file = await path.join(umdapy_folder, '_internal', 'umdalib', '__version__.dat');
+        if (!(await fs.exists(umdapy_version_file))) return;
+        const umdapy_version_file_content = await fs.readTextFile(umdapy_version_file);
+        if (!umdapy_version_file_content) return;
+        $umdapyVersion = umdapy_version_file_content;
+    };
+
     let unlisten_check_for_update: ReturnType<typeof setInterval>;
+
     onMount(async () => {
         console.log('Update page mounted');
+
         currentVersion = await getVersion();
+        umdapy_folder = await path.join(await path.appLocalDataDir(), asset_name_prefix);
+        const download_assets_btn = document.getElementById('btn-download-asset');
+        if (!(await fs.exists(umdapy_folder))) {
+            download_assets_btn?.click();
+        } else {
+            console.warn('umdapy folder exists');
+            await get_umdapy_version();
+        }
+
         if (import.meta.env.PROD) {
             unlisten_check_for_update = setInterval(
                 async () => {
-                    await check_for_update();
+                    await check_for_update(true);
                 },
                 $updateInterval * 60 * 1000,
             );
+            await check_for_update(true);
         }
     });
 
@@ -231,6 +260,7 @@
                 id="btn-download-asset"
                 class="btn btn-sm ld-ext-right"
                 on:click={async ({ currentTarget }) => {
+                    console.warn('download assets');
                     if (!window.navigator.onLine) return outputbox.warn('No internet connection');
                     assets_download_progress = 0;
                     toggle_loading(currentTarget);
