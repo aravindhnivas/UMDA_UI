@@ -13,14 +13,15 @@
 
     export let loading: boolean = false;
     export let subprocess = false;
-    export let btn: HTMLButtonElement | null = null;
+    export let btn: HTMLButtonElement;
 
     let source: CancelTokenSource;
     let process_count = 0;
 
     const dispatch = createEventDispatcher();
 
-    const run_callback = async () => {
+    const run_callback = async (e: MouseEvent) => {
+        console.warn(e.currentTarget);
         if (!$pyServerReady) return toast.error('python server is not yet started');
 
         const data = await callback();
@@ -37,8 +38,8 @@
         const dataFromPython = await computePy({
             pyfile,
             args,
-            general: subprocess,
-            target: subprocess ? btn : undefined,
+            subprocess,
+            target: btn,
             cancelToken: source.token,
         });
 
@@ -57,6 +58,11 @@
         class="btn btn-sm ld-ext-right w-max"
         class:running={loading}
         on:click={run_callback}
+        on:pyEvent
+        on:pyEventClosed
+        on:pyEventStderr
+        on:pyEventStdout
+        on:pyEventSuccess
     >
         {name}
         {#if subprocess && process_count > 0}
@@ -64,7 +70,7 @@
         {/if}
         <div class="ld ld-ring ld-spin" style="color: antiquewhite;"></div>
     </button>
-    {#if source && loading && !subprocess}
+    {#if !subprocess && source && loading}
         <button
             class="btn btn-sm btn-error"
             on:click={() => {

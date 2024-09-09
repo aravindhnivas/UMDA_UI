@@ -1,26 +1,19 @@
 import { pyServerURL, get } from './stores';
 import axios from 'axios';
 
-interface Type {
+interface ComputeFromServerType {
     pyfile: string;
     args: Object;
-    target?: HTMLButtonElement | null;
-    general?: boolean;
     cancelToken?: any;
 }
 
-export default async function <T>({
-    pyfile,
-    args,
-    target,
-    general,
-    cancelToken,
-}: Type): Promise<T | string | undefined> {
+export default async function <T>({ pyfile, args, cancelToken }: ComputeFromServerType) {
     try {
-        console.warn({ pyfile, args, target, general });
-        const response = await axios.post(
+        console.warn({ pyfile, args });
+
+        const response = await axios.post<T & { done: boolean; error: boolean; computed_time: string }>(
             get(pyServerURL),
-            { pyfile, args: { ...args, general } },
+            { pyfile, args: { ...args } },
             {
                 headers: { 'Content-type': 'application/json' },
                 // timeout: 1000 * 60 * 5, // 5 minutes,
@@ -36,15 +29,11 @@ export default async function <T>({
             return Promise.reject(dataFromPython);
         }
 
-        if (!dataFromPython) return Promise.reject('could not get file from python. check the output json file');
-        console.warn(dataFromPython);
-
-        if (general) {
-            const { done } = dataFromPython;
-            if (!done) Promise.reject(done);
-            return Promise.resolve(<string>done);
+        if (!dataFromPython) {
+            return Promise.reject('could not get file from python. check the output json file');
         }
-
+        toast.success(`${pyfile} completed in ${dataFromPython.computed_time}`);
+        console.warn(dataFromPython);
         return Promise.resolve(dataFromPython);
     } catch (err) {
         if (axios.isAxiosError(err)) {
