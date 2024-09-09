@@ -141,7 +141,16 @@
     };
 
     let unlisten_check_for_update: ReturnType<typeof setInterval>;
-
+    const set_update_interval = (time: number) => {
+        if (!import.meta.env.PROD) return console.warn('update interval is not set in dev mode');
+        if (unlisten_check_for_update) clearInterval(unlisten_check_for_update);
+        unlisten_check_for_update = setInterval(
+            async () => {
+                await check_for_update(true);
+            },
+            time * 60 * 1000,
+        );
+    };
     onMount(async () => {
         console.log('Update page mounted');
 
@@ -157,12 +166,7 @@
         }
 
         if (import.meta.env.PROD) {
-            unlisten_check_for_update = setInterval(
-                async () => {
-                    await check_for_update(true);
-                },
-                $updateInterval * 60 * 1000,
-            );
+            set_update_interval(Number($updateInterval));
             await check_for_update(true);
         }
     });
@@ -214,7 +218,16 @@
                 >
 
                 <div class="ml-auto">
-                    <CustomInput bind:value={$updateInterval} label="update interval (in min)" type="number" />
+                    <CustomInput
+                        bind:value={$updateInterval}
+                        label="update interval (in min)"
+                        type="number"
+                        on:change={() => {
+                            $updateInterval = Number($updateInterval);
+                            console.log($updateInterval);
+                            set_update_interval($updateInterval);
+                        }}
+                    />
                 </div>
             </div>
 
