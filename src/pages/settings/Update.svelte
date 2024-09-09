@@ -152,7 +152,7 @@
         if (!(await fs.exists(umdapy_folder))) {
             download_assets_btn?.click();
         } else {
-            console.warn('umdapy folder exists');
+            console.warn(`${asset_name_prefix} folder exists`);
             await get_umdapy_version();
         }
 
