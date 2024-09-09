@@ -3,8 +3,9 @@
     import { fetchServerROOT, updateServerInfo } from '$lib/pyserver/umdapyServer';
     import { checkNetstat, killPID } from '../utils/network';
     import { serverInfo } from '../utils/stores';
-    import { connect_websocket, socket } from '$lib/ws';
+    import { connect_websocket } from '$lib/ws';
     import { AxiosError } from 'axios';
+    import { LockKeyhole, RefreshCcw, UnlockKeyhole } from 'lucide-svelte/icons';
 
     export let port: number;
     export let serverReady: boolean = false;
@@ -32,22 +33,15 @@
 
 <div class="grid gap-1">
     <div class="flex items-center gap-1">
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <!-- svelte-ignore a11y-no-static-element-interactions -->
-        <i on:click={fetch_port} class="i-material-symbols-refresh"></i>
-
+        <button on:click={fetch_port}><RefreshCcw /></button>
         <Textfield disabled={port_lock} type="number" bind:value={port} label="ServerPORT" />
-
-        {#if port_lock}
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <i on:click={() => (port_lock = false)} class="i-material-symbols-lock-outline"></i>
-        {:else}
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <i on:click={() => (port_lock = true)} class="i-material-symbols-lock-open-right-outline"></i>
-        {/if}
-
+        <button on:click={() => (port_lock = !port_lock)}>
+            {#if port_lock}
+                <LockKeyhole />
+            {:else}
+                <UnlockKeyhole />
+            {/if}
+        </button>
         <button
             disabled={serverReady || starting_server}
             class="btn btn-sm"
@@ -59,7 +53,6 @@
                     console.log(error);
                     serverInfo.error('Failed to start server');
                 }
-                // starting_server = false;
             }}>Start Server</button
         >
         <button
