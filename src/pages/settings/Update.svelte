@@ -29,6 +29,7 @@
     import { toggle_loading } from '$utils/index';
     import CustomInput from '$lib/components/CustomInput.svelte';
     import { umdapyVersion } from '$lib/pyserver/stores';
+    import { ExternalLink } from 'lucide-svelte';
 
     let install_dialog_active = false;
     export const check_for_update = async (log = false) => {
@@ -214,8 +215,9 @@
                     class="btn btn-sm"
                     on:click={() => {
                         $activateChangelog = true;
-                    }}>What's New <i class="i-mdi-open-in-new ml-2 text-xs" /></button
-                >
+                    }}
+                    >What's New <ExternalLink class="ml-2" />
+                </button>
 
                 <div class="ml-auto">
                     <CustomInput
