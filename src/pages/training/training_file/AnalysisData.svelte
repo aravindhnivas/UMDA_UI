@@ -18,6 +18,7 @@
     import { use_dask } from '$lib/stores/system';
     import PlotAnalysis from './plot-analysis/PlotAnalysis.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
+    import Notification from '$lib/components/Notification.svelte';
 
     const MolecularAnalysis = async (
         mode: 'all' | 'size_distribution' | 'structural_distribution' | 'elemental_distribution' = 'all',
@@ -182,13 +183,16 @@
         />
         <CustomInput bind:value={filtered_filename} label="Enter filter name" />
     </div>
+
     {#if duplicates > 0}
-        <div class="badge badge-warning">
-            {duplicates} duplicates found and removed. Fixed filename: {deduplicated_filename}
-        </div>
-        <code class="bg-warning text-warning-content"
-            >Browse the FIXED-DUPLICATES file and load to use it for training</code
-        >
+        <Notification message="{duplicates} duplicates found!" type="warning">
+            <svelte:fragment slot="more_details">
+                <div class="grid gap-2">
+                    <span>{duplicates} duplicates found and removed</span>
+                    <span>Fixed file saved as: {deduplicated_filename}</span>
+                </div>
+            </svelte:fragment>
+        </Notification>
     {/if}
 
     <hr />
