@@ -141,14 +141,14 @@
     };
 
     let unlisten_check_for_update: ReturnType<typeof setInterval>;
-    const set_update_interval = (time: number) => {
+    const set_update_interval = (time_in_min: number) => {
         if (!import.meta.env.PROD) return console.warn('update interval is not set in dev mode');
         if (unlisten_check_for_update) clearInterval(unlisten_check_for_update);
         unlisten_check_for_update = setInterval(
             async () => {
                 await check_for_update(true);
             },
-            time * 60 * 1000,
+            time_in_min * 60 * 1000,
         );
     };
     onMount(async () => {
@@ -224,7 +224,6 @@
                         type="number"
                         on:change={() => {
                             $updateInterval = Number($updateInterval);
-                            console.log($updateInterval);
                             set_update_interval($updateInterval);
                         }}
                     />
@@ -235,13 +234,11 @@
                 <span>Last checked</span>
                 <span class="badge badge-info" id="update-check-status">{lastUpdateCheck}</span>
             </div>
-            <!-- <Notify bind:label={$updateError} type="danger" /> -->
         </div>
 
         {#if download_progress}
             <div class="progress__div">
                 <span class="badge badge-info">updating...</span>
-                <!-- <LinearProgress progress={download_progress} /> -->
                 <progress class="progress w-full" value={download_progress} max="1"></progress>
             </div>
         {/if}
@@ -302,7 +299,6 @@
         {#if assets_download_progress > 0 && assets_download_progress < 1}
             <div class="progress__div">
                 <span class="badge badge-info">update-progress</span>
-                <!-- <LinearProgress progress={assets_download_progress} /> -->
                 <progress class="progress w-full" value={assets_download_progress} max="1"></progress>
             </div>
         {/if}
