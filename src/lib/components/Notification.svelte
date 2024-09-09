@@ -5,6 +5,7 @@
 
     let dialog_element: HTMLDialogElement;
     let dismiss = false;
+
     const alert_classes = {
         info: 'p-4 mb-4 text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800',
         success:
