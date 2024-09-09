@@ -13,7 +13,7 @@
 
     export let loading: boolean = false;
     export let subprocess = false;
-    export let btn: HTMLButtonElement;
+    export let btn: HTMLButtonElement | undefined = undefined;
 
     let source: CancelTokenSource;
     let process_count = 0;
@@ -21,7 +21,9 @@
     const dispatch = createEventDispatcher();
 
     const run_callback = async (e: MouseEvent) => {
-        console.warn(e.currentTarget);
+        const target = btn ?? (e.currentTarget as HTMLButtonElement);
+        if (!target) return toast.error('No target button');
+
         if (!$pyServerReady) return toast.error('python server is not yet started');
 
         const data = await callback();
@@ -39,7 +41,7 @@
             pyfile,
             args,
             subprocess,
-            target: btn,
+            target: btn ?? (e.currentTarget as HTMLButtonElement),
             cancelToken: source.token,
         });
 
