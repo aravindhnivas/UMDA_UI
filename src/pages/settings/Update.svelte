@@ -148,6 +148,7 @@
         currentVersion = await getVersion();
         const umdapy_folder = await path.join(await path.appLocalDataDir(), asset_name_prefix);
         const download_assets_btn = document.getElementById('btn-download-asset');
+
         if (!(await fs.exists(umdapy_folder))) {
             download_assets_btn?.click();
         } else {
