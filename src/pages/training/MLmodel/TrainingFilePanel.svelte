@@ -25,11 +25,13 @@
             {/await}
         {/await}
         <div>Embedded vector file:</div>
-        {#await $embedd_savefile_path then value}
-            {#await path.basename(value) then name}
-                <div class="badge col-span-3" class:bg-red={!value}>
-                    {name || 'No file selected'}
-                </div>
+        {#await $embedd_savefile_path then file_path}
+            {#await fs.exists(file_path) then file_exists}
+                {#await path.basename(file_path) then name}
+                    <div class="badge col-span-3" class:bg-red={!file_exists}>
+                        {name || 'No file selected'}
+                    </div>
+                {/await}
             {/await}
         {/await}
 
