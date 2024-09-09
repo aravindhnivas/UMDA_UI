@@ -144,6 +144,7 @@ export function unZIP(installation_request = true) {
 
         installing_python_assets.set(true);
         outputbox.info(`unzip PID: ${child.pid}`);
+        outputbox.warn('Please wait while assets are being installed...');
 
         cmd.on('close', async () => {
             assets_installing = false;
@@ -171,19 +172,17 @@ export function unZIP(installation_request = true) {
         cmd.on('error', error => {
             err = error;
             outputbox.error('Error whiile UNZIPing assets');
-            // outputbox.error(error);
+            outputbox.error(error);
         });
 
         cmd.stderr.on('data', stderr => {
             err = stderr;
-            // outputbox.error(stderr);
-            outputbox.warn('Please wait while assets are being installed...');
+            outputbox.error(stderr);
         });
 
-        cmd.stdout.on('data', stdout => {
-            // outputbox.info(stdout);
-            outputbox.info('Please wait while assets are being installed...');
-        });
+        // cmd.stdout.on('data', stdout => {
+        //     outputbox.info(stdout);
+        // });
     });
 }
 
