@@ -130,9 +130,8 @@
     });
 
     let currentVersion = '';
-    let umdapy_folder: string = '';
 
-    const get_umdapy_version = async () => {
+    const get_umdapy_version = async (umdapy_folder: string) => {
         if (!(await fs.exists(umdapy_folder))) return;
         const umdapy_version_file = await path.join(umdapy_folder, '_internal', 'umdalib', '__version__.dat');
         if (!(await fs.exists(umdapy_version_file))) return;
@@ -147,13 +146,13 @@
         console.log('Update page mounted');
 
         currentVersion = await getVersion();
-        umdapy_folder = await path.join(await path.appLocalDataDir(), asset_name_prefix);
+        const umdapy_folder = await path.join(await path.appLocalDataDir(), asset_name_prefix);
         const download_assets_btn = document.getElementById('btn-download-asset');
         if (!(await fs.exists(umdapy_folder))) {
             download_assets_btn?.click();
         } else {
             console.warn(`${asset_name_prefix} folder exists`);
-            await get_umdapy_version();
+            await get_umdapy_version(umdapy_folder);
         }
 
         if (import.meta.env.PROD) {
