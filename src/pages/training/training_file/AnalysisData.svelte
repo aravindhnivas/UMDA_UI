@@ -51,6 +51,7 @@
         if (!dataFromPython) return;
         console.log(dataFromPython);
     };
+    let duplicates: number = 0;
     let deduplicated_filename = '';
     const onRemoveDuplicatesOnXColumn = (e: CustomEvent) => {
         console.log(e.detail);
@@ -61,7 +62,7 @@
             };
         };
         if (!dataFromPython) return;
-
+        duplicates = dataFromPython.duplicates;
         if (dataFromPython.duplicates > 0) {
             deduplicated_filename = dataFromPython.deduplicated_filename;
             toast.success(
@@ -70,6 +71,7 @@
         } else {
             toast.warning('No duplicates found');
             deduplicated_filename = '';
+            duplicates = 0;
         }
     };
 
@@ -128,6 +130,8 @@
     };
 
     const CheckDuplicatesOnXColumn = async () => {
+        duplicates = 0;
+        deduplicated_filename = '';
         const args = {
             filename: $training_file.filename,
             filetype: $training_file.filetype,
@@ -178,11 +182,10 @@
         />
         <CustomInput bind:value={filtered_filename} label="Enter filter name" />
     </div>
-    {#if deduplicated_filename}
+    {#if duplicates > 0}
         <div class="badge badge-warning">
-            Duplicates removed filename: {deduplicated_filename}
+            {duplicates} duplicates found and removed. Fixed filename: {deduplicated_filename}
         </div>
-
         <code class="bg-warning text-warning-content"
             >Browse the FIXED-DUPLICATES file and load to use it for training</code
         >
