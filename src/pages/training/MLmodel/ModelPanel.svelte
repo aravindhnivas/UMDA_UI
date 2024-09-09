@@ -59,7 +59,7 @@
         const contents = await fs.readTextFile(uploadloc);
         try {
             const parsed = JSON.parse(contents);
-
+            console.log('parsed', parsed);
             if ($model !== parsed.model) {
                 toast.error('Error: Model mismatch');
                 return;
@@ -70,9 +70,16 @@
                 name: basefilename,
                 model: parsed.model,
             };
+            console.log({ hyperparameters: $hyperparameters[$model], parameters: $parameters[$model] });
+            // $hyperparameters[$model] = parsed.values.hyperparameters;
+            // $parameters[$model] = parsed.values.parameters;
 
-            $hyperparameters[$model] = parsed.values.hyperparameters;
-            $parameters[$model] = parsed.values.parameters;
+            Object.keys($hyperparameters[$model]).forEach(key => {
+                $hyperparameters[$model][key] = parsed.values[key];
+            });
+            Object.keys($parameters[$model]).forEach(key => {
+                $parameters[$model][key] = parsed.values[key];
+            });
             toast.success('Parameters uploaded successfully');
         } catch (e) {
             toast.error('Error: Invalid JSON file');
