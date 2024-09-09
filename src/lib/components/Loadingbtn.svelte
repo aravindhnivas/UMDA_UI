@@ -50,14 +50,6 @@
     };
 </script>
 
-<!-- <button
-    bind:this={btn}
-    disabled={loading && !subprocess}
-    class="btn btn-sm ld-ext-right w-max {className} "
-    class:running={loading}
-    on:click={run_callback}
-> -->
-
 <div class="flex gap-2 {className}">
     <button
         bind:this={btn}
