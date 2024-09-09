@@ -185,11 +185,16 @@
     </div>
 
     {#if duplicates > 0}
-        <Notification message="{duplicates} duplicates found!" type="warning">
+        <Notification
+            message="{duplicates} duplicates found! load the fixed file for further analysis. View more for details"
+            type="warning"
+        >
             <svelte:fragment slot="more_details">
                 <div class="grid gap-2">
                     <span>{duplicates} duplicates found and removed</span>
-                    <span>Fixed file saved as: {deduplicated_filename}</span>
+                    <span
+                        >Fixed file saved as: {deduplicated_filename}. Browse and load this file for further analysis.</span
+                    >
                 </div>
             </svelte:fragment>
         </Notification>
