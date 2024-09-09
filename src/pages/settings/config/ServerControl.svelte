@@ -53,7 +53,13 @@
             class="btn btn-sm"
             on:click={async () => {
                 starting_server = true;
-                await startServer();
+                try {
+                    await startServer();
+                } catch (error) {
+                    console.log(error);
+                    serverInfo.error('Failed to start server');
+                }
+                // starting_server = false;
             }}>Start Server</button
         >
         <button
