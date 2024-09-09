@@ -6,6 +6,7 @@
     import { connect_websocket } from '$lib/ws';
     import { AxiosError } from 'axios';
     import { LockKeyhole, RefreshCcw, UnlockKeyhole } from 'lucide-svelte/icons';
+    import { Checkbox } from '$lib/components';
 
     export let port: number;
     export let serverReady: boolean = false;
@@ -13,6 +14,7 @@
     export let startServer: () => void;
     export let stopServer: () => void;
     export let connection: 'ws' | 'http' = 'http';
+    export let suppress_warnings: boolean = false;
 
     let starting_server = false;
     const killpids = async () => {
@@ -62,7 +64,10 @@
                 starting_server = false;
             }}>Stop Server</button
         >
+
+        <Checkbox bind:value={suppress_warnings} label="Suppress Python warnings" />
     </div>
+
     <div class="flex gap-1 items-center">
         {#if connection === 'http'}
             <button

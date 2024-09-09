@@ -1,9 +1,9 @@
+import { suppress_py_warnings } from '$pages/settings/stores';
 import computefromServer from './computefromServer';
 import computefromSubprocess from './computefromSubprocess';
 import { fetchServerROOT, start_and_check_umdapy_with_toast } from './umdapyServer';
 import { pyServerReady, get, developerMode, pyProgram } from './stores';
 import { Alert } from '$utils/stores';
-
 interface ComputePyType {
     pyfile: string;
     args: Object;
@@ -53,8 +53,10 @@ export default async function <T extends Record<string, any>>({
 
         if (!response) return Promise.reject('error');
         dataFromPython = response;
-        if ((dataFromPython as any)?.warnings) {
-            Alert.warn((dataFromPython as any).warnings);
+        if (!get(suppress_py_warnings)) {
+            if ((dataFromPython as any)?.warnings) {
+                Alert.warn((dataFromPython as any).warnings);
+            }
         }
         return Promise.resolve(dataFromPython);
     } catch (error) {

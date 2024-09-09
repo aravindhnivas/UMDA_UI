@@ -14,7 +14,7 @@
     }
 </script>
 
-<div class="flex gap-2 items-center {bordered ? 'border-solid border-black border-1 rounded-md' : ''} {className}">
+<div class="flex gap-2 items-center {bordered ? 'border-solid border-black border-1 rounded-md' : ''} p-1 {className}">
     {#if text_position === 'left'}
         <span class="label-text">{label}</span>
     {/if}
