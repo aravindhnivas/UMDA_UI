@@ -26,15 +26,6 @@ export default async function <T extends Record<string, any>>({ e, target, pyfil
 
         console.warn({ pyfile, args, general });
         if (general) {
-            if (target) {
-                processDivGeneral = target.getElementsByClassName('tag')?.[0];
-                console.log(processDivGeneral);
-                if (processDivGeneral) {
-                    const num = processDivGeneral.textContent as string;
-                    processDivGeneralNum = isNaN(parseInt(num)) ? 0 : parseInt(num);
-                    processDivGeneral.textContent = `${processDivGeneralNum + 1}`;
-                }
-            }
             dataFromPython = await computefromSubprocess<T>({
                 target,
                 pyfile,
