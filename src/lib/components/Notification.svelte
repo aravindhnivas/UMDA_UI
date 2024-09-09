@@ -7,15 +7,24 @@
     export { className as class };
 </script>
 
-<div role="alert" class="alert alert-{type} p-2 {className}">
-    {#if type === 'info'}
+{#if type === 'info'}
+    <div role="alert" class="alert alert-info p-2 {className}">
         <Info />
-    {:else if type === 'success'}
+        <span>{message}</span>
+    </div>
+{:else if type === 'success'}
+    <div role="alert" class="alert alert-success p-2 {className}">
         <CheckCheck />
-    {:else if type === 'warning'}
+        <span>{message}</span>
+    </div>
+{:else if type === 'warning'}
+    <div role="alert" class="alert alert-warning p-2 {className}">
         <TriangleAlert />
-    {:else if type === 'error'}
+        <span>{message}</span>
+    </div>
+{:else if type === 'error'}
+    <div role="alert" class="alert alert-error p-2 {className}">
         <CircleX />
-    {/if}
-    <span>{message}</span>
-</div>
+        <span>{message}</span>
+    </div>
+{/if}
