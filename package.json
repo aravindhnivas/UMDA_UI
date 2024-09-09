@@ -1,7 +1,7 @@
 {
   "name": "umda_ui",
   "private": true,
-  "version": "1.5.0",
+  "version": "1.5.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -20,7 +20,7 @@
     "tauri-plugin-websocket-api": "github:tauri-apps/tauri-plugin-websocket#v1"
   },
   "devDependencies": {
-    "@iconify/json": "^2.2.244",
+    "@iconify/json": "^2.2.245",
     "@loadingio/loading.css": "^3.2.1",
     "@macfja/svelte-persistent-store": "^2.4.1",
     "@modyfi/vite-plugin-yaml": "^1.1.0",

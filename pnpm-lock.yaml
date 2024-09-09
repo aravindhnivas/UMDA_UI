@@ -28,8 +28,8 @@ importers:
         version: https://codeload.github.com/tauri-apps/tauri-plugin-websocket/tar.gz/c23ba8b03953e459fd9a56ea6113b12461b78026
     devDependencies:
       '@iconify/json':
-        specifier: ^2.2.244
-        version: 2.2.244
+        specifier: ^2.2.245
+        version: 2.2.245
       '@loadingio/loading.css':
         specifier: ^3.2.1
         version: 3.2.1
@@ -603,8 +603,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@iconify/json@2.2.244':
-    resolution: {integrity: sha512-l5wLZMzsyOo1M7aptt5m6Oyh3FMyQvmsEXmca+iojhEt/9V9DkH4rLWsinCqMC+QU401YlwXJx4mesK4QDncNQ==}
+  '@iconify/json@2.2.245':
+    resolution: {integrity: sha512-JbruddbGKghBe6fE1mzuo5hhUkisIW4mAdQGAyx0Q6sI52ukeQJHakolc2RQD/yWC3xp7rARNXMzWSXJynJ1vw==}
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
@@ -2743,7 +2743,7 @@ snapshots:
   '@esbuild/win32-x64@0.23.1':
     optional: true
 
-  '@iconify/json@2.2.244':
+  '@iconify/json@2.2.245':
     dependencies:
       '@iconify/types': 2.0.0
       pathe: 1.1.2
