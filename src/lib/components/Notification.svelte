@@ -39,7 +39,7 @@
             {/if}
         </div>
         <div class="mt-2 mb-4 text-sm">
-            {message}
+            <slot>{message}</slot>
         </div>
 
         <div class="flex gap-2">
