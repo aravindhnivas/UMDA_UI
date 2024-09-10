@@ -22,9 +22,9 @@ export const current_post_analysis_files_directory = derived(
 );
 
 export const current_training_data_file = derived(
-    [use_filtered_data_for_training],
-    async ([$use_filtered_data_for_training]) => {
-        if (!$use_filtered_data_for_training || get(filtered_dir) === 'default') return get(training_file).filename;
+    [use_filtered_data_for_training, training_file],
+    async ([$use_filtered_data_for_training, $training_file]) => {
+        if (!$use_filtered_data_for_training || get(filtered_dir) === 'default') return $training_file.filename;
         const original_analysis_dir = await get(load_analysis_dir);
         const training_data_file = await path.join(original_analysis_dir, 'filtered', get(filtered_dir) + '.csv');
         return training_data_file;
