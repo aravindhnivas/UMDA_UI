@@ -8,7 +8,7 @@
 <CustomPanel title="More options">
     {#if $default_parameter_mode}
         <div class="p-2">
-            <Notification message="Default mode" type="warning" />
+            <Notification message="Default mode" type="info" dismissable={false} />
         </div>
     {:else if $parameters?.[$model]}
         <ModelParameters key="parameters" bind:values={$parameters[$model]} />

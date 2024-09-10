@@ -122,7 +122,7 @@
     </div>
 {:else}
     <div class="p-2">
-        <Notification message="Default mode" type="warning" />
+        <Notification message="Default mode" type="info" dismissable={false} />
     </div>
 {/if}
 

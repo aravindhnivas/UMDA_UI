@@ -2,6 +2,7 @@
     import { CircleX, Info, TriangleAlert, CheckCheck, Eye } from 'lucide-svelte/icons';
     export let message: string;
     export let type: 'info' | 'success' | 'warning' | 'error' = 'error';
+    export let dismissable = true;
 
     let dialog_element: HTMLDialogElement;
     let dismiss = false;
@@ -48,7 +49,9 @@
                     View more
                 </button>
             {/if}
-            <button type="button" class="btn btn-xs btn-error" on:click={() => (dismiss = true)}> Dismiss </button>
+            {#if dismissable}
+                <button type="button" class="btn btn-xs btn-error" on:click={() => (dismiss = true)}> Dismiss </button>
+            {/if}
         </div>
     </div>
 
