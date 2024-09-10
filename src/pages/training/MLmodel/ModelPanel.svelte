@@ -21,7 +21,7 @@
         const saveloc = await dialog.save({
             title: 'Save parameters',
             filters: [{ name: 'JSON', extensions: ['json'] }],
-            defaultPath: `./${$model}.json`,
+            defaultPath: `./${$model}.parameters.json`,
         });
 
         if (!saveloc) return;
@@ -29,9 +29,9 @@
 
         const save_content = JSON.stringify(
             {
-                values: { hyperparameters: $hyperparameters[$model], parameters: $parameters[$model] },
+                values: { ...$hyperparameters[$model], ...$parameters[$model] },
                 model: $model,
-                time: new Date().toISOString(),
+                timestamp: new Date().toLocaleString(),
             },
             null,
             4,
