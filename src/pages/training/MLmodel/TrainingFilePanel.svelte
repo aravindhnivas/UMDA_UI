@@ -7,19 +7,21 @@
 
 <CustomPanel title="Loaded training file" open={true}>
     <div class="grid gap-2 grid-cols-4 items-center">
-        <div class="badge badge-info col-span-4 h-[2.5rem] flex m-auto">
+        <div class="col-span-4">
             {#await $current_training_data_file then name}
                 {#await path.dirname(name) then dname}
-                    <div class:bg-red={!dname}>
-                        {dname || 'No file selected'}
-                    </div>
+                    {#await fs.exists(name) then file_exists}
+                        <div class="badge badge-info h-[2.5rem] flex m-auto" class:badge-error={!file_exists}>
+                            {dname || 'No file selected'}
+                        </div>
+                    {/await}
                 {/await}
             {/await}
         </div>
         <div>Training file:</div>
         {#await $current_training_data_file then name}
             {#await path.basename(name) then fname}
-                <div class="badge col-span-3" class:bg-red={!name}>
+                <div class="badge badge-success col-span-3" class:badge-error={!name}>
                     {fname || 'No file selected'}
                 </div>
             {/await}
@@ -28,7 +30,7 @@
         {#await $embedd_savefile_path then file_path}
             {#await fs.exists(file_path) then file_exists}
                 {#await path.basename(file_path) then name}
-                    <div class="badge col-span-3" class:bg-red={!file_exists}>
+                    <div class="badge badge-success col-span-3" class:badge-error={!file_exists}>
                         {name || 'No file selected'}
                     </div>
                 {/await}
@@ -36,7 +38,7 @@
         {/await}
 
         <div>Column (train_y):</div>
-        <div class="badge col-span-3" class:bg-red={!$training_column_name_y}>
+        <div class="badge badge-success col-span-3" class:badge-error={!$training_column_name_y}>
             {$training_column_name_y || 'Column not provided'}
         </div>
     </div>
