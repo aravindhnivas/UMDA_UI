@@ -139,21 +139,19 @@
 </script>
 
 {#if $index_column_valid}
-    {#await $current_analysis_file then value}
-        {#await fs.exists(value) then file_exists}
-            <div class="badge badge-info h-10" class:badge-error={!file_exists}>{value}</div>
+    <Notification message="" type="info" dismissable={false}>
+        {#await $current_analysis_file then value}
+            {#await fs.exists(value) then file_exists}
+                <div class="grid gap-1"><span>Current analysis file:</span><code>{value}</code></div>
+            {/await}
         {/await}
-    {/await}
 
-    {#if $training_column_name_X.toLocaleLowerCase() !== 'smiles'}
-        <div class="alert alert-error">
-            The column X is not 'SMILES'. Please make sure the column X name is 'SMILES' for molecular structure.
-        </div>
-    {:else}
-        <div class="badge badge-info">
-            Using {$training_column_name_X} column for molecular structure
-        </div>
-    {/if}
+        {#if $training_column_name_X.toLocaleLowerCase() !== 'smiles'}
+            <div class="text-error">
+                The column X is not 'SMILES'. Please make sure the column X name is 'SMILES' for molecular structure.
+            </div>
+        {/if}
+    </Notification>
 
     <div class="flex gap-2 m-auto items-end">
         <Loadingbtn
