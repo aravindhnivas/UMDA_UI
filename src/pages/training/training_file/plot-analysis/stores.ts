@@ -11,17 +11,22 @@ export const current_post_analysis_files_directory = derived(
             return original_analysis_dir;
         }
 
-        const dir = await path.join(original_analysis_dir, 'filtered', $filtered_dir, 'analysis_data');
+        const dir = await path.join(
+            original_analysis_dir,
+            'filtered',
+            $filtered_dir + '_processed_data',
+            'analysis_data',
+        );
         return dir;
     },
 );
 
 export const current_training_data_file = derived(
-    [current_post_analysis_files_directory, use_filtered_data_for_training],
-    async ([$current_post_analysis_files_directory, $use_filtered_data_for_training]) => {
+    [use_filtered_data_for_training],
+    async ([$use_filtered_data_for_training]) => {
         if (!$use_filtered_data_for_training || get(filtered_dir) === 'default') return get(training_file).filename;
-        const loc = await path.dirname(await $current_post_analysis_files_directory);
-        const training_data_file = await path.join(loc, `${get(filtered_dir)}_training_file.csv`);
+        const original_analysis_dir = await get(load_analysis_dir);
+        const training_data_file = await path.join(original_analysis_dir, 'filtered', get(filtered_dir) + '.csv');
         return training_data_file;
     },
 );

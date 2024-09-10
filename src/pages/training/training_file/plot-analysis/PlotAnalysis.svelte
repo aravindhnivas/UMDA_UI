@@ -57,7 +57,9 @@
             toast.error(`No directories found in ${search_dir}`);
             return;
         }
-        const dir_items = dirs.filter(dir => isArray(dir.children)).map(dir => dir.name as string);
+        const dir_items = dirs
+            .filter(dir => isArray(dir.children))
+            .map(dir => dir.name?.replace('_processed_data', '') as string);
         dir_items_for_plotting = ['default', ...dir_items.filter(Boolean)];
         if (warn) {
             toast.success(
