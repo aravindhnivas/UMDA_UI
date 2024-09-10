@@ -6,18 +6,12 @@ export const use_filtered_data_for_training = writable(false);
 export const current_post_analysis_files_directory = derived(
     [load_analysis_dir, filtered_dir],
     async ([$load_analysis_dir, $filtered_dir]) => {
-        if ($filtered_dir === 'default') {
-            const dir = await $load_analysis_dir;
-            return dir;
-        }
         const original_analysis_dir = await $load_analysis_dir;
-        const original_analysis_dirname = await path.basename(original_analysis_dir);
-        const dir = await path.join(
-            original_analysis_dir,
-            'filtered',
-            $filtered_dir,
-            original_analysis_dirname.replace('_analysis', `_${$filtered_dir.toLocaleLowerCase()}_filtered_analysis`),
-        );
+        if ($filtered_dir === 'default') {
+            return original_analysis_dir;
+        }
+
+        const dir = await path.join(original_analysis_dir, 'filtered', $filtered_dir, 'analysis_data');
         return dir;
     },
 );
@@ -25,12 +19,9 @@ export const current_post_analysis_files_directory = derived(
 export const current_training_data_file = derived(
     [current_post_analysis_files_directory, use_filtered_data_for_training],
     async ([$current_post_analysis_files_directory, $use_filtered_data_for_training]) => {
-        if (!$use_filtered_data_for_training) return get(training_file).filename;
-
-        const analysis_dir = await $current_post_analysis_files_directory;
-        const name = await path.basename(analysis_dir);
-        const dirname = await path.dirname(analysis_dir);
-        const training_data_file = await path.join(dirname, name.replace('_analysis', '.csv'));
+        if (!$use_filtered_data_for_training || get(filtered_dir) === 'default') return get(training_file).filename;
+        const loc = await path.dirname(await $current_post_analysis_files_directory);
+        const training_data_file = await path.join(loc, `${get(filtered_dir)}_training_file.csv`);
         return training_data_file;
     },
 );

@@ -8,6 +8,7 @@
         training_column_name_y,
         training_column_name_index,
         index_column_valid,
+        training_save_directory,
     } from './stores';
     import FileLoader from '$lib/components/fileloader/FileLoader.svelte';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
@@ -41,10 +42,16 @@
     bind:filename={$training_file['filename']}
     bind:filetype={$training_file['filetype']}
     bind:key={$training_file['key']}
-    on:load={e => {
+    on:load={async e => {
         if (!e.detail) return;
         data = e.detail;
         auto_fetch_columns = true;
+        if (!(await fs.exists($training_save_directory))) {
+            await fs.createDir($training_save_directory);
+            console.log(`Directory created: ${$training_save_directory}`);
+        } else {
+            console.warn(`Directory already exists: ${$training_save_directory}`);
+        }
     }}
 >
     <svelte:fragment let:load_btn>

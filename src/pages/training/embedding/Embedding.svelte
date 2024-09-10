@@ -1,28 +1,24 @@
 <script lang="ts">
+    import BrowseFile from '$lib/components/BrowseFile.svelte';
+    import Checkbox from '$lib/components/Checkbox.svelte';
+    import CustomInput from '$lib/components/CustomInput.svelte';
+    import CustomSelect from '$lib/components/CustomSelect.svelte';
+    import Loadingbtn from '$lib/components/Loadingbtn.svelte';
+    import Molecule from '$lib/components/Molecule.svelte';
+    import { NPARTITIONS, use_dask } from '$lib/stores/system';
+    import Textfield from '@smui/textfield';
+    import { TriangleAlert } from 'lucide-svelte/icons';
+    import { current_training_data_file } from '../training_file/plot-analysis/stores';
+    import { training_column_name_X, training_file } from '../training_file/stores';
+    import Results from './Results.svelte';
     import {
-        embedding,
-        embeddings,
         embedd_savefile,
         embedd_savefile_path,
-        use_PCA,
+        embedding,
+        embeddings,
         model_and_pipeline_files,
+        use_PCA,
     } from './stores';
-    import { training_file, training_column_name_X } from '../training_file/stores';
-    import {
-        current_training_data_file,
-        filtered_dir,
-        use_filtered_data_for_training,
-    } from '../training_file/plot-analysis/stores';
-    import { NPARTITIONS, use_dask } from '$lib/stores/system';
-    import Loadingbtn from '$lib/components/Loadingbtn.svelte';
-    import CustomSelect from '$lib/components/CustomSelect.svelte';
-    import CustomInput from '$lib/components/CustomInput.svelte';
-    import Checkbox from '$lib/components/Checkbox.svelte';
-    import { TriangleAlert } from 'lucide-svelte/icons';
-    import BrowseFile from '$lib/components/BrowseFile.svelte';
-    import Molecule from '$lib/components/Molecule.svelte';
-    import Textfield from '@smui/textfield';
-    import Results from './Results.svelte';
 
     export let id: string = 'main-data-container';
     export let display: string = 'none';
@@ -34,23 +30,10 @@
         };
     }
 
-    const get_embedd_savefile = async (
-        use_filtered_filename: boolean,
-        column_X_name: string,
-        embedding_name: string,
-        pca: boolean,
-    ) => {
-        const filename = await $current_training_data_file;
-        if (!filename) return;
-        const name = await path.basename(filename);
-        $embedd_savefile =
-            name.split('.').slice(0, -1).join('.') +
-            `_${column_X_name}_${embedding_name}_embeddings${pca ? '_with_PCA' : ''}`;
+    const set_embedd_savefile = async (embedding_name: string, pca: boolean) => {
+        $embedd_savefile = `${embedding_name}_embeddings${pca ? '_with_PCA' : ''}`;
     };
-
-    $: if ($training_file.filename || $filtered_dir) {
-        get_embedd_savefile($use_filtered_data_for_training, $training_column_name_X, $embedding, $use_PCA);
-    }
+    $: set_embedd_savefile($embedding, $use_PCA);
 
     let test_mode = import.meta.env.DEV;
     const test_smiles = localWritable('test_smiles', 'CCO');
@@ -89,7 +72,7 @@
         }
 
         dataFromPython = {};
-
+        const vectors_file = await $embedd_savefile_path;
         const pyfile = 'training.embedd_data';
         const final_training_file = await $current_training_data_file;
         return {
@@ -106,6 +89,7 @@
                 pretrained_model_location: $model_and_pipeline_files[$embedding].model_file,
                 PCA_pipeline_location: $use_PCA ? $model_and_pipeline_files[$embedding].pipeline_file : null,
                 embedd_savefile: $embedd_savefile,
+                vectors_file: vectors_file,
                 use_dask: $use_dask,
             },
         };

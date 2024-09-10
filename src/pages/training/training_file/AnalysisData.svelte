@@ -7,13 +7,7 @@
         sizeDistributionFilter,
         current_analysis_file,
     } from './plot-analysis/stores';
-    import {
-        training_column_name_X,
-        training_file,
-        molecule_analysis_file,
-        index_column_valid,
-        training_column_name_index,
-    } from './stores';
+    import { training_column_name_X, training_file, index_column_valid, training_column_name_index } from './stores';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import { use_dask } from '$lib/stores/system';
     import PlotAnalysis from './plot-analysis/PlotAnalysis.svelte';
@@ -25,9 +19,6 @@
     ) => {
         console.log('MolecularAnalysis', { $filtered_dir });
         const analysis_file = await $current_analysis_file;
-        const analysis_file_exists = await fs.exists(analysis_file);
-        console.log('Checking analysis file', analysis_file, analysis_file_exists);
-
         return {
             pyfile: 'training.molecular_analysis',
             args: {
@@ -36,7 +27,7 @@
                 key: $training_file.key,
                 use_dask: $use_dask,
                 smiles_column_name: $training_column_name_X,
-                analysis_file: analysis_file_exists ? analysis_file : null,
+                analysis_file: analysis_file,
                 atoms_bin_size: Number($atoms_bin_size),
                 mode,
                 index_column_name: $training_column_name_index,
@@ -83,7 +74,7 @@
             toast.error('Filters can only be applied to the default directory');
             return;
         }
-        const analysis_file = await $molecule_analysis_file;
+        const analysis_file = await $current_analysis_file;
         const analysis_file_exists = await fs.exists(analysis_file);
         if (!analysis_file_exists) {
             toast.error(`${analysis_file} file does not exist`);
@@ -148,8 +139,10 @@
 </script>
 
 {#if $index_column_valid}
-    {#await $molecule_analysis_file then value}
-        <div class="badge badge-info h-10">{value}</div>
+    {#await $current_analysis_file then value}
+        {#await fs.exists(value) then file_exists}
+            <div class="badge badge-info h-10" class:badge-error={!file_exists}>{value}</div>
+        {/await}
     {/await}
 
     {#if $training_column_name_X.toLocaleLowerCase() !== 'smiles'}

@@ -210,6 +210,7 @@
             use_dask: $use_dask,
             skip_invalid_y_values: $skip_invalid_y_values,
         };
+
         $results[$model] = null;
         return { pyfile: 'training.ml_model', args };
     };
