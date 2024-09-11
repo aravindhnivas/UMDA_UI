@@ -54,15 +54,17 @@
     setContext('unique_id', unique_id);
 
     const fit_function = async () => {
+        const final_training_file = await $current_training_data_file;
         const vectors_file = await $embedd_savefile_path;
-        console.log({ vectors_file });
-        if (!(await fs.exists(vectors_file))) {
-            toast.error('Error: Embeddings vector file not found');
+
+        console.log({ vectors_file, final_training_file });
+        if (!(await fs.exists(final_training_file))) {
+            toast.error('Error: Training file not found');
             return;
         }
 
-        if (!(await fs.exists(await $current_training_data_file))) {
-            toast.error('Error: Training file not found');
+        if (!(await fs.exists(vectors_file))) {
+            toast.error('Error: Embeddings vector file not found');
             return;
         }
 
@@ -162,8 +164,6 @@
             factor: Number($halving_factor),
         };
 
-        const final_training_file = await $current_training_data_file;
-        console.log({ final_training_file });
         const args = {
             model: $model,
             vectors_file,
