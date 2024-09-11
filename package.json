@@ -15,12 +15,12 @@
     "@tauri-apps/api": "^1.6.0",
     "@tauri-apps/cli": "^1.6.1",
     "lucide-svelte": "0.438.0",
-    "plotly.js-basic-dist-min": "^2.35.0",
+    "plotly.js-basic-dist-min": "^2.35.2",
     "smiles-drawer": "^2.1.7",
     "tauri-plugin-websocket-api": "github:tauri-apps/tauri-plugin-websocket#v1"
   },
   "devDependencies": {
-    "@iconify/json": "^2.2.245",
+    "@iconify/json": "^2.2.247",
     "@loadingio/loading.css": "^3.2.1",
     "@macfja/svelte-persistent-store": "^2.4.1",
     "@modyfi/vite-plugin-yaml": "^1.1.0",
@@ -63,10 +63,10 @@
     "svelte-splitpanes": "^8.0.5",
     "ts-try": "^0.2.0",
     "tslib": "^2.7.0",
-    "typescript": "^5.5.4",
+    "typescript": "^5.6.2",
     "unocss": "0.62.1",
     "unocss-preset-daisy": "^7.0.0",
     "unplugin-auto-import": "^0.18.2",
-    "vite": "^5.4.3"
+    "vite": "^5.4.4"
   }
 }
