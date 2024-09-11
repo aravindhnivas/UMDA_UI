@@ -20,12 +20,12 @@
             <ResolveFilename
                 filename={$current_training_data_file}
                 basename={false}
-                class="col-span-4 h-[2.5rem] flex m-auto"
+                class="badge badge-success col-span-4 h-[2.5rem] flex m-auto"
             />
             <div>Training file:</div>
-            <ResolveFilename filename={$current_training_data_file} class="col-span-3" />
+            <ResolveFilename filename={$current_training_data_file} class="badge badge-success col-span-3" />
             <div>Embedded vector file:</div>
-            <ResolveFilename filename={$embedd_savefile_path} class="col-span-3" />
+            <ResolveFilename filename={$embedd_savefile_path} class="badge badge-success col-span-3" />
             <div>Column (train_y):</div>
             <div class="badge badge-success col-span-3" class:badge-error={!$training_column_name_y}>
                 {$training_column_name_y || 'Column not provided'}
