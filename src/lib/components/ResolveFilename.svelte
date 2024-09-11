@@ -1,7 +1,7 @@
 <script lang="ts">
     export let filename: Promise<string> | string;
     export let basename: boolean = true;
-
+    export let status: 'success' | 'info' | 'primary' | 'warning' = 'success';
     let className = '';
     export { className as class };
 
@@ -15,7 +15,7 @@
     {#await filename then file_path}
         {#await fs.exists(file_path) then file_exists}
             {#await get_basename_or_dirname(file_path) then fname}
-                <div class="badge badge-success {className}" class:badge-error={!file_exists}>
+                <div class="badge badge-{status} {className}" class:badge-error={!file_exists}>
                     {fname || (basename ? 'file' : 'directory')} exists
                 </div>
             {/await}
