@@ -17,11 +17,11 @@
 
     {#key refresh}
         <div class="grid gap-2 grid-cols-4 items-center">
-            <ResolveFilename
+            <!-- <ResolveFilename
                 filename={$current_training_data_file}
                 basename={false}
                 class="badge badge-success col-span-4 h-[2.5rem] flex m-auto"
-            />
+            /> -->
             <div>Training file:</div>
             <ResolveFilename filename={$current_training_data_file} class="badge badge-success col-span-3" />
             <div>Embedded vector file:</div>

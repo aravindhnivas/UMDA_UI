@@ -8,7 +8,10 @@
     import { NPARTITIONS, use_dask } from '$lib/stores/system';
     import Textfield from '@smui/textfield';
     import { TriangleAlert } from 'lucide-svelte/icons';
-    import { current_training_data_file } from '../training_file/plot-analysis/stores';
+    import {
+        current_training_data_file,
+        current_training_processed_data_directory,
+    } from '../training_file/plot-analysis/stores';
     import { training_column_name_X, training_file } from '../training_file/stores';
     import Results from './Results.svelte';
     import {
@@ -60,10 +63,10 @@
             toast.error('Please provide a column name');
             return;
         }
-
-        if (!test_mode && (await fs.exists(await $embedd_savefile_path))) {
+        const vectors_file = await $embedd_savefile_path;
+        if (!test_mode && (await fs.exists(vectors_file))) {
             const overwrite = await dialog.confirm(
-                `embedd_savefile ${await path.basename(await $embedd_savefile_path)} already exists. Do you want to overwrite it ?`,
+                `embedd_savefile ${vectors_file} already exists. Do you want to overwrite it ?`,
                 {
                     title: 'Overwrite ?',
                     type: 'warning',
@@ -73,7 +76,7 @@
         }
 
         dataFromPython = {};
-        const vectors_file = await $embedd_savefile_path;
+
         const pyfile = 'training.embedd_data';
         const final_training_file = await $current_training_data_file;
         return {
@@ -162,11 +165,6 @@
         <h3>Loaded training file</h3>
         <div class="flex-center">
             <span class="text-sm">File: </span>
-            <!-- {#await $current_training_data_file then name}
-                <div class="badge bg-indigo" class:bg-red={!name}>
-                    {name || 'No file selected'}
-                </div>
-            {/await} -->
             <ResolveFilename class="badge badge-success" filename={$current_training_data_file} absolute={true} />
         </div>
         <div class="flex-center">

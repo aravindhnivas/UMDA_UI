@@ -1,7 +1,7 @@
 <script lang="ts">
     import { CircleX, Info, TriangleAlert, CheckCheck, Eye } from 'lucide-svelte/icons';
     export let message: string;
-    export let type: 'info' | 'success' | 'warning' | 'error' = 'error';
+    export let type: 'info' | 'success' | 'warning' | 'error' = 'info';
     export let dismissable = true;
 
     let dialog_element: HTMLDialogElement;

@@ -31,6 +31,15 @@ export const current_training_data_file = derived(
     },
 );
 
+export const current_training_processed_data_directory = derived(
+    [current_training_data_file],
+    async ([$current_training_data_file]) => {
+        const current_training_file = await $current_training_data_file;
+        const training_directory = await path.join(current_training_file.split('.')[0] + '_processed_data');
+        return training_directory;
+    },
+);
+
 export const current_analysis_file = derived(
     current_post_analysis_files_directory,
     async $current_post_analysis_files_directory => {

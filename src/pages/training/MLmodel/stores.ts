@@ -1,4 +1,6 @@
 import supervised_ml_models from '$lib/config/ml_model/ml_models_parameters';
+import { current_training_processed_data_directory } from '../training_file/plot-analysis/stores';
+
 export const model_names = Object.keys(supervised_ml_models) as MLModel[];
 export const model = localWritable<MLModel>('ml_model', 'ridge');
 
@@ -57,23 +59,22 @@ export const test_size = localWritable('test_size', 20);
 export const grid_search_method = localWritable('grid_search_method', 'RandomizedSearchCV');
 export const noise_percentage = localWritable('noise_percentage', 0.5);
 export const save_pretrained_model = localWritable('save_pretrained_model', true);
-export const save_pretrained_model_include_unique_key = writable(false);
 export const parallel_computation = localWritable('parallel_computation', true);
 export const n_jobs = localWritable('n_jobs', -2);
 export const backends: ParallelComputationBackend[] = ['loky', 'threading', 'multiprocessing', 'dask'];
-// export const backends: ParallelComputationBackend[] = ['threading', 'dask'];
 export const parallel_computation_backend = localWritable<ParallelComputationBackend>(
     'parallel_processing_backend',
     'threading',
 );
-
-export const pre_trained_file_loc = localWritable('pre_trained_file_loc', '');
-export const pre_trained_filename = localWritable('pre_trained_filename', '');
-export const pre_trained_filename_unique = writable('');
-export const current_save_filekey = writable<string>('');
-
 export const results = writable<Record<MLModel[number], Results | null>>({});
 export const plot_data = writable<Record<MLModel[number], Partial<Plotly.PlotData>[]>>({});
 export const default_parameter_mode = localWritable('default_parameter_mode', true);
-
 export const skip_invalid_y_values = localWritable('skip_invalid_y_values', false);
+export const pre_trained_filename = localWritable('pre_trained_filename', '');
+export const current_pretrained_file = derived(
+    [current_training_processed_data_directory, pre_trained_filename],
+    async ([$current_training_processed_data_directory, $pre_trained_filename]) => {
+        const dir = await path.join(await $current_training_processed_data_directory, 'pretrained_models');
+        return await path.join(dir, $pre_trained_filename.trim());
+    },
+);

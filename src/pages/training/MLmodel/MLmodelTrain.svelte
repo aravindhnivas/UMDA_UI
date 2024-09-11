@@ -9,9 +9,7 @@
         cv_fold,
         bootstrap_nsamples,
         noise_percentage,
-        pre_trained_file_loc,
         pre_trained_filename,
-        pre_trained_filename_unique,
         results,
         plot_data,
         logYscale,
@@ -27,9 +25,8 @@
         n_jobs,
         parallel_computation_backend,
         default_parameter_mode,
-        current_save_filekey,
-        save_pretrained_model_include_unique_key,
         skip_invalid_y_values,
+        current_pretrained_file,
     } from './stores';
     import { embedding, use_PCA } from '../embedding/stores';
     import { NPARTITIONS, use_dask } from '$lib/stores/system';
@@ -45,7 +42,10 @@
     import ResultsPanel from './ResultsPanel.svelte';
     import Effects from './Effects.svelte';
     import { difference } from 'lodash-es';
-    import { current_training_data_file } from '../training_file/plot-analysis/stores';
+    import {
+        current_training_data_file,
+        current_training_processed_data_directory,
+    } from '../training_file/plot-analysis/stores';
 
     export let id: string = 'ml_model-train-container';
     export let display: string = 'none';
@@ -100,22 +100,8 @@
             }
         }
 
-        $pre_trained_file_loc = $pre_trained_file_loc.trim();
-        if (!(await fs.exists($pre_trained_file_loc))) {
-            toast.error('Error: Save location does not exist');
-            return;
-        }
-
-        $pre_trained_filename = $pre_trained_filename.trim();
-        if ($save_pretrained_model_include_unique_key) {
-            $current_save_filekey = getID(5);
-            $pre_trained_filename_unique = $pre_trained_filename.split('.pkl')[0] + `_${$current_save_filekey}_`;
-        } else {
-            $pre_trained_filename_unique = $pre_trained_filename.split('.pkl')[0];
-        }
-
-        const pre_trained_file = await path.join($pre_trained_file_loc, $pre_trained_filename_unique);
-
+        const pre_trained_file = await $current_pretrained_file;
+        console.log({ pre_trained_file });
         if (await fs.exists(pre_trained_file)) {
             const overwrite = await dialog.confirm(
                 pre_trained_file + ': Pre trained model file already exists. Do you want to overwrite it?',
@@ -175,10 +161,12 @@
             n_iter: Number($randomzied_gridsearch_niter),
             factor: Number($halving_factor),
         };
+
         const final_training_file = await $current_training_data_file;
         console.log({ final_training_file });
         const args = {
             model: $model,
+            vectors_file,
             training_file: {
                 key: $training_file.key,
                 filetype: $training_file.filetype,
@@ -198,7 +186,6 @@
             grid_search_parameters,
             pre_trained_file,
             npartitions: Number($NPARTITIONS),
-            vectors_file,
             logYscale: $logYscale,
             scaleYdata: $scaleYdata,
             embedding: $embedding,
