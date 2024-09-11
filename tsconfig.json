@@ -6,15 +6,14 @@
         "module": "ESNext",
         "moduleResolution": "Bundler",
         "baseUrl": ".",
-        /**
-         * Typecheck JS in `.svelte` and `.js` files by default.
-         * Disable checkJs if you'd like to use dynamic types in JS.
-         * Note that setting allowJs false does not prevent the use
-         * of JS in `.svelte` files.
-         */
         "allowJs": true,
         "checkJs": true,
         "isolatedModules": true,
+        "strict": true, // Enable all strict type-checking options
+        "esModuleInterop": true, // Improves compatibility with CommonJS modules
+        "allowSyntheticDefaultImports": true, // Allows default imports from modules with no default export
+        "skipLibCheck": true, // Skip type checking of declaration files
+        "resolveJsonModule": true, // Allows importing JSON files as modules
         "paths": {
             "$lib/*": [
                 "./src/lib/*"
