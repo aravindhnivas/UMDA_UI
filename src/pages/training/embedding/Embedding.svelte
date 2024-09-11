@@ -19,7 +19,7 @@
         model_and_pipeline_files,
         use_PCA,
     } from './stores';
-    import ResolveFilename from '$lib/components/ResolveFilename.svelte';
+    import LoadedFileInfos from './LoadedFileInfos.svelte';
 
     export let id: string = 'main-data-container';
     export let display: string = 'none';
@@ -160,16 +160,12 @@
     {#if !test_mode}
         <hr />
         <h3>Loaded training file</h3>
-        <div class="flex-center">
-            <span class="text-sm">File: </span>
-            <ResolveFilename class="badge badge-success" filename={$current_training_data_file} absolute={true} />
-        </div>
-        <div class="flex-center">
-            <span class="text-sm">Column:</span>
-            <div class="badge badge-success" class:bg-red={!$training_column_name_X}>
+        <LoadedFileInfos>
+            <div>Column:</div>
+            <div class="col-span-3 badge badge-success" class:bg-red={!$training_column_name_X}>
                 {$training_column_name_X || 'Column not provided'}
             </div>
-        </div>
+        </LoadedFileInfos>
         <hr />
     {/if}
 

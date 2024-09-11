@@ -4,6 +4,7 @@
     import { training_column_name_y } from '../training_file/stores';
     import { current_training_data_file } from '../training_file/plot-analysis/stores';
     import { RefreshCcw } from 'lucide-svelte';
+    import LoadedFileInfos from '../embedding/LoadedFileInfos.svelte';
 
     let refresh = true;
 </script>
@@ -15,27 +16,11 @@
     </button>
 
     {#key refresh}
-        <div class="grid gap-2 grid-cols-4 items-center">
-            <div>Training file:</div>
-            {#await $current_training_data_file then file_name}
-                {#await fs.exists(file_name) then file_exists}
-                    <div class="col-span-3 bg-success border-rounded p-1" class:bg-red={!file_exists}>
-                        <code class=" break-words text-sm">{file_name}</code>
-                    </div>
-                {/await}
-            {/await}
-            <div>Embedded vector file:</div>
-            {#await $embedd_savefile_path then file_name}
-                {#await fs.exists(file_name) then file_exists}
-                    <div class="col-span-3 bg-success border-rounded p-1" class:bg-red={!file_exists}>
-                        <code class=" break-words text-sm">{file_name}</code>
-                    </div>
-                {/await}
-            {/await}
+        <LoadedFileInfos>
             <div>Column (train_y):</div>
             <div class="badge badge-success col-span-3" class:badge-error={!$training_column_name_y}>
                 {$training_column_name_y || 'Column not provided'}
             </div>
-        </div>
+        </LoadedFileInfos>
     {/key}
 </CustomPanel>
