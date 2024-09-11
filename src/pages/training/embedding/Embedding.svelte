@@ -8,10 +8,7 @@
     import { NPARTITIONS, use_dask } from '$lib/stores/system';
     import Textfield from '@smui/textfield';
     import { TriangleAlert } from 'lucide-svelte/icons';
-    import {
-        current_training_data_file,
-        current_training_processed_data_directory,
-    } from '../training_file/plot-analysis/stores';
+    import { current_training_data_file } from '../training_file/plot-analysis/stores';
     import { training_column_name_X, training_file } from '../training_file/stores';
     import Results from './Results.svelte';
     import {
