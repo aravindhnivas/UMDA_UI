@@ -1,8 +1,6 @@
 <script lang="ts">
     import CustomPanel from '$lib/components/CustomPanel.svelte';
-    import { embedd_savefile_path } from '../embedding/stores';
     import { training_column_name_y } from '../training_file/stores';
-    import { current_training_data_file } from '../training_file/plot-analysis/stores';
     import { RefreshCcw } from 'lucide-svelte';
     import LoadedFileInfos from '../embedding/LoadedFileInfos.svelte';
 
