@@ -14,11 +14,6 @@
     </button>
 
     {#key refresh}
-        <LoadedFileInfos>
-            <div>Column (train_y):</div>
-            <div class="badge badge-success col-span-3" class:badge-error={!$training_column_name_y}>
-                {$training_column_name_y || 'Column not provided'}
-            </div>
-        </LoadedFileInfos>
+        <LoadedFileInfos />
     {/key}
 </CustomPanel>

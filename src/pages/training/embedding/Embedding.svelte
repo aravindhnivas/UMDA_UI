@@ -160,12 +160,7 @@
     {#if !test_mode}
         <hr />
         <h3>Loaded training file</h3>
-        <LoadedFileInfos>
-            <div>Column:</div>
-            <div class="col-span-3 badge badge-success" class:bg-red={!$training_column_name_X}>
-                {$training_column_name_X || 'Column not provided'}
-            </div>
-        </LoadedFileInfos>
+        <LoadedFileInfos />
         <hr />
     {/if}
 
