@@ -6,6 +6,7 @@
         current_training_data_file,
         use_filtered_data_for_training,
     } from './stores';
+
     import { load_analysis_dir } from '../stores';
     import SizeDistributionPlot from './SizeDistributionPlot.svelte';
     import StructuralDistributionPlot from './StructuralDistributionPlot.svelte';
@@ -29,8 +30,7 @@
             toast.error(`File ${csv_file} does not exist`);
             return;
         }
-
-        const { columns, data } = await parse_csv_file(csv_file);
+        const { data } = await parse_csv_file(csv_file);
 
         const x = data.map(row => row[0]).filter(Boolean) as T[];
         const y = data
