@@ -2,15 +2,22 @@
     import { current_training_data_file } from '../training_file/plot-analysis/stores';
     import { embedd_savefile_path } from './stores';
     import { training_column_name_X, training_column_name_y } from '../training_file/stores';
-    import { RefreshCcw } from 'lucide-svelte';
-
+    import { RefreshCcw, ArrowBigRight } from 'lucide-svelte/icons';
     let refresh = true;
 </script>
 
-<button class="flex btn btn-sm ml-auto mb-2" on:click={() => (refresh = !refresh)}>
-    <span>Refresh</span>
-    <RefreshCcw size="20" />
-</button>
+<div class="flex items-center justify-between">
+    <div class="flex gap-1 items-end">
+        <code>File status indicator</code>
+        <ArrowBigRight size="20" />
+        <code class="badge badge-success">EXISTS</code>
+        <code class="badge badge-error">DOESN'T-EXISTS</code>
+    </div>
+    <button class="flex btn btn-sm mb-2" on:click={() => (refresh = !refresh)}>
+        <span>Refresh</span>
+        <RefreshCcw size="20" />
+    </button>
+</div>
 
 {#key refresh}
     <div class="grid gap-2 grid-cols-4 items-center">
