@@ -24,11 +24,6 @@
         if (!use_file) predicted_value = 'Computing...';
         const args = {
             smiles: $smiles,
-            // molecular_embedder: {
-            //     name: $molecular_embedder,
-            //     file: $model_and_pipeline_files[$molecular_embedder].model_file,
-            //     pipeline_file: $use_PCA ? $model_and_pipeline_files[$molecular_embedder].pipeline_file : null,
-            // },
             pretrained_model_file: $pretrained_model_file,
             test_file: use_file ? $test_file : null,
         };
