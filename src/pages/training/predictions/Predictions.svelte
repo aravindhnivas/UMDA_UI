@@ -6,6 +6,12 @@
     import CustomInput from '$lib/components/CustomInput.svelte';
 
     const predict = async () => {
+        const basename = await path.basename($pretrained_model_file);
+        if (!basename.split('.')[0]) {
+            toast.error('Invalid pretrained_model filename');
+            return;
+        }
+
         if (!(await fs.exists($pretrained_model_file))) {
             toast.error('pretrained_model file not found');
             return;
@@ -53,9 +59,6 @@
     const pretrained_model_file = localWritable('ml_prediction_pretrained_model_file', '');
     const test_file = localWritable('ml_prediction_test_file', '');
     let use_file = true;
-
-    const molecular_embedder = localWritable('ml_prediction_molecular_embedder', 'VICGAE');
-    const use_PCA = localWritable('ml_prediction_use_PCA', false);
 
     const smiles = localWritable(
         'ml_prediction_molecular_smiles',
