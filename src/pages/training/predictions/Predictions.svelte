@@ -79,6 +79,7 @@
     bind:filename={$test_file}
     label="upload test file"
     filters={[{ name: 'SMILES files', extensions: ['smi', 'csv'] }]}
+    disabled={!use_file}
 />
 
 <div class="grid grid-cols-5 items-end gap-2">
