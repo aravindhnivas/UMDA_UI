@@ -203,19 +203,7 @@
         </div>
         <div class="grid gap-2 items-center" style="grid-auto-flow: column; grid-template-columns: auto 1fr auto;">
             <CustomSelect label="embedding" bind:value={$embedding} items={embeddings} />
-            <div class="grid gap-1">
-                <Textfield label="embedd_savefile" bind:value={$embedd_savefile} />
-                {#await $embedd_savefile_path then file_path}
-                    {#await fs.exists(file_path) then value}
-                        {#if value}
-                            <span class="flex items-center gap-2 text-sm ml-auto">
-                                <TriangleAlert />
-                                <span>Embedded file exists</span>
-                            </span>
-                        {/if}
-                    {/await}
-                {/await}
-            </div>
+            <Textfield label="embedd_savefile" bind:value={$embedd_savefile} />
             <Loadingbtn name="Compute" callback={embedd_data} subprocess={true} on:result={onResult} />
         </div>
     {/if}
