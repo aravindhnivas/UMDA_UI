@@ -20,6 +20,10 @@
     const dispatch = createEventDispatcher();
 
     const browse_file = async () => {
+        if (disabled) {
+            toast.error('This field is disabled');
+            return;
+        }
         const result = await dialog.open({
             directory,
             filters,
@@ -34,6 +38,10 @@
     };
 
     const load_callback = async () => {
+        if (disabled) {
+            toast.error('This field is disabled');
+            return;
+        }
         try {
             if (!callback) return toast.error('No load callback provided');
             if (!filename) return toast.error('No file selected');
@@ -75,7 +83,9 @@
         {/if}
     </div>
     <div class="join">
-        <button class="btn btn-sm join-item" on:click={browse_file} disabled={lock}>{btn_name}</button>
+        <button class="btn btn-sm join-item" on:click={browse_file} disabled={lock}>
+            {btn_name}
+        </button>
         <input type="text" class="input input-sm join-item w-full" bind:value={filename} disabled={disabled || lock} />
         {#if callback}
             <button class="btn btn-sm join-item" on:click={load_callback}>load</button>
