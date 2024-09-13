@@ -21,35 +21,42 @@
     const dispatch = createEventDispatcher();
 
     const run_callback = async (e: MouseEvent) => {
-        const target = btn ?? (e.currentTarget as HTMLButtonElement);
-        if (!target) return toast.error('No target button');
+        try {
+            const target = btn ?? (e.currentTarget as HTMLButtonElement);
+            if (!target) return toast.error('No target button');
 
-        if (!$pyServerReady) return toast.error('python server is not yet started');
+            if (!$pyServerReady) return toast.error('python server is not yet started');
 
-        const data = await callback();
-        if (!data) return;
-        console.log(data);
+            const data = await callback();
+            if (!data) return;
+            console.log(data);
 
-        const { pyfile, args } = data;
-        const CancelToken = axios.CancelToken;
-        source = CancelToken.source();
+            const { pyfile, args } = data;
+            const CancelToken = axios.CancelToken;
+            source = CancelToken.source();
 
-        loading = true;
-        if (subprocess) process_count += 1;
+            loading = true;
+            if (subprocess) process_count += 1;
 
-        const dataFromPython = await computePy({
-            pyfile,
-            args,
-            subprocess,
-            target: btn ?? (e.currentTarget as HTMLButtonElement),
-            cancelToken: source.token,
-        });
+            const dataFromPython = await computePy({
+                pyfile,
+                args,
+                subprocess,
+                target: btn ?? (e.currentTarget as HTMLButtonElement),
+                cancelToken: source.token,
+            });
 
-        loading = false;
-        if (subprocess) process_count -= 1;
+            // loading = false;
+            // if (subprocess) process_count -= 1;
 
-        dispatch('result', { dataFromPython, pyfile, args });
-        console.log('done!!');
+            dispatch('result', { dataFromPython, pyfile, args });
+            console.log('done!!');
+        } catch (error) {
+            toast.error(error as string);
+        } finally {
+            loading = false;
+            if (subprocess) process_count -= 1;
+        }
     };
 </script>
 
