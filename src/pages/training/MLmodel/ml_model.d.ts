@@ -27,7 +27,12 @@ type ParametersArgs = Record<string, Record<string, string | boolean | number | 
 interface Results {
     embedding: Embedding;
     PCA: boolean;
-    y_test_data_size: number;
+    data_shapes: {
+        X: number[] | number;
+        y: number[] | number;
+        X_test: number[] | number;
+        y_test: number[] | number;
+    };
     r2: number;
     mse: number;
     rmse: number;

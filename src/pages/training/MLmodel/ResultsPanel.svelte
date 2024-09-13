@@ -23,7 +23,7 @@
                 <span class="badge badge-primary">
                     {r.time ? `completed in ${$results[$model].time}` : ''}
                 </span>
-                <span class="badge badge-info"># y_test_data_size ({$test_size}%): {r.y_test_data_size}</span>
+                <span class="badge badge-info"># y_test_data_size ({$test_size}%): {r.data_shapes.y_test}</span>
             </div>
             {#if r.best_params}
                 <hr />
