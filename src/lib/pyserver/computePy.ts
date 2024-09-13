@@ -31,7 +31,7 @@ export default async function <T extends Record<string, any>>({
                 args,
                 target,
             });
-            if (!response) return Promise.reject('error');
+            if (!response) return Promise.reject('error occured in subprocess');
             dataFromPython = response as T & { done: boolean; error: boolean; computed_time: string };
             return Promise.resolve(dataFromPython);
         }
@@ -51,7 +51,7 @@ export default async function <T extends Record<string, any>>({
             cancelToken,
         });
 
-        if (!response) return Promise.reject('error');
+        if (!response) return Promise.reject('error occured in server');
         dataFromPython = response;
         if (!get(suppress_py_warnings)) {
             if ((dataFromPython as any)?.warnings) {
