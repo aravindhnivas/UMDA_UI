@@ -69,6 +69,7 @@
     let current_active_analysis_tab = 'analysis_plots';
     $: if ($training_file['filename']) {
         dir_items_for_plotting = ['default'];
+        fetch_analysis_dir({ warn: false }).catch(err => toast.error(err));
     }
     onMount(async () => {
         await fetch_analysis_dir({ warn: false });
