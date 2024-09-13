@@ -33,7 +33,12 @@
     import { embedd_savefile_path } from '../embedding/stores';
     import { Loadingbtn } from '$lib/components';
     import Accordion from '@smui-extra/accordion';
-    import { training_column_name_y, training_file } from '../training_file/stores';
+    import {
+        loaded_df_columns,
+        training_column_name_X,
+        training_column_name_y,
+        training_file,
+    } from '../training_file/stores';
     import TrainingFilePanel from './TrainingFilePanel.svelte';
     import ControlPanel from './ControlPanel.svelte';
     import ModelPanel from './ModelPanel.svelte';
@@ -42,10 +47,7 @@
     import ResultsPanel from './ResultsPanel.svelte';
     import Effects from './Effects.svelte';
     import { difference } from 'lodash-es';
-    import {
-        current_training_data_file,
-        current_training_processed_data_directory,
-    } from '../training_file/plot-analysis/stores';
+    import { current_training_data_file } from '../training_file/plot-analysis/stores';
 
     export let id: string = 'ml_model-train-container';
     export let display: string = 'none';
@@ -54,6 +56,16 @@
     setContext('unique_id', unique_id);
 
     const fit_function = async () => {
+        if (!$loaded_df_columns.includes($training_column_name_X)) {
+            toast.error('Column X not found in the loaded file. Please select a valid column name.');
+            return;
+        }
+
+        if (!$loaded_df_columns.includes($training_column_name_y)) {
+            toast.error('Column y not found in the loaded file. Please select a valid column name.');
+            return;
+        }
+
         const final_training_file = await $current_training_data_file;
         const vectors_file = await $embedd_savefile_path;
 

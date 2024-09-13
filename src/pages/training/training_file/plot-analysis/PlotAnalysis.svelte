@@ -6,8 +6,7 @@
         current_training_data_file,
         use_filtered_data_for_training,
     } from './stores';
-
-    import { load_analysis_dir } from '../stores';
+    import { load_analysis_dir, training_file } from '../stores';
     import SizeDistributionPlot from './SizeDistributionPlot.svelte';
     import StructuralDistributionPlot from './StructuralDistributionPlot.svelte';
     import ElementalDistributionPlot from './ElementalDistributionPlot.svelte';
@@ -67,12 +66,13 @@
             );
         }
     };
-
+    let current_active_analysis_tab = 'analysis_plots';
+    $: if ($training_file['filename']) {
+        dir_items_for_plotting = ['default'];
+    }
     onMount(async () => {
         await fetch_analysis_dir({ warn: false });
     });
-
-    let current_active_analysis_tab = 'analysis_plots';
 </script>
 
 <div class="w-max">

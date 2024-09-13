@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { use_dask } from '$lib/stores/system';
     import { use_filtered_data_for_training, filtered_dir } from './plot-analysis/stores';
+    import { use_dask } from '$lib/stores/system';
     import { NPARTITIONS } from '$lib/stores/system';
     import {
         training_file,
@@ -9,13 +9,14 @@
         training_column_name_index,
         index_column_valid,
         training_save_directory,
+        loaded_df_columns,
     } from './stores';
     import FileLoader from '$lib/components/fileloader/FileLoader.svelte';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
     import { CustomInput, Loadingbtn } from '$lib/components';
 
     let auto_fetch_columns = false;
-    let data: DataType;
+    let data: DataType | null = null;
 
     async function MakeIndexAndSaveFile() {
         const args = {
@@ -28,7 +29,15 @@
         const pyfile = 'training.make_index_and_save_file';
         return { pyfile, args };
     }
+
     $: $index_column_valid = data?.columns.includes($training_column_name_index) ?? false;
+    $: if ($training_file['filename']) {
+        $use_filtered_data_for_training = false;
+        $filtered_dir = 'default';
+        $training_column_name_X = 'SMILES';
+        $training_column_name_y = '';
+        data = null;
+    }
 </script>
 
 {#if $use_filtered_data_for_training && $filtered_dir !== 'default'}
@@ -45,6 +54,13 @@
     on:load={async e => {
         if (!e.detail) return;
         data = e.detail;
+        if (!data) return;
+
+        $loaded_df_columns = data.columns || [];
+
+        if (!data.columns.includes($training_column_name_X)) $training_column_name_X = '';
+        if (!data.columns.includes($training_column_name_y)) $training_column_name_y = '';
+
         auto_fetch_columns = true;
         if (!(await fs.exists($training_save_directory))) {
             await fs.createDir($training_save_directory);
@@ -62,7 +78,6 @@
                     <input type="checkbox" class="toggle" bind:checked={auto_fetch_columns} />
                 </div>
             </div>
-
             {#if auto_fetch_columns && !data?.columns.length}
                 <span class="text-sm">Load file first!</span>
             {/if}
@@ -72,13 +87,13 @@
                 use_input={!auto_fetch_columns}
                 label="column X"
                 bind:value={$training_column_name_X}
-                items={data?.columns || []}
+                items={$loaded_df_columns}
             />
             <CustomSelect
                 use_input={!auto_fetch_columns}
                 label="column Y"
                 bind:value={$training_column_name_y}
-                items={data?.columns || []}
+                items={$loaded_df_columns}
             />
             <CustomInput
                 label="npartitions disk"

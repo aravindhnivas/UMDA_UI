@@ -7,9 +7,8 @@
     import Molecule from '$lib/components/Molecule.svelte';
     import { NPARTITIONS, use_dask } from '$lib/stores/system';
     import Textfield from '@smui/textfield';
-    import { TriangleAlert } from 'lucide-svelte/icons';
     import { current_training_data_file } from '../training_file/plot-analysis/stores';
-    import { training_column_name_X, training_file } from '../training_file/stores';
+    import { training_column_name_X, training_file, loaded_df_columns } from '../training_file/stores';
     import Results from './Results.svelte';
     import {
         embedd_savefile,
@@ -36,7 +35,8 @@
     };
     $: set_embedd_savefile($embedding, $use_PCA);
 
-    let test_mode = import.meta.env.DEV;
+    // let test_mode = import.meta.env.DEV;
+    let test_mode = false;
     const test_smiles = localWritable('test_smiles', 'CCO');
     let test_result = '';
 
@@ -60,6 +60,12 @@
             toast.error('Please provide a column name');
             return;
         }
+
+        if (!$loaded_df_columns.includes($training_column_name_X)) {
+            toast.error('Column name not found in the loaded file');
+            return;
+        }
+
         const vectors_file = await $embedd_savefile_path;
         if (!test_mode && (await fs.exists(vectors_file))) {
             const overwrite = await dialog.confirm(
@@ -161,6 +167,7 @@
         <hr />
         <h3>Loaded training file</h3>
         <LoadedFileInfos />
+        <span class="badge badge-info">{$training_column_name_X} (train column X) will be used for embedding</span>
         <hr />
     {/if}
 
