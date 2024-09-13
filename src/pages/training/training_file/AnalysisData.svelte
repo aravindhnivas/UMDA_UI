@@ -135,7 +135,7 @@
         const pyfile = 'training.check_duplicates_on_x_column';
         return { pyfile, args };
     };
-    let filtered_filename = 'filtered';
+    let filtered_filename = 'topelements';
 </script>
 
 {#if $index_column_valid}
