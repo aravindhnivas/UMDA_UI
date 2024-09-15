@@ -131,15 +131,7 @@ export function unZIP(installation_request = true) {
         }
 
         await remove_asset_folder();
-
-        const args = {
-            win32: ['-xf', asset_zipfile, '-C', localdir],
-            darwin: [asset_zipfile, '-d', localdir],
-            linux: [asset_zipfile, '-d', localdir],
-        };
-        const currentplatform = (await platform()) as 'darwin' | 'win32' | 'linux';
-        const command = currentplatform === 'win32' ? `unzip-${await platform()}` : 'unzip-darwin';
-        const cmd = new shell.Command(command, args[currentplatform]);
+        const cmd = new shell.Command('tar', ['-xf', asset_zipfile, '-C', localdir]);
 
         let err: string;
         const child = await cmd.spawn();
