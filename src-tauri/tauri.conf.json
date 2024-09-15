@@ -74,7 +74,7 @@
                         ]
                     },
                     {
-                        "name": "unzip-win32",
+                        "name": "tar",
                         "cmd": "tar",
                         "args": [
                             "-xf",
@@ -82,19 +82,6 @@
                                 "validator": "\\S+"
                             },
                             "-C",
-                            {
-                                "validator": "\\S+"
-                            }
-                        ]
-                    },
-                    {
-                        "name": "unzip-darwin",
-                        "cmd": "unzip",
-                        "args": [
-                            {
-                                "validator": "\\S+"
-                            },
-                            "-d",
                             {
                                 "validator": "\\S+"
                             }
