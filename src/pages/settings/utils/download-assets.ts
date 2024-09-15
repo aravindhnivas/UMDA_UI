@@ -28,14 +28,17 @@ let assets_installing = false;
 export const asset_name_prefix = 'umdapy';
 
 export const remove_asset_folder = async () => {
-    const asset_folder = await path.join(await path.appLocalDataDir(), asset_name_prefix);
-    if (!(await fs.exists(asset_folder))) return;
-    outputbox.warn(`Deleting the existing folder: ${asset_folder}`);
-    const [err] = await oO(fs.removeDir(asset_folder, { recursive: true }));
-    if (err) return Promise.reject(`Could not delete the existing umdapy folder\n ${JSON.stringify(err)}`);
-    outputbox.warn(`Deleted the existing folder: ${asset_folder}`);
-
-    return Promise.resolve(asset_folder + ' folder deleted');
+    try {
+        const asset_folder = await path.join(await path.appLocalDataDir(), asset_name_prefix);
+        if (!(await fs.exists(asset_folder))) return;
+        outputbox.warn(`Deleting the existing folder: ${asset_folder}`);
+        await fs.removeDir(asset_folder, { recursive: true });
+        outputbox.warn(`Deleted the existing folder: ${asset_folder}`);
+        return Promise.resolve(asset_folder + ' folder deleted');
+    } catch (error) {
+        if (error instanceof Error) Alert.error(error);
+        return Promise.reject(`Could not delete the existing umdapy folder\n ${JSON.stringify(error)}`);
+    }
 };
 
 export async function downloadZIP() {
@@ -131,7 +134,7 @@ export function unZIP(installation_request = true) {
 
         const args = {
             // win32: ['Expand-Archive', '-Path', asset_zipfile, '-DestinationPath', `${localdir}`, '-Force'],
-            win32: ['-xvf', asset_zipfile, '-C', localdir],
+            win32: ['-xf', asset_zipfile, '-C', localdir],
             darwin: [asset_zipfile, '-d', localdir],
             linux: [asset_zipfile, '-d', localdir],
         };
