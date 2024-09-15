@@ -133,7 +133,6 @@ export function unZIP(installation_request = true) {
         await remove_asset_folder();
 
         const args = {
-            // win32: ['Expand-Archive', '-Path', asset_zipfile, '-DestinationPath', `${localdir}`, '-Force'],
             win32: ['-xf', asset_zipfile, '-C', localdir],
             darwin: [asset_zipfile, '-d', localdir],
             linux: [asset_zipfile, '-d', localdir],
