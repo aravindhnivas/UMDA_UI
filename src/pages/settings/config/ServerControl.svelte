@@ -35,15 +35,17 @@
 
 <div class="grid gap-1">
     <div class="flex items-center gap-1">
-        <button on:click={fetch_port}><RefreshCcw /></button>
-        <Textfield disabled={port_lock} type="number" bind:value={port} label="ServerPORT" />
-        <button on:click={() => (port_lock = !port_lock)}>
-            {#if port_lock}
-                <LockKeyhole />
-            {:else}
-                <UnlockKeyhole />
-            {/if}
-        </button>
+        <div class="flex gap-2 items-end">
+            <button on:click={fetch_port}><RefreshCcw /></button>
+            <Textfield disabled={port_lock} type="number" bind:value={port} label="ServerPORT" />
+            <button on:click={() => (port_lock = !port_lock)}>
+                {#if port_lock}
+                    <LockKeyhole />
+                {:else}
+                    <UnlockKeyhole />
+                {/if}
+            </button>
+        </div>
         <button
             disabled={serverReady || starting_server}
             class="btn btn-sm"
