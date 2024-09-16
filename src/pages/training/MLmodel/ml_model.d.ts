@@ -28,15 +28,25 @@ interface Results {
     embedding: Embedding;
     PCA: boolean;
     data_shapes: {
-        X: number[] | number;
-        y: number[] | number;
-        X_test: number[] | number;
-        y_test: number[] | number;
+        X: number[];
+        y: number[];
+        X_test: number[];
+        y_test: number[];
+        X_train: number[];
+        y_train: number[];
     };
-    r2: number;
-    mse: number;
-    rmse: number;
-    mae: number;
+    train_stats: {
+        r2: number;
+        mse: number;
+        rmse: number;
+        mae: number;
+    };
+    test_stats: {
+        r2: number;
+        mse: number;
+        rmse: number;
+        mae: number;
+    };
     model: string;
     bootstrap: boolean;
     bootstrap_nsamples?: number;

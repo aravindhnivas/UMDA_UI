@@ -68,6 +68,7 @@ export const parallel_computation_backend = localWritable<ParallelComputationBac
 );
 export const results = writable<Record<MLModel[number], Results | null>>({});
 export const plot_data = writable<Record<MLModel[number], Partial<Plotly.PlotData>[]>>({});
+
 export const default_parameter_mode = localWritable('default_parameter_mode', true);
 export const skip_invalid_y_values = localWritable('skip_invalid_y_values', false);
 export const pre_trained_filename = localWritable('pre_trained_filename', '');
@@ -78,3 +79,4 @@ export const current_pretrained_file = derived(
         return await path.join(dir, $pre_trained_filename.trim());
     },
 );
+export const plot_training_file = localWritable('plot_training_file', true);

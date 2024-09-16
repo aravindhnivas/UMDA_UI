@@ -9,7 +9,6 @@
         cv_fold,
         bootstrap_nsamples,
         noise_percentage,
-        pre_trained_filename,
         results,
         plot_data,
         logYscale,
@@ -28,6 +27,7 @@
         skip_invalid_y_values,
         current_pretrained_file,
     } from './stores';
+    import { PlotlyColors } from '$lib/utils';
     import { embedding, use_PCA } from '../embedding/stores';
     import { NPARTITIONS, use_dask } from '$lib/stores/system';
     import { embedd_savefile_path } from '../embedding/stores';
@@ -214,7 +214,11 @@
         return { pyfile: 'training.ml_model', args };
     };
 
+    let plot_data_ready = false;
+    let data_file = '';
+
     const onResult = async (e: CustomEvent) => {
+        plot_data_ready = false;
         const { args } = e.detail;
         console.log('Training completed');
 
@@ -236,31 +240,10 @@
         } else {
             toast.error('Error: Model not saved');
         }
-        const data_file = args.pre_trained_file + '.dat.json';
+        data_file = args.pre_trained_file + '.dat.json';
         if (await fs.exists(data_file)) {
+            plot_data_ready = true;
             toast.success('Model trained successfully');
-            try {
-                const saved_file_contents = await fs.readTextFile(data_file);
-                const parsed = JSON.parse(saved_file_contents);
-                $plot_data[$model] = [
-                    {
-                        x: parsed.y_true,
-                        y: parsed.y_pred,
-                        mode: 'markers',
-                        type: 'scatter',
-                        name: 'Predicted',
-                    },
-                    {
-                        x: parsed.y_true,
-                        y: parsed.y_linear_fit,
-                        mode: 'lines',
-                        type: 'scatter',
-                        name: 'Linear fit',
-                    },
-                ];
-            } catch (error) {
-                toast.error('Error reading plot data\n' + error);
-            }
         } else {
             toast.error('Error: Model not saved');
         }
@@ -276,7 +259,7 @@
             <ModelPanel />
             <MoreOptionsPanel />
             <SaveModelPanel />
-            <ResultsPanel />
+            <ResultsPanel {plot_data_ready} {data_file} />
         </Accordion>
     </div>
     <Loadingbtn class="m-auto " name="Begin training" callback={fit_function} subprocess={true} on:result={onResult} />
