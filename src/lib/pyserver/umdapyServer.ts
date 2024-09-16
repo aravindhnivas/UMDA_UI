@@ -52,10 +52,15 @@ export async function startServer() {
     pyChildProcess.set(pyChild);
     currentPortPID.update(ports => [...ports, `${pyChild.pid}`]);
 
+    let full_stderr = '';
     py.on('close', () => {
         pyServerReady.set(false);
         currentPortPID.update(ports => ports.filter(p => p !== `${get(pyChildProcess)?.pid}`)); // remove pid from list
         serverInfo.warn('server closed');
+        if (full_stderr.includes('Traceback (most recent call last):')) {
+            Alert.error(full_stderr);
+            pyServerReady.set(false);
+        }
     });
 
     py.on('error', error => {
@@ -67,8 +72,8 @@ export async function startServer() {
 
     py.stderr.on('data', async stderr => {
         if (!stderr.trim()) return;
+        full_stderr += stderr;
         serverInfo.warn(stderr.trim());
-
         if (stderr.includes('Server running')) {
             pyServerReady.set(true);
             serverInfo.info(`PID: ${JSON.stringify(get(currentPortPID))}`);
