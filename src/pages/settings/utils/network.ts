@@ -82,5 +82,9 @@ export const killPID = async (fullports: string[]) => {
     for (const port of fullports) {
         await kill(port);
     }
+
+    if (fullports.length === 0) {
+        serverInfo.success('All PIDs closed successfully');
+    }
     return fullports;
 };
