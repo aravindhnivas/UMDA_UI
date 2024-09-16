@@ -65,3 +65,16 @@ export const parse_csv_file = async (csv_file: string) => {
     const data = lines.slice(1).map(line => line.split(','));
     return { columns, data };
 };
+
+export const PlotlyColors = {
+    muted_blue: '#1f77b4',
+    safety_orange: '#ff7f0e',
+    cooked_asparagus_green: '#2ca02c',
+    brick_red: '#d62728',
+    muted_purple: '#9467bd',
+    chestnut_brown: '#8c564b',
+    raspberry_yogurt_pink: '#e377c2',
+    middle_gray: '#7f7f7f',
+    curry_yellow_green: '#bcbd22',
+    blue_teal: '#17becf',
+};
