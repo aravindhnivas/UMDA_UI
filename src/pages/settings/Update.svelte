@@ -29,7 +29,7 @@
     import { toggle_loading } from '$utils/index';
     import CustomInput from '$lib/components/CustomInput.svelte';
     import { umdapyVersion } from '$lib/pyserver/stores';
-    import { ExternalLink } from 'lucide-svelte';
+    import { ExternalLink } from 'lucide-svelte/icons';
 
     let install_dialog_active = false;
     export const check_for_update = async (log = false) => {

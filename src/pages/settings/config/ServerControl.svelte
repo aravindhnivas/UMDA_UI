@@ -88,11 +88,9 @@
             value={pids.join(', ')}
             label="current port PID"
             on:change={e => {
-                // console.log(e.target.value, pids);
                 if (pids.length === 0 && e.target.value) {
                     pids = e.target.value.split(',');
                 }
-                // console.log(pids);
             }}
         />
         <button class="btn btn-sm btn-error" on:click={killpids}>kill PID</button>

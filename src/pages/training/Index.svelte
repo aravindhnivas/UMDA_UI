@@ -2,7 +2,7 @@
     import Page from '$lib/layouts/Page.svelte';
     import { Pane } from 'svelte-splitpanes';
     import { Embedding, Mol2VecTrain, VICGAETrain, PCATrain, MLmodelTrain, TrainingFile } from '.';
-    import { ConstructionIcon } from 'lucide-svelte';
+    import { ConstructionIcon } from 'lucide-svelte/icons';
     import MlPredictions from './predictions/MlPredictions.svelte';
 
     let active_item = 'Mol2Vec';

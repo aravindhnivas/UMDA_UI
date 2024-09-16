@@ -1,6 +1,6 @@
 <script lang="ts">
     import { current_post_analysis_files_directory } from './plot-analysis/stores';
-    import { AlertCircle, CheckCheck } from 'lucide-svelte';
+    import { AlertCircle, CheckCheck } from 'lucide-svelte/icons';
 
     export let name: string;
     export let recheck_files = false;

@@ -14,7 +14,7 @@
     import TabBar from '@smui/tab-bar';
     import { parse_csv_file } from '$lib/utils';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
-    import { RefreshCcw } from 'lucide-svelte';
+    import { RefreshCcw } from 'lucide-svelte/icons';
     import { isArray } from 'lodash-es';
     import FileLoader from '$lib/components/fileloader/FileLoader.svelte';
     import Checkbox from '$lib/components/Checkbox.svelte';
