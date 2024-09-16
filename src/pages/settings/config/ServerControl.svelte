@@ -16,7 +16,6 @@
     export let connection: 'ws' | 'http' = 'http';
     export let suppress_warnings: boolean = false;
 
-    let starting_server = false;
     const killpids = async () => {
         if (!pids.length) return serverInfo.error('No PID to kill');
         await killPID(pids);
@@ -47,10 +46,9 @@
             </button>
         </div>
         <button
-            disabled={serverReady || starting_server}
+            disabled={serverReady}
             class="btn btn-sm"
             on:click={async () => {
-                starting_server = true;
                 try {
                     await startServer();
                 } catch (error) {
@@ -63,7 +61,6 @@
             class="btn btn-sm btn-error"
             on:click={async () => {
                 await stopServer();
-                starting_server = false;
             }}>Stop Server</button
         >
 
