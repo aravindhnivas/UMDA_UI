@@ -41,7 +41,6 @@
             {/if}
             <div class="flex gap-1 border-rounded border-solid border-2">
                 <Checkbox bind:value={$logYscale} label="log-yscale" check="checkbox" />
-                <Checkbox bind:value={$logYscale} label="log-yscale" check="checkbox" />
                 <Checkbox bind:value={$scaleYdata} label="scale-ydata" check="checkbox" />
             </div>
         </div>
