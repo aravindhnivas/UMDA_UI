@@ -39,12 +39,13 @@
             {#if $test_size > 50}
                 <div class="badge badge-sm badge-warning">Warning: Test split ratio is greater than 50%</div>
             {/if}
-            <div class="flex gap-1">
+            <div class="flex gap-1 border-rounded border-solid border-2">
+                <Checkbox bind:value={$logYscale} label="log-yscale" check="checkbox" />
                 <Checkbox bind:value={$logYscale} label="log-yscale" check="checkbox" />
                 <Checkbox bind:value={$scaleYdata} label="scale-ydata" check="checkbox" />
             </div>
         </div>
-        <div class="grid grid-cols-2 gap-1 items-end">
+        <div class="grid grid-cols-2 gap-1 items-end border-rounded border-solid border-2 p-1">
             <Checkbox bind:value={$fine_tune_model} label="Grid search" check="checkbox" />
 
             <Checkbox bind:value={$cross_validation} label="Cross validation" check="checkbox" />
@@ -70,7 +71,7 @@
                 disabled={!$fine_tune_model}
             />
         </div>
-        <div class="grid gap-1">
+        <div class="grid gap-1 border-rounded border-solid border-2 p-1">
             <Checkbox bind:value={$bootstrap} label="bootstrap" check="checkbox" />
             <div class="flex gap-2">
                 <CustomInput
@@ -92,7 +93,7 @@
                 />
             </div>
         </div>
-        <div class="grid gap-1">
+        <div class="grid gap-1 border-rounded border-solid border-2 p-1">
             <Checkbox bind:value={$parallel_computation} label="Parallel computation" check="checkbox" />
             <div class="flex gap-2 items-end">
                 <CustomInput
