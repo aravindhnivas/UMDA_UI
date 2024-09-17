@@ -15,6 +15,7 @@
     import CustomSelect from '$lib/components/CustomSelect.svelte';
     import { Checkbox, CustomInput, Loadingbtn } from '$lib/components';
     import FetchAnalysisDir from './FetchAnalysisDir.svelte';
+    import LoadedFileInfos from '../embedding/LoadedFileInfos.svelte';
 
     let auto_fetch_columns = false;
     let data: DataType | null = null;
@@ -123,6 +124,10 @@
                 </div>
 
                 <FetchAnalysisDir />
+                <hr />
+                <h3>Loaded training file</h3>
+                <LoadedFileInfos show_embedded_file={false} />
+                <hr />
             {/if}
         {/await}
     </svelte:fragment>
