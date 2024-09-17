@@ -1,9 +1,9 @@
 <script lang="ts">
-    import { plot_data, results, model_names, model, test_size, include_training_file_in_plot } from './stores';
-    import CustomPanel from '$lib/components/CustomPanel.svelte';
-    import Plot from 'svelte-plotly.js';
+    import { include_training_file_in_plot, model, model_names, plot_data, results, test_size } from './stores';
     import Checkbox from '$lib/components/Checkbox.svelte';
+    import CustomPanel from '$lib/components/CustomPanel.svelte';
     import { PlotlyColors } from '$lib/utils';
+    import Plot from 'svelte-plotly.js';
 
     export let data_file: string;
     export let plot_data_ready = false;
