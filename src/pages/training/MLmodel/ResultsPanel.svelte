@@ -60,32 +60,34 @@
         on_plot_data_ready();
     }
 
-    $: if ($plot_training_file && train_data) {
-        if (!$plot_data[$model]) {
-            $plot_data[$model] = [];
-        }
+    $: if ($plot_data[$model]) {
+        if ($plot_training_file && train_data) {
+            // if (!$plot_data[$model]) {
+            //     $plot_data[$model] = [];
+            // }
 
-        $plot_data[$model] = [
-            ...$plot_data[$model],
-            {
-                x: train_data.y_true,
-                y: train_data.y_pred,
-                mode: 'markers',
-                type: 'scatter',
-                name: 'TRAIN: Predicted',
-                marker: { color: PlotlyColors.safety_orange },
-            },
-            {
-                x: train_data.y_true,
-                y: train_data.y_linear_fit,
-                mode: 'lines',
-                type: 'scatter',
-                name: 'TRAIN: Linear fit',
-                line: { color: PlotlyColors.safety_orange },
-            },
-        ];
-    } else if (test_data) {
-        $plot_data[$model] = $plot_data[$model]?.filter(d => !d.name.includes('TRAIN')) || [];
+            $plot_data[$model] = [
+                ...$plot_data[$model],
+                {
+                    x: train_data.y_true,
+                    y: train_data.y_pred,
+                    mode: 'markers',
+                    type: 'scatter',
+                    name: 'TRAIN: Predicted',
+                    marker: { color: PlotlyColors.safety_orange },
+                },
+                {
+                    x: train_data.y_true,
+                    y: train_data.y_linear_fit,
+                    mode: 'lines',
+                    type: 'scatter',
+                    name: 'TRAIN: Linear fit',
+                    line: { color: PlotlyColors.safety_orange },
+                },
+            ];
+        } else if (test_data) {
+            $plot_data[$model] = $plot_data[$model]?.filter(d => !d.name.includes('TRAIN')) || [];
+        }
     }
 </script>
 
