@@ -16,6 +16,7 @@
     import { Checkbox, CustomInput, Loadingbtn } from '$lib/components';
     import FetchAnalysisDir from './FetchAnalysisDir.svelte';
     import LoadedFileInfos from '../embedding/LoadedFileInfos.svelte';
+    import Notification from '$lib/components/Notification.svelte';
 
     let auto_fetch_columns = false;
     let data: DataType | null = null;
@@ -128,6 +129,8 @@
                 <h3>Loaded training file</h3>
                 <LoadedFileInfos show_embedded_file={false} />
                 <hr />
+            {:else}
+                <Notification message="File not found" type="error" dismissable={false} />
             {/if}
         {/await}
     </svelte:fragment>
