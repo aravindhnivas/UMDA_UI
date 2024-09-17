@@ -202,7 +202,7 @@
             <FetchAnalysisDir />
             <hr />
             <h3>Loaded training file</h3>
-            <LoadedFileInfos show_embedded_file={false} show_status={false} />
+            <LoadedFileInfos />
             <hr />
         {/await}
     </svelte:fragment>

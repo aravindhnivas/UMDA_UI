@@ -3,9 +3,6 @@
     import { embedd_savefile_path } from './stores';
     import { training_column_name_X, training_column_name_y } from '../training_file/stores';
 
-    // export let show_status = true;
-    // export let show_embedded_file = true;
-
     const dispatch = createEventDispatcher();
 
     let items = [
