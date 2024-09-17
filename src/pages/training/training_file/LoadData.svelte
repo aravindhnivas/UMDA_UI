@@ -102,8 +102,8 @@
             $training_column_name_y = loaded_state.training_column_name_y;
             $training_column_name_index = loaded_state.training_column_name_index;
             $loaded_df_columns = loaded_state.loaded_df_columns;
-            use_filtered_data_for_training.set(loaded_state.use_filtered_data_for_training);
-            filtered_dir.set(loaded_state.filtered_dir);
+            $use_filtered_data_for_training = loaded_state.use_filtered_data_for_training;
+            $filtered_dir = loaded_state.filtered_dir;
             toast.success('State loaded');
         } catch (error) {
             toast.error('Error loading state file');
