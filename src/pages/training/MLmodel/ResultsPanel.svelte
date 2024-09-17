@@ -21,30 +21,52 @@
         };
     }
 
-    let test_data: ParsedData['test'] | null = null;
-    let train_data: ParsedData['train'] | null = null;
+    let test_data: Record<MLModel, ParsedData['test'] | null> = {
+        linear_regression: null,
+        ridge: null,
+        svr: null,
+        knn: null,
+        rfr: null,
+        gbr: null,
+        gpr: null,
+        xgboost: null,
+        catboost: null,
+        lgbm: null,
+    };
+    let train_data: Record<MLModel, ParsedData['train'] | null> = {
+        linear_regression: null,
+        ridge: null,
+        svr: null,
+        knn: null,
+        rfr: null,
+        gbr: null,
+        gpr: null,
+        xgboost: null,
+        catboost: null,
+        lgbm: null,
+    };
 
     const on_plot_data_ready = async () => {
-        test_data = null;
-        train_data = null;
+        test_data[$model] = null;
+        train_data[$model] = null;
 
         try {
             const saved_file_contents = await fs.readTextFile(data_file);
             const parsed = JSON.parse(saved_file_contents) as ParsedData;
-            test_data = parsed.test;
-            train_data = parsed.train;
+            test_data[$model] = parsed.test;
+            train_data[$model] = parsed.train;
             $plot_data[$model] = [
                 {
-                    x: test_data.y_true,
-                    y: test_data.y_pred,
+                    x: test_data[$model].y_true,
+                    y: test_data[$model].y_pred,
                     mode: 'markers',
                     type: 'scatter',
                     name: 'TEST: Predicted',
                     marker: { color: PlotlyColors.muted_blue },
                 },
                 {
-                    x: test_data.y_true,
-                    y: test_data.y_linear_fit,
+                    x: test_data[$model].y_true,
+                    y: test_data[$model].y_linear_fit,
                     mode: 'lines',
                     type: 'scatter',
                     name: 'TEST: Linear fit',
@@ -61,31 +83,29 @@
     }
 
     $: if ($plot_data[$model]) {
-        if ($plot_training_file && train_data) {
-            // if (!$plot_data[$model]) {
-            //     $plot_data[$model] = [];
-            // }
-
-            $plot_data[$model] = [
-                ...$plot_data[$model],
-                {
-                    x: train_data.y_true,
-                    y: train_data.y_pred,
-                    mode: 'markers',
-                    type: 'scatter',
-                    name: 'TRAIN: Predicted',
-                    marker: { color: PlotlyColors.safety_orange },
-                },
-                {
-                    x: train_data.y_true,
-                    y: train_data.y_linear_fit,
-                    mode: 'lines',
-                    type: 'scatter',
-                    name: 'TRAIN: Linear fit',
-                    line: { color: PlotlyColors.safety_orange },
-                },
-            ];
-        } else if (test_data) {
+        if ($plot_training_file && train_data[$model]) {
+            if (!$plot_data[$model].some(d => d.name.includes('TRAIN'))) {
+                $plot_data[$model] = [
+                    ...$plot_data[$model],
+                    {
+                        x: train_data[$model].y_true,
+                        y: train_data[$model].y_pred,
+                        mode: 'markers',
+                        type: 'scatter',
+                        name: 'TRAIN: Predicted',
+                        marker: { color: PlotlyColors.safety_orange },
+                    },
+                    {
+                        x: train_data[$model].y_true,
+                        y: train_data[$model].y_linear_fit,
+                        mode: 'lines',
+                        type: 'scatter',
+                        name: 'TRAIN: Linear fit',
+                        line: { color: PlotlyColors.safety_orange },
+                    },
+                ];
+            }
+        } else if (test_data[$model]) {
             $plot_data[$model] = $plot_data[$model]?.filter(d => !d.name.includes('TRAIN')) || [];
         }
     }
