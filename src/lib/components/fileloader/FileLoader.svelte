@@ -116,6 +116,7 @@
             toast.success(`${filename} loaded successfully`);
         }}
     />
+    <slot name="btn-row"></slot>
 </div>
 
 <slot {load_btn} />
