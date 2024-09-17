@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { embedd_savefile } from '../embedding/stores';
     import {
         current_model,
         default_param_values,
@@ -32,12 +33,12 @@
         // console.log('fine tuned hyperparameters values', $fine_tuned_hyperparameters);
 
         // Set the pre-trained model filename
-        $pre_trained_filename = `${$model}_pretrained_model`;
+        $pre_trained_filename = `${$model}_${$embedd_savefile}_pretrained_model`;
     };
 
     onMount(() => {
         set_model_params();
     });
 
-    $: if ($model) set_model_params();
+    $: if ($model || $embedd_savefile) set_model_params();
 </script>
