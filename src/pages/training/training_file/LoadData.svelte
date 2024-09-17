@@ -109,12 +109,13 @@
             toast.error('Error loading state file');
         }
     };
+    const auto_load_state = async () => {
+        if (!(await fs.exists(`${$training_save_directory}/training_file_state.json`))) return;
+        await load_state();
+    };
 
-    onMount(async () => {
-        if (await fs.exists(`${$training_save_directory}/training_file_state.json`)) {
-            await load_state();
-        }
-    });
+    onMount(auto_load_state);
+    $: if ($training_file['filename']) auto_load_state();
 </script>
 
 <FileLoader
