@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { plot_data, results, model_names, model, test_size, plot_training_file } from './stores';
+    import { plot_data, results, model_names, model, test_size, include_training_file_in_plot } from './stores';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import Plot from 'svelte-plotly.js';
     import Checkbox from '$lib/components/Checkbox.svelte';
@@ -21,30 +21,25 @@
         };
     }
 
-    let test_data: Record<MLModel, ParsedData['test'] | null> = {
-        linear_regression: null,
-        ridge: null,
-        svr: null,
-        knn: null,
-        rfr: null,
-        gbr: null,
-        gpr: null,
-        xgboost: null,
-        catboost: null,
-        lgbm: null,
-    };
-    let train_data: Record<MLModel, ParsedData['train'] | null> = {
-        linear_regression: null,
-        ridge: null,
-        svr: null,
-        knn: null,
-        rfr: null,
-        gbr: null,
-        gpr: null,
-        xgboost: null,
-        catboost: null,
-        lgbm: null,
-    };
+    let test_data: Record<MLModel, ParsedData['test'] | null> = model_names.reduce<
+        Record<MLModel, ParsedData['test'] | null>
+    >(
+        (acc, model) => {
+            acc[model] = null;
+            return acc;
+        },
+        {} as Record<MLModel, ParsedData['test'] | null>,
+    );
+
+    let train_data: Record<MLModel, ParsedData['train'] | null> = model_names.reduce<
+        Record<MLModel, ParsedData['train'] | null>
+    >(
+        (acc, model) => {
+            acc[model] = null;
+            return acc;
+        },
+        {} as Record<MLModel, ParsedData['train'] | null>,
+    );
 
     const on_plot_data_ready = async () => {
         test_data[$model] = null;
@@ -69,8 +64,28 @@
                     y: test_data[$model].y_linear_fit,
                     mode: 'lines',
                     type: 'scatter',
-                    name: 'TEST: Linear fit',
+                    name: 'TEST: fit',
                     line: { color: PlotlyColors.muted_blue },
+                },
+            ];
+            if (!$include_training_file_in_plot) return;
+            $plot_data[$model] = [
+                ...$plot_data[$model],
+                {
+                    x: train_data[$model].y_true,
+                    y: train_data[$model].y_pred,
+                    mode: 'markers',
+                    type: 'scatter',
+                    name: 'TRAIN: Predicted',
+                    marker: { color: PlotlyColors.safety_orange },
+                },
+                {
+                    x: train_data[$model].y_true,
+                    y: train_data[$model].y_linear_fit,
+                    mode: 'lines',
+                    type: 'scatter',
+                    name: 'TRAIN: Linear fit',
+                    line: { color: PlotlyColors.safety_orange },
                 },
             ];
         } catch (error) {
@@ -82,38 +97,45 @@
         on_plot_data_ready();
     }
 
-    $: if ($plot_data[$model]) {
-        if ($plot_training_file && train_data[$model]) {
-            if (!$plot_data[$model].some(d => d.name.includes('TRAIN'))) {
-                $plot_data[$model] = [
-                    ...$plot_data[$model],
-                    {
-                        x: train_data[$model].y_true,
-                        y: train_data[$model].y_pred,
-                        mode: 'markers',
-                        type: 'scatter',
-                        name: 'TRAIN: Predicted',
-                        marker: { color: PlotlyColors.safety_orange },
-                    },
-                    {
-                        x: train_data[$model].y_true,
-                        y: train_data[$model].y_linear_fit,
-                        mode: 'lines',
-                        type: 'scatter',
-                        name: 'TRAIN: Linear fit',
-                        line: { color: PlotlyColors.safety_orange },
-                    },
-                ];
-            }
-        } else if (test_data[$model]) {
-            $plot_data[$model] = $plot_data[$model]?.filter(d => !d.name.includes('TRAIN')) || [];
+    const include_training_plot_if_required = async () => {
+        if (!$plot_data[$model]?.length) return;
+        if (!(train_data[$model] && test_data[$model])) return;
+
+        if ($plot_data[$model].some(d => d.name.includes('TRAIN'))) {
+            if ($include_training_file_in_plot) return;
+            $plot_data[$model] = $plot_data[$model].filter(d => !d.name.includes('TRAIN'));
+            return;
         }
-    }
+        if (!$include_training_file_in_plot) return;
+        $plot_data[$model] = [
+            ...$plot_data[$model],
+            {
+                x: train_data[$model].y_true,
+                y: train_data[$model].y_pred,
+                mode: 'markers',
+                type: 'scatter',
+                name: 'TRAIN: Predicted',
+                marker: { color: PlotlyColors.safety_orange },
+            },
+            {
+                x: train_data[$model].y_true,
+                y: train_data[$model].y_linear_fit,
+                mode: 'lines',
+                type: 'scatter',
+                name: 'TRAIN: Linear fit',
+                line: { color: PlotlyColors.safety_orange },
+            },
+        ];
+    };
 </script>
 
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
     <div class="flex my-2">
-        <Checkbox bind:value={$plot_training_file} label="Plot training data" />
+        <Checkbox
+            bind:value={$include_training_file_in_plot}
+            label="Plot training data"
+            on:change={include_training_plot_if_required}
+        />
     </div>
 
     <div class="grid gap-2">
