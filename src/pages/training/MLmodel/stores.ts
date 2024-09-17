@@ -79,4 +79,4 @@ export const current_pretrained_file = derived(
         return await path.join(dir, $pre_trained_filename.trim());
     },
 );
-export const plot_training_file = localWritable('plot_training_file', true);
+export const include_training_file_in_plot = localWritable('include_training_file_in_plot', true);
