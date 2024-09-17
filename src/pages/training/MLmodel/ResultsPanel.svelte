@@ -142,29 +142,35 @@
 
                 <div class="flex gap-1">
                     <span class="badge badge-primary">
-                        {r.time ? `completed in ${$results[$model].time}` : ''}
+                        {r.time ? `completed in ${r.time}` : ''}
                     </span>
                     <span class="badge badge-primary">Dataset size: {r.data_shapes.y}</span>
-                    <!-- <span class="badge badge-info"># y_test_data_size ({$test_size}%): {r.data_shapes.y_test}</span> -->
+                </div>
+                <div class="grid grid-cols-6 gap-2 items-center w-3xl">
+                    <span class="col-span-2"></span>
+                    <span class="badge">R<sup>2</sup></span>
+                    <span class="badge">MSE</span>
+                    <span class="badge">RMSE</span>
+                    <span class="badge">MAE</span>
                 </div>
                 <div class="grid grid-cols-6 gap-2 items-center w-3xl">
                     <span class="badge badge-warning col-span-2"
                         >Train stats ({100 - $test_size}% data = {r.data_shapes.y_train}):
                     </span>
-                    <span class="badge">R<sup>2</sup>: {train_stats.r2}</span>
-                    <span class="badge">MSE: {train_stats.mse}</span>
-                    <span class="badge">RMSE: {train_stats.rmse}</span>
-                    <span class="badge">MAE: {train_stats.mae}</span>
+                    <span class="badge">{train_stats.r2}</span>
+                    <span class="badge">{train_stats.mse}</span>
+                    <span class="badge">{train_stats.rmse}</span>
+                    <span class="badge">{train_stats.mae}</span>
                 </div>
                 <div class="grid grid-cols-6 gap-2 items-center w-3xl">
                     <span class="badge badge-info col-span-2"
                         >Test stats ({$test_size}% data = {r.data_shapes.y_test}):
                     </span>
-                    <span class="badge">R<sup>2</sup>: {test_stats.r2}</span>
+                    <span class="badge">{test_stats.r2}</span>
 
-                    <span class="badge">MSE: {test_stats.mse}</span>
-                    <span class="badge">RMSE: {test_stats.rmse}</span>
-                    <span class="badge">MAE: {test_stats.mae}</span>
+                    <span class="badge">{test_stats.mse}</span>
+                    <span class="badge">{test_stats.rmse}</span>
+                    <span class="badge">{test_stats.mae}</span>
                 </div>
 
                 {#if r.cross_validation && r.cv_scores}
