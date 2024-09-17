@@ -19,7 +19,7 @@ export default defineConfig(async () => ({
                     axios: [
                         ['default', 'axios'], // import { default as axios } from 'axios',
                     ],
-                    'lodash-es': [['range', 'linspace'], 'isEmpty', 'isArray'],
+                    'lodash-es': [['range', 'linspace'], 'isEmpty', 'isArray', 'isObject', 'isString', 'isNumber'],
                     '@zmotivat0r/o0': ['oO'],
                     '@tauri-apps/api/os': ['platform', 'tempdir'],
                     '@tauri-apps/api': ['fs', 'path', 'dialog', 'shell', 'invoke'],
