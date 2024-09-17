@@ -49,7 +49,14 @@
         </button>
         <CustomSelect label="Select filtered directory" bind:value={$filtered_dir} items={dir_items_for_plotting} />
     </div>
-    <Checkbox bind:value={$use_filtered_data_for_training} label="use filtered data for training" check="checkbox" />
+    <Checkbox
+        bind:value={$use_filtered_data_for_training}
+        label="use filtered data for training"
+        check="checkbox"
+        on:change={() => {
+            if (!$use_filtered_data_for_training) $filtered_dir = 'default';
+        }}
+    />
 </div>
 {#if $use_filtered_data_for_training}
     {#if $filtered_dir == 'default'}
