@@ -13,10 +13,11 @@
     } from './stores';
     import FileLoader from '$lib/components/fileloader/FileLoader.svelte';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
-    import { Checkbox, CustomInput, Loadingbtn } from '$lib/components';
+    import { CustomInput, Loadingbtn } from '$lib/components';
     import FetchAnalysisDir from './FetchAnalysisDir.svelte';
     import LoadedFileInfos from '../embedding/LoadedFileInfos.svelte';
     import Notification from '$lib/components/Notification.svelte';
+    import { Download, Save } from 'lucide-svelte/icons';
 
     let auto_fetch_columns = false;
     let data: DataType | null = null;
@@ -41,14 +42,8 @@
         $training_column_name_y = '';
         data = null;
     }
-</script>
 
-<FileLoader
-    bind:use_dask={$use_dask}
-    bind:filename={$training_file['filename']}
-    bind:filetype={$training_file['filetype']}
-    bind:key={$training_file['key']}
-    on:load={async e => {
+    const on_training_file_load = async (e: CustomEvent) => {
         if (!e.detail) return;
         data = e.detail;
         if (!data) return;
@@ -65,8 +60,66 @@
         } else {
             console.warn(`Directory already exists: ${$training_save_directory}`);
         }
-    }}
+    };
+
+    const save_state = async () => {
+        try {
+            const file_state = {
+                training_file: $training_file,
+                training_column_name_X: $training_column_name_X,
+                training_column_name_y: $training_column_name_y,
+                training_column_name_index: $training_column_name_index,
+                index_column_valid: $index_column_valid,
+                training_save_directory: $training_save_directory,
+                loaded_df_columns: $loaded_df_columns,
+                auto_fetch_columns,
+            };
+            console.log(file_state);
+
+            await fs.writeTextFile(
+                `${$training_save_directory}/training_file_state.json`,
+                JSON.stringify(file_state, null, 4),
+            );
+            toast.info('State saved');
+        } catch (error) {
+            console.error(error);
+            toast.error('Error saving state');
+        }
+    };
+
+    const load_state = async () => {
+        const loaded_state_file = await fs.readTextFile(`${$training_save_directory}/training_file_state.json`);
+        if (!fs.exists(`${$training_save_directory}/training_file_state.json`)) {
+            toast.error('No state file found');
+            return;
+        }
+        try {
+            const loaded_state = JSON.parse(loaded_state_file);
+            console.log(loaded_state);
+            $training_column_name_X = loaded_state.training_column_name_X;
+            $training_column_name_y = loaded_state.training_column_name_y;
+            $training_column_name_index = loaded_state.training_column_name_index;
+            $loaded_df_columns = loaded_state.loaded_df_columns;
+            toast.success('State loaded');
+        } catch (error) {
+            toast.error('Error loading state file');
+        }
+    };
+</script>
+
+<FileLoader
+    bind:use_dask={$use_dask}
+    bind:filename={$training_file['filename']}
+    bind:filetype={$training_file['filetype']}
+    bind:key={$training_file['key']}
+    on:load={on_training_file_load}
 >
+    <svelte:fragment slot="btn-row">
+        <div class="ml-auto">
+            <button class="btn btn-sm" on:click={save_state}>Save state <Save size="20" /></button>
+            <button class="btn btn-sm" on:click={load_state}>Load state <Download size="20" /></button>
+        </div>
+    </svelte:fragment>
     <svelte:fragment let:load_btn>
         {#await fs.exists($training_file.filename) then file_exists}
             {#if file_exists}
