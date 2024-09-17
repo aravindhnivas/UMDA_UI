@@ -17,25 +17,18 @@
         vfile: Promise<string>,
         columnX: string,
         columnY: string,
-    ): Promise<Record<string, string>> => {
-        let loaded_files: Record<string, string> = {
-            training_file: '',
-            embedded_file: '',
-            columnX: '',
-            columnY: '',
+    ): Promise<Record<string, { value: string; valid: boolean }>> => {
+        let loaded_files: Record<string, { value: string; valid: boolean }> = {
+            training_file: { value: '', valid: false },
+            embedded_file: { value: '', valid: false },
+            columnX: { value: '', valid: false },
+            columnY: { value: '', valid: false },
         };
         const [_training_file, _embedded_file] = await Promise.all([tfile, vfile]);
-
-        if (await fs.exists(_training_file)) {
-            loaded_files.training_file = _training_file;
-        }
-
-        if (await fs.exists(_embedded_file)) {
-            loaded_files.embedded_file = _embedded_file;
-        }
-
-        loaded_files.columnX = columnX || '';
-        loaded_files.columnY = columnY || '';
+        loaded_files.training_file = { value: _training_file, valid: await fs.exists(_training_file) };
+        loaded_files.embedded_file = { value: _embedded_file, valid: await fs.exists(_embedded_file) };
+        loaded_files.columnX = { value: columnX, valid: columnX !== '' };
+        loaded_files.columnY = { value: columnY, valid: columnY !== '' };
         dispatch('refresh', loaded_files);
         return loaded_files;
     };
@@ -44,10 +37,10 @@
 {#await refresh_data($current_training_data_file, $embedd_savefile_path, $training_column_name_X, $training_column_name_y) then loaded_files}
     <div class="grid gap-2 grid-cols-4 items-center">
         {#each items as { name, key }}
-            {@const val = loaded_files[key]}
+            {@const { value, valid } = loaded_files[key]}
             <div>{name}:</div>
-            <div class="col-span-3 border-rounded" class:bg-red={!val}>
-                <code class=" break-all text-sm p-1" class:bg-success={val}>{val || `Invalid ${key} name`}</code>
+            <div class="col-span-3 border-rounded" class:bg-red={!valid}>
+                <code class=" break-all text-sm p-1" class:bg-success={valid}>{value}</code>
             </div>
         {/each}
     </div>
