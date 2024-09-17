@@ -96,9 +96,9 @@
         if (!$plot_data[$model]?.length) return;
         if (!(train_data[$model] && test_data[$model])) return;
 
-        if ($plot_data[$model].some(d => d.name.includes('TRAIN'))) {
+        if ($plot_data[$model].some(d => d.name?.includes('TRAIN'))) {
             if ($include_training_file_in_plot) return;
-            $plot_data[$model] = $plot_data[$model].filter(d => !d.name.includes('TRAIN'));
+            $plot_data[$model] = $plot_data[$model].filter(d => !d.name?.includes('TRAIN'));
             return;
         }
         if (!$include_training_file_in_plot) return;
