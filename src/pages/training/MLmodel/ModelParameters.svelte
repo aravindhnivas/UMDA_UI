@@ -7,7 +7,7 @@
         model,
         default_parameter_mode,
     } from './stores';
-    import { validateInput } from '$lib/utils';
+    import { typeSafeObjectKeys, validateInput } from '$lib/utils';
     import { Checkbox, CustomSelect } from '$lib/components';
     import Kernel from './Kernel.svelte';
     import Notification from '$lib/components/Notification.svelte';
@@ -21,7 +21,7 @@
 
 {#if !$default_parameter_mode}
     <div class="flex flex-col gap-4 hyperparameters__div px-2">
-        {#each Object.keys($current_model[key]) as label (label)}
+        {#each typeSafeObjectKeys($current_model[key]) as label (label)}
             {@const { value, description } = $current_model[key][label]}
 
             {#if $model === 'gpr' && label === 'kernel'}
@@ -77,7 +77,7 @@
                             {:else}
                                 <CustomSelect
                                     label={`${label} (${value.options[values[label]]})`}
-                                    items={Object.keys(value.options)}
+                                    items={typeSafeObjectKeys(value.options)}
                                     bind:value={values[label]}
                                 />
                                 {#if values[label] === 'float'}

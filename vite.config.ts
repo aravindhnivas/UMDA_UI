@@ -27,6 +27,7 @@ export default defineConfig(async () => ({
                     '@macfja/svelte-persistent-store': ['localWritable'],
                     '$lib/pyserver/computePy': [['default', 'computePy']],
                     '$lib/utils/initialise': ['getID', 'sleep'],
+                    '$lib/utils/index': ['typeSafeObjectKeys'],
                 },
             ],
             dts: './src/auto-imports.d.ts',

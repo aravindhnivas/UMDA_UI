@@ -78,3 +78,7 @@ export const PlotlyColors = {
     curry_yellow_green: '#bcbd22',
     blue_teal: '#17becf',
 };
+
+export function typeSafeObjectKeys<T extends object>(obj: T): Array<keyof T> {
+    return Object.keys(obj) as Array<keyof T>;
+}

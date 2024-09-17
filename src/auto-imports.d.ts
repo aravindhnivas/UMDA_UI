@@ -47,6 +47,7 @@ declare global {
   const textfield: (typeof import('@smui/textfield'))['default']
   const tick: typeof import('svelte')['tick']
   const toast: typeof import('svelte-sonner')['toast']
+  const typeSafeObjectKeys: typeof import('$lib/utils/index')['typeSafeObjectKeys']
   const writable: typeof import('svelte/store')['writable']
   const writable_store: typeof import('@macfja/svelte-persistent-store')['writable']
 }
