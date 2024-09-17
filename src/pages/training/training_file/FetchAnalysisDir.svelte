@@ -4,6 +4,7 @@
     import CustomSelect from '$lib/components/CustomSelect.svelte';
     import { RefreshCcw } from 'lucide-svelte/icons';
     import { onMount } from 'svelte';
+    import { Checkbox } from '$lib/components';
 
     let dir_items_for_plotting: string[] = ['default'];
 
@@ -41,9 +42,21 @@
     });
 </script>
 
-<div class="flex gap-2 items-end">
-    <button class="btn btn-xs" on:click={async () => await fetch_analysis_dir()}>
-        <RefreshCcw size="20" />
-    </button>
-    <CustomSelect label="Select filtered directory" bind:value={$filtered_dir} items={dir_items_for_plotting} />
+<div class="flex items-end gap-2">
+    <div class="flex gap-2 items-end">
+        <button class="btn btn-xs" on:click={async () => await fetch_analysis_dir()}>
+            <RefreshCcw size="20" />
+        </button>
+        <CustomSelect label="Select filtered directory" bind:value={$filtered_dir} items={dir_items_for_plotting} />
+    </div>
+    <Checkbox bind:value={$use_filtered_data_for_training} label="use filtered data for training" check="checkbox" />
 </div>
+{#if $use_filtered_data_for_training}
+    {#if $filtered_dir == 'default'}
+        <div class="badge-sm badge-warning">If using filtered data, please select a directory other than 'default'</div>
+    {:else}
+        <div class="badge-sm badge-info">
+            NOTE: using filtered training dataset ({$filtered_dir})
+        </div>
+    {/if}
+{/if}

@@ -63,7 +63,6 @@
 </div>
 
 <div class:hidden={current_active_analysis_tab !== 'load_filtered_data'} class="grid gap-2">
-    <Checkbox bind:value={$use_filtered_data_for_training} label="use filtered data for training" check="checkbox" />
     {#await $current_training_data_file then value}
         <FileLoader filename={value} />
     {/await}
