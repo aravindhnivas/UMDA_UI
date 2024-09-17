@@ -17,9 +17,6 @@
             <span>Loaded training file</span>
             {#if !open}
                 {#if isObject(loaded_files) && !isEmpty(loaded_files)}
-                    <!-- <span class="badge badge-info" class:badge-error>{loaded_files['training_file']?.basename}</span>
-                    <span class="badge badge-info">{loaded_files['embedded_file']?.basename}</span>
-                    <span class="badge badge-info">{loaded_files['columnY']?.basename}</span> -->
                     {#each Object.keys(loaded_files) as key}
                         {@const { valid, basename } = loaded_files[key]}
                         <span class="badge badge-info" class:badge-error={!valid}>{basename}</span>
