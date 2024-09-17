@@ -61,6 +61,10 @@
     }
 
     $: if ($plot_training_file && train_data) {
+        if (!$plot_data[$model]) {
+            $plot_data[$model] = [];
+        }
+
         $plot_data[$model] = [
             ...$plot_data[$model],
             {
@@ -81,7 +85,7 @@
             },
         ];
     } else if (test_data) {
-        $plot_data[$model] = $plot_data[$model].filter(d => !d.name.includes('TRAIN'));
+        $plot_data[$model] = $plot_data[$model]?.filter(d => !d.name.includes('TRAIN')) || [];
     }
 </script>
 
