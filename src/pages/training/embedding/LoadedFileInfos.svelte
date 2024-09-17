@@ -1,6 +1,6 @@
 <script lang="ts">
     import { current_training_data_file } from '../training_file/plot-analysis/stores';
-    import { embedd_savefile_path } from './stores';
+    import { embedd_savefile_path, embeddings_computed } from './stores';
     import { training_column_name_X, training_column_name_y } from '../training_file/stores';
 
     const dispatch = createEventDispatcher();
@@ -34,14 +34,16 @@
     };
 </script>
 
-{#await refresh_data($current_training_data_file, $embedd_savefile_path, $training_column_name_X, $training_column_name_y) then loaded_files}
-    <div class="grid gap-2 grid-cols-4 items-center">
-        {#each items as { name, key }}
-            {@const { value, valid } = loaded_files[key]}
-            <div>{name}:</div>
-            <div class="col-span-3 border-rounded" class:bg-red={!valid}>
-                <code class=" break-all text-sm p-1" class:bg-success={valid}>{value}</code>
-            </div>
-        {/each}
-    </div>
-{/await}
+{#key $embeddings_computed}
+    {#await refresh_data($current_training_data_file, $embedd_savefile_path, $training_column_name_X, $training_column_name_y) then loaded_files}
+        <div class="grid gap-2 grid-cols-4 items-center">
+            {#each items as { name, key }}
+                {@const { value, valid } = loaded_files[key]}
+                <div>{name}:</div>
+                <div class="col-span-3 border-rounded" class:bg-red={!valid}>
+                    <code class=" break-all text-sm p-1" class:bg-success={valid}>{value}</code>
+                </div>
+            {/each}
+        </div>
+    {/await}
+{/key}

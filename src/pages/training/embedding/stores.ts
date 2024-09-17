@@ -1,5 +1,6 @@
 import { current_training_processed_data_directory } from '../training_file/plot-analysis/stores';
 
+export const embeddings_computed = writable(false);
 export const embeddings = ['mol2vec', 'VICGAE'];
 export const embedding = localWritable<Embedding>('embedding', 'mol2vec');
 export const embedd_savefile = writable<string>('');

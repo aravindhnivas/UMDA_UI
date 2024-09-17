@@ -15,6 +15,7 @@
         embedd_savefile_path,
         embedding,
         embeddings,
+        embeddings_computed,
         model_and_pipeline_files,
         use_PCA,
     } from './stores';
@@ -127,14 +128,13 @@
                     toast.error('No data returned from python');
                     return;
                 }
-                console.log({ parsed_result });
                 const { invalid_smiles_file } = parsed_result?.file_mode;
                 dataFromPython = parsed_result;
                 if (!dataFromPython?.file_mode) return;
+
                 const invalid_smiles = await fs.readTextFile(invalid_smiles_file);
-                console.log({ invalid_smiles });
                 dataFromPython.file_mode.invalid_smiles = invalid_smiles?.split('\n').filter(Boolean) || [];
-                console.log({ dataFromPython });
+                $embeddings_computed = true;
             } catch (error) {
                 if (error instanceof Error) toast.error(error.message);
             }
