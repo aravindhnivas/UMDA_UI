@@ -73,6 +73,8 @@
                 training_save_directory: $training_save_directory,
                 loaded_df_columns: $loaded_df_columns,
                 auto_fetch_columns,
+                use_filtered_data_for_training: $use_filtered_data_for_training,
+                filtered_dir: $filtered_dir,
             };
             console.log(file_state);
 
@@ -100,6 +102,8 @@
             $training_column_name_y = loaded_state.training_column_name_y;
             $training_column_name_index = loaded_state.training_column_name_index;
             $loaded_df_columns = loaded_state.loaded_df_columns;
+            use_filtered_data_for_training.set(loaded_state.use_filtered_data_for_training);
+            filtered_dir.set(loaded_state.filtered_dir);
             toast.success('State loaded');
         } catch (error) {
             toast.error('Error loading state file');
