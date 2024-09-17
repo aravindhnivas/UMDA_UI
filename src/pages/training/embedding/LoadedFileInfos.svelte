@@ -39,7 +39,6 @@
 
         loaded_files.columnX = columnX || '';
         loaded_files.columnY = columnY || '';
-        console.log('Loaded files:', loaded_files);
         dispatch('refresh', loaded_files);
         return loaded_files;
     };
