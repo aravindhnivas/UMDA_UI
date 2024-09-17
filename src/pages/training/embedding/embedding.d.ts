@@ -16,3 +16,10 @@ interface EmbeddingResult {
 }
 
 type Embedding = 'mol2vec' | 'VICGAE';
+
+interface LoadedInfosFile {
+    training_file: { value: string; valid: boolean; basename: string };
+    embedded_file: { value: string; valid: boolean; basename: string };
+    columnX: { value: string; valid: boolean; basename: string };
+    columnY: { value: string; valid: boolean; basename: string };
+}
