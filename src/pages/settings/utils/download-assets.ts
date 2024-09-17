@@ -210,6 +210,7 @@ const fn_asset_download_required = async ({
 
 export const check_assets_update = async ({ installation_request = true, download_request = false } = {}) => {
     if (!window.navigator.onLine) return;
+
     if (get(python_asset_ready_to_install)) {
         return outputbox.warn('assets updates are ready to install');
     }
