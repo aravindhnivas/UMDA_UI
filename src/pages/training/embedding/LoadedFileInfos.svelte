@@ -4,17 +4,20 @@
     import { training_column_name_X, training_column_name_y } from '../training_file/stores';
     import { RefreshCcw, ArrowBigRight } from 'lucide-svelte/icons';
 
+    export let show_status = true;
     export let show_embedded_file = true;
     let refresh = true;
 </script>
 
 <div class="flex items-center justify-between">
-    <div class="flex gap-1 items-end">
-        <code>File status indicator</code>
-        <ArrowBigRight size="20" />
-        <code class="badge badge-success">EXISTS</code>
-        <code class="badge badge-error">DOESN'T-EXISTS</code>
-    </div>
+    {#if show_status}
+        <div class="flex gap-1 items-end">
+            <code>File status indicator</code>
+            <ArrowBigRight size="20" />
+            <code class="badge badge-success">EXISTS</code>
+            <code class="badge badge-error">DOESN'T-EXISTS</code>
+        </div>
+    {/if}
     <button class="flex btn btn-sm mb-2" on:click={() => (refresh = !refresh)}>
         <span>Refresh</span>
         <RefreshCcw size="20" />
