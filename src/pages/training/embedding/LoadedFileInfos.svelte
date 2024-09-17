@@ -12,23 +12,26 @@
         { name: 'Train y', key: 'columnY' },
     ];
 
-    const refresh_data = async (
-        tfile: Promise<string>,
-        vfile: Promise<string>,
-        columnX: string,
-        columnY: string,
-    ): Promise<Record<string, { value: string; valid: boolean }>> => {
-        let loaded_files: Record<string, { value: string; valid: boolean }> = {
-            training_file: { value: '', valid: false },
-            embedded_file: { value: '', valid: false },
-            columnX: { value: '', valid: false },
-            columnY: { value: '', valid: false },
+    const refresh_data = async (tfile: Promise<string>, vfile: Promise<string>, columnX: string, columnY: string) => {
+        let loaded_files: LoadedInfosFile = {
+            training_file: { value: '', valid: false, basename: '' },
+            embedded_file: { value: '', valid: false, basename: '' },
+            columnX: { value: '', valid: false, basename: '' },
+            columnY: { value: '', valid: false, basename: '' },
         };
         const [_training_file, _embedded_file] = await Promise.all([tfile, vfile]);
-        loaded_files.training_file = { value: _training_file, valid: await fs.exists(_training_file) };
-        loaded_files.embedded_file = { value: _embedded_file, valid: await fs.exists(_embedded_file) };
-        loaded_files.columnX = { value: columnX, valid: columnX !== '' };
-        loaded_files.columnY = { value: columnY, valid: columnY !== '' };
+        loaded_files.training_file = {
+            value: _training_file,
+            valid: await fs.exists(_training_file),
+            basename: await path.basename(_training_file),
+        };
+        loaded_files.embedded_file = {
+            value: _embedded_file,
+            valid: await fs.exists(_embedded_file),
+            basename: await path.basename(_embedded_file),
+        };
+        loaded_files.columnX = { value: columnX, valid: columnX !== '', basename: columnX };
+        loaded_files.columnY = { value: columnY, valid: columnY !== '', basename: columnY };
         dispatch('refresh', loaded_files);
         return loaded_files;
     };
