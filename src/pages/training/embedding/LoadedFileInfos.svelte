@@ -3,6 +3,8 @@
     import { embedd_savefile_path } from './stores';
     import { training_column_name_X, training_column_name_y } from '../training_file/stores';
     import { RefreshCcw, ArrowBigRight } from 'lucide-svelte/icons';
+
+    export let show_embedded_file = true;
     let refresh = true;
 </script>
 
@@ -29,26 +31,28 @@
                 </div>
             {/await}
         {/await}
-        <div>Embedded vector file:</div>
-        {#await $embedd_savefile_path then file_name}
-            {#await fs.exists(file_name) then file_exists}
-                <div class="col-span-3 border-rounded" class:bg-success={file_exists}>
-                    <code class=" break-all text-sm p-1" class:bg-red={!file_exists}>{file_name}</code>
-                </div>
+        {#if show_embedded_file}
+            <div>Embedded vector file:</div>
+            {#await $embedd_savefile_path then file_name}
+                {#await fs.exists(file_name) then file_exists}
+                    <div class="col-span-3 border-rounded" class:bg-success={file_exists}>
+                        <code class=" break-all text-sm p-1" class:bg-red={!file_exists}>{file_name}</code>
+                    </div>
+                {/await}
             {/await}
-        {/await}
+        {/if}
+
         <div>Train X:</div>
         <div class="col-span-3 border-rounded" class:bg-red={!$training_column_name_X}>
             <code class=" break-all text-sm bg-success p-1" class:bg-success={$training_column_name_X}
-                >{$training_column_name_X}</code
+                >{$training_column_name_X || 'Please select a X - training column'}</code
             >
         </div>
         <div>Train y:</div>
         <div class="col-span-3 border-rounded" class:bg-red={!$training_column_name_y}>
             <code class=" break-all text-sm p-1" class:bg-success={$training_column_name_y}
-                >{$training_column_name_y}</code
+                >{$training_column_name_y || 'Please select a Y - training column'}</code
             >
         </div>
-        <!-- <slot /> -->
     </div>
 {/key}
