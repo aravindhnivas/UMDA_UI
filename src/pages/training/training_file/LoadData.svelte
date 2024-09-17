@@ -127,7 +127,7 @@
                 <FetchAnalysisDir />
                 <hr />
                 <h3>Loaded training file</h3>
-                <LoadedFileInfos show_embedded_file={false} />
+                <LoadedFileInfos show_embedded_file={false} show_status={false} />
                 <hr />
             {:else}
                 <Notification message="File not found" type="error" dismissable={false} />
