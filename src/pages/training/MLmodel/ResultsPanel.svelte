@@ -92,7 +92,6 @@
     }
 
     const include_training_plot_if_required = async () => {
-        console.warn($include_training_file_in_plot);
         if (!$plot_data[$model]?.length) return;
         if (!(train_data[$model] && test_data[$model])) return;
 

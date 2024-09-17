@@ -9,7 +9,7 @@
 <Panel style="background-color: coral;" bind:open>
     <Header>
         <div class="flex justify-between items-center">
-            <slot name="title"><span>{title}</span></slot>
+            <slot name="title" {open}><span>{title}</span></slot>
 
             {#if open}
                 <span class="text-white">

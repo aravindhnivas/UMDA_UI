@@ -93,7 +93,17 @@
     };
 </script>
 
-<CustomPanel title="MODEL: {$current_model.name}" open={true}>
+<CustomPanel open={true}>
+    <svelte:fragment slot="title" let:open>
+        <div class="flex-center">
+            <span>MODEL: {$current_model.name}</span>
+            {#if !open}
+                {#if $default_parameter_mode}
+                    <span class="badge badge-info">Default mode</span>
+                {/if}
+            {/if}
+        </div>
+    </svelte:fragment>
     <div class="grid gap-2">
         <ModelTab />
         <span class="text-sm">{$current_model.description}</span>

@@ -7,11 +7,14 @@
 </script>
 
 <CustomPanel>
-    <svelte:fragment slot="title">
+    <svelte:fragment slot="title" let:open>
         <div class="flex-center">
             <span>Save Model</span>
             {#if !$save_pretrained_model}
                 <div class="badge badge-warning">NOT SAVING</div>
+            {/if}
+            {#if !open}
+                <div class="badge badge-info">{$pre_trained_filename}</div>
             {/if}
         </div>
     </svelte:fragment>

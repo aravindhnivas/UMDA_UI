@@ -5,7 +5,17 @@
     import Notification from '$lib/components/Notification.svelte';
 </script>
 
-<CustomPanel title="More options">
+<CustomPanel>
+    <svelte:fragment slot="title" let:open>
+        <div class="flex-center">
+            <span>More options</span>
+            {#if !open}
+                {#if $default_parameter_mode}
+                    <span class="badge badge-info">Default mode</span>
+                {/if}
+            {/if}
+        </div>
+    </svelte:fragment>
     {#if $default_parameter_mode}
         <div class="p-2">
             <Notification message="Default mode" type="info" dismissable={false} />
