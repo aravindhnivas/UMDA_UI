@@ -118,7 +118,18 @@
             toast.error('Error loading state file');
         }
     };
+
+    const reset_state = () => {
+        // $training_column_name_X = '';
+        // $training_column_name_index = '';
+        $training_column_name_y = '';
+        $loaded_df_columns = [];
+        auto_fetch_columns = false;
+        $use_filtered_data_for_training = false;
+    };
+
     const auto_load_state = async () => {
+        reset_state();
         $training_state_loaded = false;
         if (!(await fs.exists($training_file.filename))) return;
         if (!(await fs.exists(`${$training_save_directory}/training_file_state.json`))) return;
