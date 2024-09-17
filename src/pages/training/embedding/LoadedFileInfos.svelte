@@ -9,7 +9,7 @@
     export let show_embedded_file = true;
 
     const dispatch = createEventDispatcher();
-    let refresh = true;
+    // let refresh = true;
 
     let loaded_files = {
         training_file: '',
