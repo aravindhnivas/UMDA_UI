@@ -28,6 +28,7 @@ declare global {
   const getID: typeof import('$lib/utils/initialise')['getID']
   const hasContext: typeof import('svelte')['hasContext']
   const invoke: typeof import('@tauri-apps/api')['invoke']
+  const isArray: typeof import('lodash-es')['isArray']
   const isEmpty: typeof import('lodash-es')['isEmpty']
   const linspace: typeof import('lodash-es')['range']
   const localWritable: typeof import('@macfja/svelte-persistent-store')['localWritable']
