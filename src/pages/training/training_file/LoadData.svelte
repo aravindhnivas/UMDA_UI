@@ -106,6 +106,10 @@
             $training_column_name_y = loaded_state.training_column_name_y;
             $training_column_name_index = loaded_state.training_column_name_index;
             $loaded_df_columns = loaded_state.loaded_df_columns;
+            if ($loaded_df_columns.length > 0) {
+                auto_fetch_columns = true;
+            }
+
             $use_filtered_data_for_training = loaded_state.use_filtered_data_for_training;
             $filtered_dir = loaded_state.filtered_dir;
             toast.success('State loaded');
@@ -137,66 +141,64 @@
         </div>
     </svelte:fragment>
     <svelte:fragment let:load_btn>
-        {#await fs.exists($training_file.filename) then file_exists}
-            <div class="flex flex-col gap-1">
-                <div class="flex-center">
-                    <div class="flex-center border-1 border-solid border-rounded p-1">
-                        <span>Auto-fetch column name</span>
-                        <input type="checkbox" class="toggle" bind:checked={auto_fetch_columns} />
-                    </div>
+        <div class="flex flex-col gap-1">
+            <div class="flex-center">
+                <div class="flex-center border-1 border-solid border-rounded p-1">
+                    <span>Auto-fetch column name</span>
+                    <input type="checkbox" class="toggle" bind:checked={auto_fetch_columns} />
                 </div>
-                {#if auto_fetch_columns && !data?.columns.length}
-                    <span class="text-sm">Load file first!</span>
-                {/if}
             </div>
+            {#if auto_fetch_columns && !data?.columns.length}
+                <span class="text-sm">Load file first!</span>
+            {/if}
+        </div>
 
-            <div class="flex items-end gap-1">
-                <CustomSelect
-                    use_input={!auto_fetch_columns}
-                    label="column X"
-                    bind:value={$training_column_name_X}
-                    items={$loaded_df_columns}
-                />
-                <CustomSelect
-                    use_input={!auto_fetch_columns}
-                    label="column Y"
-                    bind:value={$training_column_name_y}
-                    items={$loaded_df_columns}
-                />
-                <CustomInput
-                    label="npartitions disk"
-                    bind:value={$NPARTITIONS}
-                    type="number"
-                    placeholder="Enter dask npartitions"
-                />
-            </div>
+        <div class="flex items-end gap-1">
+            <CustomSelect
+                use_input={!auto_fetch_columns}
+                label="column X"
+                bind:value={$training_column_name_X}
+                items={$loaded_df_columns}
+            />
+            <CustomSelect
+                use_input={!auto_fetch_columns}
+                label="column Y"
+                bind:value={$training_column_name_y}
+                items={$loaded_df_columns}
+            />
+            <CustomInput
+                label="npartitions disk"
+                bind:value={$NPARTITIONS}
+                type="number"
+                placeholder="Enter dask npartitions"
+            />
+        </div>
 
-            <div class="flex items-end gap-1">
-                <CustomInput label="Enter INDEX column name" bind:value={$training_column_name_index} />
-                <Loadingbtn
-                    name="Make INDEX and save file"
-                    callback={MakeIndexAndSaveFile}
-                    on:result={e => {
-                        console.log(e.detail);
-                        load_btn?.click();
-                    }}
-                />
-                <span class="text-sm my-2">OR</span>
-                <CustomSelect
-                    label="Choose INDEX column"
-                    bind:value={$training_column_name_index}
-                    items={data?.columns || []}
-                />
-                <span class="badge badge-info ml-auto" class:badge-error={!$index_column_valid}>
-                    {$index_column_valid ? 'Index available' : 'Index not available'}
-                </span>
-            </div>
+        <div class="flex items-end gap-1">
+            <CustomInput label="Enter INDEX column name" bind:value={$training_column_name_index} />
+            <Loadingbtn
+                name="Make INDEX and save file"
+                callback={MakeIndexAndSaveFile}
+                on:result={e => {
+                    console.log(e.detail);
+                    load_btn?.click();
+                }}
+            />
+            <span class="text-sm my-2">OR</span>
+            <CustomSelect
+                label="Choose INDEX column"
+                bind:value={$training_column_name_index}
+                items={data?.columns || []}
+            />
+            <span class="badge badge-info ml-auto" class:badge-error={!$index_column_valid}>
+                {$index_column_valid ? 'Index available' : 'Index not available'}
+            </span>
+        </div>
 
-            <FetchAnalysisDir />
-            <hr />
-            <h3>Loaded training file</h3>
-            <LoadedFileInfos show_embedded_file={false} show_status={false} />
-            <hr />
-        {/await}
+        <FetchAnalysisDir />
+        <hr />
+        <h3>Loaded training file</h3>
+        <LoadedFileInfos show_embedded_file={false} show_status={false} />
+        <hr />
     </svelte:fragment>
 </FileLoader>
