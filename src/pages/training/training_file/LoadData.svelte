@@ -10,6 +10,7 @@
         index_column_valid,
         training_save_directory,
         loaded_df_columns,
+        training_state_loaded,
     } from './stores';
     import FileLoader from '$lib/components/fileloader/FileLoader.svelte';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
@@ -50,8 +51,8 @@
 
         $loaded_df_columns = data.columns || [];
 
-        if (!data.columns.includes($training_column_name_X)) $training_column_name_X = '';
-        if (!data.columns.includes($training_column_name_y)) $training_column_name_y = '';
+        if (!$loaded_df_columns.includes($training_column_name_X)) $training_column_name_X = '';
+        if (!$loaded_df_columns.includes($training_column_name_y)) $training_column_name_y = '';
 
         auto_fetch_columns = true;
         if (!(await fs.exists($training_save_directory))) {
@@ -118,9 +119,11 @@
         }
     };
     const auto_load_state = async () => {
+        $training_state_loaded = false;
         if (!(await fs.exists($training_file.filename))) return;
         if (!(await fs.exists(`${$training_save_directory}/training_file_state.json`))) return;
         await load_state();
+        $training_state_loaded = true;
     };
 
     onMount(auto_load_state);
@@ -141,64 +144,66 @@
         </div>
     </svelte:fragment>
     <svelte:fragment let:load_btn>
-        <div class="flex flex-col gap-1">
-            <div class="flex-center">
-                <div class="flex-center border-1 border-solid border-rounded p-1">
-                    <span>Auto-fetch column name</span>
-                    <input type="checkbox" class="toggle" bind:checked={auto_fetch_columns} />
+        {#await fs.exists($training_file.filename) then file_exists}
+            <div class="flex flex-col gap-1">
+                <div class="flex-center">
+                    <div class="flex-center border-1 border-solid border-rounded p-1">
+                        <span>Auto-fetch column name</span>
+                        <input type="checkbox" class="toggle" bind:checked={auto_fetch_columns} />
+                    </div>
                 </div>
+                {#if auto_fetch_columns && !data?.columns.length}
+                    <span class="text-sm">Load file first!</span>
+                {/if}
             </div>
-            {#if auto_fetch_columns && !data?.columns.length}
-                <span class="text-sm">Load file first!</span>
-            {/if}
-        </div>
 
-        <div class="flex items-end gap-1">
-            <CustomSelect
-                use_input={!auto_fetch_columns}
-                label="column X"
-                bind:value={$training_column_name_X}
-                items={$loaded_df_columns}
-            />
-            <CustomSelect
-                use_input={!auto_fetch_columns}
-                label="column Y"
-                bind:value={$training_column_name_y}
-                items={$loaded_df_columns}
-            />
-            <CustomInput
-                label="npartitions disk"
-                bind:value={$NPARTITIONS}
-                type="number"
-                placeholder="Enter dask npartitions"
-            />
-        </div>
+            <div class="flex items-end gap-1">
+                <CustomSelect
+                    use_input={!auto_fetch_columns}
+                    label="column X"
+                    bind:value={$training_column_name_X}
+                    items={$loaded_df_columns}
+                />
+                <CustomSelect
+                    use_input={!auto_fetch_columns}
+                    label="column Y"
+                    bind:value={$training_column_name_y}
+                    items={$loaded_df_columns}
+                />
+                <CustomInput
+                    label="npartitions disk"
+                    bind:value={$NPARTITIONS}
+                    type="number"
+                    placeholder="Enter dask npartitions"
+                />
+            </div>
 
-        <div class="flex items-end gap-1">
-            <CustomInput label="Enter INDEX column name" bind:value={$training_column_name_index} />
-            <Loadingbtn
-                name="Make INDEX and save file"
-                callback={MakeIndexAndSaveFile}
-                on:result={e => {
-                    console.log(e.detail);
-                    load_btn?.click();
-                }}
-            />
-            <span class="text-sm my-2">OR</span>
-            <CustomSelect
-                label="Choose INDEX column"
-                bind:value={$training_column_name_index}
-                items={data?.columns || []}
-            />
-            <span class="badge badge-info ml-auto" class:badge-error={!$index_column_valid}>
-                {$index_column_valid ? 'Index available' : 'Index not available'}
-            </span>
-        </div>
+            <div class="flex items-end gap-1">
+                <CustomInput label="Enter INDEX column name" bind:value={$training_column_name_index} />
+                <Loadingbtn
+                    name="Make INDEX and save file"
+                    callback={MakeIndexAndSaveFile}
+                    on:result={e => {
+                        console.log(e.detail);
+                        load_btn?.click();
+                    }}
+                />
+                <span class="text-sm my-2">OR</span>
+                <CustomSelect
+                    label="Choose INDEX column"
+                    bind:value={$training_column_name_index}
+                    items={data?.columns || []}
+                />
+                <span class="badge badge-info ml-auto" class:badge-error={!$index_column_valid}>
+                    {$index_column_valid ? 'Index available' : 'Index not available'}
+                </span>
+            </div>
 
-        <FetchAnalysisDir />
-        <hr />
-        <h3>Loaded training file</h3>
-        <LoadedFileInfos show_embedded_file={false} show_status={false} />
-        <hr />
+            <FetchAnalysisDir />
+            <hr />
+            <h3>Loaded training file</h3>
+            <LoadedFileInfos show_embedded_file={false} show_status={false} />
+            <hr />
+        {/await}
     </svelte:fragment>
 </FileLoader>

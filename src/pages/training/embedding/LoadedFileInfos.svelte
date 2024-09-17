@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { training_file } from '../training_file/stores';
+    import { training_file, training_state_loaded } from '../training_file/stores';
     import { current_training_data_file } from '../training_file/plot-analysis/stores';
     import { embedd_savefile_path } from './stores';
     import { training_column_name_X, training_column_name_y } from '../training_file/stores';
@@ -26,6 +26,7 @@
     ];
 
     const refresh_data = async () => {
+        await tick();
         let file_name: string;
 
         file_name = await $current_training_data_file;
@@ -45,13 +46,14 @@
         loaded_files.columnX = $training_column_name_X || '';
         loaded_files.columnY = $training_column_name_y || '';
         items = [...items]; // force update
-        // refresh = !refresh;
         console.log('Loaded files:', loaded_files);
         dispatch('refresh', loaded_files);
     };
 
-    onMount(refresh_data);
-    $: if ($training_file.filename) refresh_data();
+    onMount(async () => {
+        await refresh_data();
+    });
+    $: if ($training_file.filename || $training_state_loaded) refresh_data();
 </script>
 
 <div class="flex items-center justify-between">

@@ -7,6 +7,7 @@ export const training_file = localWritable<{
     filetype: 'csv',
     key: 'data',
 });
+export const training_state_loaded = writable<boolean>(false);
 export const loaded_df_columns = writable<string[]>([]);
 export const training_save_directory = derived([training_file], ([$training_file]) => {
     return $training_file.filename.split('.')[0] + '_processed_data';
