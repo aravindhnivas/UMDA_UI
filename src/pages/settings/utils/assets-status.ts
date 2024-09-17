@@ -22,13 +22,12 @@ export const check_umdapy_assets_status = async ({ installation_request = false 
         }
 
         // if (!(await dialog.confirm('Python assets are missing. Press OK to download.'))) return
-        if (await dialog.confirm('umdapy is missing. Press OK to download or Cancel to select the downloaded file.')) {
-            await auto_download_and_install_assets({ installation_request });
-        } else {
-            await install_umdapy_from_zipfile();
-            // outputbox.warn('Python assets are missing.')
-        }
-    } catch (error: unknown) {
+        const req = await dialog.confirm('umdapy is missing. Press OK to download and install python assets.');
+        if (!req) return;
+        await auto_download_and_install_assets({ installation_request });
+        return;
+        // await install_umdapy_from_zipfile();
+    } catch (error) {
         if (error instanceof Error) {
             outputbox.error(error.message);
         } else {
