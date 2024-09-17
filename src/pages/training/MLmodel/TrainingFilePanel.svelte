@@ -1,8 +1,29 @@
 <script lang="ts">
     import CustomPanel from '$lib/components/CustomPanel.svelte';
+    import { isObject, isEmpty } from 'lodash-es';
     import LoadedFileInfos from '../embedding/LoadedFileInfos.svelte';
+
+    let loaded_files = {} as LoadedInfosFile;
+    const get_loaded_files = async (e: CustomEvent) => {
+        if (!e.detail) return;
+        loaded_files = e.detail;
+        console.log(loaded_files);
+    };
 </script>
 
-<CustomPanel title="Loaded training file" open={true}>
-    <LoadedFileInfos />
+<CustomPanel open={false}>
+    <svelte:fragment slot="title" let:open>
+        <div class="flex-center">
+            <span>Loaded training file</span>
+            {#if !open}
+                {#if isObject(loaded_files) && !isEmpty(loaded_files)}
+                    <span class="badge badge-info">{loaded_files['training_file']?.basename}</span>
+                    <span class="badge badge-info">{loaded_files['embedded_file']?.basename}</span>
+                    <!-- <span class="badge badge-info">{loaded_files['columnX']?.basename}</span> -->
+                    <span class="badge badge-info">{loaded_files['columnY']?.basename}</span>
+                {/if}
+            {/if}
+        </div>
+    </svelte:fragment>
+    <LoadedFileInfos on:refresh={get_loaded_files} />
 </CustomPanel>
