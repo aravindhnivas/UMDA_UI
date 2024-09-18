@@ -43,11 +43,16 @@
         if (!filename) return;
 
         const contents = await fs.readTextFile(filename);
-        const { hist, binEdges } = JSON.parse(contents);
-
+        const { hist, bin_edges } = JSON.parse(contents);
+        // Create x values for Plotly bar chart
+        console.log({ contents, hist, bin_edges });
+        let xValues = [];
+        for (let i = 0; i < bin_edges.length - 1; i++) {
+            xValues.push((bin_edges[i] + bin_edges[i + 1]) / 2);
+        }
         data = [
             {
-                x: binEdges,
+                x: xValues,
                 y: hist,
                 type: 'bar',
                 marker: {
