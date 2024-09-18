@@ -11,6 +11,10 @@
     let data: Partial<Plotly.PlotData>[] = [];
 
     const analysis_y_data_distribution = async () => {
+        if (!$training_column_name_y) {
+            toast.error('Please select a column to analyse');
+            return;
+        }
         return {
             pyfile: 'training.y_data_distribution',
             args: {
