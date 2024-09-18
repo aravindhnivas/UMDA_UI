@@ -7,6 +7,7 @@
         current_post_analysis_files_directory,
         current_training_data_file,
         filtered_dir,
+        YDistributionFilter,
     } from './stores';
     import { savefilename, min_yvalue, max_yvalue } from './YdataPlots/stores';
     import YdataStats from './YdataPlots/YdataStats.svelte';
@@ -18,6 +19,10 @@
             toast.error('Please select a column to analyse');
             return;
         }
+
+        $YDistributionFilter.min_yvalue.lock = true;
+        $YDistributionFilter.max_yvalue.lock = true;
+
         return {
             pyfile: 'training.y_data_distribution',
             args: {
