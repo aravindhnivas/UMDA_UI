@@ -19,7 +19,7 @@
                 use_dask: $use_dask,
                 column_name: $training_column_name_y,
                 training_save_directory: $training_save_directory,
-                bin_size: parseInt(bin_size),
+                bin_size,
             },
         };
     };
@@ -61,6 +61,7 @@
 </script>
 
 <div class="grid gap-2" class:hidden={$active_tab !== 'y-data_distribution'}>
+    <span class="badge">using {$training_column_name_y} column to analyse distribution</span>
     <div class="flex items-end gap-1">
         <CustomInput bind:value={bin_size} label="Bin" type="number" />
         <Loadingbtn callback={analysis_y_data_distribution} on:result={onResult} />
