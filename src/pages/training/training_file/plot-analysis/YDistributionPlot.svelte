@@ -72,9 +72,10 @@
 
 <div class="grid gap-2" class:hidden={$active_tab !== 'y-data_distribution'}>
     <span class="badge">using {$training_column_name_y} column to analyse distribution</span>
+
     <div class="flex items-end gap-1">
         <Checkbox bind:value={auto_bin_size} label="auto bin_size" />
-        <CustomInput bind:value={bin_size} label="bin_size" type="number" />
+        <CustomInput bind:value={bin_size} label="bin_size" type="number" disabled={auto_bin_size} />
         <Loadingbtn callback={analysis_y_data_distribution} on:result={onResult} />
     </div>
     <div class="h-lg min-w-xl">
