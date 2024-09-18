@@ -6,9 +6,9 @@
     import { training_column_name_y, training_file, training_save_directory } from '../stores';
     import { active_tab } from './stores';
     import Plot from 'svelte-plotly.js';
-    import Checkbox from '$lib/components/Checkbox.svelte';
-
-    let data: Partial<Plotly.PlotData>[] = [];
+    import YdataStats from './YdataPlots/YdataStats.svelte';
+    import Yplots from './YdataPlots/Yplots.svelte';
+    // import Checkbox from '$lib/components/Checkbox.svelte';
 
     const analysis_y_data_distribution = async () => {
         if (!$training_column_name_y) {
@@ -22,60 +22,130 @@
                 filetype: $training_file.filetype,
                 key: $training_file.key,
                 use_dask: $use_dask,
-                column_name: $training_column_name_y,
-                training_save_directory: $training_save_directory,
+                property_column: $training_column_name_y,
+                save_loc: $training_save_directory,
                 bin_size,
                 auto_bin_size,
             },
         };
     };
 
-    const layout = {
-        title: `${$training_column_name_y} Distribution`,
-        xaxis: { title: 'Value' },
-        yaxis: { title: 'Frequency' },
-    };
+    let plots_data_and_layout: { data: any; layout: any }[] = [];
+    let data: any = {};
+    // let histogramData: Partial<Plotly.Bar>[] = [];
+    // const histogramLayout = {
+    //     // title: 'Histogram',
+    //     xaxis: { title: 'Value' },
+    //     yaxis: { title: 'Frequency' },
+    // };
+
+    // let boxPlotData: Partial<Plotly.BoxPlotData>[] = [];
+    // const boxPlotLayout = {
+    //     // title: 'Box Plot',
+    //     yaxis: { title: 'Value' },
+    //     // xaxis: { title: '' },
+    // };
+
+    // let qqPlotData: Partial<Plotly.ScatterData>[] = [];
+    // const qqPlotLayout = {
+    //     title: 'Q-Q Plot',
+    //     xaxis: { title: 'Theoretical Quantiles' },
+    //     yaxis: { title: 'Sample Quantiles' },
+    // };
+
     let dataFromPython = {} as {
-        filename: string;
-        bin_size: number;
-        min: number;
-        max: number;
-        mean: number;
-        std: number;
+        savefile: string;
+        stats: {
+            min: number;
+            max: number;
+            mean: number;
+            std: number;
+            count: number;
+            '25%': number;
+            '50%': number;
+            '75%': number;
+        };
     };
+
     const onResult = async (e: CustomEvent) => {
         console.log(e.detail);
         dataFromPython = e.detail?.dataFromPython;
         if (!dataFromPython) return;
         console.log(dataFromPython);
-        const filename = dataFromPython.filename;
-        if (!filename) return;
+        const savefile = dataFromPython.savefile;
+        if (!savefile) return;
+        const contents = await fs.readTextFile(savefile);
+        data = JSON.parse(contents);
 
-        if (auto_bin_size) {
-            bin_size = dataFromPython.bin_size;
-        }
-        const contents = await fs.readTextFile(filename);
+        console.warn({ data });
+        // return;
 
-        const parsed_data = JSON.parse(contents);
-        console.log({ parsed_data });
-        const { hist, bin_edges } = parsed_data;
-        // Create x values for Plotly bar chart
-        let xValues = [];
-        for (let i = 0; i < bin_edges.length - 1; i++) {
-            xValues.push((bin_edges[i] + bin_edges[i + 1]) / 2);
-        }
-        data = [
-            {
-                x: xValues,
-                y: hist,
-                type: 'bar',
-                marker: {
-                    color: PlotlyColors.muted_blue,
-                    line: {
-                        width: 1.5,
-                    },
-                },
-            },
+        const histogramTrace = {
+            x: data.histogram.bin_edges.slice(0, -1),
+            y: data.histogram.counts,
+            type: 'bar',
+            name: 'Histogram',
+        };
+
+        const histogramLayout = {
+            title: 'Histogram',
+            xaxis: { title: 'Value' },
+            yaxis: { title: 'Frequency' },
+        };
+
+        // Plotly.newPlot('histogram', [histogramTrace], histogramLayout);
+
+        // 2. Box Plot
+        const boxPlotTrace = {
+            y: [data.box_plot.min, data.box_plot.q1, data.box_plot.median, data.box_plot.q3, data.box_plot.max],
+            type: 'box',
+            name: 'Box Plot',
+        };
+
+        const boxPlotLayout = {
+            title: 'Box Plot',
+            yaxis: { title: 'Value' },
+        };
+
+        // Plotly.newPlot('boxplot', [boxPlotTrace], boxPlotLayout);
+
+        // 3. Q-Q Plot
+        const qqPlotTrace = {
+            x: data.qq_plot.theoretical_quantiles,
+            y: data.qq_plot.sample_quantiles,
+            mode: 'markers',
+            type: 'scatter',
+            name: 'Q-Q Plot',
+        };
+
+        const qqPlotLayout = {
+            title: 'Q-Q Plot',
+            xaxis: { title: 'Theoretical Quantiles' },
+            yaxis: { title: 'Sample Quantiles' },
+        };
+
+        // Plotly.newPlot('qqplot', [qqPlotTrace], qqPlotLayout);
+
+        // 4. KDE Plot
+        const kdePlotTrace = {
+            x: data.kde.x,
+            y: data.kde.y,
+            type: 'scatter',
+            mode: 'lines',
+            name: 'KDE',
+        };
+
+        const kdePlotLayout = {
+            title: 'Kernel Density Estimation',
+            xaxis: { title: 'Value' },
+            yaxis: { title: 'Density' },
+        };
+
+        plots_data_and_layout = [
+            { data: [histogramTrace], layout: histogramLayout },
+            { data: [boxPlotTrace], layout: boxPlotLayout },
+            { data: [qqPlotTrace], layout: qqPlotLayout },
+            { data: [kdePlotTrace], layout: kdePlotLayout },
         ];
     };
     let auto_bin_size: boolean = true;
@@ -83,21 +153,12 @@
 </script>
 
 <div class="grid gap-2" class:hidden={$active_tab !== 'y-data_distribution'}>
-    <span class="badge">using {$training_column_name_y} column to analyse distribution</span>
-    {#if dataFromPython}
-        <div class="flex gap-1">
-            <span class="badge badge-info">min: {dataFromPython.min}</span>
-            <span class="badge badge-info">max: {dataFromPython.max}</span>
-            <span class="badge badge-info">mean: {dataFromPython.mean}</span>
-            <span class="badge badge-info">std: {dataFromPython.std}</span>
-        </div>
-    {/if}
+    <span class="badge badge-primary">{$training_column_name_y}</span>
+    <YdataStats {data} />
     <div class="flex items-end gap-1">
-        <Checkbox bind:value={auto_bin_size} label="auto bin_size" />
+        <!-- <Checkbox bind:value={auto_bin_size} label="auto bin_size" /> -->
         <CustomInput bind:value={bin_size} label="bin_size" type="number" disabled={auto_bin_size} />
-        <Loadingbtn callback={analysis_y_data_distribution} on:result={onResult} />
+        <Loadingbtn callback={analysis_y_data_distribution} on:result={onResult} name="Run Analysis" />
     </div>
-    <div class="h-lg min-w-xl">
-        <Plot {data} {layout} fillParent={true} debounce={250} />
-    </div>
+    <Yplots {plots_data_and_layout} />
 </div>
