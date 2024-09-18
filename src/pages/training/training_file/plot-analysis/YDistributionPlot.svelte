@@ -63,7 +63,7 @@
             plots_data = null;
             return;
         }
-        read_and_plot(savefile);
+        await read_and_plot(savefile);
     };
 
     const read_and_plot = async (savefile: string | null = null, notify = true) => {
