@@ -34,14 +34,17 @@
         },
     };
 
-    const onResult = (e: CustomEvent) => {
+    const onResult = async (e: CustomEvent) => {
         console.log(e.detail);
         const { dataFromPython } = e.detail;
         if (!dataFromPython) return;
         console.log(dataFromPython);
-        const hist = dataFromPython.hist;
-        const binEdges = dataFromPython.bin_edges;
-        // Create Plotly trace
+        const filename = dataFromPython.filename;
+        if (!filename) return;
+
+        const contents = await fs.readTextFile(filename);
+        const { hist, binEdges } = JSON.parse(contents);
+
         data = [
             {
                 x: binEdges,
