@@ -65,7 +65,7 @@
         read_and_plot(savefile);
     };
 
-    const read_and_plot = async (savefile: string | null = null) => {
+    const read_and_plot = async (savefile: string | null = null, notify = true) => {
         try {
             if (savefile === null) {
                 savefile = await path.join(await $current_post_analysis_files_directory, savefilename);
@@ -113,10 +113,10 @@
                 qq_plot: [qqPlotTrace],
             };
 
-            toast.success('Analysis complete');
+            if (notify) toast.success('Y data distribution plots are ready and displayed');
         } catch (error) {
             console.error(error);
-            toast.error('Failed to read the saved file');
+            if (notify) toast.error('Failed to read the saved file');
         }
     };
     let bin_size: string | number = 30;
@@ -125,6 +125,12 @@
         data = null;
         plots_data = null;
     }
+    onMount(async () => {
+        const savefile = await path.join(await $current_post_analysis_files_directory, savefilename);
+        if (await fs.exists(savefile)) {
+            read_and_plot(savefile, false);
+        }
+    });
 </script>
 
 <div class="grid gap-2" class:hidden={$active_tab !== 'y-data_distribution'}>
