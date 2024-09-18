@@ -32,26 +32,6 @@
 
     let plots_data_and_layout: { data: any; layout: any }[] = [];
     let data: any = {};
-    // let histogramData: Partial<Plotly.Bar>[] = [];
-    // const histogramLayout = {
-    //     // title: 'Histogram',
-    //     xaxis: { title: 'Value' },
-    //     yaxis: { title: 'Frequency' },
-    // };
-
-    // let boxPlotData: Partial<Plotly.BoxPlotData>[] = [];
-    // const boxPlotLayout = {
-    //     // title: 'Box Plot',
-    //     yaxis: { title: 'Value' },
-    //     // xaxis: { title: '' },
-    // };
-
-    // let qqPlotData: Partial<Plotly.ScatterData>[] = [];
-    // const qqPlotLayout = {
-    //     title: 'Q-Q Plot',
-    //     xaxis: { title: 'Theoretical Quantiles' },
-    //     yaxis: { title: 'Sample Quantiles' },
-    // };
 
     let dataFromPython = {} as {
         savefile: string;
@@ -93,8 +73,6 @@
             yaxis: { title: 'Frequency' },
         };
 
-        // Plotly.newPlot('histogram', [histogramTrace], histogramLayout);
-
         // 2. Box Plot
         const boxPlotTrace = {
             y: [data.box_plot.min, data.box_plot.q1, data.box_plot.median, data.box_plot.q3, data.box_plot.max],
@@ -106,8 +84,6 @@
             title: 'Box Plot',
             yaxis: { title: 'Value' },
         };
-
-        // Plotly.newPlot('boxplot', [boxPlotTrace], boxPlotLayout);
 
         // 3. Q-Q Plot
         const qqPlotTrace = {
@@ -123,8 +99,6 @@
             xaxis: { title: 'Theoretical Quantiles' },
             yaxis: { title: 'Sample Quantiles' },
         };
-
-        // Plotly.newPlot('qqplot', [qqPlotTrace], qqPlotLayout);
 
         // 4. KDE Plot
         const kdePlotTrace = {
@@ -156,7 +130,6 @@
     <span class="badge badge-primary">{$training_column_name_y}</span>
     <YdataStats {data} />
     <div class="flex items-end gap-1">
-        <!-- <Checkbox bind:value={auto_bin_size} label="auto bin_size" /> -->
         <CustomInput bind:value={bin_size} label="bin_size" type="number" disabled={auto_bin_size} />
         <Loadingbtn callback={analysis_y_data_distribution} on:result={onResult} name="Run Analysis" />
     </div>
