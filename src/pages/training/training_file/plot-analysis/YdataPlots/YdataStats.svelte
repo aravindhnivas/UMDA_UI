@@ -11,27 +11,29 @@
             </p>
             <hr />
 
-            <div class="grid grid-cols-2">
-                <p>Mean</p>
+            <div class="grid grid-cols-2 gap-1">
+                <p class="font-bold">Mean</p>
                 <span>{data.descriptive_statistics.mean.toFixed(4)}</span>
-                <p>Median</p>
+                <!-- <p class="col-span-2 text-sm">The average value of the property</p> -->
+                <p class="font-bold">Median</p>
                 <span>{data.descriptive_statistics['50%'].toFixed(4)}</span>
-                <p>Standard Deviation</p>
+                <!-- <p class="col-span-2 text-sm">The middle value when the data is ordered (50<sup>th</sup> percentile)</p> -->
+                <p class="font-bold">Standard Deviation</p>
                 <span>{data.descriptive_statistics.std.toFixed(4)}</span>
-                <p>Minimum</p>
+                <p class="font-bold">Minimum</p>
                 <span>{data.descriptive_statistics.min.toFixed(4)}</span>
-                <p>Maximum</p>
+                <p class="font-bold">Maximum</p>
                 <span>{data.descriptive_statistics.max.toFixed(4)}</span>
             </div>
             <hr />
             <div class="grid grid-cols-2">
-                <p>Percentile</p>
-                <p>Critical Value</p>
-                <p>25%</p>
+                <p class="font-bold">Percentile</p>
+                <p class="font-bold">Critical Value</p>
+                <p>25% (Q1)</p>
                 <span>{data.descriptive_statistics['25%'].toFixed(4)}</span>
-                <p>50%</p>
+                <p>50% (Median)</p>
                 <span>{data.descriptive_statistics['50%'].toFixed(4)}</span>
-                <p>75%</p>
+                <p>75% (Q3)</p>
                 <span>{data.descriptive_statistics['75%'].toFixed(4)}</span>
             </div>
             <p class="text-sm">
@@ -44,13 +46,13 @@
             <h3>Distribution Characteristics</h3>
             <p class="text-sm">These metrics provide information about the shape of the data distribution</p>
             <hr />
-            <p>Skewness: {data.skewness.toFixed(4)}</p>
+            <p class="font-bold">Skewness: {data.skewness.toFixed(4)}</p>
             <p class="text-sm">
                 Skewness: Measures the asymmetry of the distribution. A positive value indicates a right-skewed
                 distribution, while a negative value indicates a left-skewed distribution.
             </p>
             <hr />
-            <p>Kurtosis: {data.kurtosis.toFixed(4)}</p>
+            <p class="font-bold">Kurtosis: {data.kurtosis.toFixed(4)}</p>
 
             <p class="text-sm">
                 Kurtosis: Measures the "tailedness" of the distribution. A high value indicates heavy tails (more
@@ -61,14 +63,14 @@
             <h3>Anderson-Darling Test</h3>
             <p class="text-sm">This test is used to determine if the data follows a normal distribution</p>
             <hr />
-            <p>Statistic: {data.anderson_darling_test.statistic.toFixed(4)}</p>
+            <p class="font-bold">Statistic: {data.anderson_darling_test.statistic.toFixed(4)}</p>
             <p class="text-sm">
                 Statistic: The test statistic. A smaller value suggests the data is closer to a normal distribution.
             </p>
             <hr />
             <div class="grid grid-cols-2 justify-items-start gap-1">
-                <p>Significance Level</p>
-                <p>Critical Value</p>
+                <p class="font-bold">Significance Level</p>
+                <p class="font-bold">Critical Value</p>
                 {#each data.anderson_darling_test.critical_values as cv, index (cv)}
                     <p>{data.anderson_darling_test.significance_levels?.[index]}%</p>
                     <span>{cv.toFixed(4)}</span>
