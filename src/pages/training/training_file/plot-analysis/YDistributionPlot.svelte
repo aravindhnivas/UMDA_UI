@@ -1,14 +1,13 @@
 <script lang="ts">
-    import { PlotlyColors } from '$lib/utils/index';
     import { use_dask } from '$lib/stores/system';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
-    import { training_column_name_y, training_file, training_save_directory } from '../stores';
-    import { active_tab } from './stores';
-    import Plot from 'svelte-plotly.js';
+    import { training_column_name_y, training_file } from '../stores';
+    import { active_tab, current_post_analysis_files_directory, current_training_data_file } from './stores';
     import YdataStats from './YdataPlots/YdataStats.svelte';
     import Yplots from './YdataPlots/Yplots.svelte';
-    // import Checkbox from '$lib/components/Checkbox.svelte';
+
+    const savefilename = 'y_data_distribution.json';
 
     const analysis_y_data_distribution = async () => {
         if (!$training_column_name_y) {
@@ -18,12 +17,13 @@
         return {
             pyfile: 'training.y_data_distribution',
             args: {
-                filename: $training_file.filename,
+                filename: await $current_training_data_file,
                 filetype: $training_file.filetype,
                 key: $training_file.key,
                 use_dask: $use_dask,
                 property_column: $training_column_name_y,
-                save_loc: $training_save_directory,
+                save_loc: await $current_post_analysis_files_directory,
+                savefilename: savefilename,
                 bin_size,
                 auto_bin_size,
             },
@@ -54,73 +54,86 @@
         console.log(dataFromPython);
         const savefile = dataFromPython.savefile;
         if (!savefile) return;
-        const contents = await fs.readTextFile(savefile);
-        data = JSON.parse(contents);
+        read_and_plot(savefile);
+    };
 
-        console.warn({ data });
-        // return;
+    const read_and_plot = async (savefile: string) => {
+        try {
+            if (!(await fs.exists(savefile))) return toast.error('File not found');
 
-        const histogramTrace = {
-            x: data.histogram.bin_edges.slice(0, -1),
-            y: data.histogram.counts,
-            type: 'bar',
-            name: 'Histogram',
-        };
+            const contents = await fs.readTextFile(savefile);
+            data = JSON.parse(contents);
 
-        const histogramLayout = {
-            title: 'Histogram',
-            xaxis: { title: 'Value' },
-            yaxis: { title: 'Frequency' },
-        };
+            console.warn({ data });
+            // return;
 
-        // 2. Box Plot
-        const boxPlotTrace = {
-            y: [data.box_plot.min, data.box_plot.q1, data.box_plot.median, data.box_plot.q3, data.box_plot.max],
-            type: 'box',
-            name: 'Box Plot',
-        };
+            const histogramTrace = {
+                x: data.histogram.bin_edges.slice(0, -1),
+                y: data.histogram.counts,
+                type: 'bar',
+                name: 'Histogram',
+            };
 
-        const boxPlotLayout = {
-            title: 'Box Plot',
-            yaxis: { title: 'Value' },
-        };
+            const histogramLayout = {
+                title: 'Histogram',
+                xaxis: { title: 'Value' },
+                yaxis: { title: 'Frequency' },
+            };
 
-        // 3. Q-Q Plot
-        const qqPlotTrace = {
-            x: data.qq_plot.theoretical_quantiles,
-            y: data.qq_plot.sample_quantiles,
-            mode: 'markers',
-            type: 'scatter',
-            name: 'Q-Q Plot',
-        };
+            // 2. Box Plot
+            const boxPlotTrace = {
+                y: [data.box_plot.min, data.box_plot.q1, data.box_plot.median, data.box_plot.q3, data.box_plot.max],
+                type: 'box',
+                name: 'Box Plot',
+            };
 
-        const qqPlotLayout = {
-            title: 'Q-Q Plot',
-            xaxis: { title: 'Theoretical Quantiles' },
-            yaxis: { title: 'Sample Quantiles' },
-        };
+            const boxPlotLayout = {
+                title: 'Box Plot',
+                yaxis: { title: 'Value' },
+            };
 
-        // 4. KDE Plot
-        const kdePlotTrace = {
-            x: data.kde.x,
-            y: data.kde.y,
-            type: 'scatter',
-            mode: 'lines',
-            name: 'KDE',
-        };
+            // 3. Q-Q Plot
+            const qqPlotTrace = {
+                x: data.qq_plot.theoretical_quantiles,
+                y: data.qq_plot.sample_quantiles,
+                mode: 'markers',
+                type: 'scatter',
+                name: 'Q-Q Plot',
+            };
 
-        const kdePlotLayout = {
-            title: 'Kernel Density Estimation',
-            xaxis: { title: 'Value' },
-            yaxis: { title: 'Density' },
-        };
+            const qqPlotLayout = {
+                title: 'Q-Q Plot',
+                xaxis: { title: 'Theoretical Quantiles' },
+                yaxis: { title: 'Sample Quantiles' },
+            };
 
-        plots_data_and_layout = [
-            { data: [histogramTrace], layout: histogramLayout },
-            { data: [boxPlotTrace], layout: boxPlotLayout },
-            { data: [qqPlotTrace], layout: qqPlotLayout },
-            { data: [kdePlotTrace], layout: kdePlotLayout },
-        ];
+            // 4. KDE Plot
+            const kdePlotTrace = {
+                x: data.kde.x,
+                y: data.kde.y,
+                type: 'scatter',
+                mode: 'lines',
+                name: 'KDE',
+            };
+
+            const kdePlotLayout = {
+                title: 'Kernel Density Estimation',
+                xaxis: { title: 'Value' },
+                yaxis: { title: 'Density' },
+            };
+
+            plots_data_and_layout = [
+                { data: [histogramTrace], layout: histogramLayout },
+                { data: [boxPlotTrace], layout: boxPlotLayout },
+                { data: [qqPlotTrace], layout: qqPlotLayout },
+                { data: [kdePlotTrace], layout: kdePlotLayout },
+            ];
+
+            toast.success('Analysis complete');
+        } catch (error) {
+            console.error(error);
+            toast.error('Failed to read the saved file');
+        }
     };
     let auto_bin_size: boolean = true;
     let bin_size: string | number = 30;
@@ -128,10 +141,17 @@
 
 <div class="grid gap-2" class:hidden={$active_tab !== 'y-data_distribution'}>
     <span class="badge badge-primary">{$training_column_name_y}</span>
-    <YdataStats {data} />
     <div class="flex items-end gap-1">
         <CustomInput bind:value={bin_size} label="bin_size" type="number" disabled={auto_bin_size} />
         <Loadingbtn callback={analysis_y_data_distribution} on:result={onResult} name="Run Analysis" />
+        <button
+            class="btn btn-sm"
+            on:click={async () => {
+                const savedfile = await path.join(await $current_post_analysis_files_directory, savefilename);
+                read_and_plot(savedfile);
+            }}>Plot</button
+        >
     </div>
+    <YdataStats {data} />
     <Yplots {plots_data_and_layout} />
 </div>
