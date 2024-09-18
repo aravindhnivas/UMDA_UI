@@ -2,6 +2,7 @@
     import {
         current_post_analysis_files_directory,
         current_training_data_file,
+        filtered_dir,
         YDistributionFilter,
     } from './../stores';
     import { CustomInput, Loadingbtn } from '$lib/components';
@@ -15,6 +16,11 @@
     $: if (!$YDistributionFilter.max_yvalue.lock && $max_yvalue) $YDistributionFilter.max_yvalue.value = $max_yvalue;
 
     const ApplyFilterForYData = async () => {
+        if ($filtered_dir !== 'default') {
+            toast.error('Ydata filters can only be applied to the default file');
+            return;
+        }
+
         let miny = null;
         let maxy = null;
 
