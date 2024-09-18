@@ -31,6 +31,12 @@
         if (!$YDistributionFilter.max_yvalue.lock) {
             maxy = parseFloat($YDistributionFilter.max_yvalue.value ?? '');
         }
+
+        if (miny === null && maxy === null) {
+            toast.error('Please provide a value for min or max');
+            return;
+        }
+
         const args = {
             filename: $training_file.filename,
             filetype: $training_file.filetype,
