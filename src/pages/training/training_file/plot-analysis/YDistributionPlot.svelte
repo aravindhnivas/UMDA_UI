@@ -33,7 +33,8 @@
         };
     };
 
-    let plots_data_and_layout: { data: any; layout: any }[] = [];
+    let plots_data: YDistributionPlotData | null = null;
+
     let data: any = {};
 
     let dataFromPython = {} as {
@@ -59,7 +60,7 @@
 
         if (!savefile) {
             toast.error('Failed to save the file');
-            plots_data_and_layout = [];
+            plots_data = null;
             return;
         }
         read_and_plot(savefile);
@@ -77,33 +78,22 @@
             console.warn({ data });
             // return;
 
-            const histogramTrace = {
+            const histogramTrace: Partial<Plotly.PlotData> = {
                 x: data.histogram.bin_edges.slice(0, -1),
                 y: data.histogram.counts,
                 type: 'bar',
                 name: 'Histogram',
             };
 
-            const histogramLayout = {
-                title: 'Histogram',
-                xaxis: { title: 'Value' },
-                yaxis: { title: 'Frequency' },
-            };
-
             // 2. Box Plot
-            const boxPlotTrace = {
+            const boxPlotTrace: Partial<Plotly.PlotData> = {
                 y: [data.box_plot.min, data.box_plot.q1, data.box_plot.median, data.box_plot.q3, data.box_plot.max],
                 type: 'box',
                 name: 'Box Plot',
             };
 
-            const boxPlotLayout = {
-                title: 'Box Plot',
-                yaxis: { title: 'Value' },
-            };
-
             // 3. Q-Q Plot
-            const qqPlotTrace = {
+            const qqPlotTrace: Partial<Plotly.PlotData> = {
                 x: data.qq_plot.theoretical_quantiles,
                 y: data.qq_plot.sample_quantiles,
                 mode: 'markers',
@@ -111,14 +101,8 @@
                 name: 'Q-Q Plot',
             };
 
-            const qqPlotLayout = {
-                title: 'Q-Q Plot',
-                xaxis: { title: 'Theoretical Quantiles' },
-                yaxis: { title: 'Sample Quantiles' },
-            };
-
             // 4. KDE Plot
-            const kdePlotTrace = {
+            const kdePlotTrace: Partial<Plotly.PlotData> = {
                 x: data.kde.x,
                 y: data.kde.y,
                 type: 'scatter',
@@ -126,18 +110,12 @@
                 name: 'KDE',
             };
 
-            const kdePlotLayout = {
-                title: 'Kernel Density Estimation',
-                xaxis: { title: 'Value' },
-                yaxis: { title: 'Density' },
+            plots_data = {
+                histogram: [histogramTrace],
+                kde: [kdePlotTrace],
+                box_plot: [boxPlotTrace],
+                qq_plot: [qqPlotTrace],
             };
-
-            plots_data_and_layout = [
-                { data: [histogramTrace], layout: histogramLayout },
-                { data: [boxPlotTrace], layout: boxPlotLayout },
-                { data: [qqPlotTrace], layout: qqPlotLayout },
-                { data: [kdePlotTrace], layout: kdePlotLayout },
-            ];
 
             toast.success('Analysis complete');
         } catch (error) {
@@ -163,5 +141,7 @@
         >
     </div>
     <YdataStats {data} />
-    <Yplots {plots_data_and_layout} />
+    {#if plots_data && Object.keys(plots_data).length > 0}
+        <Yplots {plots_data} />
+    {/if}
 </div>
