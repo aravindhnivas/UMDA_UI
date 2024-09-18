@@ -17,7 +17,7 @@ importers:
       lucide-svelte:
         specifier: 0.441.0
         version: 0.441.0(svelte@4.2.19)
-      plotly.js-basic-dist-min:
+      plotly.js-dist-min:
         specifier: ^2.35.2
         version: 2.35.2
       smiles-drawer:
@@ -1899,8 +1899,8 @@ packages:
   pkg-types@1.2.0:
     resolution: {integrity: sha512-+ifYuSSqOQ8CqP4MbZA5hDpb97n3E8SVWdJe+Wms9kj745lmd3b7EZJiqvmLwAlmRfjrI7Hi5z3kdBJ93lFNPA==}
 
-  plotly.js-basic-dist-min@2.35.2:
-    resolution: {integrity: sha512-+apJo+/k9YcDH7W39uIONM+t4P6x15w2MEZnmbi3JjGAl9yW1ZJmyqq4xtynwuIbyU26Nv+4oVu1IULGgUkzlQ==}
+  plotly.js-dist-min@2.35.2:
+    resolution: {integrity: sha512-oWDTf2kYOmTtEw3epeeSBdfH/H3OSktF0suST9oI6fIgKfbyd4MT7TPh8+CVzdHYllYon24Q0HI1hZjOnLqk6g==}
 
   plotly.js-dist@2.35.2:
     resolution: {integrity: sha512-zbKfz7jXGcLGoyPJxjGrKLttPiqvsEjIMHON/dEU/mnOJ+/yYoEctEEQ3qp5zQmvoovw1L47kCsQpq/GTbejBA==}
@@ -4725,7 +4725,7 @@ snapshots:
       mlly: 1.7.1
       pathe: 1.1.2
 
-  plotly.js-basic-dist-min@2.35.2: {}
+  plotly.js-dist-min@2.35.2: {}
 
   plotly.js-dist@2.35.2: {}
 

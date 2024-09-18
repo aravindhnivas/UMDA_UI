@@ -15,7 +15,7 @@
     "@tauri-apps/api": "^1.6.0",
     "@tauri-apps/cli": "^1.6.2",
     "lucide-svelte": "0.441.0",
-    "plotly.js-basic-dist-min": "^2.35.2",
+    "plotly.js-dist-min": "^2.35.2",
     "smiles-drawer": "^2.1.7"
   },
   "devDependencies": {

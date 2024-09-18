@@ -36,7 +36,7 @@ export default defineConfig(async () => ({
     ],
     resolve: {
         alias: {
-            'plotly.js-dist': 'plotly.js-basic-dist-min',
+            'plotly.js-dist': 'plotly.js-dist-min',
             $lib: path.resolve('./src/lib/'),
             $pages: path.resolve('./src/pages/'),
             $utils: path.resolve('./src/utils/'),

@@ -37,22 +37,22 @@
         histogram: {
             name: 'Histogram',
             description:
-                'This histogram shows the frequency distribution of the molecular property values. It helps visualize the overall shape of the data distribution, including any skewness or multiple peaks.',
+                'This histogram shows the frequency distribution of the dataset values. It helps visualize the overall shape of the data distribution, including any skewness or multiple peaks.',
         },
         kde: {
             name: 'Kernel Density Estimation',
             description:
-                'This plot shows a smooth, continuous estimation of the probability density function of the molecular property. It provides a more refined view of the data distribution compared to the histogram, helping to identify features like skewness and multiple modes.',
+                'This plot shows a smooth, continuous estimation of the probability density function of the dataset. It provides a more refined view of the data distribution compared to the histogram, helping to identify features like skewness and multiple modes.',
         },
         box_plot: {
             name: 'Box Plot',
             description:
-                "The box plot displays the five-number summary (minimum, first quartile, median, third quartile, maximum) of the molecular property. It's useful for identifying the central tendency, spread, and potential outliers in the data.",
+                "The box plot displays the five-number summary (minimum, first quartile, median, third quartile, maximum) of the dataset. It's useful for identifying the central tendency, spread, and potential outliers in the data.",
         },
         qq_plot: {
             name: 'Q-Q Plot',
             description:
-                'The Q-Q (Quantile-Quantile) plot compares the distribution of the molecular property to a theoretical normal distribution. A straight line indicates that the data follows a normal distribution, while deviations suggest non-normality.',
+                'The Q-Q (Quantile-Quantile) plot compares the distribution of the dataset to a theoretical normal distribution. A straight line indicates that the data follows a normal distribution, while deviations suggest non-normality.',
         },
     };
 </script>
