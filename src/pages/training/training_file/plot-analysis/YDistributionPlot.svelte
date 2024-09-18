@@ -10,6 +10,7 @@
     } from './stores';
     import YdataStats from './YdataPlots/YdataStats.svelte';
     import Yplots from './YdataPlots/Yplots.svelte';
+    import NormalLoadingBtn from '$lib/components/NormalLoadingBtn.svelte';
 
     const savefilename = 'y_data_distribution.json';
 
@@ -137,12 +138,16 @@
     <span class="badge badge-primary">{$training_column_name_y}</span>
     <div class="flex items-end gap-1">
         <Loadingbtn callback={analysis_y_data_distribution} on:result={onResult} name="Run Analysis" />
-        <button
+        <!-- <button
             class="btn btn-sm"
             on:click={async () => {
                 read_and_plot();
-            }}>Plot</button
+            }}
         >
+            <div class="ld ld-ring ld-spin" style="color: antiquewhite;"></div>
+            Plot</button
+        > -->
+        <NormalLoadingBtn name="Plot" callback={read_and_plot} />
     </div>
     {#if data}
         <YdataStats {data} />
