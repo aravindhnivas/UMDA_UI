@@ -5,7 +5,7 @@
         YDistributionFilter,
     } from './../stores';
     import { CustomInput, Loadingbtn } from '$lib/components';
-    import { training_file } from '../../stores';
+    import { training_column_name_y, training_file } from '../../stores';
     import { use_dask } from '$lib/stores/system';
     import { savefilename, min_yvalue, max_yvalue } from './stores';
 
@@ -26,14 +26,13 @@
             maxy = parseFloat($YDistributionFilter.max_yvalue.value ?? '');
         }
         const args = {
-            filename: await $current_training_data_file,
+            filename: $training_file.filename,
             filetype: $training_file.filetype,
             key: $training_file.key,
             use_dask: $use_dask,
-            save_loc: await $current_post_analysis_files_directory,
-            savefilename: $savefilename,
             min_yvalue: miny,
             max_yvalue: maxy,
+            property_column: $training_column_name_y,
         };
         const pyfile = 'training.apply_filter_for_ydata';
         return { pyfile, args };
