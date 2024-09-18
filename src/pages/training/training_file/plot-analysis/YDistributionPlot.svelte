@@ -34,8 +34,7 @@
     };
 
     let plots_data: YDistributionPlotData | null = null;
-
-    let data: any = {};
+    let data: YDistributionStats | null = null;
 
     let dataFromPython = {} as {
         savefile: string;
@@ -68,15 +67,12 @@
 
     const read_and_plot = async (savefile: string | null = null) => {
         try {
-            // if (!(await fs.exists(savedfile))) return toast.error('File not found');
             if (savefile === null) {
                 savefile = await path.join(await $current_post_analysis_files_directory, savefilename);
             }
             const contents = await fs.readTextFile(savefile);
-
-            data = JSON.parse(contents);
+            data = JSON.parse(contents) as YDistributionStats;
             console.warn({ data });
-            // return;
 
             const histogramTrace: Partial<Plotly.PlotData> = {
                 x: data.histogram.bin_edges.slice(0, -1),
@@ -140,7 +136,9 @@
             }}>Plot</button
         >
     </div>
-    <YdataStats {data} />
+    {#if data}
+        <YdataStats {data} />
+    {/if}
     {#if plots_data && Object.keys(plots_data).length > 0}
         <Yplots {plots_data} />
     {/if}

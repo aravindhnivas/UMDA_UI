@@ -1,6 +1,35 @@
 <script lang="ts">
-    export let data: any = {};
+    import { YDistributionFilter } from './../stores';
+    import { CustomInput } from '$lib/components';
+
+    export let data: YDistributionStats;
+
+    let min_yvalue: string = '';
+    let max_yvalue: string = '';
+    $: if (data?.descriptive_statistics) {
+        min_yvalue = data.descriptive_statistics.min.toFixed(4);
+        max_yvalue = data.descriptive_statistics.max.toFixed(4);
+    }
+
+    $: if (!$YDistributionFilter.min_yvalue.lock && min_yvalue) $YDistributionFilter.min_yvalue.value = min_yvalue;
+    $: if (!$YDistributionFilter.max_yvalue.lock && max_yvalue) $YDistributionFilter.max_yvalue.value = max_yvalue;
 </script>
+
+<h3>Filtering</h3>
+<div class="flex gap-3 items-end">
+    <CustomInput
+        bind:value={min_yvalue}
+        label="Min value"
+        enabled_lock_mode
+        bind:lock={$YDistributionFilter.min_yvalue.lock}
+    />
+    <CustomInput
+        bind:value={max_yvalue}
+        label="Max value"
+        enabled_lock_mode
+        bind:lock={$YDistributionFilter.max_yvalue.lock}
+    />
+</div>
 
 <div class="grid grid-cols-3 max-w-6xl gap-[100px]">
     {#if data?.descriptive_statistics && data?.skewness && data?.kurtosis && data?.anderson_darling_test}

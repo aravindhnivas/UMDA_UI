@@ -103,3 +103,23 @@ export const elementalDistributionFilter = writable<{
         lock: true,
     },
 });
+
+export const YDistributionFilter = writable<{
+    min_yvalue: {
+        value: string;
+        lock: boolean;
+    };
+    max_yvalue: {
+        value: string;
+        lock: boolean;
+    };
+}>({
+    min_yvalue: {
+        value: '',
+        lock: true,
+    },
+    max_yvalue: {
+        value: '',
+        lock: true,
+    },
+});
