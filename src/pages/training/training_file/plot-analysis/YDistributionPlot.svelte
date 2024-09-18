@@ -8,11 +8,10 @@
         current_training_data_file,
         filtered_dir,
     } from './stores';
+    import { savefilename, min_yvalue, max_yvalue } from './YdataPlots/stores';
     import YdataStats from './YdataPlots/YdataStats.svelte';
     import Yplots from './YdataPlots/Yplots.svelte';
     import NormalLoadingBtn from '$lib/components/NormalLoadingBtn.svelte';
-
-    const savefilename = 'y_data_distribution.json';
 
     const analysis_y_data_distribution = async () => {
         if (!$training_column_name_y) {
@@ -28,7 +27,7 @@
                 use_dask: $use_dask,
                 property_column: $training_column_name_y,
                 save_loc: await $current_post_analysis_files_directory,
-                savefilename: savefilename,
+                savefilename: $savefilename,
                 bin_size,
             },
         };
@@ -69,11 +68,14 @@
     const read_and_plot = async (savefile: string | null = null, notify = true) => {
         try {
             if (savefile === null) {
-                savefile = await path.join(await $current_post_analysis_files_directory, savefilename);
+                savefile = await path.join(await $current_post_analysis_files_directory, $savefilename);
             }
             const contents = await fs.readTextFile(savefile);
             data = JSON.parse(contents) as YDistributionStats;
             console.warn({ data });
+
+            $min_yvalue = String(data.descriptive_statistics.min);
+            $max_yvalue = String(data.descriptive_statistics.max);
 
             const histogramTrace: Partial<Plotly.PlotData> = {
                 x: data.histogram.bin_edges.slice(0, -1),
@@ -127,7 +129,7 @@
         plots_data = null;
     }
     // onMount(async () => {
-    //     const savefile = await path.join(await $current_post_analysis_files_directory, savefilename);
+    //     const savefile = await path.join(await $current_post_analysis_files_directory, $savefilename);
     //     if (await fs.exists(savefile)) {
     //         read_and_plot(savefile, false);
     //     }

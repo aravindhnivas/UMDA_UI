@@ -1,35 +1,67 @@
 <script lang="ts">
-    import { YDistributionFilter } from './../stores';
-    import { CustomInput } from '$lib/components';
+    import {
+        current_post_analysis_files_directory,
+        current_training_data_file,
+        YDistributionFilter,
+    } from './../stores';
+    import { CustomInput, Loadingbtn } from '$lib/components';
+    import { training_file } from '../../stores';
+    import { use_dask } from '$lib/stores/system';
+    import { savefilename, min_yvalue, max_yvalue } from './stores';
 
     export let data: YDistributionStats;
 
-    let min_yvalue: string = '';
-    let max_yvalue: string = '';
-    $: if (data?.descriptive_statistics) {
-        min_yvalue = data.descriptive_statistics.min.toFixed(4);
-        max_yvalue = data.descriptive_statistics.max.toFixed(4);
-    }
+    $: if (!$YDistributionFilter.min_yvalue.lock && $min_yvalue) $YDistributionFilter.min_yvalue.value = $min_yvalue;
+    $: if (!$YDistributionFilter.max_yvalue.lock && $max_yvalue) $YDistributionFilter.max_yvalue.value = $max_yvalue;
 
-    $: if (!$YDistributionFilter.min_yvalue.lock && min_yvalue) $YDistributionFilter.min_yvalue.value = min_yvalue;
-    $: if (!$YDistributionFilter.max_yvalue.lock && max_yvalue) $YDistributionFilter.max_yvalue.value = max_yvalue;
+    const ApplyFilterForYData = async () => {
+        let miny = null;
+        let maxy = null;
+
+        if (!$YDistributionFilter.min_yvalue.lock) {
+            miny = parseFloat($YDistributionFilter.min_yvalue.value ?? '');
+        }
+
+        if (!$YDistributionFilter.max_yvalue.lock) {
+            maxy = parseFloat($YDistributionFilter.max_yvalue.value ?? '');
+        }
+        const args = {
+            filename: await $current_training_data_file,
+            filetype: $training_file.filetype,
+            key: $training_file.key,
+            use_dask: $use_dask,
+            save_loc: await $current_post_analysis_files_directory,
+            savefilename: $savefilename,
+            min_yvalue: miny,
+            max_yvalue: maxy,
+        };
+        const pyfile = 'training.apply_filter_for_ydata';
+        return { pyfile, args };
+    };
 </script>
 
 <h3>Filtering</h3>
 <div class="flex gap-3 items-end">
     <CustomInput
-        bind:value={min_yvalue}
+        bind:value={$min_yvalue}
         label="Min value"
         enabled_lock_mode
         bind:lock={$YDistributionFilter.min_yvalue.lock}
     />
     <CustomInput
-        bind:value={max_yvalue}
+        bind:value={$max_yvalue}
         label="Max value"
         enabled_lock_mode
         bind:lock={$YDistributionFilter.max_yvalue.lock}
     />
+    <Loadingbtn
+        name="Apply Ydata filters"
+        subprocess={true}
+        callback={() => ApplyFilterForYData()}
+        on:result={e => console.log(e.detail)}
+    />
 </div>
+<hr />
 
 <div class="grid grid-cols-3 max-w-6xl gap-[100px]">
     {#if data?.descriptive_statistics && data?.skewness && data?.kurtosis && data?.anderson_darling_test}

@@ -6,6 +6,7 @@
         elementalDistributionFilter,
         sizeDistributionFilter,
         current_analysis_file,
+        YDistributionFilter,
     } from './plot-analysis/stores';
     import { training_column_name_X, training_file, index_column_valid, training_column_name_index } from './stores';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
@@ -81,7 +82,12 @@
             return;
         }
 
-        console.log($structuralDistributionFilter, $elementalDistributionFilter, $sizeDistributionFilter);
+        console.log(
+            $structuralDistributionFilter,
+            $elementalDistributionFilter,
+            $sizeDistributionFilter,
+            $YDistributionFilter,
+        );
 
         let min_atomic_number = null;
         if (!$sizeDistributionFilter.min_atomic_number.lock) {
@@ -167,7 +173,7 @@
             on:result={onResult}
         />
         <Loadingbtn
-            name="Apply filters"
+            name="Apply Xdata filters"
             subprocess={true}
             callback={() => ApplyFilterForMolecularAnalysis()}
             on:result={e => console.log(e.detail)}
