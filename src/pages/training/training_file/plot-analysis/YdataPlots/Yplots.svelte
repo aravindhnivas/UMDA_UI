@@ -55,17 +55,24 @@
                 'The Q-Q (Quantile-Quantile) plot compares the distribution of the dataset to a theoretical normal distribution. A straight line indicates that the data follows a normal distribution, while deviations suggest non-normality.',
         },
     };
+
+    let show_plot = true;
 </script>
 
-{#each typeSafeObjectKeys(plots_data) as key}
-    {@const data = plots_data[key]}
-    {@const layout = layouts[key]}
-    {@const plot_description = plot_descriptions[key]}
-    <div class="h-lg min-w-xl">
-        <Plot {data} {layout} fillParent={true} debounce={250} />
-    </div>
-    <div class="text-sm font-400">
-        <span class="font-bold">{plot_description.name}: </span>{plot_description.description}
-    </div>
-    <hr />
-{/each}
+<div class="flex">
+    <button class="btn btn-sm" on:click={() => (show_plot = !show_plot)}>{show_plot ? 'Hide' : 'Show'} plot</button>
+</div>
+{#if show_plot}
+    {#each typeSafeObjectKeys(plots_data) as key}
+        {@const data = plots_data[key]}
+        {@const layout = layouts[key]}
+        {@const plot_description = plot_descriptions[key]}
+        <div class="h-lg min-w-xl">
+            <Plot {data} {layout} fillParent={true} debounce={250} />
+        </div>
+        <div class="text-sm font-400">
+            <span class="font-bold">{plot_description.name}: </span>{plot_description.description}
+        </div>
+        <hr />
+    {/each}
+{/if}
