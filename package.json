@@ -13,14 +13,13 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^1.6.0",
-    "@tauri-apps/cli": "^1.6.1",
-    "lucide-svelte": "0.438.0",
+    "@tauri-apps/cli": "^1.6.2",
+    "lucide-svelte": "0.441.0",
     "plotly.js-basic-dist-min": "^2.35.2",
-    "smiles-drawer": "^2.1.7",
-    "tauri-plugin-websocket-api": "github:tauri-apps/tauri-plugin-websocket#v1"
+    "smiles-drawer": "^2.1.7"
   },
   "devDependencies": {
-    "@iconify/json": "^2.2.248",
+    "@iconify/json": "^2.2.250",
     "@loadingio/loading.css": "^3.2.1",
     "@macfja/svelte-persistent-store": "^2.4.1",
     "@modyfi/vite-plugin-yaml": "^1.1.0",
@@ -53,9 +52,9 @@
     "lodash-es": "^4.17.21",
     "prettier": "^3.3.3",
     "prettier-plugin-svelte": "^3.2.6",
-    "sass": "^1.78.0",
+    "sass": "^1.79.1",
     "svelte": "^4.2.19",
-    "svelte-check": "^3.8.6",
+    "svelte-check": "4.0.2",
     "svelte-flatlist": "^0.2.6",
     "svelte-material-ui": "^7.0.0",
     "svelte-plotly.js": "1.0.0",
@@ -67,6 +66,6 @@
     "unocss": "0.62.1",
     "unocss-preset-daisy": "^7.0.0",
     "unplugin-auto-import": "^0.18.3",
-    "vite": "^5.4.5"
+    "vite": "^5.4.6"
   }
 }
