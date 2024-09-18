@@ -17,6 +17,11 @@
             return;
         }
 
+        if ($YDistributionFilter.min_yvalue.lock && $YDistributionFilter.max_yvalue.lock) {
+            toast.error('Please provide a value for min or max');
+            return;
+        }
+
         let miny = null;
         let maxy = null;
 
