@@ -5,6 +5,7 @@
     export let helper: string = '';
     export let enabled_lock_mode = false;
     export let lock: boolean = false;
+    export let disabled = false;
     let className = '';
     export { className as class };
 </script>
@@ -29,7 +30,7 @@
         bind:value
         {...$$restProps}
         on:change
-        disabled={enabled_lock_mode && lock}
+        disabled={disabled || (enabled_lock_mode && lock)}
         autocomplete="off"
         autocapitalize="off"
         autocorrect="off"
