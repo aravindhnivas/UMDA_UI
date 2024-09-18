@@ -25,7 +25,7 @@
     };
 
     const layout = {
-        title: 'Histogram Plot',
+        title: `${$training_column_name_y} Distribution`,
         xaxis: {
             title: 'Bin Edges',
         },
