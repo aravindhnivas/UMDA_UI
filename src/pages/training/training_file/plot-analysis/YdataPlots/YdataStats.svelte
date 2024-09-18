@@ -9,6 +9,7 @@
     import { training_column_name_y, training_file } from '../../stores';
     import { use_dask } from '$lib/stores/system';
     import { savefilename, min_yvalue, max_yvalue } from './stores';
+    import Notification from '$lib/components/Notification.svelte';
 
     export let data: YDistributionStats;
 
@@ -37,6 +38,8 @@
             return;
         }
 
+        saved_filter_filename = '';
+
         const args = {
             filename: $training_file.filename,
             filetype: $training_file.filetype,
@@ -49,6 +52,7 @@
         const pyfile = 'training.apply_filter_for_ydata';
         return { pyfile, args };
     };
+    let saved_filter_filename = '';
 </script>
 
 <h3>Filtering</h3>
@@ -69,9 +73,20 @@
         name="Apply Ydata filters"
         subprocess={true}
         callback={() => ApplyFilterForYData()}
-        on:result={e => console.log(e.detail)}
+        on:result={e => {
+            console.warn(e.detail);
+            saved_filter_filename = e.detail?.dataFromPython?.savefile;
+        }}
     />
 </div>
+
+{#if saved_filter_filename}
+    <Notification>
+        <p class="text-sm">Ydata filters applied successfully</p>
+        <p class="text-sm">Please browse and LOAD_DATA again for the saved file to continue.</p>
+        <p class="text-sm">{saved_filter_filename}</p>
+    </Notification>
+{/if}
 <hr />
 
 <div class="grid grid-cols-3 max-w-6xl gap-[100px]">
