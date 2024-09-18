@@ -1,7 +1,7 @@
 <script lang="ts" generics="T">
     import { pyServerReady } from '$lib/pyserver/stores';
     import type { CancelTokenSource } from 'axios';
-    import { X } from 'lucide-svelte/icons';
+    import { X, Server, Cpu } from 'lucide-svelte/icons';
 
     export let name: string = 'Compute';
 
@@ -60,7 +60,15 @@
     };
 </script>
 
-<div class="flex gap-2 {className}">
+<div class="flex gap-2 items-center {className}">
+    <button on:click={() => (subprocess = !subprocess)}>
+        {#if subprocess}
+            <Cpu />
+        {:else}
+            <Server />
+        {/if}
+    </button>
+
     <button
         bind:this={btn}
         disabled={loading}
@@ -74,6 +82,7 @@
         on:pyEventSuccess
     >
         {name}
+
         {#if subprocess && process_count > 0}
             <div class="badge">{process_count}</div>
         {/if}
