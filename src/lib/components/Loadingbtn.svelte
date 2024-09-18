@@ -3,7 +3,7 @@
     import type { CancelTokenSource } from 'axios';
     import { X } from 'lucide-svelte/icons';
 
-    export let name: string;
+    export let name: string = 'Compute';
 
     type Callback = { pyfile: string; args: Record<string, any> } | undefined;
     export let callback: () => Promise<Callback> | Callback;

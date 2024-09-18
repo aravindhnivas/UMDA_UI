@@ -188,7 +188,7 @@
             <Checkbox label="PCA" bind:value={$use_PCA} />
             <CustomSelect label="embedding" bind:value={$embedding} items={embeddings} />
             <CustomInput class="col-span-2" label="Enter SMILES" bind:value={$test_smiles} placeholder="Enter SMILES" />
-            <Loadingbtn class="col-span-2" name="Compute" callback={embedd_data} on:result={onResult} />
+            <Loadingbtn class="col-span-2" callback={embedd_data} on:result={onResult} />
         </div>
 
         <div class="grid items-center gap-1 overflow-auto">
@@ -211,7 +211,7 @@
         <div class="grid gap-2 items-center" style="grid-auto-flow: column; grid-template-columns: auto 1fr auto;">
             <CustomSelect label="embedding" bind:value={$embedding} items={embeddings} />
             <Textfield label="embedd_savefile" bind:value={$embedd_savefile} />
-            <Loadingbtn name="Compute" callback={embedd_data} subprocess={true} on:result={onResult} />
+            <Loadingbtn callback={embedd_data} subprocess={true} on:result={onResult} />
         </div>
     {/if}
     <Results data={dataFromPython?.file_mode} computed_time={dataFromPython?.computed_time} />

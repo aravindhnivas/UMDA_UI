@@ -1,10 +1,5 @@
 <script lang="ts">
-    import {
-        active_tab,
-        current_post_analysis_files_directory,
-        current_training_data_file,
-        use_filtered_data_for_training,
-    } from './stores';
+    import { active_tab, current_post_analysis_files_directory, current_training_data_file } from './stores';
     import SizeDistributionPlot from './SizeDistributionPlot.svelte';
     import StructuralDistributionPlot from './StructuralDistributionPlot.svelte';
     import ElementalDistributionPlot from './ElementalDistributionPlot.svelte';
@@ -12,10 +7,15 @@
     import TabBar from '@smui/tab-bar';
     import { parse_csv_file } from '$lib/utils';
     import FileLoader from '$lib/components/fileloader/FileLoader.svelte';
-    import Checkbox from '$lib/components/Checkbox.svelte';
     import FetchAnalysisDir from '../FetchAnalysisDir.svelte';
+    import YDistributionPlot from './YDistributionPlot.svelte';
 
-    const tab_items = ['size_distribution', 'structural_distribution', 'elemental_distribution'] as const;
+    const tab_items = [
+        'y-data_distribution',
+        'size_distribution',
+        'structural_distribution',
+        'elemental_distribution',
+    ] as const;
 
     const GetData = async <T = string | number,>(name: string) => {
         const analysis_dir = await $current_post_analysis_files_directory;
@@ -57,6 +57,7 @@
             </Tab>
         </TabBar>
     </div>
+    <YDistributionPlot />
     <SizeDistributionPlot />
     <StructuralDistributionPlot />
     <ElementalDistributionPlot />
