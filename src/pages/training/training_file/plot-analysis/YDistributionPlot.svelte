@@ -35,10 +35,17 @@
         xaxis: { title: 'Value' },
         yaxis: { title: 'Frequency' },
     };
-
+    let dataFromPython = {} as {
+        filename: string;
+        bin_size: number;
+        min: number;
+        max: number;
+        mean: number;
+        std: number;
+    };
     const onResult = async (e: CustomEvent) => {
         console.log(e.detail);
-        const { dataFromPython } = e.detail;
+        dataFromPython = e.detail?.dataFromPython;
         if (!dataFromPython) return;
         console.log(dataFromPython);
         const filename = dataFromPython.filename;
@@ -48,6 +55,7 @@
             bin_size = dataFromPython.bin_size;
         }
         const contents = await fs.readTextFile(filename);
+
         const parsed_data = JSON.parse(contents);
         console.log({ parsed_data });
         const { hist, bin_edges } = parsed_data;
@@ -76,7 +84,14 @@
 
 <div class="grid gap-2" class:hidden={$active_tab !== 'y-data_distribution'}>
     <span class="badge">using {$training_column_name_y} column to analyse distribution</span>
-
+    {#if dataFromPython}
+        <div class="flex gap-1">
+            <span class="badge badge-info">min: {dataFromPython.min}</span>
+            <span class="badge badge-info">max: {dataFromPython.max}</span>
+            <span class="badge badge-info">mean: {dataFromPython.mean}</span>
+            <span class="badge badge-info">std: {dataFromPython.std}</span>
+        </div>
+    {/if}
     <div class="flex items-end gap-1">
         <Checkbox bind:value={auto_bin_size} label="auto bin_size" />
         <CustomInput bind:value={bin_size} label="bin_size" type="number" disabled={auto_bin_size} />
