@@ -125,12 +125,12 @@
         data = null;
         plots_data = null;
     }
-    onMount(async () => {
-        const savefile = await path.join(await $current_post_analysis_files_directory, savefilename);
-        if (await fs.exists(savefile)) {
-            read_and_plot(savefile, false);
-        }
-    });
+    // onMount(async () => {
+    //     const savefile = await path.join(await $current_post_analysis_files_directory, savefilename);
+    //     if (await fs.exists(savefile)) {
+    //         read_and_plot(savefile, false);
+    //     }
+    // });
 </script>
 
 <div class="grid gap-2" class:hidden={$active_tab !== 'y-data_distribution'}>
