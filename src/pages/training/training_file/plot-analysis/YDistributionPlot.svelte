@@ -121,7 +121,9 @@
     };
     let bin_size: string | number = 30;
 
-    $: if ($filtered_dir) {
+    $: if ($filtered_dir || $training_file.filename) {
+        data = null;
+        plots_data = null;
     }
 </script>
 
