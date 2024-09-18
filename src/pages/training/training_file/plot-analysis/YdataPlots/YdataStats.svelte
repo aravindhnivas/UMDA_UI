@@ -18,7 +18,7 @@
         }
 
         if ($YDistributionFilter.min_yvalue.lock && $YDistributionFilter.max_yvalue.lock) {
-            toast.error('Please provide a value for min or max');
+            toast.error('Please unlock and provide a value for min or max');
             return;
         }
 
