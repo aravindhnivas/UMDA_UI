@@ -1,14 +1,9 @@
 <script lang="ts">
-    import {
-        current_post_analysis_files_directory,
-        current_training_data_file,
-        filtered_dir,
-        YDistributionFilter,
-    } from './../stores';
+    import { filtered_dir, YDistributionFilter } from './../stores';
     import { CustomInput, Loadingbtn } from '$lib/components';
     import { training_column_name_y, training_file } from '../../stores';
     import { use_dask } from '$lib/stores/system';
-    import { savefilename, min_yvalue, max_yvalue } from './stores';
+    import { min_yvalue, max_yvalue } from './stores';
     import Notification from '$lib/components/Notification.svelte';
 
     export let data: YDistributionStats;
