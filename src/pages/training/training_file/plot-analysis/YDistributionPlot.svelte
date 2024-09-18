@@ -1,9 +1,13 @@
 <script lang="ts">
     import { use_dask } from '$lib/stores/system';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
-    import CustomInput from '$lib/components/CustomInput.svelte';
     import { training_column_name_y, training_file } from '../stores';
-    import { active_tab, current_post_analysis_files_directory, current_training_data_file } from './stores';
+    import {
+        active_tab,
+        current_post_analysis_files_directory,
+        current_training_data_file,
+        filtered_dir,
+    } from './stores';
     import YdataStats from './YdataPlots/YdataStats.svelte';
     import Yplots from './YdataPlots/Yplots.svelte';
 
@@ -25,7 +29,6 @@
                 save_loc: await $current_post_analysis_files_directory,
                 savefilename: savefilename,
                 bin_size,
-                auto_bin_size,
             },
         };
     };
@@ -53,17 +56,24 @@
         if (!dataFromPython) return;
         console.log(dataFromPython);
         const savefile = dataFromPython.savefile;
-        if (!savefile) return;
+
+        if (!savefile) {
+            toast.error('Failed to save the file');
+            plots_data_and_layout = [];
+            return;
+        }
         read_and_plot(savefile);
     };
 
-    const read_and_plot = async (savefile: string) => {
+    const read_and_plot = async (savefile: string | null = null) => {
         try {
-            if (!(await fs.exists(savefile))) return toast.error('File not found');
-
+            // if (!(await fs.exists(savedfile))) return toast.error('File not found');
+            if (savefile === null) {
+                savefile = await path.join(await $current_post_analysis_files_directory, savefilename);
+            }
             const contents = await fs.readTextFile(savefile);
-            data = JSON.parse(contents);
 
+            data = JSON.parse(contents);
             console.warn({ data });
             // return;
 
@@ -135,20 +145,20 @@
             toast.error('Failed to read the saved file');
         }
     };
-    let auto_bin_size: boolean = true;
     let bin_size: string | number = 30;
+
+    $: if ($filtered_dir) {
+    }
 </script>
 
 <div class="grid gap-2" class:hidden={$active_tab !== 'y-data_distribution'}>
     <span class="badge badge-primary">{$training_column_name_y}</span>
     <div class="flex items-end gap-1">
-        <CustomInput bind:value={bin_size} label="bin_size" type="number" disabled={auto_bin_size} />
         <Loadingbtn callback={analysis_y_data_distribution} on:result={onResult} name="Run Analysis" />
         <button
             class="btn btn-sm"
             on:click={async () => {
-                const savedfile = await path.join(await $current_post_analysis_files_directory, savefilename);
-                read_and_plot(savedfile);
+                read_and_plot();
             }}>Plot</button
         >
     </div>
