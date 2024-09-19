@@ -5,7 +5,7 @@
     import { ConstructionIcon } from 'lucide-svelte/icons';
     import MlPredictions from './predictions/MlPredictions.svelte';
 
-    let active_item = 'Mol2Vec';
+    const active_item = localWritable('active_item_main_training_page', 'Mol2Vec');
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -19,44 +19,44 @@
                     <details open>
                         <summary>Train Embedder</summary>
                         <ul>
-                            <li on:click={() => (active_item = 'Mol2Vec')}>
-                                <span class:active={active_item == 'Mol2Vec'}>Mol2Vec</span>
+                            <li on:click={() => ($active_item = 'Mol2Vec')}>
+                                <span class:active={$active_item == 'Mol2Vec'}>Mol2Vec</span>
                             </li>
-                            <li on:click={() => (active_item = 'VICGAE')}>
-                                <span class:active={active_item == 'VICGAE'}>
+                            <li on:click={() => ($active_item = 'VICGAE')}>
+                                <span class:active={$active_item == 'VICGAE'}>
                                     <span>VICGAE</span>
                                     <ConstructionIcon />
                                 </span>
                             </li>
-                            <li on:click={() => (active_item = 'PCA')}>
-                                <span class:active={active_item == 'PCA'}>PCA</span>
+                            <li on:click={() => ($active_item = 'PCA')}>
+                                <span class:active={$active_item == 'PCA'}>PCA</span>
                             </li>
                         </ul>
                     </details>
                 </li>
-                <li on:click={() => (active_item = 'training_file')}>
-                    <span class:active={active_item == 'training_file'}>Training File</span>
+                <li on:click={() => ($active_item = 'training_file')}>
+                    <span class:active={$active_item == 'training_file'}>Training File</span>
                 </li>
-                <li on:click={() => (active_item = 'Embedding')}>
-                    <span class:active={active_item == 'Embedding'}>Embedding</span>
+                <li on:click={() => ($active_item = 'Embedding')}>
+                    <span class:active={$active_item == 'Embedding'}>Embedding</span>
                 </li>
-                <li on:click={() => (active_item = 'ML_Model')}>
-                    <span class:active={active_item == 'ML_Model'}>ML Model</span>
+                <li on:click={() => ($active_item = 'ML_Model')}>
+                    <span class:active={$active_item == 'ML_Model'}>ML Model</span>
                 </li>
-                <li on:click={() => (active_item = 'ML_predictions')}>
-                    <span class:active={active_item == 'ML_predictions'}>ML Predictions</span>
+                <li on:click={() => ($active_item = 'ML_predictions')}>
+                    <span class:active={$active_item == 'ML_predictions'}>ML Predictions</span>
                 </li>
             </ul>
         </Pane>
         <Pane minSize={80}>
             <div class="overflow-auto max-h-[100%] p-2">
-                <Mol2VecTrain display={active_item.toLowerCase() === 'mol2vec' ? '' : 'none'} />
-                <VICGAETrain display={active_item.toLowerCase() === 'vicgae' ? '' : 'none'} />
-                <PCATrain display={active_item.toLowerCase() === 'pca' ? '' : 'none'} />
-                <TrainingFile display={active_item.toLowerCase() === 'training_file' ? '' : 'none'} />
-                <Embedding display={active_item.toLowerCase() === 'embedding' ? '' : 'none'} />
-                <MLmodelTrain display={active_item.toLowerCase() === 'ml_model' ? '' : 'none'} />
-                <MlPredictions display={active_item.toLowerCase() === 'ml_predictions' ? '' : 'none'} />
+                <Mol2VecTrain display={$active_item.toLowerCase() === 'mol2vec' ? '' : 'none'} />
+                <VICGAETrain display={$active_item.toLowerCase() === 'vicgae' ? '' : 'none'} />
+                <PCATrain display={$active_item.toLowerCase() === 'pca' ? '' : 'none'} />
+                <TrainingFile display={$active_item.toLowerCase() === 'training_file' ? '' : 'none'} />
+                <Embedding display={$active_item.toLowerCase() === 'embedding' ? '' : 'none'} />
+                <MLmodelTrain display={$active_item.toLowerCase() === 'ml_model' ? '' : 'none'} />
+                <MlPredictions display={$active_item.toLowerCase() === 'ml_predictions' ? '' : 'none'} />
             </div>
         </Pane>
     </svelte:fragment>
