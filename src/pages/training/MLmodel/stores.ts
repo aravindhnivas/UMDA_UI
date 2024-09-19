@@ -7,6 +7,31 @@ export const model = localWritable<MLModel>('ml_model', 'ridge');
 export const current_model = derived(model, $model => {
     return supervised_ml_models[$model];
 });
+export const locally_saved_dict_all_params_lock_status = localWritable<Record<string, boolean>>(
+    'locally_saved_dict_all_params_lock_status',
+    {},
+);
+
+export const all_params_lock_status = localWritable<
+    Record<
+        MLModel,
+        {
+            parameters: Record<string, boolean>;
+            hyperparameters: Record<string, boolean>;
+        }
+    >
+>('all_params_lock_status', {
+    linear_regression: { parameters: {}, hyperparameters: {} },
+    ridge: { parameters: {}, hyperparameters: {} },
+    svr: { parameters: {}, hyperparameters: {} },
+    knn: { parameters: {}, hyperparameters: {} },
+    rfr: { parameters: {}, hyperparameters: {} },
+    gbr: { parameters: {}, hyperparameters: {} },
+    gpr: { parameters: {}, hyperparameters: {} },
+    xgboost: { parameters: {}, hyperparameters: {} },
+    catboost: { parameters: {}, hyperparameters: {} },
+    lgbm: { parameters: {}, hyperparameters: {} },
+});
 
 export const variable_type = derived(current_model, $current_model => {
     const hyperparameters = $current_model.hyperparameters;

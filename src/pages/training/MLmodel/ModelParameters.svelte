@@ -6,17 +6,29 @@
         fine_tuned_hyperparameters,
         model,
         default_parameter_mode,
+        all_params_lock_status,
     } from './stores';
     import { typeSafeObjectKeys, validateInput } from '$lib/utils';
     import { Checkbox, CustomSelect } from '$lib/components';
     import Kernel from './Kernel.svelte';
     import Notification from '$lib/components/Notification.svelte';
+    import { LockKeyhole, UnlockKeyhole } from 'lucide-svelte/icons';
 
     export let values: Record<string, any>;
     export let key: 'hyperparameters' | 'parameters';
 
     const unique_id = getContext<string>('unique_id');
     $: fine_tune_mode = $fine_tune_model && key === 'hyperparameters';
+
+    // $: console.warn('all_params_lock_status', $all_params_lock_status[$model][key]);
+    // $: console.warn($model);
+    $: if ($model && isEmpty($all_params_lock_status[$model]?.[key])) {
+        const param_keys = typeSafeObjectKeys($current_model[key]);
+        param_keys.forEach(label => {
+            $all_params_lock_status[$model][key][label] ??= true;
+        });
+        console.warn('all_params_lock_status', $all_params_lock_status[$model][key]);
+    }
 </script>
 
 {#if !$default_parameter_mode}
@@ -29,15 +41,36 @@
             {:else if label in values}
                 {#if typeof value === 'boolean'}
                     <div class="grid gap-1">
-                        {#if fine_tune_mode}
-                            <input
-                                class="input input-sm"
-                                bind:value={$fine_tuned_hyperparameters[$model][label]}
-                                autocomplete="false"
-                            />
-                        {:else}
-                            <Checkbox class="p-2 w-max" bind:value={values[label]} {label} />
-                        {/if}
+                        <div class="flex items-center gap-1">
+                            <button
+                                on:click={() => {
+                                    $all_params_lock_status[$model][key][label] =
+                                        !$all_params_lock_status[$model][key][label];
+                                }}
+                            >
+                                {#if $all_params_lock_status[$model][key][label]}
+                                    <LockKeyhole />
+                                {:else}
+                                    <UnlockKeyhole />
+                                {/if}
+                            </button>
+                            {#if fine_tune_mode}
+                                <input
+                                    class="input input-sm"
+                                    bind:value={$fine_tuned_hyperparameters[$model][label]}
+                                    autocomplete="false"
+                                    disabled={$all_params_lock_status[$model][key][label]}
+                                />
+                            {:else}
+                                <Checkbox
+                                    class="p-2 w-max"
+                                    bind:value={values[label]}
+                                    {label}
+                                    disabled={$all_params_lock_status[$model][key][label]}
+                                />
+                            {/if}
+                        </div>
+
                         <span class="text-xs">
                             {description}
                             <div class="badge badge-sm badge-neutral">Default: {$default_param_values[key][label]}</div>
