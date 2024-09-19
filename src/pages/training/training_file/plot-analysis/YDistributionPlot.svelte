@@ -9,7 +9,13 @@
         filtered_dir,
         YDistributionFilter,
     } from './stores';
-    import { savefilename, min_yvalue, max_yvalue, ytransformation } from './YdataPlots/stores';
+    import {
+        savefilename,
+        min_yvalue,
+        max_yvalue,
+        ytransformation,
+        save_loc_for_ydistribution_data,
+    } from './YdataPlots/stores';
     import YdataStats from './YdataPlots/YdataStats.svelte';
     import Yplots from './YdataPlots/Yplots.svelte';
     import NormalLoadingBtn from '$lib/components/NormalLoadingBtn.svelte';
@@ -25,6 +31,10 @@
         $YDistributionFilter.min_yvalue.lock = true;
         $YDistributionFilter.max_yvalue.lock = true;
 
+        const save_loc = await $save_loc_for_ydistribution_data;
+        if (!(await fs.exists(save_loc))) {
+            await fs.createDir(save_loc, { recursive: true });
+        }
         return {
             pyfile: 'training.y_data_distribution',
             args: {
@@ -33,7 +43,7 @@
                 key: $training_file.key,
                 use_dask: $use_dask,
                 property_column: $training_column_name_y,
-                save_loc: await $current_post_analysis_files_directory,
+                save_loc,
                 savefilename: $savefilename,
                 bin_size,
                 auto_transform_data,
@@ -78,7 +88,7 @@
     const read_and_plot = async (savefile: string | null = null, notify = true) => {
         try {
             if (savefile === null) {
-                savefile = await path.join(await $current_post_analysis_files_directory, $savefilename);
+                savefile = await path.join(await $save_loc_for_ydistribution_data, $savefilename);
             }
 
             if (!(await fs.exists(savefile))) {
