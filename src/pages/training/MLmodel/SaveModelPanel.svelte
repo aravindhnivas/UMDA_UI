@@ -24,7 +24,9 @@
         </div>
         <Textfield bind:value={$pre_trained_filename} label="save filename (.pkl)" />
         {#await $current_pretrained_file then value}
-            <Notification message="Save location: {value}" />
+            {#await path.dirname(value) then save_loc_name}
+                <Notification message="Save location: {save_loc_name}" />
+            {/await}
         {/await}
     </div>
 </CustomPanel>
