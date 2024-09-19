@@ -13,7 +13,8 @@
     import YdataStats from './YdataPlots/YdataStats.svelte';
     import Yplots from './YdataPlots/Yplots.svelte';
     import NormalLoadingBtn from '$lib/components/NormalLoadingBtn.svelte';
-    import { Checkbox } from '$lib/components';
+    import { Checkbox, CustomSelect } from '$lib/components';
+    import { available_transformations } from '$pages/training/MLmodel/stores';
 
     const analysis_y_data_distribution = async () => {
         if (!$training_column_name_y) {
@@ -36,6 +37,7 @@
                 savefilename: $savefilename,
                 bin_size,
                 auto_transform_data,
+                ytransformation: ytransformation === 'None' ? null : ytransformation,
             },
         };
     };
@@ -144,13 +146,16 @@
         data = null;
         plots_data = null;
     }
+
     let auto_transform_data = false;
+    let ytransformation = 'None';
 </script>
 
 <div class="grid gap-2" class:hidden={$active_tab !== 'y-data_distribution'}>
     <span class="badge badge-primary">{$training_column_name_y}</span>
     <div class="flex items-end gap-1">
         <Checkbox bind:value={auto_transform_data} label="auto_transform_data" />
+        <CustomSelect items={available_transformations} label="y-transformation" bind:value={ytransformation} />
         <Loadingbtn callback={analysis_y_data_distribution} on:result={onResult} name="Run Analysis" />
         <NormalLoadingBtn name="Plot" callback={read_and_plot} />
     </div>
