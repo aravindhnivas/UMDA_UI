@@ -9,7 +9,7 @@
         filtered_dir,
         YDistributionFilter,
     } from './stores';
-    import { savefilename, min_yvalue, max_yvalue } from './YdataPlots/stores';
+    import { savefilename, min_yvalue, max_yvalue, ytransformation } from './YdataPlots/stores';
     import YdataStats from './YdataPlots/YdataStats.svelte';
     import Yplots from './YdataPlots/Yplots.svelte';
     import NormalLoadingBtn from '$lib/components/NormalLoadingBtn.svelte';
@@ -37,7 +37,7 @@
                 savefilename: $savefilename,
                 bin_size,
                 auto_transform_data,
-                ytransformation: ytransformation === 'None' ? null : ytransformation,
+                ytransformation: $ytransformation === 'None' ? null : $ytransformation,
             },
         };
     };
@@ -95,7 +95,7 @@
 
             // if (auto_transform_data) {
             applied_transformation = data?.applied_transformation || '';
-            ytransformation = applied_transformation || 'None';
+            $ytransformation = applied_transformation || 'None';
             // }
             const histogramTrace: Partial<Plotly.PlotData> = {
                 x: data.histogram.bin_edges.slice(0, -1),
@@ -151,7 +151,7 @@
     }
 
     let auto_transform_data = false;
-    let ytransformation = 'None';
+
     const transformations = {
         default: ['None'],
         for_positive_skewness: ['log1p', 'sqrt', 'reciprocal'],
@@ -168,7 +168,7 @@
         <CustomSelect
             items={transformations}
             label="y-transformation"
-            bind:value={ytransformation}
+            bind:value={$ytransformation}
             disabled={auto_transform_data}
         />
         <Loadingbtn callback={analysis_y_data_distribution} on:result={onResult} name="Run Analysis" />
