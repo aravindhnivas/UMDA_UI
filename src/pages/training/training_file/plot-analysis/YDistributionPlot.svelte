@@ -14,13 +14,13 @@
     import Yplots from './YdataPlots/Yplots.svelte';
     import NormalLoadingBtn from '$lib/components/NormalLoadingBtn.svelte';
     import { Checkbox, CustomSelect } from '$lib/components';
-    // import { available_transformations } from '$pages/training/MLmodel/stores';
 
     const analysis_y_data_distribution = async () => {
         if (!$training_column_name_y) {
             toast.error('Please select a column to analyse');
             return;
         }
+        current_skewness = null;
 
         $YDistributionFilter.min_yvalue.lock = true;
         $YDistributionFilter.max_yvalue.lock = true;
@@ -44,6 +44,7 @@
 
     let plots_data: YDistributionPlotData | null = null;
     let data: YDistributionStats | null = null;
+    let current_skewness: number | null = null;
     let applied_transformation = '';
 
     let dataFromPython = {} as {
@@ -61,7 +62,6 @@
     };
 
     const onResult = async (e: CustomEvent) => {
-        console.log(e.detail);
         dataFromPython = e.detail?.dataFromPython;
         if (!dataFromPython) return;
         console.log(dataFromPython);
@@ -84,6 +84,7 @@
             applied_transformation = '';
             data = JSON.parse(contents) as YDistributionStats;
             console.warn({ data });
+            current_skewness = data.skewness;
             if (!data) {
                 if (notify) toast.error('Failed to read the saved file');
                 return;
@@ -92,8 +93,10 @@
             $min_yvalue = String(data.descriptive_statistics.min);
             $max_yvalue = String(data.descriptive_statistics.max);
 
-            applied_transformation = data?.applied_transformation || '';
-
+            if (auto_transform_data) {
+                applied_transformation = data?.applied_transformation || '';
+                ytransformation = applied_transformation || 'None';
+            }
             const histogramTrace: Partial<Plotly.PlotData> = {
                 x: data.histogram.bin_edges.slice(0, -1),
                 y: data.histogram.counts,
@@ -162,7 +165,12 @@
     <span class="badge badge-primary">{$training_column_name_y}</span>
     <div class="flex items-end gap-1">
         <Checkbox bind:value={auto_transform_data} label="auto_transform_data" />
-        <CustomSelect items={transformations} label="y-transformation" bind:value={ytransformation} />
+        <CustomSelect
+            items={transformations}
+            label="y-transformation"
+            bind:value={ytransformation}
+            disabled={auto_transform_data}
+        />
         <Loadingbtn callback={analysis_y_data_distribution} on:result={onResult} name="Run Analysis" />
         <NormalLoadingBtn name="Plot" callback={read_and_plot} />
     </div>
