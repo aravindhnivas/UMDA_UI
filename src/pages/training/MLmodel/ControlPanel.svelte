@@ -44,18 +44,29 @@
                 <div class="badge badge-sm badge-warning">Warning: Test split ratio is greater than 50%</div>
             {/if}
             <div class="grid grid-cols-2 gap-1 border-rounded border-solid border-2 p-1">
-                <CustomSelect
-                    items={available_transformations}
-                    label="y-transformation"
-                    bind:value={$ytransformation}
-                />
-                <CustomSelect items={available_scalers} label="y-scaling" bind:value={$yscaling} />
-                <Checkbox bind:value={$inverse_scaling} label="y-inverse_scaling" check="checkbox" />
-                <Checkbox bind:value={$inverse_transform} label="y-inverse_transform" check="checkbox" />
-                <span class="text-sm font-400 col-span-2">
-                    Always inverse the transformations and scaling applied to your target variable before calculating
-                    metrics.
-                </span>
+                <div class="grid">
+                    <CustomSelect
+                        items={available_transformations}
+                        label="y-transformation"
+                        bind:value={$ytransformation}
+                    />
+                    {#if $ytransformation !== 'None'}
+                        <Checkbox bind:value={$inverse_transform} label="apply inverse_transform" check="checkbox" />
+                    {/if}
+                </div>
+                <div class="grid">
+                    <CustomSelect items={available_scalers} label="y-scaling" bind:value={$yscaling} />
+                    {#if $yscaling !== 'None'}
+                        <Checkbox bind:value={$inverse_scaling} label="apply inverse_scaling" check="checkbox" />
+                    {/if}
+                </div>
+
+                {#if !$inverse_scaling || !$inverse_transform}
+                    <span class="text-sm font-400 col-span-2 text-wrap break-all">
+                        Always inverse the transformations and scaling applied to your target variable before
+                        calculating metrics.
+                    </span>
+                {/if}
             </div>
         </div>
         <div class="grid grid-cols-2 gap-1 items-end border-rounded border-solid border-2 p-1">
