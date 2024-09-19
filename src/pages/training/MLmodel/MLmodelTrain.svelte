@@ -27,6 +27,7 @@
         yscaling,
         inverse_scaling,
         inverse_transform,
+        all_params_lock_status,
     } from './stores';
     import { embedding, use_PCA } from '../embedding/stores';
     import { NPARTITIONS, use_dask } from '$lib/stores/system';
@@ -125,6 +126,19 @@
         }
 
         const values = structuredClone({ ...$hyperparameters[$model], ...$parameters[$model] });
+
+        typeSafeObjectKeys($all_params_lock_status[$model].parameters).forEach(params => {
+            const locked = $all_params_lock_status[$model].parameters[params];
+            if (!locked) return;
+            delete values[params];
+        });
+
+        typeSafeObjectKeys($all_params_lock_status[$model].hyperparameters).forEach(hparams => {
+            const locked = $all_params_lock_status[$model].hyperparameters[hparams];
+            if (!locked) return;
+            delete values[hparams];
+        });
+
         console.log({ values }, 'values length: ' + Object.keys(values).length);
         let clonedValues: Record<string, string | boolean | number | null> = {};
         console.log({ values, $variable_type });
