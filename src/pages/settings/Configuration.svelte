@@ -43,10 +43,7 @@
     onMount(async () => {
         if (import.meta.env.DEV) {
             if (!$pyServerReady) {
-                const [err] = await oO(fetchServerROOT());
-                if (err) {
-                    console.error(err);
-                }
+                await oO(fetchServerROOT());
             }
         }
 
