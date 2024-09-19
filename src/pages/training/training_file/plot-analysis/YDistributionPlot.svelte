@@ -93,10 +93,10 @@
             $min_yvalue = String(data.descriptive_statistics.min);
             $max_yvalue = String(data.descriptive_statistics.max);
 
-            if (auto_transform_data) {
-                applied_transformation = data?.applied_transformation || '';
-                ytransformation = applied_transformation || 'None';
-            }
+            // if (auto_transform_data) {
+            applied_transformation = data?.applied_transformation || '';
+            ytransformation = applied_transformation || 'None';
+            // }
             const histogramTrace: Partial<Plotly.PlotData> = {
                 x: data.histogram.bin_edges.slice(0, -1),
                 y: data.histogram.counts,
