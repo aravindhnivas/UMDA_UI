@@ -141,9 +141,7 @@
             </p>
             <p class="text-sm font-bold">Recommended Transformations:</p>
             {#if Math.abs(data.skewness) < 0.1}
-                <span class="badge badge-success">
-                    The data is approximately symmetric. No transformation is needed
-                </span>
+                <span class="badge badge-success"> No transformation is needed </span>
             {:else if Math.abs(data.skewness) < 0.5}
                 <span class="badge badge-info">The data is slightly skewed</span>
                 <p class="text-sm">No transformation is needed.</p>
