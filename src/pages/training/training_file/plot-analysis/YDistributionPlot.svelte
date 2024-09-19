@@ -176,7 +176,7 @@
     </div>
 
     {#if applied_transformation}
-        <span class="badge badge-info text-sm">Data Transformation applied: {applied_transformation}</span>
+        <span class="badge badge-info text-sm">Best data transformation applied: {applied_transformation}</span>
     {/if}
 
     {#if data}
