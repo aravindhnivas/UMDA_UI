@@ -26,6 +26,8 @@
         default_parameter_mode,
         skip_invalid_y_values,
         current_pretrained_file,
+        ytransformation,
+        yscaling,
     } from './stores';
     import { PlotlyColors } from '$lib/utils';
     import { embedding, use_PCA } from '../embedding/stores';
@@ -198,8 +200,10 @@
             grid_search_parameters,
             pre_trained_file,
             npartitions: Number($NPARTITIONS),
-            logYscale: $logYscale,
-            scaleYdata: $scaleYdata,
+            // logYscale: $logYscale,
+            // scaleYdata: $scaleYdata,
+            ytransformation: $ytransformation === 'None' ? null : $ytransformation,
+            yscaling: $yscaling === 'None' ? null : $yscaling,
             embedding: $embedding,
             pca: $use_PCA,
             save_pretrained_model: $save_pretrained_model,

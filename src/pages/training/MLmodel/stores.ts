@@ -46,8 +46,6 @@ export const hyperparameters = writable<ParametersArgs>({});
 export const parameters = writable<ParametersArgs>({});
 export const fine_tuned_hyperparameters = writable<{ [name: string]: Record<string, string> }>({});
 export const fine_tune_model = writable(false);
-export const logYscale = writable(false);
-export const scaleYdata = writable(true);
 
 export const cross_validation = localWritable('cross_validation', true);
 export const cv_fold = localWritable('cv_fold', 5);
@@ -80,3 +78,27 @@ export const current_pretrained_file = derived(
     },
 );
 export const include_training_file_in_plot = localWritable('include_training_file_in_plot', true);
+
+export const available_transformations = [
+    'None',
+    'log1p',
+    'sqrt',
+    'square',
+    'exp',
+    'reciprocal',
+    'boxcox',
+    'yeo_johnson',
+];
+export const available_scalers = [
+    'None',
+    'StandardScaler',
+    'MinMaxScaler',
+    'MaxAbsScaler',
+    'RobustScaler',
+    'QuantileTransformer',
+    'PowerTransformer',
+];
+export const logYscale = writable(false);
+export const scaleYdata = writable(true);
+export const ytransformation = localWritable('ytransformation', 'None');
+export const yscaling = localWritable('yscaling', 'StandardScaler');

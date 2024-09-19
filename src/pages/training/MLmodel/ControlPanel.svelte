@@ -17,6 +17,10 @@
         parallel_computation_backend,
         backends,
         skip_invalid_y_values,
+        available_transformations,
+        available_scalers,
+        ytransformation,
+        yscaling,
     } from './stores';
     import { Checkbox, CustomSelect, CustomInput } from '$lib/components';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
@@ -39,9 +43,15 @@
             {#if $test_size > 50}
                 <div class="badge badge-sm badge-warning">Warning: Test split ratio is greater than 50%</div>
             {/if}
-            <div class="flex gap-1 border-rounded border-solid border-2">
-                <Checkbox bind:value={$logYscale} label="log-yscale" check="checkbox" />
-                <Checkbox bind:value={$scaleYdata} label="scale-ydata" check="checkbox" />
+            <div class="flex gap-1 border-rounded border-solid border-2 p-1">
+                <CustomSelect
+                    items={available_transformations}
+                    label="y-transformation"
+                    bind:value={$ytransformation}
+                />
+                <CustomSelect items={available_scalers} label="y-scaling" bind:value={$yscaling} />
+                <!-- <Checkbox bind:value={$logYscale} label="y-transformation" check="checkbox" />
+                <Checkbox bind:value={$scaleYdata} label="y-scaling" check="checkbox" /> -->
             </div>
         </div>
         <div class="grid grid-cols-2 gap-1 items-end border-rounded border-solid border-2 p-1">
