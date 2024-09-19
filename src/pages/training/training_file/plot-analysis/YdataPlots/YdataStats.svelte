@@ -171,12 +171,12 @@
             <hr />
             <div class="grid grid-cols-3 justify-items-start gap-1">
                 <!-- <p class="font-bold">Significance Level</p> -->
-                <p class="font-bold">Confidence Level</p>
+                <p class="font-bold">Significance Level</p>
                 <p class="font-bold">Critical Value</p>
                 <p class="font-bold">Normal dist.</p>
                 {#each data.anderson_darling_test.critical_values as cv, index (cv)}
                     {@const alpha = Number(data.anderson_darling_test.significance_levels?.[index])}
-                    <p>{100 - alpha}%</p>
+                    <p>{alpha}%</p>
                     <span>{cv.toFixed(4)}</span>
                     <!-- <span>{ ? ''}</span> -->
                     {#if data.anderson_darling_test.statistic > cv}
