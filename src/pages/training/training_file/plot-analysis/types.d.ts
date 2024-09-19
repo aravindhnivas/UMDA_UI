@@ -44,4 +44,6 @@ interface YDistributionStats {
         x: number[];
         y: number[];
     };
+    applied_transformation?: string;
+    boxcox_lambda?: number;
 }

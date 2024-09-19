@@ -13,6 +13,7 @@
     import YdataStats from './YdataPlots/YdataStats.svelte';
     import Yplots from './YdataPlots/Yplots.svelte';
     import NormalLoadingBtn from '$lib/components/NormalLoadingBtn.svelte';
+    import { Checkbox } from '$lib/components';
 
     const analysis_y_data_distribution = async () => {
         if (!$training_column_name_y) {
@@ -34,12 +35,14 @@
                 save_loc: await $current_post_analysis_files_directory,
                 savefilename: $savefilename,
                 bin_size,
+                auto_transform_data,
             },
         };
     };
 
     let plots_data: YDistributionPlotData | null = null;
     let data: YDistributionStats | null = null;
+    let applied_transformation = '';
 
     let dataFromPython = {} as {
         savefile: string;
@@ -76,11 +79,18 @@
                 savefile = await path.join(await $current_post_analysis_files_directory, $savefilename);
             }
             const contents = await fs.readTextFile(savefile);
+            applied_transformation = '';
             data = JSON.parse(contents) as YDistributionStats;
             console.warn({ data });
+            if (!data) {
+                if (notify) toast.error('Failed to read the saved file');
+                return;
+            }
 
             $min_yvalue = String(data.descriptive_statistics.min);
             $max_yvalue = String(data.descriptive_statistics.max);
+
+            applied_transformation = data?.applied_transformation || '';
 
             const histogramTrace: Partial<Plotly.PlotData> = {
                 x: data.histogram.bin_edges.slice(0, -1),
@@ -127,20 +137,28 @@
             if (notify) toast.error('Failed to read the saved file');
         }
     };
+
     let bin_size: string | number = 30;
 
     $: if ($filtered_dir || $training_file.filename) {
         data = null;
         plots_data = null;
     }
+    let auto_transform_data = false;
 </script>
 
 <div class="grid gap-2" class:hidden={$active_tab !== 'y-data_distribution'}>
     <span class="badge badge-primary">{$training_column_name_y}</span>
     <div class="flex items-end gap-1">
+        <Checkbox bind:value={auto_transform_data} label="auto_transform_data" />
         <Loadingbtn callback={analysis_y_data_distribution} on:result={onResult} name="Run Analysis" />
         <NormalLoadingBtn name="Plot" callback={read_and_plot} />
     </div>
+
+    {#if applied_transformation}
+        <span class="badge badge-info text-sm">Data Transformation applied: {applied_transformation}</span>
+    {/if}
+
     {#if data}
         <YdataStats {data} />
     {/if}

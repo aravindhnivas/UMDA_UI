@@ -53,6 +53,7 @@
         const pyfile = 'training.apply_filter_for_ydata';
         return { pyfile, args };
     };
+
     let saved_filter_filename = '';
 </script>
 
@@ -70,6 +71,7 @@
         enabled_lock_mode
         bind:lock={$YDistributionFilter.max_yvalue.lock}
     />
+
     <Loadingbtn
         name="Apply Ydata filters"
         subprocess={true}
@@ -137,6 +139,21 @@
                 Skewness: Measures the asymmetry of the distribution. A positive value indicates a right-skewed
                 distribution, while a negative value indicates a left-skewed distribution.
             </p>
+            <p class="text-sm font-bold">Recommended Transformations:</p>
+            {#if Math.abs(data.skewness) < 0.1}
+                <span class="badge badge-success">
+                    The data is approximately symmetric. No transformation is needed
+                </span>
+            {:else if Math.abs(data.skewness) < 0.5}
+                <span class="badge badge-info">The data is slightly skewed</span>
+                <p class="text-sm">No transformation is needed.</p>
+            {:else if Math.abs(data.skewness) < 1}
+                <span class="badge badge-warning">The data is moderately skewed</span>
+                <p class="text-sm">Square Root or Logarithmic Transformation</p>
+            {:else}
+                <span class="badge badge-error"> The data is highly skewed. </span>
+                <p class="text-sm">Logarithmic, Reciprocal, or Box-Cox Transformation</p>
+            {/if}
             <hr />
             <p class="font-bold">Kurtosis: {data.kurtosis.toFixed(4)}</p>
 
@@ -176,6 +193,17 @@
                 greater than a critical value, it suggests the data is not normally distributed at that significance
                 level.
             </p>
+
+            <p class="text-sm font-bold">Scaling recommendation:</p>
+            <ul>
+                <li class="text-sm">
+                    If test statistic {'<'} critical value: Data is likely normal, use <code>StandardScaler</code>
+                </li>
+                <li class="text-sm">
+                    If test statistic {'>'} critical value: Data may not be normal, consider <code>RobustScaler</code>
+                    transformations
+                </li>
+            </ul>
         </div>
     {/if}
 </div>
