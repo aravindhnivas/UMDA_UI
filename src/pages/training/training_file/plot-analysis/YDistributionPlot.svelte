@@ -80,6 +80,12 @@
             if (savefile === null) {
                 savefile = await path.join(await $current_post_analysis_files_directory, $savefilename);
             }
+
+            if (!(await fs.exists(savefile))) {
+                if (notify) toast.error('File does not exist. Run the analysis first');
+                return;
+            }
+
             const contents = await fs.readTextFile(savefile);
             applied_transformation = '';
             data = JSON.parse(contents) as YDistributionStats;
@@ -138,7 +144,6 @@
 
             if (notify) toast.success('Y data distribution plots are ready and displayed');
         } catch (error) {
-            console.error(error);
             if (notify) toast.error('Failed to read the saved file');
         }
     };
