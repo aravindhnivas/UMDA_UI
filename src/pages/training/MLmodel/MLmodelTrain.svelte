@@ -138,7 +138,6 @@
             if (!locked) return;
             delete values[hparams];
         });
-
         console.log({ values }, 'values length: ' + Object.keys(values).length);
         let clonedValues: Record<string, string | boolean | number | null> = {};
         console.log({ values, $variable_type });
