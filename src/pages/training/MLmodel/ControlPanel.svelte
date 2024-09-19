@@ -24,7 +24,7 @@
     } from './stores';
     import { Checkbox, CustomSelect, CustomInput } from '$lib/components';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
-    import Paper, { Title, Content } from '@smui/paper';
+    import Paper, { Subtitle, Content } from '@smui/paper';
 
     const grid_search_methods = [
         'GridSearchCV',
@@ -75,7 +75,7 @@
 
     <div class="grid grid-cols-2 gap-2">
         <Paper transition {elevation} style={paper_style}>
-            <Title>Data split-ratio, transformation and scaling</Title>
+            <Subtitle>Data split-ratio, transformation and scaling</Subtitle>
             <Content class="grid gap-2">
                 <input class="range" type="range" min="0" max="100" step="5" bind:value={$test_size} />
                 <span class="text-sm font-400">Split ratios: {$test_size}% test : {100 - $test_size}% train</span>
@@ -114,7 +114,7 @@
             </Content>
         </Paper>
         <Paper transition {elevation} style={paper_style}>
-            <Title>Fine tuning parameters and Cross-validation metrics</Title>
+            <Subtitle>Fine tuning parameters and Cross-validation metrics</Subtitle>
             <Content class="grid grid-cols-2 gap-1">
                 <Checkbox bind:value={$fine_tune_model} label="Grid search" check="checkbox" />
                 <Checkbox bind:value={$cross_validation} label="Cross validation" check="checkbox" />
@@ -146,7 +146,7 @@
             </Content>
         </Paper>
         <Paper transition {elevation} style={paper_style}>
-            <Title>Augment data-size</Title>
+            <Subtitle>Augment data-size</Subtitle>
             <Content>
                 <Checkbox bind:value={$bootstrap} label="bootstrap" check="checkbox" />
                 <div class="flex gap-2">
@@ -171,7 +171,7 @@
             </Content>
         </Paper>
         <Paper transition {elevation} style={paper_style}>
-            <Title>Parallel processing</Title>
+            <Subtitle>Parallel processing</Subtitle>
             <Content>
                 <Checkbox bind:value={$parallel_computation} label="Parallel computation" check="checkbox" />
                 <div class="flex gap-2 items-end">
