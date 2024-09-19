@@ -5,6 +5,7 @@
     import { use_dask } from '$lib/stores/system';
     import { min_yvalue, max_yvalue } from './stores';
     import Notification from '$lib/components/Notification.svelte';
+    import { Check, CircleAlert } from 'lucide-svelte/icons';
 
     export let data: YDistributionStats;
 
@@ -101,10 +102,8 @@
             <div class="grid grid-cols-2 gap-1">
                 <p class="font-bold">Mean</p>
                 <span>{data.descriptive_statistics.mean.toFixed(4)}</span>
-                <!-- <p class="col-span-2 text-sm">The average value of the property</p> -->
                 <p class="font-bold">Median</p>
                 <span>{data.descriptive_statistics['50%'].toFixed(4)}</span>
-                <!-- <p class="col-span-2 text-sm">The middle value when the data is ordered (50<sup>th</sup> percentile)</p> -->
                 <p class="font-bold">Standard Deviation</p>
                 <span>{data.descriptive_statistics.std.toFixed(4)}</span>
                 <p class="font-bold">Minimum</p>
@@ -155,12 +154,21 @@
                 Statistic: The test statistic. A smaller value suggests the data is closer to a normal distribution.
             </p>
             <hr />
-            <div class="grid grid-cols-2 justify-items-start gap-1">
-                <p class="font-bold">Significance Level</p>
+            <div class="grid grid-cols-3 justify-items-start gap-1">
+                <!-- <p class="font-bold">Significance Level</p> -->
+                <p class="font-bold">Confidence Level</p>
                 <p class="font-bold">Critical Value</p>
+                <p class="font-bold">Normal dist.</p>
                 {#each data.anderson_darling_test.critical_values as cv, index (cv)}
-                    <p>{data.anderson_darling_test.significance_levels?.[index]}%</p>
+                    {@const alpha = Number(data.anderson_darling_test.significance_levels?.[index])}
+                    <p>{100 - alpha}%</p>
                     <span>{cv.toFixed(4)}</span>
+                    <!-- <span>{ ? ''}</span> -->
+                    {#if data.anderson_darling_test.statistic > cv}
+                        <span class="flex items-center gap-1"><CircleAlert /><span>No</span></span>
+                    {:else}
+                        <span class="flex items-center gap-1"><Check /><span>Yes</span></span>
+                    {/if}
                 {/each}
             </div>
             <p class="text-sm">
