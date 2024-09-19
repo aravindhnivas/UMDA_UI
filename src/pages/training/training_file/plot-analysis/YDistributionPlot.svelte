@@ -153,7 +153,7 @@
         default: ['None'],
         for_positive_skewness: ['log1p', 'sqrt', 'reciprocal'],
         for_negative_skewness: ['square', 'exp'],
-        for_non_zero_data: ['boxcox'],
+        for_all_positive_data: ['boxcox'],
         for_all_data: ['yeo_johnson'],
     };
 </script>
