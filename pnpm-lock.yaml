@@ -99,9 +99,6 @@ importers:
       axios:
         specifier: ^1.7.7
         version: 1.7.7
-      bulma:
-        specifier: ^1.0.2
-        version: 1.0.2
       cooltipz-css:
         specifier: ^2.3.0
         version: 2.3.0(sass@1.79.1)
@@ -1319,9 +1316,6 @@ packages:
   buffer-crc32@1.0.0:
     resolution: {integrity: sha512-Db1SbgBS/fg/392AblrMJk97KggmvYhr4pB5ZIMTWtaivCPMWLkmb7m21cJvpvgK+J3nsU2CmmixNBZx4vFj/w==}
     engines: {node: '>=8.0.0'}
-
-  bulma@1.0.2:
-    resolution: {integrity: sha512-D7GnDuF6seb6HkcnRMM9E739QpEY9chDzzeFrHMyEns/EXyDJuQ0XA0KxbBl/B2NTsKSoDomW61jFGFaAxhK5A==}
 
   bundle-require@5.0.0:
     resolution: {integrity: sha512-GuziW3fSSmopcx4KRymQEJVbZUfqlCqcq7dvs6TYwKRZiegK/2buMxQTPs6MGlNv50wms1699qYO54R8XfRX4w==}
@@ -4181,8 +4175,6 @@ snapshots:
       update-browserslist-db: 1.1.0(browserslist@4.23.3)
 
   buffer-crc32@1.0.0: {}
-
-  bulma@1.0.2: {}
 
   bundle-require@5.0.0(esbuild@0.23.1):
     dependencies:

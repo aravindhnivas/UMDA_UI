@@ -6,5 +6,4 @@ import 'cooltipz-css';
 import 'animate.css';
 import 'ldbutton/index.min.css';
 import '@loadingio/loading.css/loading.min.css';
-import './bulma.scss';
 import './global.scss';
