@@ -8,7 +8,7 @@
         try {
             loading = true;
             const data = await callback();
-            toast.success('Comutation done successfully');
+            // toast.success('Comutation done successfully');
             dispatch('result', data);
             // return data;
         } catch (error) {
