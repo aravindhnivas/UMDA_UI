@@ -1,11 +1,9 @@
 <script lang="ts">
     import {
         fine_tune_model,
-        logYscale,
         cv_fold,
         bootstrap_nsamples,
         noise_percentage,
-        scaleYdata,
         cross_validation,
         bootstrap,
         test_size,
@@ -21,6 +19,8 @@
         available_scalers,
         ytransformation,
         yscaling,
+        inverse_scaling,
+        inverse_transform,
     } from './stores';
     import { Checkbox, CustomSelect, CustomInput } from '$lib/components';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
@@ -43,20 +43,23 @@
             {#if $test_size > 50}
                 <div class="badge badge-sm badge-warning">Warning: Test split ratio is greater than 50%</div>
             {/if}
-            <div class="flex gap-1 border-rounded border-solid border-2 p-1">
+            <div class="grid grid-cols-2 gap-1 border-rounded border-solid border-2 p-1">
                 <CustomSelect
                     items={available_transformations}
                     label="y-transformation"
                     bind:value={$ytransformation}
                 />
                 <CustomSelect items={available_scalers} label="y-scaling" bind:value={$yscaling} />
-                <!-- <Checkbox bind:value={$logYscale} label="y-transformation" check="checkbox" />
-                <Checkbox bind:value={$scaleYdata} label="y-scaling" check="checkbox" /> -->
+                <Checkbox bind:value={$inverse_scaling} label="y-inverse_scaling" check="checkbox" />
+                <Checkbox bind:value={$inverse_transform} label="y-inverse_transform" check="checkbox" />
+                <span class="text-sm font-400 col-span-2">
+                    Always inverse the transformations and scaling applied to your target variable before calculating
+                    metrics.
+                </span>
             </div>
         </div>
         <div class="grid grid-cols-2 gap-1 items-end border-rounded border-solid border-2 p-1">
             <Checkbox bind:value={$fine_tune_model} label="Grid search" check="checkbox" />
-
             <Checkbox bind:value={$cross_validation} label="Cross validation" check="checkbox" />
             <CustomSelect items={grid_search_methods} bind:value={$grid_search_method} disabled={!$fine_tune_model} />
             <CustomInput

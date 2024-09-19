@@ -10,9 +10,6 @@
         bootstrap_nsamples,
         noise_percentage,
         results,
-        plot_data,
-        logYscale,
-        scaleYdata,
         cross_validation,
         bootstrap,
         test_size,
@@ -28,8 +25,9 @@
         current_pretrained_file,
         ytransformation,
         yscaling,
+        inverse_scaling,
+        inverse_transform,
     } from './stores';
-    import { PlotlyColors } from '$lib/utils';
     import { embedding, use_PCA } from '../embedding/stores';
     import { NPARTITIONS, use_dask } from '$lib/stores/system';
     import { embedd_savefile_path } from '../embedding/stores';
@@ -200,8 +198,6 @@
             grid_search_parameters,
             pre_trained_file,
             npartitions: Number($NPARTITIONS),
-            // logYscale: $logYscale,
-            // scaleYdata: $scaleYdata,
             ytransformation: $ytransformation === 'None' ? null : $ytransformation,
             yscaling: $yscaling === 'None' ? null : $yscaling,
             embedding: $embedding,
@@ -212,6 +208,8 @@
             parallel_computation_backend: $parallel_computation_backend,
             use_dask: $use_dask,
             skip_invalid_y_values: $skip_invalid_y_values,
+            inverse_scaling: $inverse_scaling,
+            inverse_transform: $inverse_transform,
         };
 
         $results[$model] = null;

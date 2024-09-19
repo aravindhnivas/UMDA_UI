@@ -98,7 +98,7 @@ export const available_scalers = [
     'QuantileTransformer',
     'PowerTransformer',
 ];
-export const logYscale = writable(false);
-export const scaleYdata = writable(true);
 export const ytransformation = localWritable('ytransformation', 'None');
 export const yscaling = localWritable('yscaling', 'StandardScaler');
+export const inverse_transform = localWritable('inverse_transform', true);
+export const inverse_scaling = localWritable('inverse_scaling', true);
