@@ -1,7 +1,7 @@
 <script lang="ts">
     export let label: string = '';
     export let value: string;
-    export let items: string[] = [];
+    export let items: string[] | Record<string, string[]> = [];
     export let helper: string = '';
     export let disabled = false;
     export let use_input = false;
@@ -12,7 +12,7 @@
     onMount(() => {
         if (use_input) return;
 
-        if (value && items.length === 0) {
+        if (value && isArray(items) && items.length === 0) {
             items = [value];
         }
     });
@@ -37,9 +37,20 @@
         <div class="flex flex-col gap-1 {className}">
             <span class="text-xs pl-1">{label}</span>
             <select class="select select-sm select-bordered" bind:value on:change {disabled}>
-                {#each items as item}
-                    <option>{item}</option>
-                {/each}
+                {#if isArray(items) && items.length > 0}
+                    <option disabled selected>{label}</option>
+                    {#each items as item}
+                        <option>{item}</option>
+                    {/each}
+                {:else if isObject(items)}
+                    {#each Object.keys(items) as key}
+                        {@const nested_items = items[key]}
+                        <option disabled selected>{key}</option>
+                        {#each nested_items as item}
+                            <option>{item}</option>
+                        {/each}
+                    {/each}
+                {/if}
             </select>
             {#if helper}
                 <span class="text-xs pl-1 m-auto">{helper}</span>
