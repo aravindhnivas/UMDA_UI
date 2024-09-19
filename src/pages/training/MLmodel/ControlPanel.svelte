@@ -38,7 +38,7 @@
     const paper_style = 'background-color: whitesmoke;';
 </script>
 
-<CustomPanel open={false}>
+<CustomPanel open={true}>
     <svelte:fragment slot="title" let:open>
         <div class="flex-center">
             <span>Control Panel</span>
@@ -73,7 +73,7 @@
         </div>
     </svelte:fragment>
 
-    <div class="grid gap-4">
+    <div class="grid grid-cols-2 gap-2">
         <Paper transition {elevation} style={paper_style}>
             <Title>Data split-ratio, transformation and scaling</Title>
             <Content class="grid gap-2">
