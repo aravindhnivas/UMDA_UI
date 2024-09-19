@@ -35,6 +35,15 @@
         if (!(await fs.exists(save_loc))) {
             await fs.createDir(save_loc, { recursive: true });
         }
+        const savefile = await path.join(save_loc, $savefilename);
+        if (await fs.exists(savefile)) {
+            const overwrite = await dialog.confirm('File already exists. Do you want to overwrite?', {
+                title: 'Overwrite file?',
+                type: 'warning',
+            });
+            if (!overwrite) return read_and_plot(savefile);
+        }
+
         return {
             pyfile: 'training.y_data_distribution',
             args: {
