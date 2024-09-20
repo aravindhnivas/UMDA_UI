@@ -78,7 +78,7 @@
 />
 <BrowseFile
     bind:filename={$prediction_file}
-    label="upload test file"
+    label="upload file to predict"
     filters={[{ name: 'SMILES files', extensions: ['smi', 'csv'] }]}
     disabled={test_mode}
 />
