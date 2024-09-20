@@ -53,7 +53,7 @@
                             }}
                         >
                             {#if $all_params_lock_status[$model][key][label]}
-                                <LockKeyhole />
+                                <LockKeyhole color="gray" />
                             {:else}
                                 <UnlockKeyhole />
                             {/if}
@@ -73,13 +73,9 @@
                                     bind:value={values[label]}
                                     {label}
                                     disabled={$all_params_lock_status[$model][key][label]}
+                                    helper={description}
+                                    helperHighlight={`Default: ${$default_param_values[key][label]}`}
                                 />
-                                <span class="text-xs">
-                                    {description}
-                                    <div class="badge badge-sm badge-neutral">
-                                        Default: {$default_param_values[key][label]}
-                                    </div>
-                                </span>
                             </div>
                         {/if}
                     </div>
@@ -124,7 +120,7 @@
                             }}
                         >
                             {#if $all_params_lock_status[$model][key][label]}
-                                <LockKeyhole />
+                                <LockKeyhole color="gray" />
                             {:else}
                                 <UnlockKeyhole />
                             {/if}
@@ -178,7 +174,7 @@
                             }}
                         >
                             {#if $all_params_lock_status[$model][key][label]}
-                                <LockKeyhole />
+                                <LockKeyhole color="gray" />
                             {:else}
                                 <UnlockKeyhole />
                             {/if}
