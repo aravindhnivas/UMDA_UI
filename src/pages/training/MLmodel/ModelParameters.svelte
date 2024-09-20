@@ -37,7 +37,7 @@
 {/if}
 
 {#if !$default_parameter_mode}
-    <div class="flex flex-col gap-4 hyperparameters__div px-2">
+    <div class="flex flex-col gap-4 hyperparameters__div p-2">
         {#each typeSafeObjectKeys($current_model[key]) as label (label)}
             {@const { value, description } = $current_model[key][label]}
 
@@ -46,60 +46,48 @@
             {:else if label in values}
                 {#if typeof value === 'boolean'}
                     <div class="flex items-center gap-1">
-                        <button
-                            on:click={() => {
-                                $all_params_lock_status[$model][key][label] =
-                                    !$all_params_lock_status[$model][key][label];
-                            }}
-                        >
-                            {#if $all_params_lock_status[$model][key][label]}
-                                <LockKeyhole color="gray" />
-                            {:else}
-                                <UnlockKeyhole />
-                            {/if}
-                        </button>
                         {#if fine_tune_mode && !$all_params_lock_status[$model][key][label]}
                             <CustomInput
                                 {label}
                                 helper={description}
                                 helperHighlight={`Default: ${$default_param_values[key][label]}`}
                                 bind:value={$fine_tuned_hyperparameters[$model][label]}
-                                disabled={$all_params_lock_status[$model][key][label]}
+                                bind:lock={$all_params_lock_status[$model][key][label]}
+                                enabled_lock_mode
                             />
                         {:else}
-                            <div class="grid">
-                                <Checkbox
-                                    class="p-2 w-max"
-                                    bind:value={values[label]}
-                                    {label}
-                                    disabled={$all_params_lock_status[$model][key][label]}
-                                    helper={description}
-                                    helperHighlight={`Default: ${$default_param_values[key][label]}`}
-                                />
-                            </div>
+                            <button
+                                on:click={() => {
+                                    $all_params_lock_status[$model][key][label] =
+                                        !$all_params_lock_status[$model][key][label];
+                                }}
+                            >
+                                {#if $all_params_lock_status[$model][key][label]}
+                                    <LockKeyhole color="gray" />
+                                {:else}
+                                    <UnlockKeyhole />
+                                {/if}
+                            </button>
+                            <Checkbox
+                                class="p-2 w-max"
+                                bind:value={values[label]}
+                                {label}
+                                disabled={$all_params_lock_status[$model][key][label]}
+                                helper={description}
+                                helperHighlight={`Default: ${$default_param_values[key][label]}`}
+                            />
                         {/if}
                     </div>
                 {:else if typeof value === 'string' || typeof value === 'number'}
-                    <div class="flex items-center gap-1">
-                        <button
-                            on:click={() => {
-                                $all_params_lock_status[$model][key][label] =
-                                    !$all_params_lock_status[$model][key][label];
-                            }}
-                        >
-                            {#if $all_params_lock_status[$model][key][label]}
-                                <LockKeyhole color="gray" />
-                            {:else}
-                                <UnlockKeyhole />
-                            {/if}
-                        </button>
+                    <div class="grid grid-cols-2">
                         {#if fine_tune_mode && !$all_params_lock_status[$model][key][label]}
                             <CustomInput
                                 {label}
                                 helper={description}
                                 helperHighlight={`Default: ${$default_param_values[key][label]}`}
                                 bind:value={$fine_tuned_hyperparameters[$model][label]}
-                                disabled={$all_params_lock_status[$model][key][label]}
+                                bind:lock={$all_params_lock_status[$model][key][label]}
+                                enabled_lock_mode
                             />
                         {:else}
                             <CustomInput
@@ -107,31 +95,21 @@
                                 helper={description}
                                 helperHighlight={`Default: ${$default_param_values[key][label]}`}
                                 bind:value={values[label]}
-                                disabled={$all_params_lock_status[$model][key][label]}
+                                bind:lock={$all_params_lock_status[$model][key][label]}
+                                enabled_lock_mode
                             />
                         {/if}
                     </div>
                 {:else if typeof value === 'object' && value}
-                    <div class="flex items-center gap-1">
-                        <button
-                            on:click={() => {
-                                $all_params_lock_status[$model][key][label] =
-                                    !$all_params_lock_status[$model][key][label];
-                            }}
-                        >
-                            {#if $all_params_lock_status[$model][key][label]}
-                                <LockKeyhole color="gray" />
-                            {:else}
-                                <UnlockKeyhole />
-                            {/if}
-                        </button>
+                    <div class="grid grid-cols-2">
                         {#if fine_tune_mode && !$all_params_lock_status[$model][key][label]}
                             <CustomInput
                                 {label}
                                 helper={description}
                                 helperHighlight={`Default: ${$default_param_values[key][label]}`}
                                 bind:value={$fine_tuned_hyperparameters[$model][label]}
-                                disabled={$all_params_lock_status[$model][key][label]}
+                                bind:lock={$all_params_lock_status[$model][key][label]}
+                                enabled_lock_mode
                             />
                         {:else}
                             <CustomSelect
@@ -140,9 +118,22 @@
                                 helperHighlight={`Default: ${$default_param_values[key][label]}`}
                                 items={typeSafeObjectKeys(value.options)}
                                 bind:value={values[label]}
-                                disabled={$all_params_lock_status[$model][key][label]}
+                                bind:lock={$all_params_lock_status[$model][key][label]}
+                                enabled_lock_mode
                             />
                             {#if values[label] === 'float'}
+                                <button
+                                    on:click={() => {
+                                        $all_params_lock_status[$model][key][label] =
+                                            !$all_params_lock_status[$model][key][label];
+                                    }}
+                                >
+                                    {#if $all_params_lock_status[$model][key][label]}
+                                        <LockKeyhole color="gray" />
+                                    {:else}
+                                        <UnlockKeyhole />
+                                    {/if}
+                                </button>
                                 <div class="grid">
                                     <span class="text-xs pl-1">Enter {label} value</span>
                                     <input
@@ -166,26 +157,15 @@
                         {/if}
                     </div>
                 {:else if value == null}
-                    <div class="flex items-center gap-1">
-                        <button
-                            on:click={() => {
-                                $all_params_lock_status[$model][key][label] =
-                                    !$all_params_lock_status[$model][key][label];
-                            }}
-                        >
-                            {#if $all_params_lock_status[$model][key][label]}
-                                <LockKeyhole color="gray" />
-                            {:else}
-                                <UnlockKeyhole />
-                            {/if}
-                        </button>
+                    <div class="grid grid-cols-2">
                         {#if fine_tune_mode && !$all_params_lock_status[$model][key][label]}
                             <CustomInput
                                 {label}
                                 helper={description}
                                 helperHighlight={`Default: ${$default_param_values[key][label]}`}
                                 bind:value={$fine_tuned_hyperparameters[$model][label]}
-                                disabled={$all_params_lock_status[$model][key][label]}
+                                bind:lock={$all_params_lock_status[$model][key][label]}
+                                enabled_lock_mode
                             />
                         {:else}
                             <CustomInput
@@ -194,6 +174,8 @@
                                 disabled={$all_params_lock_status[$model][key][label]}
                                 helper={description}
                                 helperHighlight={`Default: ${$default_param_values[key][label]}`}
+                                bind:lock={$all_params_lock_status[$model][key][label]}
+                                enabled_lock_mode
                             />
                         {/if}
                     </div>
