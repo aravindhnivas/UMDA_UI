@@ -218,7 +218,6 @@
                             title: `${model_name.toLocaleUpperCase()} Regressor`,
                             xaxis: { title: 'y_true' },
                             yaxis: { title: 'y_pred' },
-                            // margin: { t: 0 },
                         }}
                         fillParent={true}
                         debounce={250}
