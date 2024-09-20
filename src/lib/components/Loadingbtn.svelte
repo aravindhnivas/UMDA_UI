@@ -71,9 +71,8 @@
 
     <button
         bind:this={btn}
-        disabled={loading}
-        class="btn btn-sm ld-ext-right w-max"
-        class:running={loading}
+        class:btn-disabled={loading}
+        class="btn btn-sm btn-primary w-max"
         on:click={run_callback}
         on:pyEvent
         on:pyEventClosed
@@ -82,11 +81,10 @@
         on:pyEventSuccess
     >
         {name}
-
         {#if subprocess && process_count > 0}
             <div class="badge">{process_count}</div>
         {/if}
-        <div class="ld ld-ring ld-spin" style="color: antiquewhite;"></div>
+        <span class:loading class="loading-spinner"></span>
     </button>
     {#if !subprocess && source && loading}
         <button
