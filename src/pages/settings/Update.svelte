@@ -212,7 +212,7 @@
                 </button>
 
                 <button
-                    class="btn btn-sm"
+                    class="btn btn-sm btn-outline"
                     on:click={() => {
                         $activateChangelog = true;
                     }}

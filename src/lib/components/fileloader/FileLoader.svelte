@@ -105,7 +105,7 @@
         />
     {/if}
     <button
-        class="btn btn-sm join-item"
+        class="btn btn-sm btn-outline join-item"
         on:click={async () => {
             if (!filename) return toast.error('No file selected');
             await shell.open(await path.dirname(filename));

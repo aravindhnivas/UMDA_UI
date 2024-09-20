@@ -99,7 +99,7 @@
             <button class="btn btn-sm join-item" on:click={load_callback}>load</button>
         {/if}
         <button
-            class="btn btn-sm join-item"
+            class="btn btn-sm btn-outline join-item"
             on:click={async () => {
                 if (!filename) return toast.error('No file selected');
                 if (directory) await shell.open(filename);
