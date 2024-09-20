@@ -24,8 +24,9 @@
 <div class="grid gap-1">
     <div
         class="flex gap-2 items-center {bordered
-            ? 'border-solid border-rounded border-1' + (disabled ? ' border-gray-600/75' : '')
+            ? 'border border-solid border-black border-rounded' + (disabled ? ' border-gray-600/75' : '')
             : ''} p-1 {className} w-max"
+        style="border-radius: 0.25rem;"
     >
         <button on:click={() => (lock = !lock)}>
             {#if enabled_lock_mode}
@@ -39,7 +40,7 @@
         {#if text_position === 'left'}
             <span class="label-text {disabled ? 'text-gray-600/75' : ''}">{label}</span>
         {/if}
-        <input type="checkbox" class={check} bind:checked={value} {disabled} on:change />
+        <input type="checkbox" class=" {check}" bind:checked={value} {disabled} on:change />
         {#if text_position === 'right'}
             <span class="label-text {disabled ? 'text-gray-600/75' : ''}">{label}</span>
         {/if}
@@ -57,8 +58,8 @@
     {/if}
 </div>
 
-<style>
+<style global>
     input.checkbox {
-        border: solid 1px #000;
+        border: solid 1px #000 !important;
     }
 </style>
