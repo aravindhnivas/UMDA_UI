@@ -28,7 +28,7 @@
         {/if}
     </div>
     <input
-        class="input input-sm"
+        class="w-max input input-sm"
         bind:value
         {...$$restProps}
         on:change
