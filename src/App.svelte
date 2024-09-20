@@ -2,9 +2,11 @@
     import { RAM_SIZE, CPU_COUNT, NPARTITIONS } from '$lib/stores/system';
     import { Toaster } from 'svelte-sonner';
     import * as pages from './pages';
-    import Nav from '$lib/layouts/Nav.svelte';
     import Footer from '$lib/layouts/Footer.svelte';
     import PreModal from '$utils/PreModal.svelte';
+    import CustomTabs from '$lib/components/CustomTabs.svelte';
+    import { active_tab } from '$utils/stores';
+    let tabs = ['Home', 'Training', 'Settings'];
 
     onMount(async () => {
         const [total_memory, cpu_count] = await invoke<[number, number]>('get_sysinfo');
@@ -25,7 +27,9 @@
 <Toaster position="bottom-left" richColors />
 <PreModal />
 <div class="parent w-full h-full">
-    <header><Nav /></header>
+    <header>
+        <CustomTabs {tabs} bind:active={$active_tab} />
+    </header>
     <main>
         {#each Object.keys(pages) as name}
             <svelte:component this={pages[name]} />
