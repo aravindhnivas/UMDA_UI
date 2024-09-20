@@ -92,7 +92,7 @@
                             }}
                         >
                             {#if $all_params_lock_status[$model][key][label]}
-                                <LockKeyhole />
+                                <LockKeyhole color="gray" />
                             {:else}
                                 <UnlockKeyhole />
                             {/if}
