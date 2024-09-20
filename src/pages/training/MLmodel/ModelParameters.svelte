@@ -31,7 +31,9 @@
 </script>
 
 {#if fine_tune_mode}
-    <span class="badge badge-warning my-2">Grid search mode turned on. Please unlock the parameters to fine-tune</span>
+    <span class="badge badge-warning my-2 m-auto w-full"
+        >Grid search mode turned on. Please unlock the parameters to fine-tune</span
+    >
 {/if}
 
 {#if !$default_parameter_mode}
