@@ -21,16 +21,20 @@
     const unique_id = getContext<string>('unique_id');
     $: fine_tune_mode = $fine_tune_model && key === 'hyperparameters';
 
-    // $: console.warn('all_params_lock_status', $all_params_lock_status[$model][key]);
-    // $: console.warn($model);
-    $: if ($model && isEmpty($all_params_lock_status[$model]?.[key])) {
+    $: if (isEmpty($all_params_lock_status[$model]?.[key])) {
         const param_keys = typeSafeObjectKeys($current_model[key]);
         param_keys.forEach(label => {
             $all_params_lock_status[$model][key][label] ??= true;
         });
-        console.warn('all_params_lock_status', $all_params_lock_status[$model][key]);
+        console.warn('all_params_lock_status', $all_params_lock_status[$model]?.[key]);
     }
 </script>
+
+{#if fine_tune_mode}
+    <span class="badge badge-sm badge-primary my-2"
+        >Grid search mode turned on. Please unlock the parameters to fine-tune</span
+    >
+{/if}
 
 {#if !$default_parameter_mode}
     <div class="flex flex-col gap-4 hyperparameters__div px-2">
@@ -42,7 +46,6 @@
             {:else if label in values}
                 {#if typeof value === 'boolean'}
                     <div class="flex items-center gap-1">
-                        <button class="btn btn-xs btn-primary"><SlidersHorizontal size="20" /></button>
                         <button
                             on:click={() => {
                                 $all_params_lock_status[$model][key][label] =
@@ -55,7 +58,7 @@
                                 <UnlockKeyhole />
                             {/if}
                         </button>
-                        {#if fine_tune_mode}
+                        {#if fine_tune_mode && !$all_params_lock_status[$model][key][label]}
                             <CustomInput
                                 {label}
                                 helper={description}
@@ -94,7 +97,7 @@
                                 <UnlockKeyhole />
                             {/if}
                         </button>
-                        {#if fine_tune_mode}
+                        {#if fine_tune_mode && !$all_params_lock_status[$model][key][label]}
                             <CustomInput
                                 {label}
                                 helper={description}
@@ -126,7 +129,7 @@
                                 <UnlockKeyhole />
                             {/if}
                         </button>
-                        {#if fine_tune_mode}
+                        {#if fine_tune_mode && !$all_params_lock_status[$model][key][label]}
                             <CustomInput
                                 {label}
                                 helper={description}
@@ -180,7 +183,7 @@
                                 <UnlockKeyhole />
                             {/if}
                         </button>
-                        {#if fine_tune_mode}
+                        {#if fine_tune_mode && !$all_params_lock_status[$model][key][label]}
                             <CustomInput
                                 {label}
                                 helper={description}

@@ -16,15 +16,7 @@ export const locally_saved_dict_all_params_lock_status = localWritable<Record<st
     {},
 );
 
-export const all_params_lock_status = writable<
-    Record<
-        MLModel,
-        {
-            parameters: Record<string, boolean>;
-            hyperparameters: Record<string, boolean>;
-        }
-    >
->({
+const default_values_for_models = {
     linear_regression: { parameters: {}, hyperparameters: {} },
     ridge: { parameters: {}, hyperparameters: {} },
     svr: { parameters: {}, hyperparameters: {} },
@@ -35,10 +27,12 @@ export const all_params_lock_status = writable<
     xgboost: { parameters: {}, hyperparameters: {} },
     catboost: { parameters: {}, hyperparameters: {} },
     lgbm: { parameters: {}, hyperparameters: {} },
-});
+} as const;
+
+export const all_params_lock_status = writable<MLParamsLockStatus>(structuredClone(default_values_for_models));
+// export const finetune_params_lock_status = writable<MLParamsLockStatus>(structuredClone(default_values_for_models));
 
 export const variable_type = derived(current_model, $current_model => {
-    // console.warn($current_model);
     if (!$current_model) return {};
     const hyperparameters = $current_model.hyperparameters;
     const parameters = $current_model.parameters;

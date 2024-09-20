@@ -58,7 +58,7 @@
                 {/if}
 
                 {#if $fine_tune_model}
-                    <span class="badge badge-sm">Fine-tune</span>
+                    <span class="badge badge-sm badge-primary">Fine-tune</span>
                 {/if}
                 {#if $cross_validation}
                     <span class="badge badge-sm">Cross-validation</span>

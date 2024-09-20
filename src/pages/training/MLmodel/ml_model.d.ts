@@ -65,3 +65,11 @@ interface Results {
 
 type ParallelComputationBackend = 'loky' | 'threading' | 'multiprocessing' | 'dask';
 // type ParallelComputationBackend = 'threading' | 'dask';
+
+type MLParamsLockStatus = Record<
+    MLModel,
+    {
+        parameters: Record<string, boolean>;
+        hyperparameters: Record<string, boolean>;
+    }
+>;
