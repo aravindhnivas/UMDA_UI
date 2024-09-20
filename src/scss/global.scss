@@ -39,27 +39,27 @@ input.input, select.select {
     border: solid black 1px;
 }
 
-button.btn, button.button {
-    background-color: transparent;
-    color: black;
-    border: solid 1px;
+// button.btn, button.button {
+//     background-color: transparent;
+//     color: black;
+//     border: solid 1px;
 
-    &:not([disabled]):hover {
-        background-color: black;
-        color: white;
-        border: solid 1px black;
-    }
+//     &:not([disabled]):hover {
+//         background-color: black;
+//         color: white;
+//         border: solid 1px black;
+//     }
 
-    &.btn-error {
-        background-color: rgba(202, 27, 27, 0.964);
-        color: white;
-        border: none;
-        &:hover {
-            background-color: rgba(202, 27, 27, 0.964);
-            border: solid 1px whitesmoke;
-        }
-    }
-}
+//     &.btn-error {
+//         background-color: rgba(202, 27, 27, 0.964);
+//         color: white;
+//         border: none;
+//         &:hover {
+//             background-color: rgba(202, 27, 27, 0.964);
+//             border: solid 1px whitesmoke;
+//         }
+//     }
+// }
 
 
 .mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
