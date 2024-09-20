@@ -32,7 +32,7 @@
         <CustomTabs {tabs} bind:active={$active_tab} />
     </header>
     <main>
-        {#each Object.keys(pages) as name}
+        {#each typeSafeObjectKeys(pages) as name}
             <svelte:component this={pages[name]} />
         {/each}
     </main>
