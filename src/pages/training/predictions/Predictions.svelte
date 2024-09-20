@@ -4,6 +4,7 @@
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import Molecule from '$lib/components/Molecule.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
+    import { Checkbox } from '$lib/components';
 
     const predict = async () => {
         const basename = await path.basename($pretrained_model_file);
@@ -83,10 +84,7 @@
 />
 
 <div class="grid grid-cols-5 items-end gap-2">
-    <div class="flex-center border-1 border-solid border-rounded p-1">
-        <span>USE test-file</span>
-        <input type="checkbox" class="toggle" bind:checked={use_file} />
-    </div>
+    <Checkbox label="USE test-file" bind:value={use_file} />
     {#if !use_file}
         <CustomInput class="col-span-3" bind:value={$smiles} label="Enter molecular SMILES" />
     {/if}

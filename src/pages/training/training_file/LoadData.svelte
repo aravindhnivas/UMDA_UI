@@ -19,6 +19,7 @@
     import LoadedFileInfos from '../embedding/LoadedFileInfos.svelte';
     import Notification from '$lib/components/Notification.svelte';
     import { Download, Save } from 'lucide-svelte/icons';
+    import Checkbox from '$lib/components/Checkbox.svelte';
 
     let auto_fetch_columns = false;
     let data: DataType | null = null;
@@ -157,12 +158,7 @@
     <svelte:fragment let:load_btn>
         {#await fs.exists($training_file.filename) then file_exists}
             <div class="flex flex-col gap-1">
-                <div class="flex-center">
-                    <div class="flex-center border-1 border-solid border-rounded p-1">
-                        <span>Auto-fetch column name</span>
-                        <input type="checkbox" class="toggle" bind:checked={auto_fetch_columns} />
-                    </div>
-                </div>
+                <Checkbox bind:value={auto_fetch_columns} label="Auto-fetch column name" />
                 {#if auto_fetch_columns && !data?.columns.length}
                     <span class="text-sm">Load file first!</span>
                 {/if}
@@ -170,12 +166,14 @@
 
             <div class="flex items-end gap-1">
                 <CustomSelect
+                    enable_use_input
                     use_input={!auto_fetch_columns}
                     label="column X"
                     bind:value={$training_column_name_X}
                     items={$loaded_df_columns}
                 />
                 <CustomSelect
+                    enable_use_input
                     use_input={!auto_fetch_columns}
                     label="column Y"
                     bind:value={$training_column_name_y}

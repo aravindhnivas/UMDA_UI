@@ -6,7 +6,8 @@
     import PreModal from '$utils/PreModal.svelte';
     import CustomTabs from '$lib/components/CustomTabs.svelte';
     import { active_tab } from '$utils/stores';
-    let tabs = ['Home', 'Training', 'Settings'];
+
+    const tabs = ['Home', 'Training', 'Settings'];
 
     onMount(async () => {
         const [total_memory, cpu_count] = await invoke<[number, number]>('get_sysinfo');

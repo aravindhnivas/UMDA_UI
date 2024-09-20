@@ -155,10 +155,7 @@
 <div class="grid content-start gap-2" {id} style:display>
     <div class="flex justify-between">
         <h2>Embeddings</h2>
-        <div class="flex-center text-sm">
-            <input type="checkbox" class="toggle" bind:checked={test_mode} />
-            <span>Test mode</span>
-        </div>
+        <Checkbox label="Test mode" bind:value={test_mode} />
     </div>
 
     <h3>Pre-trained model ({$embedding})</h3>
@@ -194,10 +191,7 @@
             </div>
         </div>
     {:else}
-        <div class="flex-center border-1 border-solid border-rounded p-1 w-max">
-            <span>PCA</span>
-            <input type="checkbox" class="toggle" bind:checked={$use_PCA} />
-        </div>
+        <Checkbox label="PCA" bind:value={$use_PCA} />
         <div class="grid gap-2 items-end" style="grid-auto-flow: column; grid-template-columns: auto 1fr auto;">
             <CustomSelect label="embedding" bind:value={$embedding} items={embeddings} />
             <CustomInput label="Embeddings filename" bind:value={$embedd_savefile} />

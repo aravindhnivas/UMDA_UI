@@ -6,6 +6,7 @@
     import Tab, { Label } from '@smui/tab';
     import TabBar from '@smui/tab-bar';
     import Plot from 'svelte-plotly.js';
+    import Checkbox from '$lib/components/Checkbox.svelte';
 
     export let id: string = 'pca-train-container';
     export let display: string = 'none';
@@ -126,10 +127,7 @@
             btn_name={'Browse vectors (.npy)'}
         />
 
-        <div class="flex-center">
-            <span>Compute KMeans clustering</span>
-            <input type="checkbox" class="toggle" bind:checked={compute_kmeans} />
-        </div>
+        <Checkbox label="Compute KMeans clustering" bind:value={compute_kmeans} />
 
         <div class="flex gap-1">
             <div class="flex flex-col gap-1">
