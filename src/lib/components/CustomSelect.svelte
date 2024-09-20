@@ -53,7 +53,7 @@
                 {/if}
             </select>
             {#if helper}
-                <span class="text-xs pl-1 m-auto">{helper}</span>
+                <span class="text-xs pl-1">{helper}</span>
             {/if}
         </div>
     {/if}
