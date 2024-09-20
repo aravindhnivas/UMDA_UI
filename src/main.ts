@@ -1,6 +1,4 @@
-import '@unocss/reset/normalize.css';
 import './scss';
-import 'virtual:uno.css';
 import App from './App.svelte';
 import './lib/utils/initialise';
 

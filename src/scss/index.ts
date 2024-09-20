@@ -7,3 +7,4 @@ import 'animate.css';
 import 'ldbutton/index.min.css';
 import '@loadingio/loading.css/loading.min.css';
 import './global.scss';
+import './tailwind.css';

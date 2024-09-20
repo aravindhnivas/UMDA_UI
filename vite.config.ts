@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
-import UnoCSS from 'unocss/vite';
+// import UnoCSS from 'unocss/vite';
 import path from 'path';
 import AutoImport from 'unplugin-auto-import/vite';
 import ViteYaml from '@modyfi/vite-plugin-yaml';
@@ -8,7 +8,7 @@ import ViteYaml from '@modyfi/vite-plugin-yaml';
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
     plugins: [
-        UnoCSS(),
+        // UnoCSS(),
         svelte(),
         AutoImport({
             imports: [
