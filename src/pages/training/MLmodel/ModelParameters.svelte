@@ -13,6 +13,7 @@
     import Kernel from './Kernel.svelte';
     import Notification from '$lib/components/Notification.svelte';
     import { LockKeyhole, UnlockKeyhole } from 'lucide-svelte/icons';
+    import CustomInput from '$lib/components/CustomInput.svelte';
 
     export let values: Record<string, any>;
     export let key: 'hyperparameters' | 'parameters';
@@ -40,169 +41,154 @@
                 <Kernel bind:value={values[label]} />
             {:else if label in values}
                 {#if typeof value === 'boolean'}
-                    <div class="grid gap-1">
-                        <div class="flex items-center gap-1">
-                            <button
-                                on:click={() => {
-                                    $all_params_lock_status[$model][key][label] =
-                                        !$all_params_lock_status[$model][key][label];
-                                }}
-                            >
-                                {#if $all_params_lock_status[$model][key][label]}
-                                    <LockKeyhole />
-                                {:else}
-                                    <UnlockKeyhole />
-                                {/if}
-                            </button>
-                            {#if fine_tune_mode}
-                                <input
-                                    class="input input-sm"
-                                    bind:value={$fine_tuned_hyperparameters[$model][label]}
-                                    autocomplete="false"
-                                    disabled={$all_params_lock_status[$model][key][label]}
-                                />
+                    <div class="flex items-center gap-1">
+                        <button
+                            on:click={() => {
+                                $all_params_lock_status[$model][key][label] =
+                                    !$all_params_lock_status[$model][key][label];
+                            }}
+                        >
+                            {#if $all_params_lock_status[$model][key][label]}
+                                <LockKeyhole />
                             {:else}
+                                <UnlockKeyhole />
+                            {/if}
+                        </button>
+                        {#if fine_tune_mode}
+                            <CustomInput
+                                {label}
+                                helper={`${description}. Default: ${$default_param_values[key][label]}`}
+                                bind:value={$fine_tuned_hyperparameters[$model][label]}
+                                disabled={$all_params_lock_status[$model][key][label]}
+                            />
+                        {:else}
+                            <div class="grid">
                                 <Checkbox
                                     class="p-2 w-max"
                                     bind:value={values[label]}
                                     {label}
                                     disabled={$all_params_lock_status[$model][key][label]}
                                 />
-                            {/if}
-                        </div>
-
-                        <span class="text-xs">
-                            {description}
-                            <div class="badge badge-sm badge-neutral">Default: {$default_param_values[key][label]}</div>
-                        </span>
+                                <span class="text-xs">
+                                    {description}
+                                    <div class="badge badge-sm badge-neutral">
+                                        Default: {$default_param_values[key][label]}
+                                    </div>
+                                </span>
+                            </div>
+                        {/if}
                     </div>
                 {:else if typeof value === 'string' || typeof value === 'number'}
-                    <div class="grid gap-1">
-                        <div class="grid">
-                            <div class="text-xs">{label}</div>
-                            <div class="flex items-center gap-1">
-                                <button
-                                    on:click={() => {
-                                        $all_params_lock_status[$model][key][label] =
-                                            !$all_params_lock_status[$model][key][label];
-                                    }}
-                                >
-                                    {#if $all_params_lock_status[$model][key][label]}
-                                        <LockKeyhole />
-                                    {:else}
-                                        <UnlockKeyhole />
-                                    {/if}
-                                </button>
-                                {#if fine_tune_mode}
-                                    <input
-                                        class="input input-sm"
-                                        bind:value={$fine_tuned_hyperparameters[$model][label]}
-                                        autocomplete="false"
-                                        disabled={$all_params_lock_status[$model][key][label]}
-                                    />
-                                {:else}
-                                    <input
-                                        class="w-max input input-sm"
-                                        bind:value={values[label]}
-                                        autocomplete="false"
-                                        disabled={$all_params_lock_status[$model][key][label]}
-                                    />
-                                {/if}
-                            </div>
-                        </div>
-                        <span class="text-xs"
-                            >{description}
-                            <div class="badge badge-sm badge-neutral">Default: {$default_param_values[key][label]}</div>
-                        </span>
+                    <div class="flex items-center gap-1">
+                        <button
+                            on:click={() => {
+                                $all_params_lock_status[$model][key][label] =
+                                    !$all_params_lock_status[$model][key][label];
+                            }}
+                        >
+                            {#if $all_params_lock_status[$model][key][label]}
+                                <LockKeyhole />
+                            {:else}
+                                <UnlockKeyhole />
+                            {/if}
+                        </button>
+                        {#if fine_tune_mode}
+                            <CustomInput
+                                {label}
+                                helper={`${description}. Default: ${$default_param_values[key][label]}`}
+                                bind:value={$fine_tuned_hyperparameters[$model][label]}
+                                disabled={$all_params_lock_status[$model][key][label]}
+                            />
+                        {:else}
+                            <CustomInput
+                                {label}
+                                helper={`${description} Default: ${$default_param_values[key][label]}`}
+                                bind:value={values[label]}
+                                disabled={$all_params_lock_status[$model][key][label]}
+                            />
+                        {/if}
                     </div>
                 {:else if typeof value === 'object' && value}
-                    <div class="grid gap-1">
-                        <div class="flex items-end gap-4">
-                            <div class="flex items-center gap-1">
-                                <button
-                                    on:click={() => {
-                                        $all_params_lock_status[$model][key][label] =
-                                            !$all_params_lock_status[$model][key][label];
-                                    }}
-                                >
-                                    {#if $all_params_lock_status[$model][key][label]}
-                                        <LockKeyhole />
-                                    {:else}
-                                        <UnlockKeyhole />
-                                    {/if}
-                                </button>
-                                {#if fine_tune_mode}
-                                    <div class="grid w-full">
-                                        <div class="text-xs">{label}</div>
-                                        <input
-                                            class=" input input-sm"
-                                            bind:value={$fine_tuned_hyperparameters[$model][label]}
-                                            autocomplete="false"
-                                            disabled={$all_params_lock_status[$model][key][label]}
-                                        />
-                                    </div>
-                                {:else}
-                                    <CustomSelect
-                                        label={`${label} (${value.options[values[label]]})`}
-                                        items={typeSafeObjectKeys(value.options)}
-                                        bind:value={values[label]}
+                    <div class="flex items-center gap-1">
+                        <button
+                            on:click={() => {
+                                $all_params_lock_status[$model][key][label] =
+                                    !$all_params_lock_status[$model][key][label];
+                            }}
+                        >
+                            {#if $all_params_lock_status[$model][key][label]}
+                                <LockKeyhole />
+                            {:else}
+                                <UnlockKeyhole />
+                            {/if}
+                        </button>
+                        {#if fine_tune_mode}
+                            <CustomInput
+                                {label}
+                                helper={`${description}. Default: ${$default_param_values[key][label]}`}
+                                bind:value={$fine_tuned_hyperparameters[$model][label]}
+                                disabled={$all_params_lock_status[$model][key][label]}
+                            />
+                        {:else}
+                            <CustomSelect
+                                label={`${label} (${value.options[values[label]]})`}
+                                helper={`${description}. Default: ${$default_param_values[key][label]}`}
+                                items={typeSafeObjectKeys(value.options)}
+                                bind:value={values[label]}
+                                disabled={$all_params_lock_status[$model][key][label]}
+                            />
+                            {#if values[label] === 'float'}
+                                <div class="grid">
+                                    <span class="text-xs pl-1">Enter {label} value</span>
+                                    <input
+                                        autocomplete="off"
+                                        autocapitalize="off"
+                                        autocorrect="off"
+                                        on:keydown={validateInput}
+                                        id="{unique_id}_{label}"
+                                        class="input input-sm"
+                                        type="number"
                                         disabled={$all_params_lock_status[$model][key][label]}
                                     />
-                                    {#if values[label] === 'float'}
-                                        <div class="grid">
-                                            <span class="text-xs pl-1">Enter {label} value</span>
-                                            <!-- svelte-ignore a11y-autocomplete-valid -->
-                                            <input
-                                                autocomplete="false"
-                                                on:keydown={validateInput}
-                                                id="{unique_id}_{label}"
-                                                class="input input-sm"
-                                                type="number"
-                                                disabled={$all_params_lock_status[$model][key][label]}
-                                            />
+                                    <span class="text-xs pl-1"
+                                        >{description}
+                                        <div class="badge badge-sm badge-neutral">
+                                            Default: {$default_param_values[key][label]}
                                         </div>
-                                    {/if}
-                                {/if}
-                            </div>
-                        </div>
-                        <span class="text-xs pl-1"
-                            >{description}
-                            <div class="badge badge-sm badge-neutral">Default: {$default_param_values[key][label]}</div>
-                        </span>
+                                    </span>
+                                </div>
+                            {/if}
+                        {/if}
                     </div>
                 {:else if value == null}
-                    <div class="grid gap-1">
-                        <span class="text-xs">{label}</span>
-                        <div class="flex items-center gap-1">
-                            <button
-                                on:click={() => {
-                                    $all_params_lock_status[$model][key][label] =
-                                        !$all_params_lock_status[$model][key][label];
-                                }}
-                            >
-                                {#if $all_params_lock_status[$model][key][label]}
-                                    <LockKeyhole />
-                                {:else}
-                                    <UnlockKeyhole />
-                                {/if}
-                            </button>
-                            {#if fine_tune_mode}
-                                <input
-                                    class="input input-sm"
-                                    bind:value={$fine_tuned_hyperparameters[$model][label]}
-                                    autocomplete="false"
-                                    disabled={$all_params_lock_status[$model][key][label]}
-                                />
+                    <div class="flex items-center gap-1">
+                        <button
+                            on:click={() => {
+                                $all_params_lock_status[$model][key][label] =
+                                    !$all_params_lock_status[$model][key][label];
+                            }}
+                        >
+                            {#if $all_params_lock_status[$model][key][label]}
+                                <LockKeyhole />
                             {:else}
-                                <input
-                                    class="w-max input input-sm"
-                                    bind:value={values[label]}
-                                    autocomplete="false"
-                                    disabled={$all_params_lock_status[$model][key][label]}
-                                />
+                                <UnlockKeyhole />
                             {/if}
-                        </div>
-                        <span class="text-xs">{description}. Default: None</span>
+                        </button>
+                        {#if fine_tune_mode}
+                            <CustomInput
+                                {label}
+                                helper={`${description}. Default: None`}
+                                bind:value={$fine_tuned_hyperparameters[$model][label]}
+                                disabled={$all_params_lock_status[$model][key][label]}
+                            />
+                        {:else}
+                            <CustomInput
+                                {label}
+                                bind:value={values[label]}
+                                disabled={$all_params_lock_status[$model][key][label]}
+                                helper={`${description}. Default: None`}
+                            />
+                        {/if}
                     </div>
                 {/if}
             {:else}
