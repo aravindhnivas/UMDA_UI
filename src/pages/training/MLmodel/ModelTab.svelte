@@ -4,17 +4,14 @@
     import { typeSafeObjectKeys } from '$lib/utils';
 </script>
 
-<div role="tablist" class="tabs tabs-bordered gap-1">
+<div role="tablist" class="tabs tabs-bordered flex flex-wrap">
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y-missing-attribute -->
     {#each typeSafeObjectKeys(supervised_ml_models) as tab (tab)}
-        <button
-            role="tab"
-            class="tab border border-b-2 hvr-glow hover:border-rounded"
-            class:border-b-solid={$model === tab}
-            class:border-rounded={$model === tab}
-            class:tab-active={$model === tab}
-            on:click={() => ($model = tab)}
-        >
+        <!-- svelte-ignore a11y-interactive-supports-focus -->
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <a role="tab" class="tab" class:tab-active={$model === tab} on:click={() => ($model = tab)}>
             {tab.toLocaleUpperCase()}
-        </button>
+        </a>
     {/each}
 </div>
