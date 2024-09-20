@@ -69,3 +69,11 @@ button {
     cursor: pointer;
     outline: inherit;
 }
+
+.btn-error {
+    background-color: transparent !important;
+    border: solid 2px rgba(230, 57, 70, 0.83) !important;
+    &:hover {
+        background-color: rgba(230, 57, 70, 0.83) !important;
+    }
+}
