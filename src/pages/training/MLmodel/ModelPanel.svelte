@@ -136,14 +136,9 @@
         <ModelTab />
         <span class="text-sm">{$current_model.description}</span>
         {#if $current_model}
-            <div class="flex">
-                <h3>
-                    <span>Hyperparameters</span>
-                    {#if uploadedfile && uploadedfile.model === $model}
-                        <div class="badge badge-sm badge-info">loaded: {uploadedfile.name}</div>
-                    {/if}
-                </h3>
-                <div class="flex gap-2 ml-auto">
+            <div class="flex justify-between">
+                <h3>Hyperparameters</h3>
+                <div class="flex gap-2">
                     <Checkbox bind:value={$default_parameter_mode} label="defaults" />
                     <button class="btn btn-sm btn-outline" on:click={reset_parameters}>
                         <RotateCcw />
@@ -159,6 +154,9 @@
                     </button>
                 </div>
             </div>
+            {#if uploadedfile && uploadedfile.model === $model}
+                <div class="badge badge-sm badge-info">loaded: {uploadedfile.name}</div>
+            {/if}
         {/if}
     </div>
 
