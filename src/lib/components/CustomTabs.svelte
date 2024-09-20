@@ -1,12 +1,12 @@
 <script lang="ts">
+    import Tab, { Label } from '@smui/tab';
+    import TabBar from '@smui/tab-bar';
     export let tabs: string[];
     export let active: string;
 </script>
 
-<div class="flex tabs tabs-boxed bg-orange-300/50 shadow-xl">
-    {#each tabs as tab (tab)}
-        <button class="tab" class:tab-active={active === tab} on:click={() => (active = tab)}>
-            {tab}
-        </button>
-    {/each}
-</div>
+<TabBar {tabs} let:tab bind:active>
+    <Tab {tab}>
+        <Label>{tab}</Label>
+    </Tab>
+</TabBar>

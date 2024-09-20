@@ -3,6 +3,7 @@
     import TabBar from '@smui/tab-bar';
     import Predictions from './Predictions.svelte';
     import Analysis from './Analysis.svelte';
+    import CustomTabs from '$lib/components/CustomTabs.svelte';
 
     export let id: string = 'ml-predictions';
     export let display: string = 'none';
@@ -12,11 +13,7 @@
 
 <div class="grid content-start gap-2" {id} style:display>
     <div class="w-max">
-        <TabBar tabs={['Predictions', 'Analysis']} let:tab bind:active={active_tab}>
-            <Tab {tab}>
-                <Label>{tab}</Label>
-            </Tab>
-        </TabBar>
+        <CustomTabs tabs={['Predictions', 'Analysis']} bind:active={active_tab} />
     </div>
     <div class="grid gap-2" class:hidden={active_tab !== 'Predictions'}>
         <Predictions />

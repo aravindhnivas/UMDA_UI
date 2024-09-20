@@ -28,7 +28,7 @@
 <Toaster position="bottom-left" richColors />
 <PreModal />
 <div class="parent w-full h-full">
-    <header>
+    <header class="bg-orange-300/50 shadow-xl">
         <CustomTabs {tabs} bind:active={$active_tab} />
     </header>
     <main>
