@@ -47,7 +47,7 @@
         </div>
         <button
             disabled={serverReady}
-            class="btn btn-sm"
+            class="btn btn-sm btn-outline"
             on:click={async () => {
                 try {
                     await startServer();
@@ -70,7 +70,7 @@
     <div class="flex gap-1 items-center">
         {#if connection === 'http'}
             <button
-                class="btn btn-sm"
+                class="btn btn-sm btn-outline"
                 on:click={async () => {
                     const [err] = await oO(fetchServerROOT());
                     if (err instanceof AxiosError) {
@@ -80,9 +80,10 @@
                 }}>Check Server connection</button
             >
         {:else}
-            <button class="btn btn-sm" on:click={connect_websocket}>Check ws connection</button>
+            <button class="btn btn-sm btn-outline" on:click={connect_websocket}>Check ws connection</button>
         {/if}
-        <button class="btn btn-sm" on:click={async () => await checkNetstat(port)}>Check PORT status</button>
+        <button class="btn btn-sm btn-outline" on:click={async () => await checkNetstat(port)}>Check PORT status</button
+        >
 
         <Textfield
             value={pids.join(', ')}

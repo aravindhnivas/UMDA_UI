@@ -60,7 +60,9 @@
 </script>
 
 <div class="flex">
-    <button class="btn btn-sm" on:click={() => (show_plot = !show_plot)}>{show_plot ? 'Hide' : 'Show'} plot</button>
+    <button class="btn btn-sm btn-outline" on:click={() => (show_plot = !show_plot)}
+        >{show_plot ? 'Hide' : 'Show'} plot</button
+    >
 </div>
 {#if show_plot}
     {#each typeSafeObjectKeys(plots_data) as key}

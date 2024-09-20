@@ -74,7 +74,7 @@
         {/each}
     </select>
     <button
-        class="btn btn-sm btn-neutral join-item rounded-0"
+        class="btn btn-sm btn-outline join-item rounded-0"
         on:click={async () => {
             const filters = filetype === '*' ? [] : [{ name: filetype, extensions: [filetype] }];
             const result = await dialog.open({ filters, multiple: false });

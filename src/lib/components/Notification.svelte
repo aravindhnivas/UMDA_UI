@@ -65,7 +65,7 @@
             </p>
             <div class="modal-action">
                 <form method="dialog">
-                    <button class="btn btn-sm">Close</button>
+                    <button class="btn btn-sm btn-outline">Close</button>
                 </form>
             </div>
         </div>

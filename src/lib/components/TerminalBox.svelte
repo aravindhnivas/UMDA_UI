@@ -12,7 +12,7 @@
 </script>
 
 <button
-    class="btn btn-sm ml-auto"
+    class="btn btn-sm btn-outline ml-auto"
     on:click={() => {
         if (!terminal) return toast.error('Terminal not initialized');
         const date = new Date().toLocaleTimeString();

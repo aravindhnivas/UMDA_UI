@@ -73,7 +73,7 @@
         bind:this={btn}
         class:running={loading}
         class:btn-disabled={loading}
-        class="btn btn-sm btn-neutral ld-ext-right w-max"
+        class="btn btn-sm btn-outline ld-ext-right w-max"
         on:click={run_callback}
         on:pyEvent
         on:pyEventClosed

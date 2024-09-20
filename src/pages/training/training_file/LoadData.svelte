@@ -150,8 +150,8 @@
 >
     <svelte:fragment slot="btn-row">
         <div class="ml-auto">
-            <button class="btn btn-sm" on:click={save_state}>Save state <Save size="20" /></button>
-            <button class="btn btn-sm" on:click={load_state}>Load state <Download size="20" /></button>
+            <button class="btn btn-sm btn-outline" on:click={save_state}>Save state <Save size="20" /></button>
+            <button class="btn btn-sm btn-outline" on:click={load_state}>Load state <Download size="20" /></button>
         </div>
     </svelte:fragment>
     <svelte:fragment let:load_btn>

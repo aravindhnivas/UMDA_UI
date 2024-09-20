@@ -8,7 +8,7 @@
 </script>
 
 <div class="console__box card shadow-xl bg-orange-300 p-5" style:max-height={max_height}>
-    <button class="btn btn-sm ml-auto" on:click={() => (console_arr = [])}>Clear</button>
+    <button class="btn btn-sm btn-outline ml-auto" on:click={() => (console_arr = [])}>Clear</button>
     <div class="body">
         {#each console_arr as obj}
             <span class="type-{obj.type}">>> {obj.value}</span>

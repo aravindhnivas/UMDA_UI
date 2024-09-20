@@ -145,15 +145,15 @@
                 </h3>
                 <div class="flex gap-2 ml-auto">
                     <Checkbox bind:value={$default_parameter_mode} label="defaults" />
-                    <button class="btn btn-sm" on:click={reset_parameters}>
+                    <button class="btn btn-sm btn-outline" on:click={reset_parameters}>
                         <RotateCcw />
                         <span>Reset</span>
                     </button>
-                    <button class="btn btn-sm" on:click={load_parameters}>
+                    <button class="btn btn-sm btn-outline" on:click={load_parameters}>
                         <Download />
                         <span>Load</span>
                     </button>
-                    <button class="btn btn-sm" on:click={save_parameters}>
+                    <button class="btn btn-sm btn-outline" on:click={save_parameters}>
                         <Save />
                         <span>Save</span>
                     </button>

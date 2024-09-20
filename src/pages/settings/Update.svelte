@@ -200,7 +200,7 @@
         <div class="align">
             <div class="align">
                 <button
-                    class="btn btn-sm"
+                    class="btn btn-sm btn-outline"
                     class:is-warning={updateReadyToInstall}
                     id="updateCheckBtn"
                     on:click={async () => {
