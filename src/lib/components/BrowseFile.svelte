@@ -83,7 +83,7 @@
         {/if}
     </div>
     <div class="join">
-        <button class="btn btn-sm join-item" on:click={browse_file} disabled={lock}>
+        <button class="btn btn-sm btn-neutral join-item" on:click={browse_file} disabled={lock}>
             {btn_name}
         </button>
         <input

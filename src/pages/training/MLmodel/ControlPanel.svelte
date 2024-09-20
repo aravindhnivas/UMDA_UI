@@ -35,7 +35,7 @@
         'DaskRandomSearchCV',
     ];
     const elevation = 3;
-    const paper_style = 'background-color: whitesmoke;';
+    const paper_style = 'background-color: transparent;';
 </script>
 
 <CustomPanel open={true}>

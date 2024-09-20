@@ -11,7 +11,7 @@
             <span>More options</span>
             {#if !open}
                 {#if $default_parameter_mode}
-                    <span class="badge badge-info">Default mode</span>
+                    <span class="badge badge-sm">Default mode</span>
                 {/if}
             {/if}
         </div>

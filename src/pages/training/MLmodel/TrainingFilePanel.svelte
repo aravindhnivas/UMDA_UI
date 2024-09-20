@@ -16,12 +16,14 @@
         <div class="flex-center">
             <span>Loaded training file</span>
             {#if !open}
-                {#if isObject(loaded_files) && !isEmpty(loaded_files)}
-                    {#each typeSafeObjectKeys(loaded_files) as key}
-                        {@const { valid, basename } = loaded_files[key]}
-                        <span class="badge badge-info" class:badge-error={!valid}>{basename}</span>
-                    {/each}
-                {/if}
+                <div class="flex flex-wrap gap-2">
+                    {#if isObject(loaded_files) && !isEmpty(loaded_files)}
+                        {#each typeSafeObjectKeys(loaded_files) as key}
+                            {@const { valid, basename } = loaded_files[key]}
+                            <span class="badge badge-sm" class:badge-error={!valid}>{basename}</span>
+                        {/each}
+                    {/if}
+                </div>
             {/if}
         </div>
     </svelte:fragment>
