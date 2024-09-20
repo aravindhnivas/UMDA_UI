@@ -9,7 +9,7 @@
     export let disabled = false;
     let className = '';
     export { className as class };
-    export let helper_class = '';
+    // export let helper_class = '';
 </script>
 
 <div class="grid gap-1 {className}">
@@ -28,7 +28,7 @@
         {/if}
     </div>
     <input
-        class="w-max input input-sm"
+        class=" input input-sm"
         bind:value
         {...$$restProps}
         on:change
@@ -39,9 +39,10 @@
         autocorrect="off"
     />
     {#if helper}
-        <span class="text-xs {helper_class}">
+        <span class="text-xs text-wrap break-words max-w-sm">
             {helper}
             {#if helperHighlight}
+                <br />
                 <div class="badge badge-sm badge-neutral">
                     {helperHighlight}
                 </div>

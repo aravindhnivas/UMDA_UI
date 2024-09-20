@@ -53,8 +53,9 @@
                 {/if}
             </select>
             {#if helper}
-                <span class="text-xs pl-1">
+                <span class="text-xs pl-1 text-wrap break-words max-w-sm">
                     {helper}
+                    <br />
                     {#if helperHighlight}
                         <div class="badge badge-sm badge-neutral">
                             {helperHighlight}
