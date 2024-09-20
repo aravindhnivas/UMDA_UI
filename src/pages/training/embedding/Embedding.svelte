@@ -36,7 +36,6 @@
     };
     $: set_embedd_savefile($embedding, $use_PCA);
 
-    // let test_mode = import.meta.env.DEV;
     let test_mode = false;
     const test_smiles = localWritable('test_smiles', 'CCO');
     let test_result = '';
