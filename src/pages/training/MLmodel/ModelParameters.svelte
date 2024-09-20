@@ -12,8 +12,8 @@
     import { Checkbox, CustomSelect } from '$lib/components';
     import Kernel from './Kernel.svelte';
     import Notification from '$lib/components/Notification.svelte';
-    import { LockKeyhole, UnlockKeyhole } from 'lucide-svelte/icons';
     import CustomInput from '$lib/components/CustomInput.svelte';
+    import { LockKeyhole, UnlockKeyhole, SlidersHorizontal } from 'lucide-svelte/icons';
 
     export let values: Record<string, any>;
     export let key: 'hyperparameters' | 'parameters';
@@ -42,6 +42,7 @@
             {:else if label in values}
                 {#if typeof value === 'boolean'}
                     <div class="flex items-center gap-1">
+                        <button class="btn btn-xs btn-primary"><SlidersHorizontal size="20" /></button>
                         <button
                             on:click={() => {
                                 $all_params_lock_status[$model][key][label] =
