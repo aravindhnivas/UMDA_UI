@@ -1,6 +1,7 @@
 <script lang="ts">
     import { PlusCircle, Trash2 } from 'lucide-svelte/icons';
     import { difference } from 'lodash-es';
+    import CustomInput from '$lib/components/CustomInput.svelte';
 
     export let value: Record<string, any> | null = null;
 
@@ -53,11 +54,7 @@
 </script>
 
 {#if value === null}
-    <div class="grid gap-1">
-        <span class="text-xs">kernel</span>
-        <input class="w-max input input-sm" autocomplete="false" value="" disabled />
-        <span class="text-xs">Default: None</span>
-    </div>
+    <CustomInput disabled label="kernel" value="" helper="Default: None" />
 {:else if typeof value === 'object' && !isEmpty(value)}
     <span>Custom kernel</span>
     {#each Object.keys(value) as kernel (kernel)}
@@ -65,10 +62,7 @@
             <span>{kernel}</span>
             <div class="flex flex-wrap gap-2 col-span-3">
                 {#each Object.keys(value[kernel]) as item}
-                    <div class="grid">
-                        <div class="text-xs">{item}</div>
-                        <input class="input input-sm" autocomplete="false" bind:value={value[kernel][item]} />
-                    </div>
+                    <CustomInput label={item} bind:value={value[kernel][item]} />
                 {/each}
             </div>
             <button
@@ -85,8 +79,16 @@
     {:else}
         <div class="grid">
             <div class="text-xs col-span-2">kernel</div>
-            <input class="input input-sm w-max" autocomplete="false" value="" disabled />
+            <input
+                class="input input-sm w-max"
+                value=""
+                disabled
+                autocomplete="off"
+                autocapitalize="off"
+                autocorrect="off"
+            />
         </div>
+        <CustomInput label="kernel" value="" />
     {/each}
 {/if}
 <button
