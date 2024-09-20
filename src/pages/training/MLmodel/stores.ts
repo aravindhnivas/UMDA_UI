@@ -4,7 +4,12 @@ import { current_training_processed_data_directory } from '../training_file/plot
 export const model_names = Object.keys(supervised_ml_models) as MLModel[];
 export const model = localWritable<MLModel>('ml_model', 'ridge');
 
+if (!model_names.includes(get(model))) {
+    model.set('ridge');
+}
+
 export const current_model = derived(model, $model => {
+    console.warn($model, supervised_ml_models[$model]);
     return supervised_ml_models[$model];
 });
 export const locally_saved_dict_all_params_lock_status = localWritable<Record<string, boolean>>(
@@ -34,6 +39,8 @@ export const all_params_lock_status = writable<
 });
 
 export const variable_type = derived(current_model, $current_model => {
+    console.warn($current_model);
+    if (!$current_model) return {};
     const hyperparameters = $current_model.hyperparameters;
     const parameters = $current_model.parameters;
     return Object.keys({ ...hyperparameters, ...parameters }).reduce(
