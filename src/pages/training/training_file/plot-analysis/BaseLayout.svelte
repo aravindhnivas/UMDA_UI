@@ -50,7 +50,7 @@
                 }}
             />
             <button
-                class=" btn btn-sm"
+                class="btn btn-sm btn-outline"
                 on:click={() => {
                     recheck_files = !recheck_files;
                     dispatch('plot');
