@@ -5,7 +5,6 @@
     import Nav from '$lib/layouts/Nav.svelte';
     import Footer from '$lib/layouts/Footer.svelte';
     import PreModal from '$utils/PreModal.svelte';
-    import Modal from '$lib/components/modal/Modal.svelte';
 
     onMount(async () => {
         const [total_memory, cpu_count] = await invoke<[number, number]>('get_sysinfo');
