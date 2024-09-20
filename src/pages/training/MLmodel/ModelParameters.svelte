@@ -13,7 +13,7 @@
     import Kernel from './Kernel.svelte';
     import Notification from '$lib/components/Notification.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
-    import { LockKeyhole, UnlockKeyhole, SlidersHorizontal } from 'lucide-svelte/icons';
+    import { LockKeyhole, UnlockKeyhole } from 'lucide-svelte/icons';
 
     export let values: Record<string, any>;
     export let key: 'hyperparameters' | 'parameters';
