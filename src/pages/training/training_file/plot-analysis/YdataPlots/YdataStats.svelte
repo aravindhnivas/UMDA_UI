@@ -57,6 +57,7 @@
     let saved_filter_filename = '';
 </script>
 
+<button>button</button>
 <h3>Filtering</h3>
 <div class="flex gap-3 items-end">
     <CustomInput
@@ -92,7 +93,7 @@
 {/if}
 <hr />
 
-<div class="grid grid-cols-3 max-w-6xl gap-[100px]">
+<div class="grid grid-cols-3 max-w-6xl gap-[50px]">
     {#if data?.descriptive_statistics && data?.skewness && data?.kurtosis && data?.anderson_darling_test}
         <div class="grid gap-1" style="align-content: baseline;">
             <h3>Descriptive Statistics</h3>
