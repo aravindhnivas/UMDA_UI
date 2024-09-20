@@ -28,6 +28,7 @@
         });
         console.warn('all_params_lock_status', $all_params_lock_status[$model]?.[key]);
     }
+    const ncols = 3;
 </script>
 
 {#if fine_tune_mode}
@@ -37,85 +38,81 @@
 {/if}
 
 {#if !$default_parameter_mode}
-    <div class="flex flex-col gap-4 hyperparameters__div p-2">
+    <div class="grid gap-4 md:grid-cols-{ncols} lg:grid-cols-{ncols + 2} hyperparameters__div p-2" style="">
         {#each typeSafeObjectKeys($current_model[key]) as label (label)}
             {@const { value, description } = $current_model[key][label]}
-
             {#if $model === 'gpr' && label === 'kernel'}
-                <Kernel bind:value={values[label]} />
+                <div class="grid gap-2 col-span-{ncols}">
+                    <Kernel bind:value={values[label]} />
+                </div>
             {:else if label in values}
                 {#if typeof value === 'boolean'}
-                    <div class="grid grid-cols-2 gap-2">
-                        {#if fine_tune_mode && !$all_params_lock_status[$model][key][label]}
-                            <CustomInput
+                    {#if fine_tune_mode && !$all_params_lock_status[$model][key][label]}
+                        <CustomInput
+                            {label}
+                            helper={description}
+                            helperHighlight={`Default: ${$default_param_values[key][label]}`}
+                            bind:value={$fine_tuned_hyperparameters[$model][label]}
+                            bind:lock={$all_params_lock_status[$model][key][label]}
+                            enabled_lock_mode
+                        />
+                    {:else}
+                        <div class="flex gap-2 items-start">
+                            <Checkbox
+                                bind:value={values[label]}
                                 {label}
+                                disabled={$all_params_lock_status[$model][key][label]}
                                 helper={description}
                                 helperHighlight={`Default: ${$default_param_values[key][label]}`}
-                                bind:value={$fine_tuned_hyperparameters[$model][label]}
                                 bind:lock={$all_params_lock_status[$model][key][label]}
                                 enabled_lock_mode
                             />
-                        {:else}
-                            <div class="flex gap-2 items-start">
-                                <Checkbox
-                                    bind:value={values[label]}
-                                    {label}
-                                    disabled={$all_params_lock_status[$model][key][label]}
-                                    helper={description}
-                                    helperHighlight={`Default: ${$default_param_values[key][label]}`}
-                                    bind:lock={$all_params_lock_status[$model][key][label]}
-                                    enabled_lock_mode
-                                />
-                            </div>
-                        {/if}
-                    </div>
+                        </div>
+                    {/if}
                 {:else if typeof value === 'string' || typeof value === 'number'}
-                    <div class="grid grid-cols-2 gap-2">
-                        {#if fine_tune_mode && !$all_params_lock_status[$model][key][label]}
-                            <CustomInput
-                                {label}
-                                helper={description}
-                                helperHighlight={`Default: ${$default_param_values[key][label]}`}
-                                bind:value={$fine_tuned_hyperparameters[$model][label]}
-                                bind:lock={$all_params_lock_status[$model][key][label]}
-                                enabled_lock_mode
-                            />
-                        {:else}
-                            <CustomInput
-                                {label}
-                                helper={description}
-                                helperHighlight={`Default: ${$default_param_values[key][label]}`}
-                                bind:value={values[label]}
-                                bind:lock={$all_params_lock_status[$model][key][label]}
-                                enabled_lock_mode
-                            />
-                        {/if}
-                    </div>
+                    {#if fine_tune_mode && !$all_params_lock_status[$model][key][label]}
+                        <CustomInput
+                            {label}
+                            helper={description}
+                            helperHighlight={`Default: ${$default_param_values[key][label]}`}
+                            bind:value={$fine_tuned_hyperparameters[$model][label]}
+                            bind:lock={$all_params_lock_status[$model][key][label]}
+                            enabled_lock_mode
+                        />
+                    {:else}
+                        <CustomInput
+                            {label}
+                            helper={description}
+                            helperHighlight={`Default: ${$default_param_values[key][label]}`}
+                            bind:value={values[label]}
+                            bind:lock={$all_params_lock_status[$model][key][label]}
+                            enabled_lock_mode
+                        />
+                    {/if}
                 {:else if typeof value === 'object' && value}
-                    <div class="grid grid-cols-2 gap-2">
-                        {#if fine_tune_mode && !$all_params_lock_status[$model][key][label]}
-                            <CustomInput
-                                {label}
-                                helper={description}
-                                helperHighlight={`Default: ${$default_param_values[key][label]}`}
-                                bind:value={$fine_tuned_hyperparameters[$model][label]}
-                                bind:lock={$all_params_lock_status[$model][key][label]}
-                                enabled_lock_mode
-                            />
-                        {:else}
-                            <CustomSelect
-                                label={`${label} (${value.options[values[label]]})`}
-                                helper={description}
-                                helperHighlight={`Default: ${$default_param_values[key][label]}`}
-                                items={typeSafeObjectKeys(value.options)}
-                                bind:value={values[label]}
-                                bind:lock={$all_params_lock_status[$model][key][label]}
-                                enabled_lock_mode
-                            />
+                    {#if fine_tune_mode && !$all_params_lock_status[$model][key][label]}
+                        <CustomInput
+                            {label}
+                            helper={description}
+                            helperHighlight={`Default: ${$default_param_values[key][label]}`}
+                            bind:value={$fine_tuned_hyperparameters[$model][label]}
+                            bind:lock={$all_params_lock_status[$model][key][label]}
+                            enabled_lock_mode
+                        />
+                    {:else}
+                        <CustomSelect
+                            label={`${label} (${value.options[values[label]]})`}
+                            helper={description}
+                            helperHighlight={`Default: ${$default_param_values[key][label]}`}
+                            items={typeSafeObjectKeys(value.options)}
+                            bind:value={values[label]}
+                            bind:lock={$all_params_lock_status[$model][key][label]}
+                            enabled_lock_mode
+                        >
                             {#if values[label] === 'float'}
                                 <CustomInput
                                     id="{unique_id}_{label}"
-                                    {label}
+                                    label={`Enter ${label}`}
                                     value=""
                                     type="number"
                                     helper={description}
@@ -125,31 +122,29 @@
                                     on:keydown={validateInput}
                                 />
                             {/if}
-                        {/if}
-                    </div>
+                        </CustomSelect>
+                    {/if}
                 {:else if value == null}
-                    <div class="grid grid-cols-2 gap-2">
-                        {#if fine_tune_mode && !$all_params_lock_status[$model][key][label]}
-                            <CustomInput
-                                {label}
-                                helper={description}
-                                helperHighlight={`Default: ${$default_param_values[key][label]}`}
-                                bind:value={$fine_tuned_hyperparameters[$model][label]}
-                                bind:lock={$all_params_lock_status[$model][key][label]}
-                                enabled_lock_mode
-                            />
-                        {:else}
-                            <CustomInput
-                                {label}
-                                bind:value={values[label]}
-                                disabled={$all_params_lock_status[$model][key][label]}
-                                helper={description}
-                                helperHighlight={`Default: ${$default_param_values[key][label]}`}
-                                bind:lock={$all_params_lock_status[$model][key][label]}
-                                enabled_lock_mode
-                            />
-                        {/if}
-                    </div>
+                    {#if fine_tune_mode && !$all_params_lock_status[$model][key][label]}
+                        <CustomInput
+                            {label}
+                            helper={description}
+                            helperHighlight={`Default: ${$default_param_values[key][label]}`}
+                            bind:value={$fine_tuned_hyperparameters[$model][label]}
+                            bind:lock={$all_params_lock_status[$model][key][label]}
+                            enabled_lock_mode
+                        />
+                    {:else}
+                        <CustomInput
+                            {label}
+                            bind:value={values[label]}
+                            disabled={$all_params_lock_status[$model][key][label]}
+                            helper={description}
+                            helperHighlight={`Default: ${$default_param_values[key][label]}`}
+                            bind:lock={$all_params_lock_status[$model][key][label]}
+                            enabled_lock_mode
+                        />
+                    {/if}
                 {/if}
             {:else}
                 <span class="text-sm bg-red">{label} not defined in object</span>
@@ -166,5 +161,6 @@
     .hyperparameters__div {
         max-height: calc(100vh - 20rem);
         overflow: auto;
+        align-items: baseline;
     }
 </style>

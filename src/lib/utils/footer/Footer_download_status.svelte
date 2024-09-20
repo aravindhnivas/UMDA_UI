@@ -1,33 +1,16 @@
 <script lang="ts">
+    import { CheckCheck } from 'lucide-svelte/icons';
     import { footerMsg } from '$lib/utils/initialise';
-    // $footerMsg = {
-    //     status: 'done',
-    //     msg: 'Installing dependencies',
-    // };
 </script>
 
 {#if $footerMsg.status !== 'idle'}
-    <div class="">
+    <div class="flex items-center gap-1">
         {#if $footerMsg.status === 'running'}
-            <div class="icon-footer">
-                <span>{$footerMsg.msg}</span>
-                <i class="i-line-md-uploading-loop" />
-            </div>
-        {/if}
-
-        {#if $footerMsg.status === 'done'}
-            <div class="icon-footer">
-                <span>Download completed</span>
-                <i class="i-material-symbols-download-done-sharp" />
-            </div>
+            <span class="loading loading-spinner"></span>
+            <span>{$footerMsg.msg}</span>
+        {:else if $footerMsg.status === 'done'}
+            <span>Download completed</span>
+            <CheckCheck />
         {/if}
     </div>
 {/if}
-
-<style global>
-    .icon-footer {
-        display: flex;
-        align-items: center;
-        gap: 0.5em;
-    }
-</style>

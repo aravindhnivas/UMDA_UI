@@ -48,7 +48,6 @@
         />
     {:else}
         <div class="flex flex-col gap-1 {className}">
-            <!-- <span class="text-xs pl-1">{label}</span> -->
             <div class="flex gap-1 items-center">
                 {#if label}
                     <button on:click={() => (lock = !lock)}>
@@ -63,7 +62,6 @@
                     <span class="text-xs pl-1 {element_disabled ? 'text-gray-600/75' : ''}">{label}</span>
                 {/if}
             </div>
-
             <select
                 class="select select-sm select-bordered {element_disabled ? 'bg-gray-600/25' : ''}"
                 bind:value
@@ -96,6 +94,7 @@
                     {/if}
                 </span>
             {/if}
+            <slot />
         </div>
     {/if}
 </div>

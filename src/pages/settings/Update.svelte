@@ -29,7 +29,7 @@
     import { toggle_loading } from '$utils/index';
     import CustomInput from '$lib/components/CustomInput.svelte';
     import { umdapyVersion } from '$lib/pyserver/stores';
-    import { ExternalLink } from 'lucide-svelte/icons';
+    import { ExternalLink, WifiOff } from 'lucide-svelte/icons';
 
     let install_dialog_active = false;
     export const check_for_update = async (log = false) => {
@@ -185,7 +185,7 @@
     <h1>Update</h1>
     {#if !window.navigator.onLine}
         <div class="ml-auto" aria-label="No internet connection" data-cooltipz-dir="left">
-            <div class="i-ion-cloud-offline-outline" />
+            <WifiOff />
         </div>
     {/if}
 
