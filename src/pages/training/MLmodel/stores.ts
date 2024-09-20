@@ -7,11 +7,10 @@ export const model = localWritable<MLModel>('ml_model', 'ridge');
 if (!model_names.includes(get(model))) {
     model.set('ridge');
 }
-
 export const current_model = derived(model, $model => {
-    console.warn($model, supervised_ml_models[$model]);
     return supervised_ml_models[$model];
 });
+
 export const locally_saved_dict_all_params_lock_status = localWritable<Record<string, boolean>>(
     'locally_saved_dict_all_params_lock_status',
     {},
