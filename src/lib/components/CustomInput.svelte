@@ -8,6 +8,7 @@
     export let disabled = false;
     let className = '';
     export { className as class };
+    export let helper_class = '';
 </script>
 
 <div class="grid gap-1 {className}">
@@ -36,6 +37,6 @@
         autocorrect="off"
     />
     {#if helper}
-        <span class="text-xs m-auto">{helper}</span>
+        <span class="text-xs {helper_class}">{helper}</span>
     {/if}
 </div>
