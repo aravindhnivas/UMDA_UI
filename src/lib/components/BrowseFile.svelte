@@ -86,7 +86,15 @@
         <button class="btn btn-sm join-item" on:click={browse_file} disabled={lock}>
             {btn_name}
         </button>
-        <input type="text" class="input input-sm join-item w-full" bind:value={filename} disabled={disabled || lock} />
+        <input
+            type="text"
+            class="input input-sm join-item w-full"
+            bind:value={filename}
+            disabled={disabled || lock}
+            autocomplete="off"
+            autocapitalize="off"
+            autocorrect="off"
+        />
         {#if callback}
             <button class="btn btn-sm join-item" on:click={load_callback}>load</button>
         {/if}
