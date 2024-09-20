@@ -38,7 +38,7 @@
 {/if}
 
 {#if !$default_parameter_mode}
-    <div class="grid gap-4 md:grid-cols-{ncols} lg:grid-cols-{ncols + 2} hyperparameters__div p-2" style="">
+    <div class="grid gap-4 grid-cols-{ncols} hyperparameters__div p-2" style="">
         {#each typeSafeObjectKeys($current_model[key]) as label (label)}
             {@const { value, description } = $current_model[key][label]}
             {#if $model === 'gpr' && label === 'kernel'}
