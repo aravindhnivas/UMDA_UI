@@ -3,6 +3,7 @@
     export let label: string = '';
     export let value: string | number;
     export let helper: string = '';
+    export let helperHighlight: string = '';
     export let enabled_lock_mode = false;
     export let lock: boolean = false;
     export let disabled = false;
@@ -37,6 +38,13 @@
         autocorrect="off"
     />
     {#if helper}
-        <span class="text-xs {helper_class}">{helper}</span>
+        <span class="text-xs {helper_class}">
+            {helper}
+            {#if helperHighlight}
+                <div class="badge badge-sm badge-neutral">
+                    {helperHighlight}
+                </div>
+            {/if}
+        </span>
     {/if}
 </div>

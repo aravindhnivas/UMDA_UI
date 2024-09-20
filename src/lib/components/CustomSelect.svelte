@@ -3,6 +3,7 @@
     export let value: string;
     export let items: string[] | Record<string, string[]> = [];
     export let helper: string = '';
+    export let helperHighlight: string = '';
     export let disabled = false;
     export let use_input = false;
 
@@ -53,7 +54,14 @@
                 {/if}
             </select>
             {#if helper}
-                <span class="text-xs pl-1">{helper}</span>
+                <span class="text-xs pl-1">
+                    {helper}
+                    {#if helperHighlight}
+                        <div class="badge badge-sm badge-neutral">
+                            {helperHighlight}
+                        </div>
+                    {/if}
+                </span>
             {/if}
         </div>
     {/if}
