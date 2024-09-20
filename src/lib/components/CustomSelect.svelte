@@ -86,7 +86,7 @@
                 {/if}
             </select>
             {#if helper}
-                <span class="text-xs pl-1 text-wrap break-words max-w-sm {element_disabled ? 'text-gray-600/75' : ''}">
+                <span class="text-xs pl-1 text-wrap break-words {element_disabled ? 'text-gray-600/75' : ''}">
                     {helper}
                     <br />
                     {#if helperHighlight}

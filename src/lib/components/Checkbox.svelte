@@ -25,7 +25,7 @@
     <div
         class="flex gap-2 items-center {bordered
             ? 'border-solid border-rounded border-1' + (disabled ? ' border-gray-600/75' : '')
-            : ''} p-1 {className}"
+            : ''} p-1 {className} w-max"
     >
         <button on:click={() => (lock = !lock)}>
             {#if enabled_lock_mode}
@@ -45,7 +45,7 @@
         {/if}
     </div>
     {#if helper}
-        <span class="text-xs text-wrap break-words max-w-sm {disabled ? 'text-gray-600/75' : ''}">
+        <span class="text-xs text-wrap break-words {disabled ? 'text-gray-600/75' : ''}">
             {helper}
             {#if helperHighlight}
                 <br />

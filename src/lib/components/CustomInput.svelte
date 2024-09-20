@@ -44,7 +44,7 @@
         autocorrect="off"
     />
     {#if helper}
-        <span class="text-xs text-wrap break-words max-w-sm {element_disabled ? 'text-gray-600/75' : ''}">
+        <span class="text-xs text-wrap break-words {element_disabled ? 'text-gray-600/75' : ''}">
             {helper}
             {#if helperHighlight}
                 <br />

@@ -45,7 +45,7 @@
                 <Kernel bind:value={values[label]} />
             {:else if label in values}
                 {#if typeof value === 'boolean'}
-                    <div class="flex items-center gap-1">
+                    <div class="grid grid-cols-2 gap-2">
                         {#if fine_tune_mode && !$all_params_lock_status[$model][key][label]}
                             <CustomInput
                                 {label}
@@ -58,7 +58,6 @@
                         {:else}
                             <div class="flex gap-2 items-start">
                                 <Checkbox
-                                    class="p-2 w-max"
                                     bind:value={values[label]}
                                     {label}
                                     disabled={$all_params_lock_status[$model][key][label]}
