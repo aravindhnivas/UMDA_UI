@@ -23,6 +23,6 @@
 </script>
 
 <button class="btn btn-sm btn-outline ld-ext-right" class:running={loading} on:click={load} disabled={loading}>
-    {name}
+    <slot>{name}</slot>
     <div class="ld ld-ring ld-spin" style="color: antiquewhite;"></div>
 </button>
