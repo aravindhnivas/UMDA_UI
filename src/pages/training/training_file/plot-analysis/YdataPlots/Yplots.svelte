@@ -64,6 +64,7 @@
         >{show_plot ? 'Hide' : 'Show'} plot</button
     >
 </div>
+
 {#if show_plot}
     {#each typeSafeObjectKeys(plots_data) as key}
         {@const data = plots_data[key]}
