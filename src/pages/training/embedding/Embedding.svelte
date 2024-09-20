@@ -163,14 +163,6 @@
         </div>
     </div>
 
-    {#if !test_mode}
-        <hr />
-        <h3>Loaded training file</h3>
-        <LoadedFileInfos />
-        <span class="badge badge-info">{$training_column_name_X} (train column X) will be used for embedding</span>
-        <hr />
-    {/if}
-
     <h3>Pre-trained model ({$embedding})</h3>
 
     <BrowseFile bind:filename={$model_and_pipeline_files[$embedding].model_file} label="Model" />
@@ -213,6 +205,14 @@
             <Textfield label="embedd_savefile" bind:value={$embedd_savefile} />
             <Loadingbtn callback={embedd_data} subprocess={true} on:result={onResult} />
         </div>
+    {/if}
+
+    {#if !test_mode}
+        <hr />
+        <h3>Loaded training file</h3>
+        <LoadedFileInfos />
+        <span class="badge badge-info">{$training_column_name_X} (train column X) will be used for embedding</span>
+        <hr />
     {/if}
     <Results data={dataFromPython?.file_mode} computed_time={dataFromPython?.computed_time} />
 </div>
