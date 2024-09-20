@@ -4,6 +4,7 @@
     import Textfield from '@smui/textfield';
     import { Checkbox } from '$lib/components';
     import Notification from '$lib/components/Notification.svelte';
+    import { ExternalLink } from 'lucide-svelte';
 </script>
 
 <CustomPanel>
@@ -25,7 +26,18 @@
         <Textfield bind:value={$pre_trained_filename} label="save filename (.pkl)" />
         {#await $current_pretrained_file then value}
             {#await path.dirname(value) then save_loc_name}
-                <Notification message="Save location: {save_loc_name}" />
+                <Notification dismissable={false}>
+                    <span>Save location: {save_loc_name}</span>
+                    <button
+                        class="btn btn-xs btn-outline"
+                        on:click={async () => {
+                            if (!save_loc_name) return;
+                            await shell.open(save_loc_name);
+                        }}
+                    >
+                        <ExternalLink />
+                    </button>
+                </Notification>
             {/await}
         {/await}
     </div>
