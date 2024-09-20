@@ -12,7 +12,7 @@ export const locally_saved_dict_all_params_lock_status = localWritable<Record<st
     {},
 );
 
-export const all_params_lock_status = localWritable<
+export const all_params_lock_status = writable<
     Record<
         MLModel,
         {
@@ -20,7 +20,7 @@ export const all_params_lock_status = localWritable<
             hyperparameters: Record<string, boolean>;
         }
     >
->('all_params_lock_status', {
+>({
     linear_regression: { parameters: {}, hyperparameters: {} },
     ridge: { parameters: {}, hyperparameters: {} },
     svr: { parameters: {}, hyperparameters: {} },
