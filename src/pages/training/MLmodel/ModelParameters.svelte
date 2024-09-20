@@ -57,18 +57,6 @@
                             />
                         {:else}
                             <div class="flex gap-2 items-start">
-                                <button
-                                    on:click={() => {
-                                        $all_params_lock_status[$model][key][label] =
-                                            !$all_params_lock_status[$model][key][label];
-                                    }}
-                                >
-                                    {#if $all_params_lock_status[$model][key][label]}
-                                        <LockKeyhole color="gray" />
-                                    {:else}
-                                        <UnlockKeyhole />
-                                    {/if}
-                                </button>
                                 <Checkbox
                                     class="p-2 w-max"
                                     bind:value={values[label]}
@@ -76,12 +64,14 @@
                                     disabled={$all_params_lock_status[$model][key][label]}
                                     helper={description}
                                     helperHighlight={`Default: ${$default_param_values[key][label]}`}
+                                    bind:lock={$all_params_lock_status[$model][key][label]}
+                                    enabled_lock_mode
                                 />
                             </div>
                         {/if}
                     </div>
                 {:else if typeof value === 'string' || typeof value === 'number'}
-                    <div class="grid grid-cols-2">
+                    <div class="grid grid-cols-2 gap-2">
                         {#if fine_tune_mode && !$all_params_lock_status[$model][key][label]}
                             <CustomInput
                                 {label}
@@ -103,7 +93,7 @@
                         {/if}
                     </div>
                 {:else if typeof value === 'object' && value}
-                    <div class="grid grid-cols-2">
+                    <div class="grid grid-cols-2 gap-2">
                         {#if fine_tune_mode && !$all_params_lock_status[$model][key][label]}
                             <CustomInput
                                 {label}
@@ -124,42 +114,22 @@
                                 enabled_lock_mode
                             />
                             {#if values[label] === 'float'}
-                                <button
-                                    on:click={() => {
-                                        $all_params_lock_status[$model][key][label] =
-                                            !$all_params_lock_status[$model][key][label];
-                                    }}
-                                >
-                                    {#if $all_params_lock_status[$model][key][label]}
-                                        <LockKeyhole color="gray" />
-                                    {:else}
-                                        <UnlockKeyhole />
-                                    {/if}
-                                </button>
-                                <div class="grid">
-                                    <span class="text-xs pl-1">Enter {label} value</span>
-                                    <input
-                                        autocomplete="off"
-                                        autocapitalize="off"
-                                        autocorrect="off"
-                                        on:keydown={validateInput}
-                                        id="{unique_id}_{label}"
-                                        class="input input-sm"
-                                        type="number"
-                                        disabled={$all_params_lock_status[$model][key][label]}
-                                    />
-                                    <span class="text-xs pl-1"
-                                        >{description}
-                                        <div class="badge badge-sm badge-neutral">
-                                            Default: {$default_param_values[key][label]}
-                                        </div>
-                                    </span>
-                                </div>
+                                <CustomInput
+                                    id="{unique_id}_{label}"
+                                    {label}
+                                    value=""
+                                    type="number"
+                                    helper={description}
+                                    helperHighlight={`Default: ${$default_param_values[key][label]}`}
+                                    bind:lock={$all_params_lock_status[$model][key][label]}
+                                    enabled_lock_mode
+                                    on:keydown={validateInput}
+                                />
                             {/if}
                         {/if}
                     </div>
                 {:else if value == null}
-                    <div class="grid grid-cols-2">
+                    <div class="grid grid-cols-2 gap-2">
                         {#if fine_tune_mode && !$all_params_lock_status[$model][key][label]}
                             <CustomInput
                                 {label}

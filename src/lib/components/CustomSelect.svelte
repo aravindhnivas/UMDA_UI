@@ -54,7 +54,7 @@
                     <button on:click={() => (lock = !lock)}>
                         {#if enabled_lock_mode}
                             {#if lock}
-                                <LockKeyhole size="20" class="text-gray-600/75" />
+                                <LockKeyhole size="20" class="text-gray-700" />
                             {:else}
                                 <UnlockKeyhole size="20" />
                             {/if}

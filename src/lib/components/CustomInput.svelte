@@ -7,6 +7,8 @@
     export let enabled_lock_mode = false;
     export let lock: boolean = false;
     export let disabled = false;
+    export let id: string = getID(5);
+
     let className = '';
     export { className as class };
     // export let helper_class = '';
@@ -20,7 +22,7 @@
             <button on:click={() => (lock = !lock)}>
                 {#if enabled_lock_mode}
                     {#if lock}
-                        <LockKeyhole size="20" class="text-gray-600/75" />
+                        <LockKeyhole size="20" class="text-gray-700" />
                     {:else}
                         <UnlockKeyhole size="20" />
                     {/if}
@@ -30,10 +32,12 @@
         {/if}
     </div>
     <input
+        {id}
         class=" input input-sm {element_disabled ? 'bg-gray-600/25' : ''}"
         bind:value
         {...$$restProps}
         on:change
+        on:keydown
         disabled={element_disabled}
         autocomplete="off"
         autocapitalize="off"
