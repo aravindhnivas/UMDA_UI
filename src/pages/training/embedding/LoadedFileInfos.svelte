@@ -43,7 +43,7 @@
             {#each items as { name, key }}
                 {@const { value, valid } = loaded_files[key]}
                 <div>{name}:</div>
-                <div class="col-span-3 border-rounded" class:bg-red={!valid}>
+                <div class="col-span-3 border-rounded" class:bg-error={!valid}>
                     <code class=" break-all text-sm p-1" class:bg-success={valid}>{value}</code>
                 </div>
             {/each}

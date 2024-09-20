@@ -4,7 +4,6 @@
     import { start_and_check_umdapy_with_toast, stopServer, currentPortPID } from '$lib/pyserver/umdapyServer';
     import ServerControl from './ServerControl.svelte';
     import { Panel, Header, Content } from '@smui-extra/accordion';
-    import IconButton, { Icon } from '@smui/icon-button';
     import { ChevronDown, ChevronUp } from 'lucide-svelte/icons';
 
     let open = true;
@@ -12,11 +11,14 @@
 
 <Panel extend bind:open style="background-color: coral;">
     <Header>
-        Python server
-        <IconButton slot="icon" toggle pressed={open}>
-            <Icon on><ChevronUp /></Icon>
-            <Icon><ChevronDown /></Icon>
-        </IconButton>
+        <div class="flex justify-between">
+            <span>Python server</span>
+            {#if open}
+                <ChevronUp />
+            {:else}
+                <ChevronDown />
+            {/if}
+        </div>
     </Header>
     <Content>
         <ServerControl

@@ -3,7 +3,6 @@
     import { wsport, wsready, stop_websocket, connect_websocket, socket } from '$lib/ws';
     import ServerControl from './ServerControl.svelte';
     import { Panel, Header, Content } from '@smui-extra/accordion';
-    import IconButton, { Icon } from '@smui/icon-button';
     import { ChevronDown, ChevronUp } from 'lucide-svelte/icons';
     import computePy from '$lib/pyserver/computePy';
     import { serverInfo } from '../utils/stores';
@@ -28,11 +27,15 @@
 
 <Panel extend bind:open style="background-color: coral;">
     <Header>
+        <div class="flex justify-between">
+            <span>Websocket</span>
+            {#if open}
+                <ChevronUp />
+            {:else}
+                <ChevronDown />
+            {/if}
+        </div>
         Websocket
-        <IconButton slot="icon" toggle pressed={open}>
-            <Icon on><ChevronUp /></Icon>
-            <Icon><ChevronDown /></Icon>
-        </IconButton>
     </Header>
     <Content>
         <ServerControl

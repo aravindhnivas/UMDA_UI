@@ -6,7 +6,6 @@
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import Molecule from '$lib/components/Molecule.svelte';
     import { NPARTITIONS, use_dask } from '$lib/stores/system';
-    import Textfield from '@smui/textfield';
     import { current_training_data_file } from '../training_file/plot-analysis/stores';
     import { training_column_name_X, training_file, loaded_df_columns } from '../training_file/stores';
     import Results from './Results.svelte';
@@ -199,9 +198,9 @@
             <span>PCA</span>
             <input type="checkbox" class="toggle" bind:checked={$use_PCA} />
         </div>
-        <div class="grid gap-2 items-center" style="grid-auto-flow: column; grid-template-columns: auto 1fr auto;">
+        <div class="grid gap-2 items-end" style="grid-auto-flow: column; grid-template-columns: auto 1fr auto;">
             <CustomSelect label="embedding" bind:value={$embedding} items={embeddings} />
-            <Textfield label="embedd_savefile" bind:value={$embedd_savefile} />
+            <CustomInput label="Embeddings filename" bind:value={$embedd_savefile} />
             <Loadingbtn callback={embedd_data} subprocess={true} on:result={onResult} />
         </div>
     {/if}
