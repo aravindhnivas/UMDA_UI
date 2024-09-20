@@ -38,7 +38,7 @@ export const all_params_lock_status = writable<
 });
 
 export const variable_type = derived(current_model, $current_model => {
-    console.warn($current_model);
+    // console.warn($current_model);
     if (!$current_model) return {};
     const hyperparameters = $current_model.hyperparameters;
     const parameters = $current_model.parameters;
