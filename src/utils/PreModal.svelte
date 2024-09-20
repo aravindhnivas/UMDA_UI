@@ -87,8 +87,9 @@
                         type="text"
                         bind:value={searchText}
                         placeholder="Search"
-                        autocomplete="on"
-                        autocapitalize="on"
+                        autocomplete="off"
+                        autocapitalize="off"
+                        autocorrect="off"
                     />
                     {#if searchText}
                         <button
