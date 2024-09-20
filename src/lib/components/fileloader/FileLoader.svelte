@@ -86,9 +86,23 @@
             }
         }}>Browse file</button
     >
-    <input class="input input-sm input-bordered join-item w-full" placeholder="Enter filename" bind:value={filename} />
+    <input
+        class="input input-sm input-bordered join-item w-full"
+        placeholder="Enter filename"
+        bind:value={filename}
+        autocomplete="off"
+        autocapitalize="off"
+        autocorrect="off"
+    />
     {#if filetype === 'hdf'}
-        <input class="input input-sm input-bordered join-item" placeholder="Enter key" bind:value={key} />
+        <input
+            class="input input-sm input-bordered join-item"
+            placeholder="Enter key"
+            bind:value={key}
+            autocomplete="off"
+            autocapitalize="off"
+            autocorrect="off"
+        />
     {/if}
     <button
         class="btn btn-sm join-item"
