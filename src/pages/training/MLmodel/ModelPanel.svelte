@@ -6,13 +6,14 @@
         default_param_values,
         current_model,
         default_parameter_mode,
+        all_params_lock_status,
     } from './stores';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
-    import { RotateCcw, Save, Upload } from 'lucide-svelte/icons';
     import ModelParameters from './ModelParameters.svelte';
     import Notification from '$lib/components/Notification.svelte';
     import { Checkbox } from '$lib/components';
     import ModelTab from './ModelTab.svelte';
+    import { RotateCcw, Save, Download } from 'lucide-svelte/icons';
 
     let savedfile: string;
     let uploadedfile: { fullname: string; name: string; model: string } | null = null;
@@ -27,20 +28,36 @@
         if (!saveloc) return;
         savedfile = saveloc;
 
+        let values: Record<string, any> = {};
+        typeSafeObjectKeys($all_params_lock_status[$model].hyperparameters).forEach(key => {
+            const locked = $all_params_lock_status[$model].hyperparameters[key];
+            if (locked) return;
+            values[key] = structuredClone($hyperparameters[$model][key]);
+        });
+        typeSafeObjectKeys($all_params_lock_status[$model].parameters).forEach(key => {
+            const locked = $all_params_lock_status[$model].parameters[key];
+            if (locked) return;
+            values[key] = structuredClone($parameters[$model][key]);
+        });
+        if (isEmpty(values)) {
+            toast.error('No parameters to save');
+            return;
+        }
+
         const save_content = JSON.stringify(
             {
-                values: { ...$hyperparameters[$model], ...$parameters[$model] },
+                values,
                 model: $model,
                 timestamp: new Date().toLocaleString(),
             },
             null,
-            4,
+            2,
         );
         await fs.writeTextFile(savedfile, save_content);
         toast.success('Parameters saved successfully');
     };
 
-    const upload_parameters = async () => {
+    const load_parameters = async () => {
         const selected = await dialog.open({
             title: 'Upload parameters',
             filters: [{ name: 'JSON', extensions: ['json'] }],
@@ -75,10 +92,14 @@
             // $parameters[$model] = parsed.values.parameters;
 
             Object.keys($hyperparameters[$model]).forEach(key => {
+                if (!(key in parsed.values)) return;
                 $hyperparameters[$model][key] = parsed.values[key];
+                $all_params_lock_status[$model].hyperparameters[key] = false;
             });
             Object.keys($parameters[$model]).forEach(key => {
+                if (!(key in parsed.values)) return;
                 $parameters[$model][key] = parsed.values[key];
+                $all_params_lock_status[$model].parameters[key] = false;
             });
             toast.success('Parameters uploaded successfully');
         } catch (e) {
@@ -90,6 +111,13 @@
         uploadedfile = null;
         $hyperparameters[$model] = structuredClone($default_param_values.hyperparameters);
         $parameters[$model] = structuredClone($default_param_values.parameters);
+
+        typeSafeObjectKeys($all_params_lock_status[$model].hyperparameters).forEach(key => {
+            $all_params_lock_status[$model].hyperparameters[key] = true;
+        });
+        typeSafeObjectKeys($all_params_lock_status[$model].parameters).forEach(key => {
+            $all_params_lock_status[$model].parameters[key] = true;
+        });
     };
 </script>
 
@@ -121,9 +149,9 @@
                         <RotateCcw />
                         <span>Reset</span>
                     </button>
-                    <button class="btn btn-sm" on:click={upload_parameters}>
-                        <Upload />
-                        <span>Upload</span>
+                    <button class="btn btn-sm" on:click={load_parameters}>
+                        <Download />
+                        <span>Load</span>
                     </button>
                     <button class="btn btn-sm" on:click={save_parameters}>
                         <Save />
