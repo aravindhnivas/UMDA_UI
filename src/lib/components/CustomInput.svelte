@@ -32,6 +32,7 @@
         bind:value
         {...$$restProps}
         on:change
+        class:bg-gray-200={disabled || (enabled_lock_mode && lock)}
         disabled={disabled || (enabled_lock_mode && lock)}
         autocomplete="off"
         autocapitalize="off"
