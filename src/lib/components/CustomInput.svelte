@@ -10,6 +10,8 @@
     let className = '';
     export { className as class };
     // export let helper_class = '';
+
+    $: element_disabled = disabled || (enabled_lock_mode && lock);
 </script>
 
 <div class="grid gap-1 {className}">
@@ -18,32 +20,31 @@
             <button on:click={() => (lock = !lock)}>
                 {#if enabled_lock_mode}
                     {#if lock}
-                        <LockKeyhole size="20" class="text-gray-500" />
+                        <LockKeyhole size="20" class="text-gray-600/75" />
                     {:else}
                         <UnlockKeyhole size="20" />
                     {/if}
                 {/if}
             </button>
-            <span class="text-xs pl-1">{label}</span>
+            <span class="text-xs pl-1 {element_disabled ? 'text-gray-600/75' : ''}">{label}</span>
         {/if}
     </div>
     <input
-        class=" input input-sm"
+        class=" input input-sm {element_disabled ? 'bg-gray-600/25' : ''}"
         bind:value
         {...$$restProps}
         on:change
-        class:bg-gray-200={disabled || (enabled_lock_mode && lock)}
-        disabled={disabled || (enabled_lock_mode && lock)}
+        disabled={element_disabled}
         autocomplete="off"
         autocapitalize="off"
         autocorrect="off"
     />
     {#if helper}
-        <span class="text-xs text-wrap break-words max-w-sm">
+        <span class="text-xs text-wrap break-words max-w-sm {element_disabled ? 'text-gray-600/75' : ''}">
             {helper}
             {#if helperHighlight}
                 <br />
-                <div class="badge badge-sm badge-neutral">
+                <div class="badge badge-sm badge-neutral {element_disabled ? 'text-gray' : ''}">
                     {helperHighlight}
                 </div>
             {/if}

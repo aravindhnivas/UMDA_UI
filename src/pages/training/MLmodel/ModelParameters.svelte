@@ -56,26 +56,28 @@
                                 enabled_lock_mode
                             />
                         {:else}
-                            <button
-                                on:click={() => {
-                                    $all_params_lock_status[$model][key][label] =
-                                        !$all_params_lock_status[$model][key][label];
-                                }}
-                            >
-                                {#if $all_params_lock_status[$model][key][label]}
-                                    <LockKeyhole color="gray" />
-                                {:else}
-                                    <UnlockKeyhole />
-                                {/if}
-                            </button>
-                            <Checkbox
-                                class="p-2 w-max"
-                                bind:value={values[label]}
-                                {label}
-                                disabled={$all_params_lock_status[$model][key][label]}
-                                helper={description}
-                                helperHighlight={`Default: ${$default_param_values[key][label]}`}
-                            />
+                            <div class="flex gap-2 items-start">
+                                <button
+                                    on:click={() => {
+                                        $all_params_lock_status[$model][key][label] =
+                                            !$all_params_lock_status[$model][key][label];
+                                    }}
+                                >
+                                    {#if $all_params_lock_status[$model][key][label]}
+                                        <LockKeyhole color="gray" />
+                                    {:else}
+                                        <UnlockKeyhole />
+                                    {/if}
+                                </button>
+                                <Checkbox
+                                    class="p-2 w-max"
+                                    bind:value={values[label]}
+                                    {label}
+                                    disabled={$all_params_lock_status[$model][key][label]}
+                                    helper={description}
+                                    helperHighlight={`Default: ${$default_param_values[key][label]}`}
+                                />
+                            </div>
                         {/if}
                     </div>
                 {:else if typeof value === 'string' || typeof value === 'number'}

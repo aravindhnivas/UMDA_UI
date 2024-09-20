@@ -18,23 +18,23 @@
 <div class="grid gap-1">
     <div
         class="flex gap-2 items-center {bordered
-            ? 'border-solid border-black border-1 rounded-md'
+            ? 'border-solid border-rounded border-1' + (disabled ? ' border-gray-600/75' : '')
             : ''} p-1 {className}"
     >
         {#if text_position === 'left'}
-            <span class="label-text">{label}</span>
+            <span class="label-text {disabled ? 'text-gray-600/75' : ''}">{label}</span>
         {/if}
         <input type="checkbox" class={check} bind:checked={value} {disabled} on:change />
         {#if text_position === 'right'}
-            <span class="label-text">{label}</span>
+            <span class="label-text {disabled ? 'text-gray-600/75' : ''}">{label}</span>
         {/if}
     </div>
     {#if helper}
-        <span class="text-xs text-wrap break-words max-w-sm">
+        <span class="text-xs text-wrap break-words max-w-sm {disabled ? 'text-gray-600/75' : ''}">
             {helper}
             {#if helperHighlight}
                 <br />
-                <div class="badge badge-sm badge-neutral">
+                <div class="badge badge-sm badge-neutral {disabled ? 'text-gray' : ''}">
                     {helperHighlight}
                 </div>
             {/if}

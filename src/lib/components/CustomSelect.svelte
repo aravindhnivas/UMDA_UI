@@ -25,20 +25,27 @@
     });
 
     const toggle_select = (e: MouseEvent) => {
-        if (disabled) return;
-        if (!enable_use_input) return;
+        if (element_disabled) return;
         e.stopPropagation();
         if (e.altKey && e.shiftKey) {
             use_input = !use_input;
         }
     };
+    $: element_disabled = disabled || (enabled_lock_mode && lock);
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div on:click={toggle_select}>
     {#if enable_use_input && use_input}
-        <CustomInput bind:value label={`Enter ${label}`} placeholder={`Enter ${label}`} />
+        <CustomInput
+            bind:value
+            label={`Enter ${label}`}
+            placeholder={`Enter ${label}`}
+            bind:lock
+            {enabled_lock_mode}
+            {disabled}
+        />
     {:else}
         <div class="flex flex-col gap-1 {className}">
             <!-- <span class="text-xs pl-1">{label}</span> -->
@@ -47,17 +54,22 @@
                     <button on:click={() => (lock = !lock)}>
                         {#if enabled_lock_mode}
                             {#if lock}
-                                <LockKeyhole size="20" class="text-gray-500" />
+                                <LockKeyhole size="20" class="text-gray-600/75" />
                             {:else}
                                 <UnlockKeyhole size="20" />
                             {/if}
                         {/if}
                     </button>
-                    <span class="text-xs pl-1">{label}</span>
+                    <span class="text-xs pl-1 {element_disabled ? 'text-gray-600/75' : ''}">{label}</span>
                 {/if}
             </div>
 
-            <select class="select select-sm select-bordered" bind:value on:change {disabled}>
+            <select
+                class="select select-sm select-bordered {element_disabled ? 'bg-gray-600/25' : ''}"
+                bind:value
+                on:change
+                disabled={element_disabled}
+            >
                 {#if isArray(items) && items.length > 0}
                     <option disabled selected>{label}</option>
                     {#each items as item}
@@ -74,11 +86,11 @@
                 {/if}
             </select>
             {#if helper}
-                <span class="text-xs pl-1 text-wrap break-words max-w-sm">
+                <span class="text-xs pl-1 text-wrap break-words max-w-sm {element_disabled ? 'text-gray-600/75' : ''}">
                     {helper}
                     <br />
                     {#if helperHighlight}
-                        <div class="badge badge-sm badge-neutral">
+                        <div class="badge badge-sm badge-neutral {element_disabled ? 'text-gray' : ''}">
                             {helperHighlight}
                         </div>
                     {/if}
