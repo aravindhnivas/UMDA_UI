@@ -57,7 +57,8 @@
                         {#if fine_tune_mode}
                             <CustomInput
                                 {label}
-                                helper={`${description} Default: ${$default_param_values[key][label]}`}
+                                helper={description}
+                                helperHighlight={`Default: ${$default_param_values[key][label]}`}
                                 bind:value={$fine_tuned_hyperparameters[$model][label]}
                                 disabled={$all_params_lock_status[$model][key][label]}
                             />
@@ -95,14 +96,16 @@
                         {#if fine_tune_mode}
                             <CustomInput
                                 {label}
-                                helper={`${description} Default: ${$default_param_values[key][label]}`}
+                                helper={description}
+                                helperHighlight={`Default: ${$default_param_values[key][label]}`}
                                 bind:value={$fine_tuned_hyperparameters[$model][label]}
                                 disabled={$all_params_lock_status[$model][key][label]}
                             />
                         {:else}
                             <CustomInput
                                 {label}
-                                helper={`${description} Default: ${$default_param_values[key][label]}`}
+                                helper={description}
+                                helperHighlight={`Default: ${$default_param_values[key][label]}`}
                                 bind:value={values[label]}
                                 disabled={$all_params_lock_status[$model][key][label]}
                             />
@@ -125,14 +128,16 @@
                         {#if fine_tune_mode}
                             <CustomInput
                                 {label}
-                                helper={`${description} Default: ${$default_param_values[key][label]}`}
+                                helper={description}
+                                helperHighlight={`Default: ${$default_param_values[key][label]}`}
                                 bind:value={$fine_tuned_hyperparameters[$model][label]}
                                 disabled={$all_params_lock_status[$model][key][label]}
                             />
                         {:else}
                             <CustomSelect
                                 label={`${label} (${value.options[values[label]]})`}
-                                helper={`${description} Default: ${$default_param_values[key][label]}`}
+                                helper={description}
+                                helperHighlight={`Default: ${$default_param_values[key][label]}`}
                                 items={typeSafeObjectKeys(value.options)}
                                 bind:value={values[label]}
                                 disabled={$all_params_lock_status[$model][key][label]}
@@ -177,7 +182,8 @@
                         {#if fine_tune_mode}
                             <CustomInput
                                 {label}
-                                helper={`${description} Default: None`}
+                                helper={description}
+                                helperHighlight={`Default: ${$default_param_values[key][label]}`}
                                 bind:value={$fine_tuned_hyperparameters[$model][label]}
                                 disabled={$all_params_lock_status[$model][key][label]}
                             />
@@ -186,7 +192,8 @@
                                 {label}
                                 bind:value={values[label]}
                                 disabled={$all_params_lock_status[$model][key][label]}
-                                helper={`${description} Default: None`}
+                                helper={description}
+                                helperHighlight={`Default: ${$default_param_values[key][label]}`}
                             />
                         {/if}
                     </div>
