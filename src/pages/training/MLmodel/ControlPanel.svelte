@@ -48,20 +48,20 @@
                     <span class="join-item badge-sm badge-info">{$test_size}</span>
                 </div>
                 {#if $ytransformation !== 'None'}
-                    <span class="badge-sm badge-info">{$ytransformation}</span>
+                    <span class="badge badge-sm">{$ytransformation}</span>
                 {/if}
                 {#if $yscaling !== 'None'}
-                    <span class="badge-sm badge-info">{$yscaling}</span>
+                    <span class="badge badge-sm">{$yscaling}</span>
                 {/if}
                 {#if $bootstrap}
                     <span class="badge-sm badge-warning">Augment</span>
                 {/if}
 
                 {#if $fine_tune_model}
-                    <span class="badge-sm badge-info">Fine-tune</span>
+                    <span class="badge badge-sm">Fine-tune</span>
                 {/if}
                 {#if $cross_validation}
-                    <span class="badge-sm badge-info">Cross-validation</span>
+                    <span class="badge badge-sm">Cross-validation</span>
                 {/if}
                 {#if $parallel_computation}
                     <span class="badge-sm badge-primary">Parallel</span>
