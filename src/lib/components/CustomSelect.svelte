@@ -1,4 +1,6 @@
 <script lang="ts">
+    import CustomInput from './CustomInput.svelte';
+
     export let label: string = '';
     export let value: string;
     export let items: string[] | Record<string, string[]> = [];
@@ -30,10 +32,7 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div on:click={toggle_select}>
     {#if use_input}
-        <div class="flex flex-col gap-1">
-            <span class="text-xs pl-1">Enter {label}</span>
-            <input type="text" class="input input-sm" bind:value placeholder="Enter {label}" />
-        </div>
+        <CustomInput bind:value label={`Enter ${label}`} placeholder={`Enter ${label}`} />
     {:else}
         <div class="flex flex-col gap-1 {className}">
             <span class="text-xs pl-1">{label}</span>
