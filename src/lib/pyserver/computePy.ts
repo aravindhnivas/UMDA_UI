@@ -58,7 +58,7 @@ export default async function <T extends Record<string, any>>({
             if (get(suppress_py_warnings)) {
                 const warnings = (dataFromPython as any).warnings as string[];
                 suppressed_warnings.update(w => {
-                    const timestamp = new Date().toLocaleTimeString();
+                    const timestamp = new Date().toLocaleString();
                     const currnet_warning = { timestamp, warnings };
                     if (w[pyfile]) {
                         w[pyfile] = [...w[pyfile], currnet_warning];
@@ -68,6 +68,7 @@ export default async function <T extends Record<string, any>>({
                     if (w[pyfile].length > 5) {
                         w[pyfile].shift();
                     }
+                    if (import.meta.env.DEV) w.test = [currnet_warning];
                     return w;
                 });
 
