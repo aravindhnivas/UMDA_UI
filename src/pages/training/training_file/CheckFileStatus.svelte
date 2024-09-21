@@ -7,7 +7,7 @@
 </script>
 
 <div class="flex gap-2">
-    <button class="btn btn-xs" on:click={() => (recheck_files = !recheck_files)}>check file status</button>
+    <button class="btn btn-xs btn-outline" on:click={() => (recheck_files = !recheck_files)}>check file status</button>
     {#key recheck_files}
         {#await $current_post_analysis_files_directory then dir}
             {#await path.join(dir, name) then file}
