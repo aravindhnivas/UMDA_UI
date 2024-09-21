@@ -5,21 +5,18 @@
 </script>
 
 <div class="footer items-center bg-orange-400 h-[2rem]">
-    <aside class="items-center grid-flow-col px-4 w-full">
-        <p class="text-black">
+    <aside class="grid-flow-col items-center px-4 w-full justify-between">
+        <div>
             <span>{import.meta.env.VITE_YEAR} &copy; {import.meta.env.VITE_AUTHOUR} |</span>
-            <!-- svelte-ignore missing-declaration -->
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <span
+            <button
                 on:click={async () => {
                     await shell.open('https://mcguirelab.mit.edu/index.html');
                 }}
             >
                 Developed at <span class="underline cursor-pointer">{import.meta.env.VITE_GROUP}</span>
-            </span>
-        </p>
-        <div class="flex gap-2 ml-auto">
+            </button>
+        </div>
+        <div class="flex items-center gap-2">
             <FooterLabel />
             <FooterDownloadStatus />
             <FooterProcess />
