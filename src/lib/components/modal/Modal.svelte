@@ -4,6 +4,7 @@
     export let open: boolean = false;
 
     let dialog_element: HTMLDialogElement;
+
     const openModal = () => {
         if (!dialog_element) return toast.error('Dialog element not found');
         dialog_element.showModal();
