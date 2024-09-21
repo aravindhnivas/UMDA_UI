@@ -5,6 +5,13 @@
 </script>
 
 <Modal title="Supressed warnings" label="Show Warnings" open={false}>
+    <svelte:fragment let:openModal let:label slot="button-slot">
+        <div class="indicator">
+            <span class="indicator-item badge">{Object.keys($suppressed_warnings).length}</span>
+            <button class="btn btn-sm btn-warning" on:click={openModal}>{label}</button>
+        </div>
+    </svelte:fragment>
+
     <div class="grid gap-2">
         {#each typeSafeObjectKeys($suppressed_warnings) as pyfile}
             <div class="grid gap-2">
