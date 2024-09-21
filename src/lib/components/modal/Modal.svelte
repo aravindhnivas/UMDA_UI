@@ -1,30 +1,29 @@
 <script lang="ts">
     import { getID } from '$lib/utils/initialise';
 
-    export let id: string = getID();
     export let title: string = 'Title';
     export let label: string = 'Open';
+    export let open: boolean = false;
+
+    let dialog_element: HTMLDialogElement;
     const openModal = () => {
-        const modal = document.getElementById(id) as HTMLDialogElement;
-        if (!modal) return toast.error('Modal not found');
-        modal.showModal();
+        if (!dialog_element) return toast.error('Dialog element not found');
+        dialog_element.showModal();
+        open = true;
     };
+
+    $: if (dialog_element && open) dialog_element.showModal();
 </script>
 
-<button class="btn btn-sm w-max" on:click={openModal}>{label}</button>
+<button class="flex btn btn-sm btn-outline" on:click={openModal}>{label}</button>
 
-<dialog {id} class="modal">
-    <div class="modal-box">
-        <div class="flex justify-between p-y-2">
-            <h3 class="font-bold text-lg">{title}</h3>
-            <form method="dialog">
-                <button class="btn btn-sm btn-circle btn-ghost">✕</button>
-            </form>
-        </div>
-        <hr />
-        <div class="p-y-2">
-            <slot />
-        </div>
+<dialog bind:this={dialog_element} class="modal">
+    <div class="modal-box w-11/12 max-w-5xl">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+        </form>
+        <h3 class="text-lg font-bold">{title}</h3>
+        <p class="py-4"><slot /></p>
     </div>
 </dialog>
 
