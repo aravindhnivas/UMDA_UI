@@ -4,8 +4,7 @@
     import { suppressed_warnings } from '$lib/pyserver/stores';
     import { Trash2 } from 'lucide-svelte';
 
-    onMount(async () => {
-        // console.warn('suppressed_warnings', $suppressed_warnings);
+    onMount(() => {
         if (!import.meta.env.DEV) return;
         const test_size = 5;
         for (let i = 0; i < test_size; i++) {
@@ -16,8 +15,6 @@
             }));
         }
         $suppressed_warnings = $suppressed_warnings;
-        await tick();
-        console.warn('suppressed_warnings', $suppressed_warnings);
     });
 </script>
 
