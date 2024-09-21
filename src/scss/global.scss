@@ -56,7 +56,6 @@ td.mdc-data-table__cell {
     -webkit-user-select: text !important;
 }
 
-// remove button default styles
 button {
     background: none;
     color: inherit;
@@ -73,4 +72,10 @@ button {
     &:hover {
         background-color: rgba(230, 57, 70, 0.83) !important;
     }
+}
+
+.modebar-group {
+    display: flex!important;
+    gap: 0.5em;
+    align-items: center;
 }

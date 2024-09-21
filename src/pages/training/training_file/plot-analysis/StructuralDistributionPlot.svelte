@@ -51,7 +51,7 @@
         </Set>
         <pre class="status">Selected: {selected.length} / {choices.length} categories</pre>
     {/if}
-    <div class="h-lg min-w-xl">
+    <div style="height: 500px;">
         <Plot data={plotData} fillParent={true} debounce={250} />
     </div>
 </BaseLayout>

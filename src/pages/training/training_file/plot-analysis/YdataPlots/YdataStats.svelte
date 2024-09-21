@@ -57,7 +57,6 @@
     let saved_filter_filename = '';
 </script>
 
-<button>button</button>
 <h3>Filtering</h3>
 <div class="flex gap-3 items-end">
     <CustomInput

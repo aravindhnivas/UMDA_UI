@@ -9,7 +9,7 @@
     horizontal={false}
     {id}
     style="display: {$active_tab === id ? 'flex' : 'none'};"
-    class="card bg-orange-300/50 shadow-xl animate__animated animate__fadeIn h-full w-full overflow-hidden rounded-none"
+    class="card bg-orange-300/50 shadow-xl animate__animated animate__fadeIn h-full w-full overflow-hidden rounded-none py-2"
 >
     <slot name="body" />
 </Splitpanes>

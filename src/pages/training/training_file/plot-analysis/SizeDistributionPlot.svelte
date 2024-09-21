@@ -61,7 +61,7 @@
             />
         </div>
     {/if}
-    <div class="h-lg min-w-xl">
+    <div style="height: 500px;">
         <Plot data={plotData} {layout} fillParent={true} debounce={250} />
     </div>
 </BaseLayout>

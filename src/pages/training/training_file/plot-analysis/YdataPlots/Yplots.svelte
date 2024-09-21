@@ -70,7 +70,7 @@
         {@const data = plots_data[key]}
         {@const layout = layouts[key]}
         {@const plot_description = plot_descriptions[key]}
-        <div class="h-lg min-w-xl">
+        <div style="height: 500px; ">
             <Plot {data} {layout} fillParent={true} debounce={250} />
         </div>
         <div class="text-sm font-400">
