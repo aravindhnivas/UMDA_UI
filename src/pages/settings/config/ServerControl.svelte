@@ -5,8 +5,10 @@
     import { serverInfo } from '../utils/stores';
     import { connect_websocket } from '$lib/ws';
     import { AxiosError } from 'axios';
-    import { LockKeyhole, RefreshCcw, UnlockKeyhole } from 'lucide-svelte/icons';
+    import { LockKeyhole, RefreshCcw, UnlockKeyhole, ChevronRight } from 'lucide-svelte/icons';
     import { Checkbox } from '$lib/components';
+    import Modal from '$lib/components/modal/Modal.svelte';
+    import { suppressed_warnings } from '$lib/pyserver/stores';
 
     export let port: number;
     export let serverReady: boolean = false;
@@ -65,6 +67,27 @@
         >
 
         <Checkbox bind:value={suppress_warnings} label="Suppress Python warnings" />
+        {#if !isEmpty($suppressed_warnings)}
+            <Modal title="Supressed warnings" label="Show Warnings" open={false}>
+                <!-- <pre>{JSON.stringify($suppressed_warnings, null, 4)}</pre> -->
+                <ul>
+                    {#each typeSafeObjectKeys($suppressed_warnings) as pyfile}
+                        <li>{pyfile}</li>
+                        <div>
+                            {#each $suppressed_warnings[pyfile] as { timestamp, warnings }}
+                                <div>
+                                    <button class="flex w-max">
+                                        <ChevronRight />
+                                        <span class="font-bold">{timestamp}: </span>
+                                    </button>
+                                    <p class="text-sm font-400">{warnings}</p>
+                                </div>
+                            {/each}
+                        </div>
+                    {/each}
+                </ul>
+            </Modal>
+        {/if}
     </div>
 
     <div class="flex gap-1 items-center">
