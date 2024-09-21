@@ -2,8 +2,9 @@ import { suppress_py_warnings } from '$pages/settings/stores';
 import computefromServer from './computefromServer';
 import computefromSubprocess from './computefromSubprocess';
 import { fetchServerROOT, start_and_check_umdapy_with_toast } from './umdapyServer';
-import { pyServerReady, get, developerMode, pyProgram } from './stores';
+import { pyServerReady, get, developerMode, pyProgram, suppressed_warnings } from './stores';
 import { Alert } from '$utils/stores';
+
 interface ComputePyType {
     pyfile: string;
     args: Object;
@@ -53,9 +54,26 @@ export default async function <T extends Record<string, any>>({
 
         if (!response) return Promise.reject('error occured in server');
         dataFromPython = response;
-        if (!get(suppress_py_warnings)) {
-            if ((dataFromPython as any)?.warnings) {
-                Alert.warn((dataFromPython as any).warnings);
+        if ((dataFromPython as any)?.warnings) {
+            if (get(suppress_py_warnings)) {
+                const warnings = (dataFromPython as any).warnings as string[];
+                suppressed_warnings.update(w => {
+                    const timestamp = new Date().toLocaleTimeString();
+                    const currnet_warning = { timestamp, warnings };
+                    if (w[pyfile]) {
+                        w[pyfile] = [...w[pyfile], currnet_warning];
+                    } else {
+                        w[pyfile] = [currnet_warning];
+                    }
+                    if (w[pyfile].length > 5) {
+                        w[pyfile].shift();
+                    }
+                    return w;
+                });
+
+                console.warn(get(suppressed_warnings));
+            } else {
+                Alert.warn(dataFromPython.warnings);
             }
         }
         return Promise.resolve(dataFromPython);
