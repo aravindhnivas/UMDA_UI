@@ -41,6 +41,18 @@
                         <input type="radio" name="my-accordion-1" checked={true} />
                         <div class="collapse-title text-xl font-medium">{pyfile}</div>
                         <div class="collapse-content">
+                            <div class="flex w-full my-2">
+                                <button
+                                    class="btn btn-sm btn-error m-auto"
+                                    on:click={() => {
+                                        delete $suppressed_warnings[pyfile];
+                                        $suppressed_warnings = $suppressed_warnings;
+                                    }}
+                                >
+                                    <Trash2 size="20" />
+                                    Dismiss all
+                                </button>
+                            </div>
                             <div class="grid gap-2">
                                 {#each $suppressed_warnings[pyfile] as { timestamp, warnings, id } (id)}
                                     <div class="grid gap-2">
