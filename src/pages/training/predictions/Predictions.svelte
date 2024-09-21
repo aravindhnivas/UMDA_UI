@@ -76,12 +76,13 @@
     label="Pre-trained model"
     filters={[{ name: 'Model files', extensions: ['pkl'] }]}
 />
-<BrowseFile
-    bind:filename={$prediction_file}
-    label="upload file to predict"
-    filters={[{ name: 'SMILES files', extensions: ['smi', 'csv'] }]}
-    disabled={test_mode}
-/>
+{#if !test_mode}
+    <BrowseFile
+        bind:filename={$prediction_file}
+        label="upload file to predict"
+        filters={[{ name: 'SMILES files', extensions: ['smi', 'csv'] }]}
+    />
+{/if}
 
 <div class="grid grid-cols-5 items-end gap-2">
     {#if test_mode}
