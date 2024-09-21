@@ -34,8 +34,9 @@
                 {$running_processes_count.running > 1 ? 'processes' : 'process'}</span
             >
         {/if}
-
-        <span style="color: green;"><CheckCheck /> {$running_processes_count.completed}</span>
-        <span class=" text-red-700"><CircleOff /> {$running_processes_count.aborted}</span>
+        <span class="flex items-center gap-1" style="color: green;"
+            ><CheckCheck /> {$running_processes_count.completed}</span
+        >
+        <span class="flex items-center gap-1 text-red-700"><CircleOff /> {$running_processes_count.aborted}</span>
     </div>
 {/if}
