@@ -12,7 +12,6 @@
     export let btn_name = `Browse ${directory ? 'directory' : 'file'}`;
     export let callback: null | ((filename: string) => Promise<void>) = null;
     export let lock: boolean = false;
-    export let show_lock_label = false;
 
     let className = '';
     export { className as class };
@@ -58,16 +57,6 @@
 
 <div class="flex flex-col gap-1 w-full {className}">
     <div class="flex">
-        {#if show_lock_label}
-            <button class="btn btn-xs" on:click={() => (lock = !lock)}>
-                {#if lock}
-                    <LockKeyhole size="20" class="text-gray-500" />
-                {:else}
-                    <UnlockKeyhole size="20" />
-                {/if}
-            </button>
-        {/if}
-
         {#if label}
             <span class="text-sm pl-1"
                 >{label} (<em>{filename.split('/').at(-1) || `Choose a ${directory ? 'directory' : 'file'}`}</em>)</span
