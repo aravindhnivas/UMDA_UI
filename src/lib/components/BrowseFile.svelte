@@ -1,6 +1,6 @@
 <script lang="ts">
     import { isError } from 'ts-try';
-    import { HelpCircle, ExternalLink, UnlockKeyhole, LockKeyhole } from 'lucide-svelte/icons';
+    import { HelpCircle, ExternalLink } from 'lucide-svelte/icons';
     import type { DialogFilter } from '@tauri-apps/api/dialog';
 
     export let disabled = false;
