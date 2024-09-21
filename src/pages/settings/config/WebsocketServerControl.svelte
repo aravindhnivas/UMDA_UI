@@ -35,7 +35,6 @@
                 <ChevronDown />
             {/if}
         </div>
-        Websocket
     </Header>
     <Content>
         <ServerControl
