@@ -99,7 +99,7 @@
     <div class="accordion-container">
         <Accordion>
             <PyServerControl />
-            <WebsocketServerControl />
+            <!-- <WebsocketServerControl /> -->
         </Accordion>
     </div>
     <TerminalBox bind:terminal={$serverInfo} />
