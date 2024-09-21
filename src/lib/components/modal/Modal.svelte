@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { getID } from '$lib/utils/initialise';
-
     export let title: string = 'Title';
     export let label: string = 'Open';
     export let open: boolean = false;
@@ -15,7 +13,9 @@
     $: if (dialog_element && open) dialog_element.showModal();
 </script>
 
-<button class="flex btn btn-sm btn-outline" on:click={openModal}>{label}</button>
+<slot name="button-slot" {openModal} {label}>
+    <button class="flex btn btn-sm btn-outline" on:click={openModal}>{label}</button>
+</slot>
 
 <dialog bind:this={dialog_element} class="modal">
     <div class="modal-box w-11/12 max-w-5xl">
