@@ -210,7 +210,7 @@
         {/if}
 
         {#each model_names as model_name (model_name)}
-            <div class="h-lg min-w-xl" class:hidden={model_name !== $model}>
+            <div style="height: 500px;" class:hidden={model_name !== $model}>
                 {#if $plot_data[model_name]}
                     <Plot
                         data={$plot_data[model_name]}
