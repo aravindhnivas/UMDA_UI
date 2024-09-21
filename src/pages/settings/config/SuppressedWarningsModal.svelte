@@ -4,7 +4,7 @@
     import { suppressed_warnings } from '$lib/pyserver/stores';
 </script>
 
-<Modal title="Supressed warnings" label="Show Warnings" open={true}>
+<Modal title="Supressed warnings" label="Show Warnings" open={false}>
     <div class="grid gap-2">
         {#each typeSafeObjectKeys($suppressed_warnings) as pyfile}
             <div class="grid gap-2">
@@ -19,7 +19,7 @@
                                         <input type="radio" name="my-accordion-2" checked={true} />
                                         <div class="collapse-title text-xl font-medium">{timestamp}</div>
                                         <div class="collapse-content">
-                                            <p class="text-sm font-400">
+                                            <p class="text-sm font-400 select-text">
                                                 {#each warnings as w, ind}
                                                     {ind + 1}. {w}
                                                     {#if ind < warnings.length - 1}
