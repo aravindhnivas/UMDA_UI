@@ -68,9 +68,7 @@
         >
 
         <Checkbox bind:value={suppress_warnings} label="Suppress Python warnings" />
-        {#if !isEmpty($suppressed_warnings)}
-            <SuppressedWarningsModal />
-        {/if}
+        <SuppressedWarningsModal />
     </div>
 
     <div class="flex gap-1 items-center">

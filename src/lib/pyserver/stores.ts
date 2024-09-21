@@ -27,4 +27,6 @@ export const serverDebug = localWritable('serverDebug', false);
 export const serverCurrentStatus = writable<OutputBoxtype>({ value: 'umdapy server not running', type: 'error' });
 
 export const pyChildProcess = writable<Child>();
-export const suppressed_warnings = writable<Record<string, { timestamp: string; warnings: string[] }[]>>({});
+export const suppressed_warnings = writable<Record<string, { timestamp: string; warnings: string[]; id: string }[]>>(
+    {},
+);
