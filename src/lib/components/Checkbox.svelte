@@ -29,15 +29,15 @@
             : ''} p-1 {className} w-max"
         style="border-radius: 0.25rem;"
     >
-        <button on:click={() => (lock = !lock)}>
-            {#if enabled_lock_mode}
+        {#if enabled_lock_mode}
+            <button on:click={() => (lock = !lock)}>
                 {#if lock}
                     <LockKeyhole size="20" class="text-gray-700" />
                 {:else}
                     <UnlockKeyhole size="20" />
                 {/if}
-            {/if}
-        </button>
+            </button>
+        {/if}
         {#if text_position === 'left'}
             <span class="label-text {element_disabled ? 'text-gray-600/75' : ''}">{label}</span>
         {/if}

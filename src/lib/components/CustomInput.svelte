@@ -19,15 +19,15 @@
 <div class="grid gap-1 {className}">
     <div class="flex gap-1 items-center">
         {#if label}
-            <button on:click={() => (lock = !lock)}>
-                {#if enabled_lock_mode}
+            {#if enabled_lock_mode}
+                <button on:click={() => (lock = !lock)}>
                     {#if lock}
                         <LockKeyhole size="20" class="text-gray-700" />
                     {:else}
                         <UnlockKeyhole size="20" />
                     {/if}
-                {/if}
-            </button>
+                </button>
+            {/if}
             <span class="text-xs pl-1 {element_disabled ? 'text-gray-600/75' : ''}">{label}</span>
         {/if}
     </div>
