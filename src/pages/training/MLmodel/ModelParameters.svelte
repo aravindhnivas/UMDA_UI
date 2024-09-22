@@ -49,7 +49,7 @@
                 <span class="badge badge-error w-full"> All {total_len} parameters are locked</span>
             {:else}
                 <span class="badge badge-warning w-full">
-                    {unlocked_len} / {locked_len} parameters are unlocked
+                    {unlocked_len} / {total_len} parameters are unlocked
                 </span>
             {/if}
         </div>
@@ -80,13 +80,13 @@
                             bind:value={$fine_tuned_values[$model][key][label]}
                             bind:lock={$all_params_lock_status[$model][key][label]}
                             enabled_lock_mode
+                            disabled={true}
                         />
                     {:else}
                         <div class="flex gap-2 items-start">
                             <Checkbox
                                 bind:value={values[label]}
                                 {label}
-                                disabled={$all_params_lock_status[$model][key][label]}
                                 helper={description}
                                 helperHighlight={`Default: ${$default_param_values[key][label]}`}
                                 bind:lock={$all_params_lock_status[$model][key][label]}
