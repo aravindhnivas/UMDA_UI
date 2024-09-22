@@ -19,12 +19,13 @@
         text_position = 'right';
         bordered = false;
     }
+    $: element_disabled = disabled || (enabled_lock_mode && lock);
 </script>
 
 <div class="grid gap-1">
     <div
         class="flex gap-2 items-center {bordered
-            ? 'border border-solid border-black border-rounded' + (disabled ? ' border-gray-600/75' : '')
+            ? 'border border-solid border-black border-rounded' + (element_disabled ? ' border-gray-600/75' : '')
             : ''} p-1 {className} w-max"
         style="border-radius: 0.25rem;"
     >
@@ -38,19 +39,19 @@
             {/if}
         </button>
         {#if text_position === 'left'}
-            <span class="label-text {disabled ? 'text-gray-600/75' : ''}">{label}</span>
+            <span class="label-text {element_disabled ? 'text-gray-600/75' : ''}">{label}</span>
         {/if}
-        <input type="checkbox" class={check} bind:checked={value} {disabled} on:change />
+        <input type="checkbox" class={check} bind:checked={value} disabled={element_disabled} on:change />
         {#if text_position === 'right'}
-            <span class="label-text {disabled ? 'text-gray-600/75' : ''}">{label}</span>
+            <span class="label-text {element_disabled ? 'text-gray-600/75' : ''}">{label}</span>
         {/if}
     </div>
     {#if helper}
-        <span class="text-xs text-wrap break-words {disabled ? 'text-gray-600/75' : ''}">
+        <span class="text-xs text-wrap break-words {element_disabled ? 'text-gray-600/75' : ''}">
             {helper}
             {#if helperHighlight}
                 <br />
-                <div class="badge badge-sm badge-neutral {disabled ? 'text-gray' : ''}">
+                <div class="badge badge-sm badge-neutral {element_disabled ? 'text-gray' : ''}">
                     {helperHighlight}
                 </div>
             {/if}
