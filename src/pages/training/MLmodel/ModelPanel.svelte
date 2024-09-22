@@ -29,12 +29,12 @@
         savedfile = saveloc;
 
         let values: Record<string, any> = {};
-        typeSafeObjectKeys($all_params_lock_status[$model].hyperparameters).forEach(key => {
+        Object.keys($all_params_lock_status[$model].hyperparameters).forEach(key => {
             const locked = $all_params_lock_status[$model].hyperparameters[key];
             if (locked) return;
             values[key] = structuredClone($hyperparameters[$model][key]);
         });
-        typeSafeObjectKeys($all_params_lock_status[$model].parameters).forEach(key => {
+        Object.keys($all_params_lock_status[$model].parameters).forEach(key => {
             const locked = $all_params_lock_status[$model].parameters[key];
             if (locked) return;
             values[key] = structuredClone($parameters[$model][key]);
@@ -112,10 +112,10 @@
         $hyperparameters[$model] = structuredClone($default_param_values.hyperparameters);
         $parameters[$model] = structuredClone($default_param_values.parameters);
 
-        typeSafeObjectKeys($all_params_lock_status[$model].hyperparameters).forEach(key => {
+        Object.keys($all_params_lock_status[$model].hyperparameters).forEach(key => {
             $all_params_lock_status[$model].hyperparameters[key] = true;
         });
-        typeSafeObjectKeys($all_params_lock_status[$model].parameters).forEach(key => {
+        Object.keys($all_params_lock_status[$model].parameters).forEach(key => {
             $all_params_lock_status[$model].parameters[key] = true;
         });
     };

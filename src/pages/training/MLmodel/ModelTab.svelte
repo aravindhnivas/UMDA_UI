@@ -7,7 +7,7 @@
 </script>
 
 <div class="flex flex-wrap w-max">
-    <TabBar tabs={typeSafeObjectKeys(supervised_ml_models)} let:tab bind:active={$model}>
+    <TabBar tabs={Object.keys(supervised_ml_models)} let:tab bind:active={$model}>
         <Tab {tab}>
             <Label>{tab}</Label>
         </Tab>

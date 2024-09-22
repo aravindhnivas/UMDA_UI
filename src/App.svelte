@@ -6,7 +6,7 @@
     import PreModal from '$utils/PreModal.svelte';
     import CustomTabs from '$lib/components/CustomTabs.svelte';
     import { active_tab } from '$utils/stores';
-
+    import { typeSafeObjectKeys } from '$lib/utils';
     const tabs = ['Home', 'Training', 'Settings'];
 
     onMount(async () => {

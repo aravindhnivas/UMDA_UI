@@ -127,13 +127,13 @@
 
         const values = structuredClone({ ...$hyperparameters[$model], ...$parameters[$model] });
 
-        typeSafeObjectKeys($all_params_lock_status[$model].parameters).forEach(params => {
+        Object.keys($all_params_lock_status[$model].parameters).forEach(params => {
             const locked = $all_params_lock_status[$model].parameters[params];
             if (!locked) return;
             delete values[params];
         });
 
-        typeSafeObjectKeys($all_params_lock_status[$model].hyperparameters).forEach(hparams => {
+        Object.keys($all_params_lock_status[$model].hyperparameters).forEach(hparams => {
             const locked = $all_params_lock_status[$model].hyperparameters[hparams];
             if (!locked) return;
             delete values[hparams];

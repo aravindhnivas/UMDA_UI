@@ -18,7 +18,7 @@
             {#if !open}
                 <div class="flex flex-wrap gap-2">
                     {#if isObject(loaded_files) && !isEmpty(loaded_files)}
-                        {#each typeSafeObjectKeys(loaded_files) as key}
+                        {#each Object.keys(loaded_files) as key}
                             {@const { valid, basename } = loaded_files[key]}
                             <span class="badge badge-sm" class:badge-error={!valid}>{basename}</span>
                         {/each}

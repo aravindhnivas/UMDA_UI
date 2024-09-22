@@ -35,7 +35,7 @@
         </div>
 
         <div class="grid gap-2">
-            {#each typeSafeObjectKeys($suppressed_warnings) as pyfile (pyfile)}
+            {#each Object.keys($suppressed_warnings) as pyfile (pyfile)}
                 <div class="grid gap-2">
                     <div class="collapse collapse-arrow bg-base-200" style="background-color: #d2ccd2;">
                         <input type="radio" name="my-accordion-1" checked={true} />

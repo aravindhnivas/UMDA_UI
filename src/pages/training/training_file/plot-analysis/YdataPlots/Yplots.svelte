@@ -1,6 +1,6 @@
 <script lang="ts">
     import Plot from 'svelte-plotly.js';
-
+    import { typeSafeObjectKeys } from '$lib/utils';
     export let plots_data: YDistributionPlotData;
 
     const histogramLayout: Partial<Plotly.Layout> = {
