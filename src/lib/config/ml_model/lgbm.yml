@@ -4,22 +4,18 @@ hyperparameters:
   n_estimators:
     value: 100
     description: 'Number of boosting rounds'
-    
     type: integer
   learning_rate:
     value: 0.1
     description: 'Boosting learning rate'
-    
     type: float
   max_depth:
     value: -1
     description: 'Maximum tree depth for base learners, <=0 means no limit'
-    
     type: integer
   num_leaves:
     value: 31
     description: 'Maximum number of leaves in one tree'
-    
     type: integer
 parameters:
   objective:
