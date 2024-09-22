@@ -70,3 +70,11 @@ type MLParamsLockStatus = Record<
         hyperparameters: Record<string, boolean>;
     }
 >;
+
+type FineTunedValues = Record<
+    MLModel,
+    {
+        parameters: Record<string, string>;
+        hyperparameters: Record<string, string>;
+    }
+>;

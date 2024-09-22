@@ -70,6 +70,8 @@ export const default_param_values = derived(current_model, $current_model => {
 export const hyperparameters = writable<ParametersArgs>({});
 export const parameters = writable<ParametersArgs>({});
 export const fine_tuned_hyperparameters = writable<{ [name: string]: Record<string, string> }>({});
+export const fine_tuned_values = writable<FineTunedValues>(structuredClone(default_values_for_models));
+
 export const fine_tune_model = writable(false);
 
 export const cross_validation = localWritable('cross_validation', true);

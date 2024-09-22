@@ -7,6 +7,9 @@
         current_model,
         default_parameter_mode,
         all_params_lock_status,
+        fine_tune_model,
+        fine_tuned_hyperparameters,
+        fine_tuned_values,
     } from './stores';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import ModelParameters from './ModelParameters.svelte';
@@ -18,27 +21,38 @@
     let savedfile: string;
     let uploadedfile: { fullname: string; name: string; model: string } | null = null;
 
+    const v = ['hyperparameters', 'parameters'] as const;
+
     const save_parameters = async () => {
         const saveloc = await dialog.save({
             title: 'Save parameters',
             filters: [{ name: 'JSON', extensions: ['json'] }],
-            defaultPath: `./${$model}.parameters.json`,
         });
 
         if (!saveloc) return;
         savedfile = saveloc;
 
         let values: Record<string, any> = {};
-        Object.keys($all_params_lock_status[$model].hyperparameters).forEach(key => {
-            const locked = $all_params_lock_status[$model].hyperparameters[key];
-            if (locked) return;
-            values[key] = structuredClone($hyperparameters[$model][key]);
-        });
-        Object.keys($all_params_lock_status[$model].parameters).forEach(key => {
-            const locked = $all_params_lock_status[$model].parameters[key];
-            if (locked) return;
-            values[key] = structuredClone($parameters[$model][key]);
-        });
+        if ($fine_tune_model) {
+            v.forEach(key => {
+                Object.keys($fine_tuned_values[$model][key]).forEach(label => {
+                    values[label] = structuredClone($fine_tuned_values[$model][key][label]);
+                });
+            });
+        } else {
+            v.forEach(key => {
+                Object.keys($all_params_lock_status[$model][key]).forEach(label => {
+                    const locked = $all_params_lock_status[$model][key][label];
+                    if (locked) return;
+                    if (key === 'hyperparameters') {
+                        values[label] = structuredClone($hyperparameters[$model][label]);
+                    } else {
+                        values[label] = structuredClone($parameters[$model][label]);
+                    }
+                });
+            });
+        }
+
         if (isEmpty(values)) {
             toast.error('No parameters to save');
             return;
@@ -88,19 +102,27 @@
                 model: parsed.model,
             };
             console.log({ hyperparameters: $hyperparameters[$model], parameters: $parameters[$model] });
-            // $hyperparameters[$model] = parsed.values.hyperparameters;
-            // $parameters[$model] = parsed.values.parameters;
+            if ($fine_tune_model) {
+                v.forEach(key => {
+                    Object.keys($fine_tuned_values[$model][key]).forEach(label => {
+                        if (!(label in parsed.values)) return;
+                        $fine_tuned_values[$model][key][label] = parsed.values[label];
+                        $all_params_lock_status[$model][key][label] = false;
+                    });
+                });
+            } else {
+                Object.keys($hyperparameters[$model]).forEach(label => {
+                    if (!(label in parsed.values)) return;
+                    $hyperparameters[$model][label] = parsed.values[label];
+                    $all_params_lock_status[$model].hyperparameters[label] = false;
+                });
+                Object.keys($parameters[$model]).forEach(label => {
+                    if (!(label in parsed.values)) return;
+                    $parameters[$model][label] = parsed.values[label];
+                    $all_params_lock_status[$model].parameters[label] = false;
+                });
+            }
 
-            Object.keys($hyperparameters[$model]).forEach(key => {
-                if (!(key in parsed.values)) return;
-                $hyperparameters[$model][key] = parsed.values[key];
-                $all_params_lock_status[$model].hyperparameters[key] = false;
-            });
-            Object.keys($parameters[$model]).forEach(key => {
-                if (!(key in parsed.values)) return;
-                $parameters[$model][key] = parsed.values[key];
-                $all_params_lock_status[$model].parameters[key] = false;
-            });
             toast.success('Parameters uploaded successfully');
         } catch (e) {
             toast.error('Error: Invalid JSON file');

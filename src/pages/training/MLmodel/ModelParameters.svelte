@@ -3,12 +3,12 @@
         current_model,
         default_param_values,
         fine_tune_model,
-        fine_tuned_hyperparameters,
+        fine_tuned_values,
         model,
         default_parameter_mode,
         all_params_lock_status,
     } from './stores';
-    import { typeSafeObjectKeys, validateInput } from '$lib/utils';
+    import { validateInput } from '$lib/utils';
     import { Checkbox, CustomSelect } from '$lib/components';
     import Kernel from './Kernel.svelte';
     import Notification from '$lib/components/Notification.svelte';
@@ -77,7 +77,7 @@
                             {label}
                             helper={description}
                             helperHighlight={`Default: ${$default_param_values[key][label]}`}
-                            bind:value={$fine_tuned_hyperparameters[$model][label]}
+                            bind:value={$fine_tuned_values[$model][key][label]}
                             bind:lock={$all_params_lock_status[$model][key][label]}
                             enabled_lock_mode
                         />
@@ -100,7 +100,7 @@
                             {label}
                             helper={description}
                             helperHighlight={`Default: ${$default_param_values[key][label]}`}
-                            bind:value={$fine_tuned_hyperparameters[$model][label]}
+                            bind:value={$fine_tuned_values[$model][key][label]}
                             bind:lock={$all_params_lock_status[$model][key][label]}
                             enabled_lock_mode
                         />
@@ -120,7 +120,7 @@
                             {label}
                             helper={description}
                             helperHighlight={`Default: ${$default_param_values[key][label]}`}
-                            bind:value={$fine_tuned_hyperparameters[$model][label]}
+                            bind:value={$fine_tuned_values[$model][key][label]}
                             bind:lock={$all_params_lock_status[$model][key][label]}
                             enabled_lock_mode
                         />
@@ -155,7 +155,7 @@
                             {label}
                             helper={description}
                             helperHighlight={`Default: ${$default_param_values[key][label]}`}
-                            bind:value={$fine_tuned_hyperparameters[$model][label]}
+                            bind:value={$fine_tuned_values[$model][key][label]}
                             bind:lock={$all_params_lock_status[$model][key][label]}
                             enabled_lock_mode
                         />

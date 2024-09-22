@@ -28,6 +28,7 @@
         inverse_scaling,
         inverse_transform,
         all_params_lock_status,
+        fine_tuned_values,
     } from './stores';
     import { embedding, use_PCA } from '../embedding/stores';
     import { NPARTITIONS, use_dask } from '$lib/stores/system';
@@ -89,24 +90,26 @@
         let clonedFineTunedValues: Record<string, any> = {};
 
         if ($fine_tune_model) {
-            if (!$fine_tuned_hyperparameters[$model]) {
+            if (!$fine_tuned_values[$model]) {
                 toast.error('Error: Fine tuned hyperparameters not found');
                 return;
             }
-
-            Object.keys($fine_tuned_hyperparameters[$model]).forEach(f => {
-                const val = structuredClone($fine_tuned_hyperparameters[$model][f]);
-                clonedFineTunedValues[f] = val.split(',').map(f => {
-                    f = f.trim();
-                    try {
-                        if (f === 'true' || f === 'false' || f === 'null') return JSON.parse(f);
-                        if (!isNaN(Number(f))) return Number(f);
-                        return f;
-                    } catch (error) {
-                        console.error('Error parsing', f, error);
-                    }
+            const v = ['hyperparameters', 'parameters'] as const;
+            v.forEach(key => {
+                const cloned_obj = structuredClone($fine_tuned_values[$model][key]);
+                Object.keys(cloned_obj).forEach(label => {
+                    clonedFineTunedValues[label] = cloned_obj[label].split(',').map(f => {
+                        f = f.trim();
+                        try {
+                            if (f === 'true' || f === 'false' || f === 'null') return JSON.parse(f);
+                            if (!isNaN(Number(f))) return Number(f);
+                            return f;
+                        } catch (error) {
+                            console.error('Error parsing', f, error);
+                        }
+                    });
+                    console.log(label, cloned_obj[label], clonedFineTunedValues[label]);
                 });
-                console.log(f, val, clonedFineTunedValues[f]);
             });
             console.log('fine tuned values', clonedFineTunedValues);
             if (isEmpty(clonedFineTunedValues)) {
@@ -199,7 +202,7 @@
             },
             training_column_name_y: $training_column_name_y,
             parameters: $default_parameter_mode ? {} : clonedValues,
-            fine_tuned_hyperparameters: $default_parameter_mode ? {} : clonedFineTunedValues,
+            fine_tuned_values: $default_parameter_mode ? {} : clonedFineTunedValues,
             fine_tune_model: $fine_tune_model,
             bootstrap: $bootstrap,
             bootstrap_nsamples: Number($bootstrap_nsamples),
