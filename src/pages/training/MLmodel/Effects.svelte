@@ -1,4 +1,5 @@
 <script lang="ts">
+    // import { range } from 'lodash-es';
     import { embedd_savefile } from '../embedding/stores';
     import {
         current_model,
@@ -17,20 +18,35 @@
         if (!$model) return;
         if (!$current_model) return;
 
-        // console.log({ $hyperparameters, $parameters });
-        // console.log(Object.keys({ ...$hyperparameters?.[$model], ...$parameters?.[$model] }).length);
         // Set the default values if they don't exist
         $hyperparameters[$model] ??= structuredClone($default_param_values.hyperparameters);
         $parameters[$model] ??= structuredClone($default_param_values.parameters);
 
         // setting fine tuned hyperparameters
         $fine_tuned_hyperparameters[$model] ??= {};
-        Object.keys($current_model.hyperparameters).forEach(f => {
-            $fine_tuned_hyperparameters[$model][f] ??= structuredClone($current_model.hyperparameters[f].fine_tune);
+        const cloned_obj = structuredClone({ ...$current_model.hyperparameters, ...$current_model.parameters });
+        Object.keys(cloned_obj).forEach((label, ind) => {
+            const obj = cloned_obj[label];
+            let fine_tune_options = '';
+            if (isObject(obj.value)) {
+                let opts = Object.keys(obj.value.options);
+                if (opts.includes('float')) {
+                    opts = opts.filter(f => f !== 'float');
+                    opts.push('10');
+                }
+                fine_tune_options = opts.join(', ');
+            } else if (obj.value === null) {
+                fine_tune_options = 'null';
+            } else if (isBoolean(obj.value)) {
+                fine_tune_options = 'true, false';
+            } else {
+                fine_tune_options = obj.value.toString();
+            }
+            fine_tune_options = fine_tune_options.trim();
+            // remove trailing comma
+            if (fine_tune_options.endsWith(',')) fine_tune_options = fine_tune_options.slice(0, -1);
+            $fine_tuned_hyperparameters[$model][label] = fine_tune_options;
         });
-        // console.log({ $hyperparameters, $parameters });
-        // console.log(Object.keys({ ...$hyperparameters[$model], ...$parameters[$model] }).length);
-        // console.log('fine tuned hyperparameters values', $fine_tuned_hyperparameters);
 
         // Set the pre-trained model filename
         $pre_trained_filename = `${$model}_${$embedd_savefile}_pretrained_model`;
