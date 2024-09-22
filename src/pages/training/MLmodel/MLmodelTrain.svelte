@@ -4,7 +4,6 @@
         hyperparameters,
         parameters,
         fine_tune_model,
-        fine_tuned_hyperparameters,
         variable_type,
         cv_fold,
         bootstrap_nsamples,
@@ -98,6 +97,7 @@
             v.forEach(key => {
                 const cloned_obj = structuredClone($fine_tuned_values[$model][key]);
                 Object.keys(cloned_obj).forEach(label => {
+                    if ($all_params_lock_status[$model][key][label]) return;
                     clonedFineTunedValues[label] = cloned_obj[label].split(',').map(f => {
                         f = f.trim();
                         try {
@@ -141,7 +141,7 @@
             if (!locked) return;
             delete values[hparams];
         });
-        console.log({ values }, 'values length: ' + Object.keys(values).length);
+        // console.log({ values }, 'values length: ' + Object.keys(values).length);
         let clonedValues: Record<string, string | boolean | number | null> = {};
         console.log({ values, $variable_type });
 
@@ -182,10 +182,10 @@
             }
         });
 
-        console.log({ clonedValues }, 'values length: ' + Object.keys(clonedValues).length);
+        // console.log({ clonedValues }, 'values length: ' + Object.keys(clonedValues).length);
         const diff = difference(Object.keys(values), Object.keys(clonedValues));
         console.log(diff, 'diff length: ' + diff.length);
-        console.log(diff.map(f => ({ [f]: values[f] })));
+        // console.log(diff.map(f => ({ [f]: values[f] })));
 
         const grid_search_parameters = {
             n_iter: Number($randomzied_gridsearch_niter),
@@ -229,6 +229,8 @@
         };
 
         $results[$model] = null;
+        console.warn(args);
+        // return;
         return { pyfile: 'training.ml_model', args };
     };
 
@@ -270,7 +272,7 @@
 
 <div {id} style:display class="grid content-start gap-2">
     <Effects />
-    <div class="overflow-auto md:max-h-[80vh] sm:max-h-lg p-2">
+    <div class="overflow-auto md:max-h-[75vh] sm:max-h-lg p-2">
         <Accordion multiple>
             <TrainingFilePanel />
             <ControlPanel />
