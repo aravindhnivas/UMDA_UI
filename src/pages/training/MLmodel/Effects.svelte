@@ -1,10 +1,8 @@
 <script lang="ts">
-    // import { range } from 'lodash-es';
     import { embedd_savefile } from '../embedding/stores';
     import {
         current_model,
         default_param_values,
-        // fine_tuned_hyperparameters,
         fine_tuned_values,
         hyperparameters,
         model,
@@ -12,7 +10,6 @@
         pre_trained_filename,
     } from './stores';
 
-    // import { embedding, use_PCA } from '../embedding/stores';
     const set_fine_tuned_values = (key: 'hyperparameters' | 'parameters') => {
         const cloned_obj = structuredClone($current_model[key]);
         Object.keys(cloned_obj).forEach(label => {

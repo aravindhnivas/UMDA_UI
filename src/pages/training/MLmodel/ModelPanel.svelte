@@ -8,7 +8,6 @@
         default_parameter_mode,
         all_params_lock_status,
         fine_tune_model,
-        fine_tuned_hyperparameters,
         fine_tuned_values,
     } from './stores';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
