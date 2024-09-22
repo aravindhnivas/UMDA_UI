@@ -19,20 +19,16 @@
     export let key: 'hyperparameters' | 'parameters';
 
     const unique_id = getContext<string>('unique_id');
-    $: fine_tune_mode = $fine_tune_model && key === 'hyperparameters';
+    // $: fine_tune_mode = $fine_tune_model && key === 'hyperparameters';
 
     $: if (isEmpty($all_params_lock_status[$model]?.[key])) {
-        const param_keys = typeSafeObjectKeys($current_model[key]);
+        const param_keys = Object.keys($current_model[key]);
         param_keys.forEach(label => {
             $all_params_lock_status[$model][key][label] ??= true;
         });
-        console.warn('all_params_lock_status', $all_params_lock_status[$model]?.[key]);
+        // console.warn('all_params_lock_status', $all_params_lock_status[$model]?.[key]);
     }
-    // $: console.log(
-    //     $all_params_lock_status?.[$model]?.[key],
-    //     Object.values($all_params_lock_status?.[$model]?.[key]).filter(f => !f),
-    // );
-    $: console.log(Object.values($all_params_lock_status?.[$model]?.[key]).length);
+
     const ncols = 3;
 </script>
 
@@ -48,9 +44,9 @@
         {@const unlocked_len = total_len - locked_len}
         <div class="flex m-auto w-full">
             {#if unlocked_len === total_len}
-                <span class="badge badge-success w-full">All parameters are unlocked</span>
+                <span class="badge badge-success w-full">All {total_len} parameters are unlocked</span>
             {:else if unlocked_len === 0}
-                <span class="badge badge-error w-full"> All parameters are locked</span>
+                <span class="badge badge-error w-full"> All {total_len} parameters are locked</span>
             {:else}
                 <span class="badge badge-warning w-full">
                     {unlocked_len} / {locked_len} parameters are unlocked
@@ -58,16 +54,17 @@
             {/if}
         </div>
     {/if}
-    {#if fine_tune_mode}
-        <span class="badge badge-warning m-auto w-full"
-            >Grid search mode turned on. Please unlock the parameters to fine-tune</span
-        >
+    {#if $fine_tune_model}
+        <span class="badge badge-warning m-auto w-full">Grid search mode turned ON</span>
+        <span class="badge badge-warning m-auto w-full font-bold">
+            Please unlock the parameters to fine-tune i.e., enter comma separated values
+        </span>
     {/if}
 </div>
 
 {#if !$default_parameter_mode}
     <div class="grid gap-4 grid-cols-{ncols} hyperparameters__div p-2" style="">
-        {#each typeSafeObjectKeys($current_model[key]) as label (label)}
+        {#each Object.keys($current_model[key]) as label (label)}
             {@const { value, description } = $current_model[key][label]}
             {#if $model === 'gpr' && label === 'kernel'}
                 <div class="grid gap-2 col-span-{ncols}">
@@ -75,7 +72,7 @@
                 </div>
             {:else if label in values}
                 {#if typeof value === 'boolean'}
-                    {#if fine_tune_mode && !$all_params_lock_status[$model][key][label]}
+                    {#if $fine_tune_model && !$all_params_lock_status[$model][key][label]}
                         <CustomInput
                             {label}
                             helper={description}
@@ -98,7 +95,7 @@
                         </div>
                     {/if}
                 {:else if typeof value === 'string' || typeof value === 'number'}
-                    {#if fine_tune_mode && !$all_params_lock_status[$model][key][label]}
+                    {#if $fine_tune_model && !$all_params_lock_status[$model][key][label]}
                         <CustomInput
                             {label}
                             helper={description}
@@ -118,7 +115,7 @@
                         />
                     {/if}
                 {:else if typeof value === 'object' && value}
-                    {#if fine_tune_mode && !$all_params_lock_status[$model][key][label]}
+                    {#if $fine_tune_model && !$all_params_lock_status[$model][key][label]}
                         <CustomInput
                             {label}
                             helper={description}
@@ -132,7 +129,7 @@
                             label={`${label} (${value.options[values[label]]})`}
                             helper={description}
                             helperHighlight={`Default: ${$default_param_values[key][label]}`}
-                            items={typeSafeObjectKeys(value.options)}
+                            items={Object.keys(value.options)}
                             bind:value={values[label]}
                             bind:lock={$all_params_lock_status[$model][key][label]}
                             enabled_lock_mode
@@ -153,7 +150,7 @@
                         </CustomSelect>
                     {/if}
                 {:else if value == null}
-                    {#if fine_tune_mode && !$all_params_lock_status[$model][key][label]}
+                    {#if $fine_tune_model && !$all_params_lock_status[$model][key][label]}
                         <CustomInput
                             {label}
                             helper={description}
