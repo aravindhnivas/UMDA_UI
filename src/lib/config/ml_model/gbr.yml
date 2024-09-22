@@ -4,32 +4,26 @@ hyperparameters:
     learning_rate:
         value: 0.1
         description: 'Learning rate shrinks the contribution of each tree'
-        fine_tune: '0.001, 0.01, 0.1, 0.5, 1'
         type: float
     n_estimators:
         value: 100
         description: 'The number of boosting stages to perform'
-        fine_tune: '10, 50, 100, 200, 500'
         type: integer
     min_samples_split:
         value: 2
         description: 'Minimum number of samples required to split an internal node'
-        fine_tune: '0.1, 0.3, 0.5, 0.7, 1'
         type: float
     min_samples_leaf:
         value: 1
         description: 'Minimum number of samples required to be at a leaf node'
-        fine_tune: '0.1, 0.3, 0.5, 0.7, 1'
         type: float
     subsample:
         value: 1.0
         description: 'The fraction of samples to be used for fitting the individual base learners'
-        fine_tune: '0.1, 0.3, 0.5, 0.7, 1'
         type: float
     max_depth:
         value: 3
         description: 'Maximum depth of the individual regression estimators'
-        fine_tune: '3, 5, 7, 9, 11'
         type: integer
 parameters:
     loss:

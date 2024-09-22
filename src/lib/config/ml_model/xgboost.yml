@@ -4,47 +4,38 @@ hyperparameters:
     n_estimators:
         value: 100
         description: 'Number of boosting rounds'
-        fine_tune: '10, 50, 100, 200, 500'
         type: integer
     learning_rate:
         value: 0.1
         description: 'Boosting learning rate'
-        fine_tune: '0.001, 0.01, 0.1, 0.5, 1'
         type: float
     max_depth:
         value: 3
         description: 'Maximum tree depth for base learners'
-        fine_tune: '3, 5, 7, 9, 11'
         type: integer
     min_child_weight:
         value: 1
         description: 'Minimum sum of instance weight (hessian) needed in a child'
-        fine_tune: '1, 3, 5, 7, 9'
         type: integer
     subsample:
         value: 1.0
         description: 'Subsample ratio of the training instance'
-        fine_tune: '0.1, 0.3, 0.5, 0.7, 1'
         type: float
     colsample_bytree:
         value: 1.0
         description: 'Subsample ratio of columns when constructing each tree'
-        fine_tune: '0.1, 0.3, 0.5, 0.7, 1'
         type: float
     reg_alpha:
         value: 0.0
         description: 'L1 regularization term on weights'
-        fine_tune: '0.0, 0.1, 1.0, 10.0, 100.0'
         type: float
     reg_lambda:
         value: 1.0
         description: 'L2 regularization term on weights'
-        fine_tune: '0.0, 0.1, 1.0, 10.0, 100.0'
         type: float
     gamma:
         value: 0.0
         description: 'Minimum loss reduction required to make a further partition on a leaf node of the tree'
-        fine_tune: '0.0, 0.1, 1.0, 10.0, 100.0'
         type: float
 parameters:
     objective:

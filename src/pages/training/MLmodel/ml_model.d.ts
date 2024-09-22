@@ -9,10 +9,7 @@ type MLParameterValue =
           options: Record<string, string | number>;
       };
 
-type ModelHyperParameters = Record<
-    string,
-    { value: MLParameterValue; description: string; fine_tune: string; type: string }
->;
+type ModelHyperParameters = Record<string, { value: MLParameterValue; description: string; type: string }>;
 type ModelParameters = Record<string, { value: MLParameterValue; description: string; type: string }>;
 
 interface CurrentModel {

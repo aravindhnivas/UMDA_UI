@@ -4,7 +4,6 @@ hyperparameters:
     fit_intercept:
         value: true
         description: 'Specifies whether to calculate the intercept for this model'
-        fine_tune: 'true, false'
         type: bool
 parameters:
     copy_X:

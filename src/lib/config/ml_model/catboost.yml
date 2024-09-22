@@ -5,37 +5,30 @@ hyperparameters:
   iterations:
     value: 1000
     description: 'The maximum number of trees that can be built'
-    fine_tune: '100, 500, 1000, 2000, 5000'
     type: integer
   learning_rate:
     value: 0.03
     description: 'Step size shrinkage used to prevent overfitting'
-    fine_tune: '0.001, 0.01, 0.03, 0.1, 0.3'
     type: float
   depth:
     value: 6
     description: 'Depth of the tree'
-    fine_tune: '4, 6, 8, 10'
     type: integer
   l2_leaf_reg:
     value: 3
     description: 'L2 regularization coefficient'
-    fine_tune: '1.0, 3.0, 5.0, 7.0, 9.0'
     type: float
   random_strength:
     value: 1
     description: 'Amount of randomness to use for scoring splits'
-    fine_tune: '0.1, 1.0, 10.0'
     type: float
   border_count:
     value: 254
     description: 'Number of splits for numerical features'
-    fine_tune: '32, 128, 254'
     type: integer
   subsample:
     value: 0.8
     description: 'Subsample ratio of the training instance'
-    fine_tune: '0.5, 0.8, 1.0'
     type: float
 
 parameters:

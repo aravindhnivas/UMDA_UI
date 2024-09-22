@@ -11,7 +11,6 @@ hyperparameters:
                 sigmoid: 'Sigmoid kernel'
                 precomputed: 'Precomputed kernel'
         description: 'Specifies the kernel type to be used in the algorithm'
-        fine_tune: 'linear, poly, rbf, sigmoid'
         type: str
     gamma:
         value:
@@ -21,17 +20,14 @@ hyperparameters:
                 auto: '1 / n_features'
                 float: 'must be non-negative'
         description: 'Kernel coefficient for rbf, poly and sigmoid.'
-        fine_tune: 'scale, auto, 0.001, 0.01, 0.1, 1, 10, 100, 1000'
         type: str
     C:
         value: 1.0
         description: 'Regularization parameter'
-        fine_tune: '0.001, 0.01, 0.1, 1, 10, 100, 1000'
         type: float
     epsilon:
         value: 0.1
         description: 'Epsilon in the epsilon-SVR model'
-        fine_tune: '0.01, 0.1, 0.5, 1, 2, 5, 10'
         type: float
 parameters:
     degree:
