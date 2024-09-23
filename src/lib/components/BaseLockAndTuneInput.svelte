@@ -1,7 +1,8 @@
 <script lang="ts">
     import { UnlockKeyhole, LockKeyhole, SlidersHorizontal } from 'lucide-svelte/icons';
 
-    export let value: string | number;
+    export let component: 'input' | 'select' | 'checkbox';
+    export let value: string | number | boolean;
     export let label: string = '';
     export let helper: string = '';
     export let helperHighlight: string = '';
@@ -9,7 +10,6 @@
     export let disabled = false;
     export let fine_tune: boolean | null = null;
     export let fine_tuned_value: string | null = null;
-    export let component: 'input' | 'select' | 'checkbox' = 'input';
     export let items: string[] = [];
 
     let className = '';
@@ -23,15 +23,20 @@
     $: if (!lock && component === 'select' && fine_tune && !fine_tuned_value) {
         fine_tuned_value = items.filter(f => f !== 'float').join(', ');
     }
+    $: if (!lock && component === 'checkbox' && fine_tune) {
+        fine_tuned_value = 'true, false';
+    }
 
     $: if (lock || !fine_tune) fine_tuned_value = null;
-    $: if (lock && component === 'select') fine_tune = false;
+    $: if (lock && (component === 'select' || component === 'checkbox')) fine_tune = false;
 
     const input_attr = {
         autocomplete: 'off',
         autocapitalize: 'off',
         autocorrect: 'off',
     };
+
+    $: console.log({ value, fine_tune, fine_tuned_value });
 </script>
 
 <div class="grid gap-1 {className}">
@@ -51,7 +56,7 @@
             </span>
         </div>
     {/if}
-    <div class="flex items-center gap-2">
+    <div class="grid grid-cols-[1fr_auto] gap-1">
         {#if component === 'input'}
             <input
                 class="w-full input input-sm {element_disabled ? 'bg-gray-600/25' : ''}"
@@ -65,8 +70,17 @@
                 disabled={element_disabled}
                 {...input_attr}
             />
-        {:else if component === 'checkbox'}
-            <input type="checkbox" class="toggle" bind:checked={value} disabled={element_disabled} on:change />
+        {:else if component === 'checkbox' && typeof value === 'boolean' && !fine_tune}
+            <div class="flex items-center gap-2">
+                <input type="checkbox" class="toggle" bind:checked={value} disabled={element_disabled} on:change />
+                <span class="text-xs">{value ? 'true' : 'false'}</span>
+            </div>
+        {:else if component === 'checkbox' && fine_tune}
+            <input
+                class="w-full input input-sm {element_disabled ? 'bg-gray-600/25' : ''}"
+                value={fine_tuned_value}
+                disabled={true}
+            />
         {:else if fine_tune}
             <input
                 class="w-full input input-sm {element_disabled ? 'bg-gray-600/25' : ''}"
@@ -104,7 +118,7 @@
                 class="flex gap-1 items-center btn btn-sm btn-square"
                 class:btn-primary={fine_tune}
                 on:click={() => {
-                    if (component === 'select') {
+                    if (component === 'select' || component === 'checkbox') {
                         fine_tune = !fine_tune;
                         return;
                     }
