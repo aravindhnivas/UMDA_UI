@@ -103,6 +103,7 @@
                         f = f.trim();
                         try {
                             if (f === 'true' || f === 'false' || f === 'null') return JSON.parse(f);
+                            if (f === 'None') return null;
                             if (!isNaN(Number(f))) return Number(f);
                             return f;
                         } catch (error) {
