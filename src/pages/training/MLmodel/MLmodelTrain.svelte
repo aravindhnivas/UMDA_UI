@@ -237,8 +237,8 @@
         };
 
         $results[$model] = null;
-        console.warn(args);
-        return;
+        // console.warn(args);
+        // return;
         return { pyfile: 'training.ml_model', args };
     };
 
