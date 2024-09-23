@@ -28,7 +28,7 @@
                 </button>
             {/if}
             <span class="text-xs {element_disabled ? 'text-gray-600/75' : ''}">
-                {label}{element_disabled ? ' (locked)' : ''}
+                {label}
             </span>
         </div>
     {/if}
