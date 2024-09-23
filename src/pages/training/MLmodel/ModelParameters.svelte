@@ -29,10 +29,10 @@
     }
 
     const ncols = 3;
-    $: console.log(values, $fine_tuned_values[$model][key]);
+    // $: console.log(values, $fine_tuned_values[$model][key]);
 </script>
 
-<div class="grid mb-2">
+<div class="grid m-2">
     <span class="badge badge-info m-auto w-full flex gap-2">
         Click <LockKeyhole size="16" /> to unlock <UnlockKeyhole size="16" /> parameters to change the value
     </span>
