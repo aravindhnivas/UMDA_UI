@@ -76,7 +76,7 @@
                 {...input_attr}
             />
         {:else if component === 'checkbox' && typeof value === 'boolean' && !fine_tune}
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 border border-black rounded-xl p-1">
                 <input type="checkbox" class="toggle" bind:checked={value} disabled={element_disabled} on:change />
                 <span class="text-xs">{value ? 'true' : 'false'}</span>
             </div>
