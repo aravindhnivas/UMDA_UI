@@ -16,8 +16,12 @@
     export { className as class };
 
     $: element_disabled = disabled || lock;
-    $: if (!lock && component === 'input' && fine_tune !== null && typeof value === 'string') {
+    $: if (!lock && component === 'input' && fine_tune !== null) {
+        if (!value) value = '';
+        value = value.toString();
+        // if (typeof value === 'number') value = value.toString();
         fine_tune = value.includes(',');
+        console.warn({ fine_tune });
         if (fine_tune && !value.trim().endsWith(',')) fine_tuned_value = value;
     }
     $: if (!lock && component === 'select' && fine_tune && !fine_tuned_value) {
@@ -35,7 +39,6 @@
         autocapitalize: 'off',
         autocorrect: 'off',
     };
-
     $: console.log({ value, fine_tune, fine_tuned_value });
 </script>
 
