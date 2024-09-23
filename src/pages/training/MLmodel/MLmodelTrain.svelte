@@ -98,6 +98,7 @@
                 const cloned_obj = structuredClone($fine_tuned_values[$model][key]);
                 Object.keys(cloned_obj).forEach(label => {
                     if ($all_params_lock_status[$model][key][label]) return;
+                    if (!cloned_obj[label]) return;
                     clonedFineTunedValues[label] = cloned_obj[label].split(',').map(f => {
                         f = f.trim();
                         try {
@@ -131,12 +132,22 @@
         const values = structuredClone({ ...$hyperparameters[$model], ...$parameters[$model] });
 
         Object.keys($all_params_lock_status[$model].parameters).forEach(params => {
+            if (params in clonedFineTunedValues && clonedFineTunedValues[params]) {
+                delete values[params];
+                return;
+            }
+
             const locked = $all_params_lock_status[$model].parameters[params];
             if (!locked) return;
             delete values[params];
         });
 
         Object.keys($all_params_lock_status[$model].hyperparameters).forEach(hparams => {
+            if (hparams in clonedFineTunedValues && clonedFineTunedValues[hparams]) {
+                delete values[hparams];
+                return;
+            }
+
             const locked = $all_params_lock_status[$model].hyperparameters[hparams];
             if (!locked) return;
             delete values[hparams];
@@ -182,11 +193,11 @@
             }
         });
 
-        console.warn({ clonedValues, fine_tuned_values: $fine_tuned_values[$model] });
         const grid_search_parameters = {
             n_iter: Number($randomzied_gridsearch_niter),
             factor: Number($halving_factor),
         };
+        console.warn({ clonedValues, fine_tuned_values: $fine_tuned_values[$model], clonedFineTunedValues });
 
         const args = {
             model: $model,
