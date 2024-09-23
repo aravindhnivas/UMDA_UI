@@ -29,13 +29,22 @@
     }
 
     const ncols = 3;
-    // $: console.log(values, $fine_tuned_values[$model][key]);
+    $: console.log($fine_tuned_values[$model][key]);
+    $: if (Object.values($fine_tuned_values[$model][key]).some(f => f)) {
+        console.log('fine_tuned_values', $fine_tuned_values[$model][key]);
+    }
 </script>
 
 <div class="grid m-2">
-    <span class="badge badge-info m-auto w-full flex gap-2">
+    <span class="badge m-auto w-full flex gap-2">
         Click <LockKeyhole size="16" /> to unlock <UnlockKeyhole size="16" /> parameters to change the value
     </span>
+
+    {#if !$fine_tune_model && Object.values($fine_tuned_values[$model][key]).some(f => f)}
+        <span class="badge badge-error m-auto w-full flex gap-2">
+            Turn on grid search mode to use the fine-tuned search parameters in the model
+        </span>
+    {/if}
 
     {#if Object.values($all_params_lock_status[$model][key]) && !$default_parameter_mode}
         {@const locked_obj_values = Object.values($all_params_lock_status[$model][key])}
@@ -55,8 +64,8 @@
         </div>
     {/if}
     {#if $fine_tune_model}
-        <span class="badge badge-warning m-auto w-full">Grid search mode turned ON</span>
-        <span class="badge badge-warning m-auto w-full font-bold">
+        <span class="badge badge-info m-auto w-full">Grid search mode turned ON</span>
+        <span class="badge badge-info m-auto w-full font-bold">
             Please unlock the parameters to fine-tune i.e., enter comma separated values
         </span>
     {/if}
