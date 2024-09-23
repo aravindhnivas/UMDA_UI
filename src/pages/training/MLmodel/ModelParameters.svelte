@@ -80,7 +80,7 @@
                         items={Object.keys(value.options)}
                         bind:value={values[label]}
                         bind:lock={$all_params_lock_status[$model][key][label]}
-                        fine_tune={$fine_tune_model}
+                        fine_tune={false}
                         bind:fine_tuned_value={$fine_tuned_values[$model][key][label]}
                     >
                         {#if values[label] === 'float'}
@@ -91,7 +91,6 @@
                                 helper={description}
                                 helperHighlight={`Default: ${$default_param_values[key][label]}`}
                                 bind:lock={$all_params_lock_status[$model][key][label]}
-                                enabled_lock_mode
                                 on:keydown={validateInput}
                             />
                         {/if}
@@ -104,7 +103,7 @@
                         helperHighlight={`Default: ${$default_param_values[key][label]}`}
                         bind:value={values[label]}
                         bind:lock={$all_params_lock_status[$model][key][label]}
-                        fine_tune={$fine_tune_model}
+                        fine_tune={false}
                         bind:fine_tuned_value={$fine_tuned_values[$model][key][label]}
                     />
                 {/if}
