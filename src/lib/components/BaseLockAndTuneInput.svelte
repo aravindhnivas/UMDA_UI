@@ -16,12 +16,8 @@
     export { className as class };
 
     $: element_disabled = disabled || lock;
-    $: if (!lock && component === 'input' && fine_tune !== null) {
-        if (!value) value = '';
-        value = value.toString();
-        // if (typeof value === 'number') value = value.toString();
+    $: if (!lock && component === 'input' && fine_tune !== null && typeof value === 'string') {
         fine_tune = value.includes(',');
-        console.warn({ fine_tune });
         if (fine_tune && !value.trim().endsWith(',')) fine_tuned_value = value;
     }
     $: if (!lock && component === 'select' && fine_tune && !fine_tuned_value) {
@@ -40,6 +36,12 @@
         autocorrect: 'off',
     };
     $: console.log({ value, fine_tune, fine_tuned_value });
+    onMount(() => {
+        if (component === 'input') {
+            if (!value) value = '';
+            if (typeof value !== 'string') value = value.toString();
+        }
+    });
 </script>
 
 <div class="grid gap-1 {className}">
