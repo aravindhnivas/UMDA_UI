@@ -133,7 +133,7 @@
         const values = structuredClone({ ...$hyperparameters[$model], ...$parameters[$model] });
 
         Object.keys($all_params_lock_status[$model].parameters).forEach(params => {
-            if (params in clonedFineTunedValues && clonedFineTunedValues[params]) {
+            if (params in clonedFineTunedValues && clonedFineTunedValues[params] !== null) {
                 delete values[params];
                 return;
             }
@@ -144,7 +144,7 @@
         });
 
         Object.keys($all_params_lock_status[$model].hyperparameters).forEach(hparams => {
-            if (hparams in clonedFineTunedValues && clonedFineTunedValues[hparams]) {
+            if (hparams in clonedFineTunedValues && clonedFineTunedValues[hparams] !== null) {
                 delete values[hparams];
                 return;
             }
