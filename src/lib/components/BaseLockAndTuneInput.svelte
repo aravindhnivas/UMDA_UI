@@ -121,7 +121,7 @@
         {#if fine_tune !== null && !lock}
             <button
                 class="flex gap-1 items-center btn btn-sm btn-square"
-                class:btn-primary={fine_tune}
+                class:btn-info={fine_tune}
                 on:click={() => {
                     if (component === 'select' || component === 'checkbox') {
                         fine_tune = !fine_tune;
