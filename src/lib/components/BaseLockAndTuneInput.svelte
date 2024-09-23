@@ -35,7 +35,7 @@
         autocapitalize: 'off',
         autocorrect: 'off',
     };
-    $: console.log({ value, fine_tune, fine_tuned_value });
+    // $: console.log({ value, fine_tune, fine_tuned_value });
     onMount(() => {
         if (component === 'input') {
             if (!value) value = '';
