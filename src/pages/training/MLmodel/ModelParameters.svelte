@@ -9,11 +9,10 @@
         all_params_lock_status,
     } from './stores';
     import { validateInput } from '$lib/utils';
-    import { Checkbox, CustomSelect } from '$lib/components';
     import Kernel from './Kernel.svelte';
     import Notification from '$lib/components/Notification.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
-    import { LockKeyhole, UnlockKeyhole } from 'lucide-svelte/icons';
+    import { LockKeyhole, UnlockKeyhole, TriangleAlert } from 'lucide-svelte/icons';
     import BaseLockAndTuneInput from '$lib/components/BaseLockAndTuneInput.svelte';
 
     export let values: Record<string, any>;
@@ -40,12 +39,6 @@
         Click <LockKeyhole size="16" /> to unlock <UnlockKeyhole size="16" /> parameters to change the value
     </span>
 
-    {#if !$fine_tune_model && Object.values($fine_tuned_values[$model][key]).some(f => f)}
-        <span class="badge badge-error m-auto w-full flex gap-2">
-            Turn on grid search mode to use the fine-tuned search parameters in the model
-        </span>
-    {/if}
-
     {#if Object.values($all_params_lock_status[$model][key]) && !$default_parameter_mode}
         {@const locked_obj_values = Object.values($all_params_lock_status[$model][key])}
         {@const total_len = locked_obj_values.length}
@@ -63,10 +56,22 @@
             {/if}
         </div>
     {/if}
+
     {#if $fine_tune_model}
         <span class="badge badge-info m-auto w-full">Grid search mode turned ON</span>
         <span class="badge badge-info m-auto w-full font-bold">
             Please unlock the parameters to fine-tune i.e., enter comma separated values
+        </span>
+        {#if !Object.values($fine_tuned_values[$model][key]).some(f => f)}
+            <span class="badge badge-error m-auto w-full flex gap-2">
+                <TriangleAlert size="20" />
+                <span>Grid search mode turned ON. Fine-tune the parameters to use the grid search</span>
+            </span>
+        {/if}
+    {:else if Object.values($fine_tuned_values[$model][key]).some(f => f)}
+        <span class="badge badge-error m-auto w-full flex gap-2">
+            <TriangleAlert size="20" />
+            <span>Turn on grid search mode to use the fine-tuned search parameters in the model</span>
         </span>
     {/if}
 </div>
