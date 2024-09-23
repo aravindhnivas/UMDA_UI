@@ -141,9 +141,9 @@
             if (!locked) return;
             delete values[hparams];
         });
-        // console.log({ values }, 'values length: ' + Object.keys(values).length);
+
         let clonedValues: Record<string, string | boolean | number | null> = {};
-        console.log({ values, $variable_type });
+        // console.log({ values, $variable_type });
 
         Object.entries(values).forEach(([key, value], ind) => {
             // console.log(ind, { key, value, type: $variable_type[key] });
@@ -182,11 +182,7 @@
             }
         });
 
-        // console.log({ clonedValues }, 'values length: ' + Object.keys(clonedValues).length);
-        const diff = difference(Object.keys(values), Object.keys(clonedValues));
-        console.log(diff, 'diff length: ' + diff.length);
-        // console.log(diff.map(f => ({ [f]: values[f] })));
-
+        console.warn({ clonedValues, fine_tuned_values: $fine_tuned_values[$model] });
         const grid_search_parameters = {
             n_iter: Number($randomzied_gridsearch_niter),
             factor: Number($halving_factor),
@@ -230,7 +226,7 @@
 
         $results[$model] = null;
         console.warn(args);
-        // return;
+        return;
         return { pyfile: 'training.ml_model', args };
     };
 
