@@ -1,7 +1,12 @@
 <script lang="ts">
     import Plot from 'svelte-plotly.js';
     import { typeSafeObjectKeys } from '$lib/utils';
+    import Chip, { Set, Text } from '@smui/chips';
+
     export let plots_data: YDistributionPlotData;
+
+    let choices = typeSafeObjectKeys(plots_data);
+    let selected: Partial<typeof choices> = ['histogram', 'box_plot'];
 
     const histogramLayout: Partial<Plotly.Layout> = {
         title: 'Histogram',
@@ -55,18 +60,16 @@
                 'The Q-Q (Quantile-Quantile) plot compares the distribution of the dataset to a theoretical normal distribution. A straight line indicates that the data follows a normal distribution, while deviations suggest non-normality.',
         },
     };
-
-    let show_plot = true;
 </script>
 
-<div class="flex">
-    <button class="btn btn-sm btn-outline" on:click={() => (show_plot = !show_plot)}
-        >{show_plot ? 'Hide' : 'Show'} plot</button
-    >
-</div>
+<Set chips={choices} let:chip filter bind:selected>
+    <Chip {chip} touch>
+        <Text>{chip}</Text>
+    </Chip>
+</Set>
 
-{#if show_plot}
-    {#each typeSafeObjectKeys(plots_data) as key}
+{#each typeSafeObjectKeys(plots_data) as key}
+    {#if selected.includes(key)}
         {@const data = plots_data[key]}
         {@const layout = layouts[key]}
         {@const plot_description = plot_descriptions[key]}
@@ -77,5 +80,5 @@
             <span class="font-bold">{plot_description.name}: </span>{plot_description.description}
         </div>
         <hr />
-    {/each}
-{/if}
+    {/if}
+{/each}
