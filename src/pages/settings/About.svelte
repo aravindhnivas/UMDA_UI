@@ -26,7 +26,7 @@
             </li>
             <li class="text-sm">RAM: <span class="badge badge-info">{$RAM_SIZE.toFixed(0)} GB RAM</span></li>
             <li class="text-sm">CPU: <span class="badge badge-info">{$CPU_COUNT.toFixed(0)} core</span></li>
-            <hr />
+            <div class="divider"></div>
 
             {#await getVersion() then value}
                 <li>UMDA_UI: <span class="badge badge-info">v{value}</span></li>
@@ -43,7 +43,7 @@
                     >v{$umdapyVersion || 'unknown'}</span
                 >
             </li>
-            <hr />
+            <div class="divider"></div>
         </ul>
     </div>
 </Layout>
