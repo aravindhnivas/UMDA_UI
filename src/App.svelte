@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { RAM_SIZE, CPU_COUNT, NPARTITIONS } from '$lib/stores/system';
+    import { RAM_SIZE, CPU_COUNT, NPARTITIONS, fontSize } from '$lib/stores/system';
     import { Toaster } from 'svelte-sonner';
     import * as pages from './pages';
     import Footer from '$lib/layouts/Footer.svelte';
@@ -10,12 +10,15 @@
     import { typeSafeObjectKeys } from '$lib/utils';
     import { Home, Settings, Binary } from 'lucide-svelte/icons';
     import type { SvelteComponent } from 'svelte';
+    import { os } from '@tauri-apps/api';
 
     const nav_tabs = {
         Home: Home,
         Training: Binary,
         Settings: Settings,
     } as Record<string, typeof SvelteComponent>;
+
+    let html: HTMLElement;
 
     onMount(async () => {
         const [total_memory, cpu_count] = await invoke<[number, number]>('get_sysinfo');
@@ -30,8 +33,25 @@
         const max_npartitions = Math.max(cpu_npartitions, ram_npartitions, 50);
 
         NPARTITIONS.set(Math.floor(max_npartitions));
+        html = document.getElementsByTagName('html')[0];
     });
+
+    $: if (html && $fontSize && $fontSize < 25 && $fontSize > 5) {
+        html.style.fontSize = `${$fontSize}px`;
+    }
+
+    async function handleKeydown(event: KeyboardEvent) {
+        const platform = await os.platform();
+        const cond = platform === 'darwin' ? event.metaKey : event.ctrlKey;
+        if (cond && event.key === '=') {
+            $fontSize += 1;
+        } else if (cond && event.key === '-') {
+            $fontSize -= 1;
+        }
+    }
 </script>
+
+<svelte:window on:keydown={handleKeydown} />
 
 <Toaster position="bottom-left" richColors />
 <PreModal />

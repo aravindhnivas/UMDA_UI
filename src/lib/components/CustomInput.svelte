@@ -45,6 +45,7 @@
             autocapitalize="off"
             autocorrect="off"
         />
+        <slot />
     </div>
 
     {#if helper}

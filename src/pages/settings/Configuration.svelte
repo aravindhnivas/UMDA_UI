@@ -8,6 +8,7 @@
         pyVersion,
         umdapyVersion,
     } from '$lib/pyserver/stores';
+    import { fontSize } from '$lib/stores/system';
     import { Checkbox } from '$components/index';
     import Layout from './comp/Layout.svelte';
     import { fetchServerROOT, start_and_check_umdapy_with_toast } from '$lib/pyserver/umdapyServer';
@@ -15,12 +16,12 @@
     import { install_umdapy_from_zipfile } from './utils/download-assets';
     import { check_umdapy_assets_status } from './utils/assets-status';
     import PyServerControl from './config/PyServerControl.svelte';
-    import WebsocketServerControl from './config/WebsocketServerControl.svelte';
     import Accordion from '@smui-extra/accordion';
     import TerminalBox from '$lib/components/TerminalBox.svelte';
     import { serverInfo } from './utils/stores';
     import BrowseFile from '$lib/components/BrowseFile.svelte';
-    import { Download, ExternalLink } from 'lucide-svelte/icons';
+    import { Download, ExternalLink, RefreshCcw } from 'lucide-svelte/icons';
+    import CustomInput from '$lib/components/CustomInput.svelte';
 
     const get_local_dir = async () => {
         try {
@@ -56,7 +57,13 @@
 </script>
 
 <Layout id="Configuration">
-    <div class="flex gap-1 items-center justify-between">
+    <div class="flex">
+        <CustomInput bind:value={$fontSize} label="font-size" type="number" max="25">
+            <button on:click={() => ($fontSize = 16)}><RefreshCcw /></button>
+        </CustomInput>
+    </div>
+    <div class="divider"></div>
+    <div class="flex-center justify-between">
         <div class="">
             {#if $pyServerReady && $pyVersion}
                 <div class="badge badge-success">Python: {$pyVersion} (umdapy: {$umdapyVersion})</div>
