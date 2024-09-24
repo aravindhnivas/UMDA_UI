@@ -4,7 +4,7 @@
     import FooterProcess from '$lib/utils/footer/Footer_processes.svelte';
 </script>
 
-<div class="footer items-center bg-orange-400 h-[2rem]">
+<div class="footer items-center h-[2rem] shadow-2xl">
     <aside class="grid-flow-col items-center px-4 w-full justify-between">
         <div>
             <span>{import.meta.env.VITE_YEAR} &copy; {import.meta.env.VITE_AUTHOUR} |</span>

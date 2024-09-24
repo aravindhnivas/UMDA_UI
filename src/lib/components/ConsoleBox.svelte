@@ -7,7 +7,7 @@
     export let max_height = '250px';
 </script>
 
-<div class="console__box card shadow-xl bg-orange-300 p-5" style:max-height={max_height}>
+<div class="console__box card shadow-xl p-5" style:max-height={max_height}>
     <button class="btn btn-sm btn-outline ml-auto" on:click={() => (console_arr = [])}>Clear</button>
     <div class="body">
         {#each console_arr as obj}

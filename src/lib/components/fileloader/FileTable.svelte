@@ -29,7 +29,7 @@
                 </Head>
                 <Body>
                     {#each data.nrows as nrows, index}
-                        <Row class="hover:bg-orange-300">
+                        <Row>
                             <Cell>{index}</Cell>
                             {#each data.columns as column}
                                 <Cell>{nrows[column]}</Cell>

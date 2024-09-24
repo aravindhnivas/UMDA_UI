@@ -36,7 +36,7 @@
 <Toaster position="bottom-left" richColors />
 <PreModal />
 <div class="parent w-full h-full">
-    <header class="bg-orange-300/50 shadow-xl">
+    <header class=" shadow-xl">
         <TabBar tabs={Object.keys(nav_tabs)} let:tab bind:active={$active_tab}>
             <Tab {tab}>
                 <Label>
@@ -53,7 +53,7 @@
             <svelte:component this={pages[name]} />
         {/each}
     </main>
-    <footer><Footer /></footer>
+    <footer class="border-t border-t-black"><Footer /></footer>
 </div>
 
 <style>
