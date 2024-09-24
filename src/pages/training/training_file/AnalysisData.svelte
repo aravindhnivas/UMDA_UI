@@ -14,6 +14,7 @@
     import PlotAnalysis from './plot-analysis/PlotAnalysis.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
     import Notification from '$lib/components/Notification.svelte';
+    import FetchAnalysisDir from './FetchAnalysisDir.svelte';
 
     const MolecularAnalysis = async (
         mode: 'all' | 'size_distribution' | 'structural_distribution' | 'elemental_distribution' = 'all',
@@ -145,7 +146,8 @@
 </script>
 
 {#if $index_column_valid}
-    <Notification message="" type="info" dismissable={false}>
+    <FetchAnalysisDir />
+    <!-- <Notification message="" type="info" dismissable={false}>
         {#await $current_analysis_file then value}
             {#await fs.exists(value) then file_exists}
                 <div class="grid gap-1"><span>Current analysis file:</span><code>{value}</code></div>
@@ -157,7 +159,7 @@
                 The column X is not 'SMILES'. Please make sure the column X name is 'SMILES' for molecular structure.
             </div>
         {/if}
-    </Notification>
+    </Notification> -->
 
     <div class="flex gap-2 m-auto items-end">
         <Loadingbtn

@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { filtered_dir, use_filtered_data_for_training } from './plot-analysis/stores';
+    import { current_training_data_file, filtered_dir, use_filtered_data_for_training } from './plot-analysis/stores';
     import { load_analysis_dir, training_file } from './stores';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
-    import { RefreshCcw } from 'lucide-svelte/icons';
+    import { RefreshCcw, ExternalLink } from 'lucide-svelte/icons';
     import { onMount } from 'svelte';
     import { Checkbox } from '$lib/components';
 
@@ -42,6 +42,23 @@
     });
 </script>
 
+{#await $current_training_data_file then filename}
+    <div class="flex gap-1 items-center">
+        <span class="badge">{filename}</span>
+        <button
+            class="btn btn-xs btn-outline"
+            on:click={async () => {
+                const dir = await path.dirname(filename);
+                if (!(await fs.exists(dir))) {
+                    toast.error(`Directory ${dir} does not exist`);
+                    return;
+                }
+                await shell.open(dir);
+            }}><ExternalLink size="20" /></button
+        >
+    </div>
+{/await}
+
 <div class="flex items-end gap-2">
     <div class="flex gap-2 items-end">
         <button class="btn btn-sm btn-square btn-outline" on:click={async () => await fetch_analysis_dir()}>
@@ -58,12 +75,16 @@
         }}
     />
 </div>
-{#if $use_filtered_data_for_training}
-    {#if $filtered_dir == 'default'}
-        <div class="badge-sm badge-warning">If using filtered data, please select a directory other than 'default'</div>
-    {:else}
-        <div class="badge-sm badge-info">
-            NOTE: using filtered training dataset ({$filtered_dir})
-        </div>
+<div class="flex">
+    {#if $use_filtered_data_for_training}
+        {#if $filtered_dir == 'default'}
+            <div class="badge-sm badge-warning rounded-xl">
+                If using filtered data, please select a directory other than 'default'
+            </div>
+        {:else}
+            <div class="badge-sm badge-info rounded-xl">
+                NOTE: using filtered training dataset ({$filtered_dir})
+            </div>
+        {/if}
     {/if}
-{/if}
+</div>

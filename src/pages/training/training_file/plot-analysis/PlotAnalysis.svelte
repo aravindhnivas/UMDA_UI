@@ -47,7 +47,7 @@
     </TabBar>
 </div>
 
-<FetchAnalysisDir />
+<!-- <FetchAnalysisDir /> -->
 
 <div class:hidden={current_active_analysis_tab !== 'analysis_plots'} class="grid gap-2">
     <div class="w-max">
