@@ -14,7 +14,7 @@
   "dependencies": {
     "@tauri-apps/api": "^1.6.0",
     "@tauri-apps/cli": "^1.6.2",
-    "lucide-svelte": "0.441.0",
+    "lucide-svelte": "0.445.0",
     "plotly.js-dist-min": "^2.35.2",
     "smiles-drawer": "^2.1.7"
   },
@@ -31,7 +31,6 @@
     "@smui/paper": "^7.0.0",
     "@smui/tab": "^7.0.0",
     "@smui/tab-bar": "^7.0.0",
-    "@smui/textfield": "^7.0.0",
     "@sveltejs/svelte-virtual-list": "^3.0.1",
     "@sveltejs/vite-plugin-svelte": "^3.1.2",
     "@tailwindcss/typography": "^0.5.15",

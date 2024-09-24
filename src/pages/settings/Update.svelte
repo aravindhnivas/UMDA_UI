@@ -1,10 +1,5 @@
 <script lang="ts">
-    import {
-        downloadURL,
-        downloadoverrideURL,
-        python_asset_ready_to_install,
-        install_update_without_promt,
-    } from '$pages/settings/utils/stores';
+    import { python_asset_ready_to_install, install_update_without_promt } from '$pages/settings/utils/stores';
     import { updateError } from '$utils/stores';
     import { activateChangelog } from '$utils/stores';
     import { checkUpdate, installUpdate } from '@tauri-apps/api/updater';
@@ -12,7 +7,6 @@
     import { stopServer } from '$lib/pyserver/umdapyServer';
     import { listen } from '@tauri-apps/api/event';
     import { outputbox } from '$settings/utils/stores';
-    import Textfield from '@smui/textfield';
     import { footerMsg } from '$lib/utils/initialise';
     import {
         download_assets,
@@ -246,13 +240,6 @@
         {/if}
 
         <h3>Python assets download</h3>
-
-        {#if import.meta.env.DEV}
-            <div class="flex w-full gap-2">
-                <Textfield bind:value={$downloadURL} label="download-URL" style="width: 100%" />
-                <Checkbox bind:value={$downloadoverrideURL} label="override URL" />
-            </div>
-        {/if}
 
         <div class="align">
             <button

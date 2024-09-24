@@ -1,10 +1,9 @@
 <script lang="ts">
     import { pre_trained_filename, save_pretrained_model, current_pretrained_file } from './stores';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
-    import Textfield from '@smui/textfield';
-    import { Checkbox } from '$lib/components';
+    import { Checkbox, CustomInput } from '$lib/components';
     import Notification from '$lib/components/Notification.svelte';
-    import { ExternalLink } from 'lucide-svelte';
+    import { ExternalLink } from 'lucide-svelte/icons';
 </script>
 
 <CustomPanel>
@@ -23,7 +22,7 @@
         <div class="flex gap-1">
             <Checkbox bind:value={$save_pretrained_model} label="Save" check="checkbox" />
         </div>
-        <Textfield bind:value={$pre_trained_filename} label="save filename (.pkl)" />
+        <CustomInput bind:value={$pre_trained_filename} label="save filename (.pkl)" />
         {#await $current_pretrained_file then value}
             {#await path.dirname(value) then save_loc_name}
                 <Notification dismissable={false}>

@@ -1,14 +1,11 @@
 <script lang="ts">
-    import Textfield from '@smui/textfield';
     import { fetchServerROOT, updateServerInfo } from '$lib/pyserver/umdapyServer';
     import { checkNetstat, killPID } from '../utils/network';
     import { serverInfo } from '../utils/stores';
     import { connect_websocket } from '$lib/ws';
     import { AxiosError } from 'axios';
-    import { LockKeyhole, RefreshCcw, UnlockKeyhole, ChevronRight } from 'lucide-svelte/icons';
+    import { RefreshCcw } from 'lucide-svelte/icons';
     import { Checkbox, CustomInput } from '$lib/components';
-    // import Modal from '$lib/components/modal/Modal.svelte';
-    import { suppressed_warnings } from '$lib/pyserver/stores';
     import SuppressedWarningsModal from './SuppressedWarningsModal.svelte';
 
     export let port: number;
@@ -35,7 +32,7 @@
     };
 </script>
 
-<div class="grid gap-1">
+<div class="grid gap-4">
     <div class="flex items-end gap-2">
         <div class="flex">
             <CustomInput bind:lock={port_lock} bind:value={port} label="ServerPORT" type="number">
@@ -67,7 +64,7 @@
         <SuppressedWarningsModal />
     </div>
 
-    <div class="flex gap-1 items-center">
+    <div class="flex items-end gap-2">
         {#if connection === 'http'}
             <button
                 class="btn btn-sm btn-outline"
@@ -85,7 +82,7 @@
         <button class="btn btn-sm btn-outline" on:click={async () => await checkNetstat(port)}>Check PORT status</button
         >
 
-        <Textfield
+        <CustomInput
             value={pids.join(', ')}
             label="current port PID"
             on:change={e => {

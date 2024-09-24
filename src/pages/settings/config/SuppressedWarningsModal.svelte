@@ -1,8 +1,7 @@
 <script lang="ts">
     import Modal from '$lib/components/modal/Modal.svelte';
-    import { typeSafeObjectKeys } from '$lib/utils';
     import { suppressed_warnings } from '$lib/pyserver/stores';
-    import { Trash2 } from 'lucide-svelte';
+    import { Trash2 } from 'lucide-svelte/icons';
 
     onMount(() => {
         if (!import.meta.env.DEV) return;
