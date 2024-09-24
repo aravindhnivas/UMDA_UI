@@ -6,7 +6,7 @@
     import { connect_websocket } from '$lib/ws';
     import { AxiosError } from 'axios';
     import { LockKeyhole, RefreshCcw, UnlockKeyhole, ChevronRight } from 'lucide-svelte/icons';
-    import { Checkbox } from '$lib/components';
+    import { Checkbox, CustomInput } from '$lib/components';
     // import Modal from '$lib/components/modal/Modal.svelte';
     import { suppressed_warnings } from '$lib/pyserver/stores';
     import SuppressedWarningsModal from './SuppressedWarningsModal.svelte';
@@ -36,17 +36,13 @@
 </script>
 
 <div class="grid gap-1">
-    <div class="flex items-center gap-1">
-        <div class="flex gap-2 items-end">
-            <button on:click={fetch_port}><RefreshCcw /></button>
-            <Textfield disabled={port_lock} type="number" bind:value={port} label="ServerPORT" />
-            <button on:click={() => (port_lock = !port_lock)}>
-                {#if port_lock}
-                    <LockKeyhole />
-                {:else}
-                    <UnlockKeyhole />
-                {/if}
-            </button>
+    <div class="flex items-end gap-2">
+        <div class="flex">
+            <CustomInput bind:lock={port_lock} bind:value={port} label="ServerPORT" type="number">
+                <svelte:fragment slot="pre-input">
+                    <button on:click={fetch_port}><RefreshCcw size="18" /></button>
+                </svelte:fragment>
+            </CustomInput>
         </div>
         <button
             disabled={serverReady}
