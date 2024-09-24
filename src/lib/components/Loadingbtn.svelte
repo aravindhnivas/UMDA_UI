@@ -6,7 +6,7 @@
     export let name: string = 'Compute';
 
     type Callback = { pyfile: string; args: Record<string, any> } | undefined;
-    export let callback: () => Promise<Callback> | Callback;
+    export let callback: () => Promise<Callback | void> | Callback | void;
 
     let className = '';
     export { className as class };
