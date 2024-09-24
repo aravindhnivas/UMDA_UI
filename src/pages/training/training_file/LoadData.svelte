@@ -17,7 +17,6 @@
     import { CustomInput, Loadingbtn } from '$lib/components';
     import FetchAnalysisDir from './FetchAnalysisDir.svelte';
     import LoadedFileInfos from '../embedding/LoadedFileInfos.svelte';
-    import Notification from '$lib/components/Notification.svelte';
     import { Download, Save } from 'lucide-svelte/icons';
     import Checkbox from '$lib/components/Checkbox.svelte';
 
@@ -159,7 +158,7 @@
         {#await fs.exists($training_file.filename) then file_exists}
             <div class="flex flex-col gap-1">
                 <Checkbox bind:value={auto_fetch_columns} label="Auto-fetch column name" />
-                {#if auto_fetch_columns && !data?.columns.length}
+                {#if auto_fetch_columns && !$loaded_df_columns.length}
                     <span class="text-sm">Load file first!</span>
                 {/if}
             </div>
@@ -201,7 +200,7 @@
                 <CustomSelect
                     label="Choose INDEX column"
                     bind:value={$training_column_name_index}
-                    items={data?.columns || []}
+                    items={$loaded_df_columns || []}
                 />
                 <span class="badge badge-info ml-auto" class:badge-error={!$index_column_valid}>
                     {$index_column_valid ? 'Index available' : 'Index not available'}
