@@ -5,18 +5,17 @@
     import Footer from '$lib/layouts/Footer.svelte';
     import PreModal from '$utils/PreModal.svelte';
     import { active_tab } from '$utils/stores';
-    import Tab, { Label } from '@smui/tab';
-    import TabBar from '@smui/tab-bar';
     import { typeSafeObjectKeys } from '$lib/utils';
     import { Home, Settings, Binary } from 'lucide-svelte/icons';
     import type { SvelteComponent } from 'svelte';
     import { os } from '@tauri-apps/api';
+    import CustomTabs from '$lib/components/CustomTabs.svelte';
 
-    const nav_tabs = {
-        Home: Home,
-        Training: Binary,
-        Settings: Settings,
-    } as Record<string, typeof SvelteComponent>;
+    const nav_tabs = [
+        { tab: 'Home', component: Home },
+        { tab: 'Training', component: Binary },
+        { tab: 'Settings', component: Settings },
+    ] as { tab: string; component: typeof SvelteComponent }[];
 
     let html: HTMLElement;
 
@@ -56,17 +55,8 @@
 <Toaster position="bottom-left" richColors />
 <PreModal />
 <div class="parent w-full h-full">
-    <header class=" shadow-xl">
-        <TabBar tabs={Object.keys(nav_tabs)} let:tab bind:active={$active_tab}>
-            <Tab {tab}>
-                <Label>
-                    <div class="flex gap-2 items-center">
-                        <svelte:component this={nav_tabs[tab]} />
-                        <span>{tab}</span>
-                    </div>
-                </Label>
-            </Tab>
-        </TabBar>
+    <header class=" shadow-xl p-2">
+        <CustomTabs tabs={nav_tabs} bind:active={$active_tab} />
     </header>
     <main>
         {#each typeSafeObjectKeys(pages) as name}
