@@ -4,10 +4,18 @@
     import * as pages from './pages';
     import Footer from '$lib/layouts/Footer.svelte';
     import PreModal from '$utils/PreModal.svelte';
-    import CustomTabs from '$lib/components/CustomTabs.svelte';
     import { active_tab } from '$utils/stores';
+    import Tab, { Label } from '@smui/tab';
+    import TabBar from '@smui/tab-bar';
     import { typeSafeObjectKeys } from '$lib/utils';
-    const tabs = ['Home', 'Training', 'Settings'];
+    import { Home, Settings, Binary } from 'lucide-svelte/icons';
+    import type { SvelteComponent } from 'svelte';
+
+    const nav_tabs = {
+        Home: Home,
+        Training: Binary,
+        Settings: Settings,
+    } as Record<string, typeof SvelteComponent>;
 
     onMount(async () => {
         const [total_memory, cpu_count] = await invoke<[number, number]>('get_sysinfo');
@@ -29,7 +37,16 @@
 <PreModal />
 <div class="parent w-full h-full">
     <header class="bg-orange-300/50 shadow-xl">
-        <CustomTabs {tabs} bind:active={$active_tab} />
+        <TabBar tabs={Object.keys(nav_tabs)} let:tab bind:active={$active_tab}>
+            <Tab {tab}>
+                <Label>
+                    <div class="flex gap-2 items-center">
+                        <svelte:component this={nav_tabs[tab]} />
+                        <span>{tab}</span>
+                    </div>
+                </Label>
+            </Tab>
+        </TabBar>
     </header>
     <main>
         {#each typeSafeObjectKeys(pages) as name}
@@ -39,7 +56,7 @@
     <footer><Footer /></footer>
 </div>
 
-<style lang="scss">
+<style>
     .parent {
         display: grid;
         grid-template-rows: auto 1fr auto;
