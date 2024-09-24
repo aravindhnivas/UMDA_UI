@@ -19,6 +19,9 @@ import { sleep } from '$lib/utils/initialise';
 import { Alert } from '$utils/stores';
 import { check_umdapy_assets_status } from '$pages/settings/utils/assets-status';
 
+const server_started_keyword = 'Warm-up phase completed';
+// const server_started_keyword = 'Server running';
+
 export const currentPortPID = localWritable<string[]>('pyserver-pid', []);
 
 export async function startServer() {
@@ -78,7 +81,7 @@ export async function startServer() {
         if (!stderr.trim()) return;
         full_stderr += stderr;
         serverInfo.warn(stderr.trim());
-        if (stderr.includes('Server running')) {
+        if (stderr.includes(server_started_keyword)) {
             pyServerReady.set(true);
             serverInfo.info(`PID: ${JSON.stringify(get(currentPortPID))}`);
             await updateServerInfo();
