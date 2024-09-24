@@ -78,7 +78,7 @@
         }
 
         dataFromPython = {};
-
+        $embeddings_computed = false;
         const pyfile = 'training.embedd_data';
         const final_training_file = await $current_training_data_file;
         return {
