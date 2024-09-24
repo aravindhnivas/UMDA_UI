@@ -32,7 +32,9 @@
             </span>
         </div>
     {/if}
+
     <div class="flex items-center gap-2">
+        <slot name="pre-input" />
         <input
             {id}
             class="w-full input input-sm {element_disabled ? 'bg-gray-600/25' : ''}"
