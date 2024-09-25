@@ -105,9 +105,11 @@
                     </div>
 
                     <!-- {#if !$inverse_scaling || !$inverse_transform} -->
-                    <span class="badge-sm badge-info col-span-2">
-                        Always inverse the transformations and scaling applied to your target variable before
-                        calculating metrics.
+                    <span class="col-span-2">
+                        <span class="badge-sm badge-warning rounded-xl">
+                            Always inverse the transformations and scaling applied to your target variable before
+                            calculating metrics.
+                        </span>
                     </span>
                     <!-- {/if} -->
                 </div>
