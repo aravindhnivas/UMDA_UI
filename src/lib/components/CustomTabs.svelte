@@ -8,7 +8,7 @@
     export { className as class };
 </script>
 
-<div role="tablist" class="tabs tabs-{className} w-max rounded-xl {className === 'boxed' ? 'bg-orange-200/50' : ''}">
+<div role="tablist" class="tabs tabs-{className} w-max rounded-xl {className === 'boxed' ? 'bg-base-200/50' : ''}">
     {#each tabs as { tab, component } (tab)}
         <!-- svelte-ignore a11y-interactive-supports-focus -->
         <!-- svelte-ignore a11y-click-events-have-key-events -->
