@@ -3,19 +3,18 @@
     import SizeDistributionPlot from './SizeDistributionPlot.svelte';
     import StructuralDistributionPlot from './StructuralDistributionPlot.svelte';
     import ElementalDistributionPlot from './ElementalDistributionPlot.svelte';
-    import Tab, { Label } from '@smui/tab';
-    import TabBar from '@smui/tab-bar';
     import { parse_csv_file } from '$lib/utils';
     import FileLoader from '$lib/components/fileloader/FileLoader.svelte';
-    import FetchAnalysisDir from '../FetchAnalysisDir.svelte';
+    import CustomTabs from '$lib/components/CustomTabs.svelte';
+    import { Atom, Binary, ChartCandlestick, Pyramid, Ruler, Scale3D } from 'lucide-svelte/icons';
     import YDistributionPlot from './YDistributionPlot.svelte';
 
     const tab_items = [
-        'y-data_distribution',
-        'size_distribution',
-        'structural_distribution',
-        'elemental_distribution',
-    ] as const;
+        { tab: 'y-data_distribution', component: Ruler },
+        { tab: 'size_distribution', component: Scale3D },
+        { tab: 'structural_distribution', component: Pyramid },
+        { tab: 'elemental_distribution', component: Atom },
+    ];
 
     const GetData = async <T = string | number,>(name: string) => {
         const analysis_dir = await $current_post_analysis_files_directory;
@@ -39,24 +38,16 @@
     let current_active_analysis_tab = 'analysis_plots';
 </script>
 
-<div class="w-max">
-    <TabBar tabs={['analysis_plots', 'load_filtered_data']} let:tab bind:active={current_active_analysis_tab}>
-        <Tab {tab}>
-            <Label>{tab}</Label>
-        </Tab>
-    </TabBar>
-</div>
-
-<!-- <FetchAnalysisDir /> -->
+<CustomTabs
+    tabs={[
+        { tab: 'load_filtered_data', component: ChartCandlestick },
+        { tab: 'analysis_plots', component: Binary },
+    ]}
+    bind:active={current_active_analysis_tab}
+/>
 
 <div class:hidden={current_active_analysis_tab !== 'analysis_plots'} class="grid gap-2">
-    <div class="w-max">
-        <TabBar tabs={[...tab_items]} let:tab bind:active={$active_tab}>
-            <Tab {tab}>
-                <Label>{tab}</Label>
-            </Tab>
-        </TabBar>
-    </div>
+    <CustomTabs class="bordered" tabs={tab_items} bind:active={$active_tab} />
     <YDistributionPlot />
     <SizeDistributionPlot />
     <StructuralDistributionPlot />

@@ -1,14 +1,7 @@
 <script lang="ts">
-    import Tab, { Label } from '@smui/tab';
-    import TabBar from '@smui/tab-bar';
     import { model } from './stores';
     import supervised_ml_models from '$lib/config/ml_model/ml_models_parameters';
+    import CustomTabs from '$lib/components/CustomTabs.svelte';
 </script>
 
-<div class="flex flex-wrap w-max">
-    <TabBar tabs={Object.keys(supervised_ml_models)} let:tab bind:active={$model}>
-        <Tab {tab}>
-            <Label>{tab}</Label>
-        </Tab>
-    </TabBar>
-</div>
+<CustomTabs class="bordered" tabs={Object.keys(supervised_ml_models).map(f => ({ tab: f }))} bind:active={$model} />

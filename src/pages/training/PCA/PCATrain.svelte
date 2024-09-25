@@ -3,10 +3,10 @@
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
     import { embeddings } from '../embedding/stores';
-    import Tab, { Label } from '@smui/tab';
-    import TabBar from '@smui/tab-bar';
     import Plot from 'svelte-plotly.js';
     import Checkbox from '$lib/components/Checkbox.svelte';
+    import CustomTabs from '$lib/components/CustomTabs.svelte';
+    import { Binary, ChartCandlestick } from 'lucide-svelte/icons';
 
     export let id: string = 'pca-train-container';
     export let display: string = 'none';
@@ -104,13 +104,15 @@
 </script>
 
 <div class="grid content-start gap-2" {id} style:display>
-    <div class="w-max">
-        <TabBar tabs={['Training', 'Analysis']} let:tab bind:active={$active}>
-            <Tab {tab}>
-                <Label>{tab}</Label>
-            </Tab>
-        </TabBar>
-    </div>
+    <CustomTabs
+        class="bordered"
+        tabs={[
+            { tab: 'Training', component: Binary },
+            { tab: 'Analysis', component: ChartCandlestick },
+        ]}
+        bind:active={$active}
+    />
+
     {#if $active === 'Training'}
         <div class="grid">
             <h2>Principal component analysis</h2>
@@ -162,7 +164,7 @@
         <div class="plot__div">
             <div class="grid">
                 <h2>Scree plot</h2>
-                <div class="plot w-xl h-lg">
+                <div style="height: 500px;">
                     <Plot
                         data={explained_variance_data}
                         layout={{
@@ -183,7 +185,7 @@
                         ? Number(cumulative_variance_data[0].y.at(-1) * 100).toFixed(0)
                         : ''} %)
                 </h2>
-                <div class="plot w-xl h-lg">
+                <div style="height: 500px;">
                     <Plot
                         data={cumulative_variance_data}
                         layout={{

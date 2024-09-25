@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { SvelteComponent } from 'svelte';
 
-    export let tabs: { tab: string; component: typeof SvelteComponent }[];
+    export let tabs: { tab: string; component?: typeof SvelteComponent }[];
     export let active: string;
 
     let className = 'boxed';
@@ -17,11 +17,12 @@
                 active = tab;
             }}
             role="tab"
-            class="flex-center tab"
+            class="flex-center tab transition-all duration-300 ease-in-out"
             class:tab-active={active === tab}
         >
-            <!-- <RefreshCcw size="20" /> -->
-            <svelte:component this={component}></svelte:component>
+            {#if component}
+                <svelte:component this={component}></svelte:component>
+            {/if}
             <span class="font-semibold">{tab.toLocaleUpperCase()}</span>
         </div>
     {/each}

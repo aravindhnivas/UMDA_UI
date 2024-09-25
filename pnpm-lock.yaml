@@ -54,12 +54,6 @@ importers:
       '@smui/paper':
         specifier: ^7.0.0
         version: 7.0.0(svelte@4.2.19)(typescript@5.6.2)
-      '@smui/tab':
-        specifier: ^7.0.0
-        version: 7.0.0(svelte@4.2.19)(typescript@5.6.2)
-      '@smui/tab-bar':
-        specifier: ^7.0.0
-        version: 7.0.0(svelte@4.2.19)(typescript@5.6.2)
       '@sveltejs/svelte-virtual-list':
         specifier: ^3.0.1
         version: 3.0.1
