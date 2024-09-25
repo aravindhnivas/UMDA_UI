@@ -78,11 +78,11 @@
 <div class="flex">
     {#if $use_filtered_data_for_training}
         {#if $filtered_dir == 'default'}
-            <div class="badge-sm badge-warning rounded-xl">
+            <div class="badge badge-warning rounded-xl">
                 If using filtered data, please select a directory other than 'default'
             </div>
         {:else}
-            <div class="badge-sm badge-info rounded-xl">
+            <div class="badge badge-info rounded-xl">
                 NOTE: using filtered training dataset ({$filtered_dir})
             </div>
         {/if}

@@ -11,10 +11,10 @@
         <div class="flex-center">
             <span>Save Model</span>
             {#if !$save_pretrained_model}
-                <div class="badge badge-sm badge-warning">NOT SAVING</div>
+                <div class="badge badge-warning">NOT SAVING</div>
             {/if}
             {#if !open}
-                <div class="badge badge-sm" class:badge-error={!$save_pretrained_model}>{$pre_trained_filename}</div>
+                <div class="badge" class:badge-error={!$save_pretrained_model}>{$pre_trained_filename}</div>
             {/if}
         </div>
     </svelte:fragment>

@@ -44,30 +44,30 @@
             <span>Control Panel</span>
             {#if !open}
                 <div class="join">
-                    <span class="join-item badge-sm badge-warning">{100 - $test_size}</span>
-                    <span class="join-item badge-sm badge-info">{$test_size}</span>
+                    <span class="join-item badge badge-warning">{100 - $test_size}</span>
+                    <span class="join-item badge badge-info">{$test_size}</span>
                 </div>
                 {#if $ytransformation !== 'None'}
-                    <span class="badge badge-sm">{$ytransformation}</span>
+                    <span class="badge">{$ytransformation}</span>
                 {/if}
                 {#if $yscaling !== 'None'}
-                    <span class="badge badge-sm">{$yscaling}</span>
+                    <span class="badge">{$yscaling}</span>
                 {/if}
                 {#if $bootstrap}
-                    <span class="badge-sm badge-warning">Augment</span>
+                    <span class="badge badge-warning">Augment</span>
                 {/if}
 
                 {#if $fine_tune_model}
-                    <span class="badge badge-sm badge-primary">Fine-tune</span>
+                    <span class="badge badge-primary">Fine-tune</span>
                 {/if}
                 {#if $cross_validation}
-                    <span class="badge badge-sm">Cross-validation</span>
+                    <span class="badge">Cross-validation</span>
                 {/if}
                 {#if $parallel_computation}
-                    <span class="badge-sm badge-primary">Parallel</span>
+                    <span class="badge badge-primary">Parallel</span>
                 {/if}
                 {#if $skip_invalid_y_values}
-                    <span class="badge-sm badge-warning">skip_invalid_y_values</span>
+                    <span class="badge badge-warning">skip_invalid_y_values</span>
                 {/if}
             {/if}
         </div>

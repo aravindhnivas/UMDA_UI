@@ -20,7 +20,7 @@
                     {#if isObject(loaded_files) && !isEmpty(loaded_files)}
                         {#each Object.keys(loaded_files) as key}
                             {@const { valid, basename } = loaded_files[key]}
-                            <span class="badge badge-sm" class:badge-error={!valid}>{basename}</span>
+                            <span class="badge" class:badge-error={!valid}>{basename}</span>
                         {/each}
                     {/if}
                 </div>
