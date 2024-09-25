@@ -4430,7 +4430,7 @@ dependencies = [
 
 [[package]]
 name = "umda_ui"
-version = "2.2.2"
+version = "2.2.3"
 dependencies = [
  "error-chain",
  "futures-util",
