@@ -5,5 +5,6 @@
 </script>
 
 <Layout id="Console" class="pl-5">
+    <h1>Console</h1>
     <TerminalBox bind:terminal={$terminal_log} />
 </Layout>
