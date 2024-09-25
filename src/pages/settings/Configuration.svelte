@@ -57,6 +57,7 @@
 </script>
 
 <Layout id="Configuration">
+    <h1>Configuration</h1>
     <div class="flex">
         <CustomInput bind:value={$fontSize} label="font-size" type="number" max="25">
             <button on:click={() => ($fontSize = 16)}><RefreshCcw /></button>
