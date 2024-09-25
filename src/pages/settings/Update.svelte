@@ -244,7 +244,7 @@
         <div class="align">
             <button
                 id="btn-check-asset-update"
-                class="btn btn-sm ld-ext-right"
+                class="btn btn-sm btn-outline ld-ext-right"
                 on:click={async ({ currentTarget }) => {
                     if (!window.navigator.onLine) return outputbox.warn('No internet connection');
                     toggle_loading(currentTarget);
@@ -257,7 +257,7 @@
             </button>
             <button
                 id="btn-download-asset"
-                class="btn btn-sm ld-ext-right"
+                class="btn btn-sm btn-outline ld-ext-right"
                 on:click={async ({ currentTarget }) => {
                     console.warn('download assets');
                     if (!window.navigator.onLine) return outputbox.warn('No internet connection');
