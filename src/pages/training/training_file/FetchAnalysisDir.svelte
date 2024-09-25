@@ -1,5 +1,10 @@
 <script lang="ts">
-    import { current_training_data_file, filtered_dir, use_filtered_data_for_training } from './plot-analysis/stores';
+    import {
+        current_post_analysis_files_directory,
+        current_training_data_file,
+        filtered_dir,
+        use_filtered_data_for_training,
+    } from './plot-analysis/stores';
     import { load_analysis_dir, training_file } from './stores';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
     import { RefreshCcw, ExternalLink } from 'lucide-svelte/icons';
@@ -42,18 +47,13 @@
     });
 </script>
 
-{#await $current_training_data_file then filename}
+{#await $current_post_analysis_files_directory then filedir}
     <div class="flex gap-1 items-center">
-        <span class="badge">{filename}</span>
+        <span class="badge">{filedir}</span>
         <button
             class="btn btn-xs btn-outline"
             on:click={async () => {
-                const dir = await path.dirname(filename);
-                if (!(await fs.exists(dir))) {
-                    toast.error(`Directory ${dir} does not exist`);
-                    return;
-                }
-                await shell.open(dir);
+                await shell.open(filedir);
             }}><ExternalLink size="20" /></button
         >
     </div>
