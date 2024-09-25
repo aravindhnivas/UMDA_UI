@@ -7,6 +7,7 @@
     import Checkbox from '$lib/components/Checkbox.svelte';
     import CustomTabs from '$lib/components/CustomTabs.svelte';
     import { Binary, ChartCandlestick } from 'lucide-svelte/icons';
+    import CustomInput from '$lib/components/CustomInput.svelte';
 
     export let id: string = 'pca-train-container';
     export let display: string = 'none';
@@ -132,30 +133,13 @@
         <Checkbox label="Compute KMeans clustering" bind:value={compute_kmeans} />
 
         <div class="flex gap-1">
-            <div class="flex flex-col gap-1">
-                <span class="text-xs pl-1">radius</span>
-                <input type="number" class="input input-sm" bind:value={radius} />
-                <span class="text-xs pl-1 m-auto">Radius of morgan fingerprint</span>
-            </div>
-
-            <div class="flex flex-col gap-1">
-                <span class="text-xs pl-1">pca_dim</span>
-                <input type="number" class="input input-sm" bind:value={pca_dim} />
-                <span class="text-xs pl-1 m-auto">PCA dimensions</span>
-            </div>
-
-            {#if compute_kmeans}
-                <div class="flex flex-col gap-1">
-                    <span class="text-xs pl-1">n_clusters</span>
-                    <input type="number" class="input input-sm" bind:value={n_clusters} />
-                    <span class="text-xs pl-1 m-auto">KMeans Cluster</span>
-                </div>
-            {/if}
+            <CustomInput bind:value={radius} label="radius" type="number" helper="Radius of morgan fingerprint" />
+            <CustomInput bind:value={pca_dim} label="pca_dim" type="number" helper="PCA dimensions" />
+            <CustomInput bind:value={n_clusters} label="n_clusters" type="number" helper="KMeans cluster" />
         </div>
         <BrowseFile directory={true} bind:filename={$embeddings_save_loc} btn_name={'Browse Save location'} />
-        <Loadingbtn class="m-auto " callback={generate_pca} subprocess={true} />
+        <Loadingbtn class="m-auto" callback={generate_pca} subprocess={true} />
     {:else if $active === 'Analysis'}
-        <!-- <div class="w-lg"> -->
         <BrowseFile
             bind:filename={$explained_variance_file}
             btn_name={'Browse explained_variance'}
