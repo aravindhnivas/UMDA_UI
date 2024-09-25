@@ -59,7 +59,7 @@
                 }
             }}
         >
-            <span class:loading={!serverReady && starting_server} class="loading-spinner"></span>
+            <span class:loading={starting_server} class="loading-spinner"></span>
             Start Server
         </button>
         <button
