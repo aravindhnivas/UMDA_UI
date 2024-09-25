@@ -135,7 +135,9 @@
         <div class="flex gap-1">
             <CustomInput bind:value={radius} label="radius" type="number" helper="Radius of morgan fingerprint" />
             <CustomInput bind:value={pca_dim} label="pca_dim" type="number" helper="PCA dimensions" />
-            <CustomInput bind:value={n_clusters} label="n_clusters" type="number" helper="KMeans cluster" />
+            {#if compute_kmeans}
+                <CustomInput bind:value={n_clusters} label="n_clusters" type="number" helper="KMeans cluster" />
+            {/if}
         </div>
         <BrowseFile directory={true} bind:filename={$embeddings_save_loc} btn_name={'Browse Save location'} />
         <Loadingbtn class="m-auto" callback={generate_pca} subprocess={true} />
