@@ -1,7 +1,4 @@
 <script lang="ts">
-    import LinearProgress from '@smui/linear-progress';
-    import DataTable, { Head, Body, Row, Cell } from '@smui/data-table';
-
     export let data: {
         columns: string[];
         nrows: {
@@ -9,7 +6,6 @@
         }[];
         shape: number;
     } | null = null;
-    export let loading = false;
 </script>
 
 {#if data}
@@ -17,28 +13,27 @@
         <div class="alert text-sm p-1">
             <span>Total {data.shape} rows: {data?.nrows.length} rows are displayed below</span>
         </div>
-        <div class="overflow-x-auto">
-            <DataTable style="width: 100%; max-height: 500px;">
-                <Head>
-                    <Row>
-                        <Cell></Cell>
+        <div class="overflow-x-auto" style="height: 500px;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
                         {#each data.columns as column}
-                            <Cell><span class="select-text">{column}</span></Cell>
+                            <th>{column}</th>
                         {/each}
-                    </Row>
-                </Head>
-                <Body>
+                    </tr>
+                </thead>
+                <tbody>
                     {#each data.nrows as nrows, index}
-                        <Row>
-                            <Cell>{index}</Cell>
+                        <tr class="hover:bg-base-200">
+                            <th>{index}</th>
                             {#each data.columns as column}
-                                <Cell>{nrows[column]}</Cell>
+                                <td class="select-text">{nrows[column]}</td>
                             {/each}
-                        </Row>
+                        </tr>
                     {/each}
-                </Body>
-                <LinearProgress indeterminate closed={!loading} aria-label="Data is being loaded..." slot="progress" />
-            </DataTable>
+                </tbody>
+            </table>
         </div>
     {/if}
 {/if}
