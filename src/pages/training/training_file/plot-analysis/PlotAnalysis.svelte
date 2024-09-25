@@ -6,7 +6,7 @@
     import { parse_csv_file } from '$lib/utils';
     import FileLoader from '$lib/components/fileloader/FileLoader.svelte';
     import CustomTabs from '$lib/components/CustomTabs.svelte';
-    import { Atom, Binary, ChartCandlestick, Pyramid, Ruler, Scale3D } from 'lucide-svelte/icons';
+    import { Atom, Filter, ChartCandlestick, Pyramid, Ruler, Scale3D } from 'lucide-svelte/icons';
     import YDistributionPlot from './YDistributionPlot.svelte';
 
     const tab_items = [
@@ -40,13 +40,13 @@
 
 <CustomTabs
     tabs={[
-        { tab: 'load_filtered_data', component: ChartCandlestick },
-        { tab: 'analysis_plots', component: Binary },
+        { tab: 'load_filtered_data', component: Filter },
+        { tab: 'Plots', component: ChartCandlestick },
     ]}
     bind:active={current_active_analysis_tab}
 />
 
-<div class:hidden={current_active_analysis_tab !== 'analysis_plots'} class="grid gap-2">
+<div class:hidden={current_active_analysis_tab !== 'Plots'} class="grid gap-2">
     <CustomTabs class="bordered" tabs={tab_items} bind:active={$active_tab} />
     <YDistributionPlot />
     <SizeDistributionPlot />
