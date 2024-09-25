@@ -35,7 +35,7 @@
         return { x, y };
     };
     setContext('GetData', GetData);
-    let current_active_analysis_tab = 'analysis_plots';
+    let current_active_analysis_tab = 'Plots';
 </script>
 
 <CustomTabs
