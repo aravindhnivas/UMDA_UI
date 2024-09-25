@@ -14,7 +14,7 @@
             <span>Total {data.shape} rows: {data?.nrows.length} rows are displayed below</span>
         </div>
         <div class="overflow-x-auto" style="height: 500px;">
-            <table class="table">
+            <table class="table bg-base-100">
                 <thead>
                     <tr>
                         <th></th>
