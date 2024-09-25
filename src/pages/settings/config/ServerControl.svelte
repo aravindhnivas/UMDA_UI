@@ -10,6 +10,7 @@
 
     export let port: number;
     export let serverReady: boolean = false;
+    export let serverFailed: boolean = false;
     export let pids: string[] = [];
     export let startServer: () => void;
     export let stopServer: () => void;
@@ -22,6 +23,9 @@
         serverReady = false;
         await updateServerInfo();
     };
+
+    let starting_server = false;
+    $: if (serverReady) starting_server = false;
 
     let port_lock = true;
     const fetch_port = async () => {
@@ -42,12 +46,14 @@
             </CustomInput>
         </div>
         <button
-            disabled={serverReady}
+            disabled={(!serverFailed && serverReady) || (!serverFailed && starting_server)}
             class="btn btn-sm btn-outline"
             on:click={async () => {
                 try {
+                    starting_server = true;
                     await startServer();
                 } catch (error) {
+                    serverFailed = true;
                     console.log(error);
                     serverInfo.error('Failed to start server');
                 }

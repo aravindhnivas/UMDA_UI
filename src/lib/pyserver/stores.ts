@@ -12,6 +12,7 @@ export const pyProgram = derived([developerMode, pythonpath, umdapy], ([$develop
 });
 
 export const pyServerReady = writable(false);
+export const pyServerFailed = writable(false);
 // export const port_lock = localWritable('port_lock', false);
 
 export const pyVersion = writable('');

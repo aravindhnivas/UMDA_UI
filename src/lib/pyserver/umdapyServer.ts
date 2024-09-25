@@ -9,6 +9,7 @@ import {
     serverCurrentStatus,
     pyServerURL,
     pyVersion,
+    pyServerFailed,
 } from '$lib/pyserver/stores';
 import { serverInfo } from '$settings/utils/stores';
 import { python_asset_ready } from '$settings/utils/stores';
@@ -56,6 +57,8 @@ export async function startServer() {
     }
     if (!pyChild) return Promise.reject('pyChild not found');
 
+    pyServerFailed.set(false);
+
     pyChildProcess.set(pyChild);
     currentPortPID.update(ports => [...ports, `${pyChild.pid}`]);
 
@@ -71,8 +74,7 @@ export async function startServer() {
             console.log(last_traceback);
             serverInfo.error(last_traceback);
             serverInfo.error('Server closed with error');
-
-            // Alert.error(full_stderr);
+            pyServerFailed.set(true);
             pyServerReady.set(false);
         }
     });
