@@ -57,8 +57,11 @@
                     console.log(error);
                     serverInfo.error('Failed to start server');
                 }
-            }}>Start Server</button
+            }}
         >
+            <span class:loading={!serverReady && starting_server} class="loading-spinner"></span>
+            Start Server
+        </button>
         <button
             class="btn btn-sm btn-error"
             on:click={async () => {
