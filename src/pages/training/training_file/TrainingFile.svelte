@@ -2,13 +2,13 @@
     import AnalysisData from './AnalysisData.svelte';
     import LoadData from './LoadData.svelte';
     import CustomTabs from '$lib/components/CustomTabs.svelte';
-    import { Binary, ChartCandlestick } from 'lucide-svelte/icons';
+    import { MonitorDown, ChartCandlestick } from 'lucide-svelte/icons';
 
     export let id: string = 'training-file-container';
     export let display: string = 'none';
 
     const tabs = [
-        { tab: 'Load data', component: Binary },
+        { tab: 'Load data', component: MonitorDown },
         { tab: 'Analyse data', component: ChartCandlestick },
     ];
 
