@@ -15,7 +15,7 @@
     let active_tab = 'Load data';
 </script>
 
-<div class="grid content-start gap-2" {id} style:display>
+<div class="grid content-start gap-4" {id} style:display>
     <CustomTabs class="bordered" {tabs} bind:active={active_tab} />
     <div class="grid gap-2" class:hidden={active_tab !== 'Load data'}>
         <LoadData />
