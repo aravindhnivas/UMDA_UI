@@ -59,7 +59,7 @@
                 }
             }}
         >
-            <span class:loading={starting_server} class="loading-spinner"></span>
+            <span class:loading={!serverFailed && starting_server} class="loading-spinner"></span>
             Start Server
         </button>
         <button
