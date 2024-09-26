@@ -21,6 +21,12 @@ interface CurrentModel {
 
 type ParametersArgs = Record<string, Record<string, string | boolean | number | null>>;
 
+type CV_scoring_methods = 'r2' | 'mse' | 'rmse' | 'mae';
+interface CV_scores {
+    mean: string;
+    std: string;
+    scores: number[];
+}
 interface Results {
     embedding: Embedding;
     PCA: boolean;
@@ -50,9 +56,8 @@ interface Results {
     cross_validation: boolean;
     cv_fold?: number;
     cv_scores?: {
-        mean: string;
-        std: string;
-        scores: number[];
+        test: Record<CV_scoring_methods, CV_scores>;
+        train: Record<CV_scoring_methods, CV_scores>;
     };
     timeframe: string;
     best_params?: Record<string, string | number | boolean | null>;
