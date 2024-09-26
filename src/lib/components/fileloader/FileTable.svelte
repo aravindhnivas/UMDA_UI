@@ -1,4 +1,5 @@
 <script lang="ts">
+    export let loading = false;
     export let data: {
         columns: string[];
         nrows: {
@@ -7,6 +8,10 @@
         shape: number;
     } | null = null;
 </script>
+
+{#if loading}
+    <p>Loading data please wait...</p>
+{/if}
 
 {#if data}
     {#if data?.columns && data?.nrows}
