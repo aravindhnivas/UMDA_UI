@@ -104,7 +104,7 @@
                 if (notify) toast.error('File does not exist. Run the analysis first');
                 return;
             }
-
+            console.warn('Reading file', savefile);
             const contents = await fs.readTextFile(savefile);
             applied_transformation = '';
             data = JSON.parse(contents) as YDistributionStats;
