@@ -124,7 +124,7 @@
     <div class="grid grid-cols-[3fr_1fr] join join-item w-full">
         <input
             class="input input-sm input-bordered join-item"
-            placeholder="Enter filename"
+            placeholder="Browse Directory"
             bind:value={filelocation}
             autocomplete="off"
             autocapitalize="off"
