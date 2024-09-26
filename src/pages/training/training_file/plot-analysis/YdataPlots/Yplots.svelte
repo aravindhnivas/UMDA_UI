@@ -74,12 +74,14 @@
         {@const layout = layouts[key]}
         {@const plot_description = plot_descriptions[key]}
 
-        {#if data?.[0].y?.length <= 25000}
+        {#if data?.[0].y?.length <= 5000}
             <div style="height: 500px; ">
                 <Plot {data} {layout} fillParent={true} debounce={250} />
             </div>
             <div class="text-sm font-400">
-                <span class="font-bold">{plot_description.name}: </span>{plot_description.description}
+                <span class="font-bold"
+                    >{plot_description.name} ({data?.[0].y?.length} data shape):
+                </span>{plot_description.description}
             </div>
             <hr />
         {:else}
