@@ -60,6 +60,23 @@
                 'The Q-Q (Quantile-Quantile) plot compares the distribution of the dataset to a theoretical normal distribution. A straight line indicates that the data follows a normal distribution, while deviations suggest non-normality.',
         },
     };
+
+    // function downsample(data, factor) {
+    //     const downsampled = [];
+    //     for (let i = 0; i < data.length; i += factor) {
+    //         downsampled.push(data[i]);
+    //     }
+    //     return downsampled;
+    // }
+
+    // function downsampleData(data, factor) {
+    //     return data.map(trace => {
+    //         if (trace.x) {
+    //             return { ...trace, x: downsample(trace.x, factor), y: downsample(trace.y, factor) };
+    //         }
+    //         return trace;
+    //     });
+    // }
 </script>
 
 <Set chips={choices} let:chip filter bind:selected>
@@ -73,8 +90,12 @@
         {@const data = plots_data[key]}
         {@const layout = layouts[key]}
         {@const plot_description = plot_descriptions[key]}
-
-        {#if data?.[0].y?.length <= 5000}
+        {#if data?.[0].type !== 'scattergl' && data?.[0].y?.length > 25000}
+            <div class="text-sm text-red-700 font-400">
+                <span class="font-bold">{plot_description.name}: </span>
+                The plot is too large to display ({data?.[0].y?.length} length).
+            </div>
+        {:else}
             <div style="height: 500px; ">
                 <Plot {data} {layout} fillParent={true} debounce={250} />
             </div>
@@ -82,12 +103,6 @@
                 <span class="font-bold"
                     >{plot_description.name} ({data?.[0].y?.length} data shape):
                 </span>{plot_description.description}
-            </div>
-            <hr />
-        {:else}
-            <div class="text-sm text-red-700 font-400">
-                <span class="font-bold">{plot_description.name}: </span>
-                The plot is too large to display ({data?.[0].y?.length} length).
             </div>
             <hr />
         {/if}
