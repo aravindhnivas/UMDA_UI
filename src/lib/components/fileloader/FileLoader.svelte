@@ -56,6 +56,33 @@
             },
         };
     };
+
+    let filelocation: string;
+    let fname: string;
+    let fname_lists: string[] = [];
+
+    const fetch_all_files = async (loc: string) => {
+        filelocation = loc;
+        const read_dir = await fs.readDir(filelocation);
+
+        fname_lists = read_dir.filter(f => !f.children && f.name?.endsWith(filetype)).map(f => f.name) as string[];
+        fname = fname_lists[0];
+        if (!fname) {
+            filename = '';
+            toast.error('No files found');
+            return;
+        }
+        filename = await path.join(filelocation, fname);
+    };
+
+    onMount(async () => {
+        if (!filename) return;
+        filelocation = await path.dirname(filename);
+        fname = await path.basename(filename);
+        const read_dir = await fs.readDir(filelocation);
+        fname_lists = read_dir.filter(f => !f.children && f.name?.endsWith(filetype)).map(f => f.name) as string[];
+    });
+
     let loading = false;
     let load_btn: HTMLButtonElement;
     const rows = {
@@ -73,27 +100,6 @@
             <option>{filetype}</option>
         {/each}
     </select>
-    <button
-        class="btn btn-sm btn-outline join-item rounded-0"
-        on:click={async () => {
-            const filters = filetype === '*' ? [] : [{ name: filetype, extensions: [filetype] }];
-            const result = await dialog.open({ filters, multiple: false });
-            if (!result) return;
-            if (typeof result === 'string') {
-                filename = result;
-            } else {
-                filename = result[0];
-            }
-        }}>Browse file</button
-    >
-    <input
-        class="input input-sm input-bordered join-item w-full"
-        placeholder="Enter filename"
-        bind:value={filename}
-        autocomplete="off"
-        autocapitalize="off"
-        autocorrect="off"
-    />
     {#if filetype === 'hdf'}
         <input
             class="input input-sm input-bordered join-item"
@@ -104,6 +110,40 @@
             autocorrect="off"
         />
     {/if}
+    <button
+        class="btn btn-sm btn-outline join-item rounded-0"
+        on:click={async () => {
+            // const filters = filetype === '*' ? [] : [{ name: filetype, extensions: [filetype] }];
+            // const result = await dialog.open({ filters, multiple: false });
+            const dir = await dialog.open({ directory: true, multiple: false });
+            if (!dir) return;
+            if (isArray(dir)) return toast.error('Please select a single directory');
+            fetch_all_files(dir);
+        }}>Browse Directory</button
+    >
+    <div class="grid grid-cols-[3fr_1fr] join join-item w-full">
+        <input
+            class="input input-sm input-bordered join-item"
+            placeholder="Enter filename"
+            bind:value={filelocation}
+            autocomplete="off"
+            autocapitalize="off"
+            autocorrect="off"
+        />
+        <select
+            class="select select-sm select-bordered join-item"
+            bind:value={fname}
+            on:change={async () => {
+                filename = await path.join(filelocation, fname);
+            }}
+        >
+            <option disabled selected>files</option>
+            {#each fname_lists as _fname}
+                <option>{_fname}</option>
+            {/each}
+        </select>
+    </div>
+
     <button
         class="btn btn-sm btn-outline join-item"
         on:click={async () => {
