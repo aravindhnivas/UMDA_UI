@@ -59,14 +59,14 @@
                 x: dataFromPython.y_true,
                 y: dataFromPython.y_pred,
                 mode: 'markers',
-                type: 'scatter',
+                type: 'scattergl',
                 name: 'Predicted vs True',
             },
             {
                 x: dataFromPython.y_true,
                 y: dataFromPython.y_fit,
                 mode: 'lines',
-                type: 'scatter',
+                type: 'scattergl',
                 name: 'Fit line',
             },
         ];
