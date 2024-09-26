@@ -171,26 +171,42 @@
                     <span class="badge badge-warning col-span-2"
                         >Train stats ({100 - $test_size}% data = {r.data_shapes.y_train}):
                     </span>
-                    <span class="badge">{train_stats.r2}</span>
-                    <span class="badge">{train_stats.mse}</span>
-                    <span class="badge">{train_stats.rmse}</span>
-                    <span class="badge">{train_stats.mae}</span>
+                    <span class="badge badge-warning">{train_stats.r2}</span>
+                    <span class="badge badge-warning">{train_stats.mse}</span>
+                    <span class="badge badge-warning">{train_stats.rmse}</span>
+                    <span class="badge badge-warning">{train_stats.mae}</span>
                 </div>
+                {#if r.cross_validation && r.cv_scores?.train}
+                    {@const rcv = r.cv_scores?.train}
+                    <div class="grid grid-cols-6 gap-2 items-center w-3xl">
+                        <span class="badge col-span-2">{r.cv_fold}-fold CV:</span>
+                        <span class="badge">{rcv.r2.mean} ({rcv.r2.std})</span>
+                        <span class="badge">{rcv.mse.mean} ({rcv.mse.std})</span>
+                        <span class="badge">{rcv.rmse.mean} ({rcv.rmse.std})</span>
+                        <span class="badge">{rcv.mae.mean} ({rcv.mae.std})</span>
+                    </div>
+                {/if}
+
                 <div class="grid grid-cols-6 gap-2 items-center w-3xl">
                     <span class="badge badge-info col-span-2"
                         >Test stats ({$test_size}% data = {r.data_shapes.y_test}):
                     </span>
-                    <span class="badge">{test_stats.r2}</span>
+                    <span class="badge badge-info">{test_stats.r2}</span>
 
-                    <span class="badge">{test_stats.mse}</span>
-                    <span class="badge">{test_stats.rmse}</span>
-                    <span class="badge">{test_stats.mae}</span>
+                    <span class="badge badge-info">{test_stats.mse}</span>
+                    <span class="badge badge-info">{test_stats.rmse}</span>
+                    <span class="badge badge-info">{test_stats.mae}</span>
                 </div>
 
-                {#if r.cross_validation && r.cv_scores}
-                    <span class="badge"
-                        >{r.cv_fold}-fold CV - R<sup>2</sup>: {r.cv_scores.mean} ({r.cv_scores.std})</span
-                    >
+                {#if r.cross_validation && r.cv_scores?.test}
+                    {@const rcv = r.cv_scores?.test}
+                    <div class="grid grid-cols-6 gap-2 items-center w-3xl">
+                        <span class="badge col-span-2">{r.cv_fold}-fold CV:</span>
+                        <span class="badge">{rcv.r2.mean} ({rcv.r2.std})</span>
+                        <span class="badge">{rcv.mse.mean} ({rcv.mse.std})</span>
+                        <span class="badge">{rcv.rmse.mean} ({rcv.rmse.std})</span>
+                        <span class="badge">{rcv.mae.mean} ({rcv.mae.std})</span>
+                    </div>
                 {/if}
 
                 {#if r.best_params}
