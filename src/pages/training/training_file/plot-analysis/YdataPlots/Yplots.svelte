@@ -73,12 +73,21 @@
         {@const data = plots_data[key]}
         {@const layout = layouts[key]}
         {@const plot_description = plot_descriptions[key]}
-        <div style="height: 500px; ">
-            <Plot {data} {layout} fillParent={true} debounce={250} />
-        </div>
-        <div class="text-sm font-400">
-            <span class="font-bold">{plot_description.name}: </span>{plot_description.description}
-        </div>
-        <hr />
+
+        {#if data?.[0].y?.length <= 25000}
+            <div style="height: 500px; ">
+                <Plot {data} {layout} fillParent={true} debounce={250} />
+            </div>
+            <div class="text-sm font-400">
+                <span class="font-bold">{plot_description.name}: </span>{plot_description.description}
+            </div>
+            <hr />
+        {:else}
+            <div class="text-sm text-red-700 font-400">
+                <span class="font-bold">{plot_description.name}: </span>
+                The plot is too large to display ({data?.[0].y?.length} length).
+            </div>
+            <hr />
+        {/if}
     {/if}
 {/each}
