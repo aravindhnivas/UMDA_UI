@@ -140,7 +140,7 @@
                 x: data.qq_plot.theoretical_quantiles,
                 y: data.qq_plot.sample_quantiles,
                 mode: 'markers',
-                type: 'scatter',
+                type: 'scattergl',
                 name: 'Q-Q Plot',
             };
 
@@ -148,7 +148,7 @@
             const kdePlotTrace: Partial<Plotly.PlotData> = {
                 x: data.kde.x,
                 y: data.kde.y,
-                type: 'scatter',
+                type: 'scattergl',
                 mode: 'lines',
                 name: 'KDE',
             };
