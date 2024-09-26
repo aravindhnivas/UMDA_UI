@@ -6,7 +6,7 @@
     export let plots_data: YDistributionPlotData;
 
     let choices = typeSafeObjectKeys(plots_data);
-    let selected: Partial<typeof choices> = ['histogram', 'box_plot'];
+    let selected: Partial<typeof choices> = ['kde', 'box_plot'];
 
     const histogramLayout: Partial<Plotly.Layout> = {
         title: 'Histogram',
