@@ -12,7 +12,7 @@
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import { PlotlyColors } from '$lib/utils';
     import Plot from 'svelte-plotly.js';
-    import { CheckCheck } from 'lucide-svelte';
+    import { CheckCheck } from 'lucide-svelte/icons';
 
     export let data_file: string;
     export let plot_data_ready = false;
@@ -43,6 +43,8 @@
             const saved_file_contents = await fs.readTextFile(datfile);
             const parsed = JSON.parse(saved_file_contents) as ParsedData;
             console.warn({ parsed });
+
+            await get_pretrained_file();
 
             test_data[$model] = parsed.test;
             train_data[$model] = parsed.train;
@@ -96,10 +98,6 @@
             toast.error('Error reading plot data\n' + error);
         }
     };
-
-    $: if (plot_data_ready && data_file) {
-        on_plot_data_ready(data_file);
-    }
 
     const include_training_plot_if_required = async () => {
         console.log('include_training_plot_if_required', $include_training_file_in_plot);
@@ -167,21 +165,28 @@
     };
 
     $: if ($model) get_pretrained_file();
+    $: if (plot_data_ready && data_file) {
+        plot_from_datfile();
+    }
 
     const plot_from_datfile = async () => {
-        get_pretrained_file();
+        await get_pretrained_file();
         await on_plot_data_ready(datfile);
         console.log('Reading results file', resultsfile);
 
         if (!(await fs.exists(resultsfile))) return;
 
         const results_data = await fs.readTextFile(resultsfile);
-        const parsed_results = JSON.parse(results_data);
+        const parsed_results = safeJsonParse<MLResults>(results_data);
+        if (!parsed_results) return;
+
         console.log(parsed_results);
         if (!$results) $results = {};
-        $results[$model] = parsed_results;
 
-        // await get_learning_curve_data(learning_curve_file);
+        $results[$model] = parsed_results;
+        const learning_curve_plotly_data = await get_learning_curve_data(learning_curve_file);
+        if (!learning_curve_plotly_data) return;
+        $results[$model].learning_curve_plotly_data = learning_curve_plotly_data;
     };
 
     const get_learning_curve_data = async (filename: string) => {
@@ -339,15 +344,6 @@
                     </div>
                     <hr />
                 {/if}
-
-                {#await get_learning_curve_data(learning_curve_file) then learning_curve_data}
-                    {#if learning_curve_data}
-                        {@const { data, layout } = learning_curve_data}
-                        <div style="height: 500px;">
-                            <Plot {data} {layout} fillParent={true} debounce={250} />
-                        </div>
-                    {/if}
-                {/await}
             {/if}
         {/if}
 
@@ -366,6 +362,12 @@
                     />
                 {/if}
             </div>
+            {#if $results[model_name]?.learning_curve_plotly_data}
+                {@const { data, layout } = $results[model_name].learning_curve_plotly_data}
+                <div style="height: 500px;" class:hidden={model_name !== $model}>
+                    <Plot {data} {layout} fillParent={true} debounce={250} />
+                </div>
+            {/if}
         {/each}
     </div>
 </CustomPanel>

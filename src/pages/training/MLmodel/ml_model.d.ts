@@ -30,7 +30,11 @@ interface CV_scores {
 
 type LearningCurveData = Record<string, Record<'test' | 'train', { mean: string; std: string; scores: number[] }>>;
 
-interface Results {
+interface MLResults {
+    learning_curve_plotly_data?: {
+        data: Partial<Partial<PlotData>>[];
+        layout: Partial<Partial<Layout>>;
+    };
     embedding: Embedding;
     PCA: boolean;
     data_shapes: {

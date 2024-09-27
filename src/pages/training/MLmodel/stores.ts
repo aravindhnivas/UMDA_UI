@@ -101,7 +101,7 @@ export const parallel_computation_backend = localWritable<ParallelComputationBac
     'parallel_processing_backend',
     'threading',
 );
-export const results = writable<Record<MLModel[number], Results | null>>({});
+export const results = writable<Record<MLModel[number], MLResults | null>>({});
 export const plot_data = writable<Record<MLModel[number], Partial<Plotly.PlotData>[]>>({});
 
 export const default_parameter_mode = localWritable('default_parameter_mode', true);
