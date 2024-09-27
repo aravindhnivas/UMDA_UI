@@ -106,6 +106,7 @@ export const plot_data = writable<Record<MLModel[number], Partial<Plotly.PlotDat
 
 export const default_parameter_mode = localWritable('default_parameter_mode', true);
 export const skip_invalid_y_values = localWritable('skip_invalid_y_values', false);
+export const analyse_shapley_values = localWritable('analyse_shapley_values', false);
 export const pre_trained_filename = localWritable('pre_trained_filename', '');
 export const current_pretrained_file = derived(
     [current_training_processed_data_directory, pre_trained_filename],

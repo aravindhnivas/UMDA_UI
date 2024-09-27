@@ -29,6 +29,7 @@
         all_params_lock_status,
         fine_tuned_values,
         learning_curve,
+        analyse_shapley_values,
     } from './stores';
     import { embedding, use_PCA } from '../embedding/stores';
     import { NPARTITIONS, use_dask } from '$lib/stores/system';
@@ -260,6 +261,7 @@
             inverse_scaling: $inverse_scaling,
             inverse_transform: $inverse_transform,
             learning_curve_train_sizes,
+            analyse_shapley_values: $analyse_shapley_values,
         };
 
         $results[$model] = null;

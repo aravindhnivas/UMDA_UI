@@ -22,9 +22,10 @@
         inverse_scaling,
         inverse_transform,
         learning_curve,
-        model,
-        model_names,
-        ensemble_regressors,
+        // model,
+        // model_names,
+        // ensemble_regressors,
+        analyse_shapley_values,
     } from './stores';
     import Chip, { Set, Text } from '@smui/chips';
     import { Checkbox, CustomSelect, CustomInput } from '$lib/components';
@@ -229,7 +230,10 @@
         <Paper transition {elevation} style={paper_style}>
             <Subtitle>Misc</Subtitle>
             <Content>
-                <Checkbox bind:value={$skip_invalid_y_values} label="skip_invalid_y_values" check="checkbox" />
+                <div class="flex gap-2">
+                    <Checkbox bind:value={$skip_invalid_y_values} label="skip_invalid_y_values" check="checkbox" />
+                    <Checkbox bind:value={$analyse_shapley_values} label="analyse_shapley_values" check="checkbox" />
+                </div>
             </Content>
         </Paper>
     </div>
