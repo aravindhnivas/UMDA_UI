@@ -226,7 +226,7 @@
             },
             mode: 'lines+markers',
             name: 'Test',
-            type: 'scattergl',
+            type: 'scatter',
         };
 
         const trainTrace: Partial<Plotly.Data> = {
@@ -239,7 +239,7 @@
             },
             mode: 'lines+markers',
             name: 'Train',
-            type: 'scattergl',
+            type: 'scatter',
         };
 
         // Define the layout
@@ -377,7 +377,7 @@
                     />
                 {/if}
             </div>
-            {#if $learning_curve.active && $results[model_name]?.learning_curve_plotly_data}
+            {#if $results[model_name]?.learning_curve_plotly_data}
                 {@const { data, layout } = $results[model_name].learning_curve_plotly_data}
                 <div style="height: 500px;" class:hidden={model_name !== $model}>
                     <Plot {data} {layout} fillParent={true} debounce={250} />
