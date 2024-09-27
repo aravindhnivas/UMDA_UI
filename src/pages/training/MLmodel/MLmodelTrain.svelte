@@ -92,10 +92,16 @@
         let clonedFineTunedValues: Record<string, any> = {};
 
         if ($fine_tune_model) {
+            if ($default_parameter_mode) {
+                toast.error('Cannot fine tune model with default parameters');
+                return;
+            }
+
             if (!$fine_tuned_values[$model]) {
                 toast.error('Error: Fine tuned hyperparameters not found');
                 return;
             }
+
             const v = ['hyperparameters', 'parameters'] as const;
             v.forEach(key => {
                 const cloned_obj = structuredClone($fine_tuned_values[$model][key]);
@@ -238,7 +244,7 @@
             training_column_name_y: $training_column_name_y,
             parameters: $default_parameter_mode ? {} : clonedValues,
             fine_tuned_values: $default_parameter_mode ? {} : clonedFineTunedValues,
-            fine_tune_model: $fine_tune_model && !$default_parameter_mode && !isEmpty(clonedFineTunedValues),
+            fine_tune_model: $fine_tune_model,
             bootstrap: $bootstrap,
             bootstrap_nsamples: Number($bootstrap_nsamples),
             noise_percentage: Number($noise_percentage),
