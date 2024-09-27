@@ -21,6 +21,7 @@
         yscaling,
         inverse_scaling,
         inverse_transform,
+        learning_curve,
     } from './stores';
     import { Checkbox, CustomSelect, CustomInput } from '$lib/components';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
@@ -191,6 +192,24 @@
                         disabled={!$parallel_computation}
                     />
                 </div>
+                <Checkbox bind:value={$skip_invalid_y_values} label="skip_invalid_y_values" check="checkbox" />
+            </Content>
+        </Paper>
+        <Paper transition {elevation} style={paper_style}>
+            <Subtitle>Learning curve</Subtitle>
+            <Content>
+                <Checkbox bind:value={$learning_curve.active} label="Learning curve" check="checkbox" />
+                <CustomInput
+                    label="min, max, length - Relative train sizes"
+                    helper="Train sizes for learning curve analysis"
+                    bind:value={$learning_curve.train_sizes}
+                    disabled={!$learning_curve.active}
+                />
+            </Content>
+        </Paper>
+        <Paper transition {elevation} style={paper_style}>
+            <Subtitle>Misc</Subtitle>
+            <Content>
                 <Checkbox bind:value={$skip_invalid_y_values} label="skip_invalid_y_values" check="checkbox" />
             </Content>
         </Paper>

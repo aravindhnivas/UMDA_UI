@@ -84,6 +84,10 @@ export const grid_search_method = localWritable('grid_search_method', 'Randomize
 export const noise_percentage = localWritable('noise_percentage', 0.5);
 export const save_pretrained_model = localWritable('save_pretrained_model', true);
 export const parallel_computation = localWritable('parallel_computation', true);
+export const learning_curve = localWritable('learning_curve', {
+    active: false,
+    train_sizes: '0.1, 1.0, 10',
+});
 export const n_jobs = localWritable('n_jobs', -2);
 export const backends: ParallelComputationBackend[] = ['loky', 'threading', 'multiprocessing', 'dask'];
 export const parallel_computation_backend = localWritable<ParallelComputationBackend>(

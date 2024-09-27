@@ -28,6 +28,7 @@
         inverse_transform,
         all_params_lock_status,
         fine_tuned_values,
+        learning_curve,
     } from './stores';
     import { embedding, use_PCA } from '../embedding/stores';
     import { NPARTITIONS, use_dask } from '$lib/stores/system';
@@ -200,6 +201,30 @@
         };
         console.warn({ clonedValues, fine_tuned_values: $fine_tuned_values[$model], clonedFineTunedValues });
 
+        let learning_curve_train_sizes = null;
+        if ($learning_curve.active) {
+            if ($learning_curve.train_sizes === '') {
+                toast.error('Error: Learning curve train sizes not provided');
+                return;
+            }
+            learning_curve_train_sizes = $learning_curve.train_sizes.split(',').map(f => Number(f));
+            console.log({ learning_curve_train_sizes });
+            if (learning_curve_train_sizes.length !== 3) {
+                toast.error('Error: Learning curve train sizes must be 3 values');
+                return;
+            }
+
+            if (learning_curve_train_sizes.some(f => isNaN(f))) {
+                toast.error('Error: Learning curve train sizes must be numbers');
+                return;
+            }
+
+            if (learning_curve_train_sizes.slice(0, -1).some(f => f <= 0 || f > 1)) {
+                toast.error('Error: Learning curve train sizes must be between 0 and 1');
+                return;
+            }
+        }
+
         const args = {
             model: $model,
             vectors_file,
@@ -234,6 +259,7 @@
             skip_invalid_y_values: $skip_invalid_y_values,
             inverse_scaling: $inverse_scaling,
             inverse_transform: $inverse_transform,
+            learning_curve_train_sizes,
         };
 
         $results[$model] = null;
