@@ -28,6 +28,7 @@ interface CV_scores {
     scores: number[];
 }
 interface Results {
+    learning_curve: null | Record<string, Record<'test' | 'train', { mean: string; std: string; scores?: number[] }>>;
     embedding: Embedding;
     PCA: boolean;
     data_shapes: {

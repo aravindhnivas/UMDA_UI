@@ -170,16 +170,68 @@
 
         const results_data = await fs.readTextFile(resultsfile);
         const parsed_results = JSON.parse(results_data);
-
+        console.log(parsed_results);
         if (!$results) $results = {};
         $results[$model] = parsed_results;
     };
 
-    // onMount(async () => {
-    //     if (!datfile) return;
-    //     await get_pretrained_file();
-    //     await plot_from_datfile();
-    // });
+    const get_learning_curve_data = (
+        learningCurveData: Record<string, Record<'test' | 'train', { mean: string; std: string; scores?: number[] }>>,
+    ) => {
+        // Prepare the data for plotting
+        const trainingSizes = Object.keys(learningCurveData).map(Number);
+        const testScores = trainingSizes.map(size => parseFloat(learningCurveData[size].test.mean));
+        const testStd = trainingSizes.map(size => parseFloat(learningCurveData[size].test.std));
+        const trainScores = trainingSizes.map(size => parseFloat(learningCurveData[size].train.mean));
+        const trainStd = trainingSizes.map(size => parseFloat(learningCurveData[size].train.std));
+
+        // Create traces for test and train scores with error bars
+        const testTrace = {
+            x: trainingSizes,
+            y: testScores,
+            error_y: {
+                type: 'data',
+                array: testStd,
+                visible: true,
+            },
+            mode: 'lines+markers',
+            name: 'Test',
+            type: 'scattergl',
+        };
+
+        const trainTrace = {
+            x: trainingSizes,
+            y: trainScores,
+            error_y: {
+                type: 'data',
+                array: trainStd,
+                visible: true,
+            },
+            mode: 'lines+markers',
+            name: 'Train',
+            type: 'scattergl',
+        };
+
+        // Define the layout
+        const layout: Partial<Plotly.Layout> = {
+            title: 'Learning Curve',
+            xaxis: {
+                title: 'Training Data Size',
+                tickmode: 'array',
+                tickvals: trainingSizes,
+            },
+            yaxis: {
+                title: 'R<sup>2</sup> - Score',
+                // range: [0.6, 1.1], // Adjusted to better show the error bars
+            },
+            // legend: {
+            //     x: 0.1,
+            //     y: 1,
+            // },
+        };
+
+        return { data: [trainTrace, testTrace], layout };
+    };
 </script>
 
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
@@ -194,6 +246,7 @@
             </div>
         {/if}
     {/await}
+
     <div class="flex my-2">
         <Checkbox
             bind:value={$include_training_file_in_plot}
@@ -208,6 +261,7 @@
             {#if r}
                 {@const train_stats = r.train_stats}
                 {@const test_stats = r.test_stats}
+                {@const learning_curve_data = r.learning_curve}
 
                 <div class="flex gap-1">
                     <span class="badge badge-primary">
@@ -277,6 +331,12 @@
                     </div>
                     <hr />
                 {/if}
+                {#if learning_curve_data}
+                    {@const { data, layout } = get_learning_curve_data(learning_curve_data)}
+                    <div style="height: 500px;">
+                        <Plot {data} {layout} fillParent={true} debounce={250} />
+                    </div>
+                {/if}
             {/if}
         {/if}
 
@@ -297,4 +357,8 @@
             </div>
         {/each}
     </div>
+
+    <!-- <div style="height: 500px;">
+        <Plot data={fill_between().data} layout={fill_between().layout} fillParent={true} debounce={250} />
+    </div> -->
 </CustomPanel>
