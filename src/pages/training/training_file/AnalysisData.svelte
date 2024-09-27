@@ -147,20 +147,6 @@
 
 {#if $index_column_valid}
     <FetchAnalysisDir />
-    <!-- <Notification message="" type="info" dismissable={false}>
-        {#await $current_analysis_file then value}
-            {#await fs.exists(value) then file_exists}
-                <div class="grid gap-1"><span>Current analysis file:</span><code>{value}</code></div>
-            {/await}
-        {/await}
-
-        {#if $training_column_name_X.toLocaleLowerCase() !== 'smiles'}
-            <div class="text-error">
-                The column X is not 'SMILES'. Please make sure the column X name is 'SMILES' for molecular structure.
-            </div>
-        {/if}
-    </Notification> -->
-
     <div class="flex gap-2 m-auto items-end">
         <Loadingbtn
             name="Remove duplicates on X column"
