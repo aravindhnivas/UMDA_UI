@@ -265,7 +265,7 @@
         return learning_curve_plotly_data;
     };
     let significant_digits = 2;
-    $: fixedDigits = significant_digits < 1 ? 1 : significant_digits;
+    $: fixedDigits = significant_digits < 0 ? 0 : significant_digits;
 </script>
 
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
@@ -294,9 +294,9 @@
             bind:value={significant_digits}
             label="significant_digits"
             type="number"
-            min="1"
+            min="0"
             on:change={() => {
-                if (significant_digits < 1) significant_digits = 1;
+                if (significant_digits < 0) significant_digits = 0;
             }}
         />
     </div>
