@@ -200,7 +200,6 @@
                         disabled={!$parallel_computation}
                     />
                 </div>
-                <Checkbox bind:value={$skip_invalid_y_values} label="skip_invalid_y_values" check="checkbox" />
             </Content>
         </Paper>
         <Paper transition {elevation} style={paper_style}>
