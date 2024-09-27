@@ -27,8 +27,10 @@ interface CV_scores {
     std: number;
     scores: number[];
 }
+
+type LearningCurveData = Record<string, Record<'test' | 'train', { mean: string; std: string; scores: number[] }>>;
+
 interface Results {
-    learning_curve: null | Record<string, Record<'test' | 'train', { mean: string; std: string; scores?: number[] }>>;
     embedding: Embedding;
     PCA: boolean;
     data_shapes: {

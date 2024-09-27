@@ -149,6 +149,7 @@
 
     let datfile: string = '';
     let resultsfile: string = '';
+    let learning_curve_file: string = '';
 
     const get_pretrained_file = async () => {
         let pretrained_file = await $current_pretrained_file;
@@ -158,11 +159,13 @@
 
         datfile = pretrained_file + '.dat.json';
         resultsfile = pretrained_file + '.results.json';
+        learning_curve_file = pretrained_file + '.learning_curve.json';
     };
 
     $: if ($model) get_pretrained_file();
 
     const plot_from_datfile = async () => {
+        get_pretrained_file();
         await on_plot_data_ready(datfile);
         console.log('Reading results file', resultsfile);
 
@@ -173,17 +176,24 @@
         console.log(parsed_results);
         if (!$results) $results = {};
         $results[$model] = parsed_results;
+
+        // await get_learning_curve_data(learning_curve_file);
     };
 
-    const get_learning_curve_data = (
-        learningCurveData: Record<string, Record<'test' | 'train', { mean: string; std: string; scores?: number[] }>>,
-    ) => {
+    const get_learning_curve_data = async (filename: string) => {
+        if (!(await fs.exists(filename))) return;
+
+        const fileContents = await fs.readTextFile(filename);
+        const learningCurveData = safeJsonParse<LearningCurveData>(fileContents);
+        if (!learningCurveData) return;
+
         // Prepare the data for plotting
         const trainingSizes = Object.keys(learningCurveData).map(Number);
         const testScores = trainingSizes.map(size => parseFloat(learningCurveData[size].test.mean));
         const testStd = trainingSizes.map(size => parseFloat(learningCurveData[size].test.std));
         const trainScores = trainingSizes.map(size => parseFloat(learningCurveData[size].train.mean));
         const trainStd = trainingSizes.map(size => parseFloat(learningCurveData[size].train.std));
+        const Nfold_CV = learningCurveData[trainingSizes[0]].test.scores.length;
 
         // Create traces for test and train scores with error bars
         const testTrace: Partial<Plotly.Data> = {
@@ -221,7 +231,7 @@
                 tickvals: trainingSizes,
             },
             yaxis: {
-                title: 'R<sup>2</sup> - Score',
+                title: `R<sup>2</sup> - Score (${Nfold_CV}-fold CV)`,
                 // range: [0.6, 1.1], // Adjusted to better show the error bars
             },
             // legend: {
@@ -261,7 +271,6 @@
             {#if r}
                 {@const train_stats = r.train_stats}
                 {@const test_stats = r.test_stats}
-                {@const learning_curve_data = r.learning_curve}
 
                 <div class="flex gap-1">
                     <span class="badge badge-primary">
@@ -332,12 +341,14 @@
                     <hr />
                 {/if}
 
-                {#if learning_curve_data}
-                    {@const { data, layout } = get_learning_curve_data(learning_curve_data)}
-                    <div style="height: 500px;">
-                        <Plot {data} {layout} fillParent={true} debounce={250} />
-                    </div>
-                {/if}
+                {#await get_learning_curve_data(learning_curve_file) then learning_curve_data}
+                    {#if learning_curve_data}
+                        {@const { data, layout } = learning_curve_data}
+                        <div style="height: 500px;">
+                            <Plot {data} {layout} fillParent={true} debounce={250} />
+                        </div>
+                    {/if}
+                {/await}
             {/if}
         {/if}
 
