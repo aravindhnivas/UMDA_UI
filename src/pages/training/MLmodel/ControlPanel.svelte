@@ -22,7 +22,11 @@
         inverse_scaling,
         inverse_transform,
         learning_curve,
+        model,
+        model_names,
+        ensemble_regressors,
     } from './stores';
+    import Chip, { Set, Text } from '@smui/chips';
     import { Checkbox, CustomSelect, CustomInput } from '$lib/components';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import Paper, { Subtitle, Content } from '@smui/paper';
@@ -211,6 +215,17 @@
                 />
             </Content>
         </Paper>
+        <!-- <Paper transition {elevation} style={paper_style}>
+            <Subtitle>Ensemble regressors</Subtitle>
+            <Content>
+                <Checkbox bind:value={$ensemble_regressors.active} label="Use ensamble regressors" check="checkbox" />
+                <Set chips={model_names} let:chip filter bind:selected={$ensemble_regressors.regressors}>
+                    <Chip {chip} touch>
+                        <Text>{chip}</Text>
+                    </Chip>
+                </Set>
+            </Content>
+        </Paper> -->
         <Paper transition {elevation} style={paper_style}>
             <Subtitle>Misc</Subtitle>
             <Content>
