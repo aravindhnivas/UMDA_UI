@@ -5,7 +5,7 @@
     import CustomSelect from '$lib/components/CustomSelect.svelte';
     import Checkbox from '$lib/components/Checkbox.svelte';
     import FileTable from './FileTable.svelte';
-    import { ExternalLink } from 'lucide-svelte/icons';
+    import { ExternalLink, RefreshCcw } from 'lucide-svelte/icons';
 
     export let filetype = 'csv';
     export let key = 'data';
@@ -94,6 +94,14 @@
 </script>
 
 <div class="join">
+    <button
+        class="btn btn-sm btn-outline join-item rounded-0"
+        on:click={async () => {
+            await fetch_all_files(filelocation);
+        }}
+    >
+        <RefreshCcw />
+    </button>
     <select class="select select-sm select-bordered join-item" bind:value={filetype}>
         <option disabled selected>filetype</option>
         {#each filetypes as filetype}
@@ -118,7 +126,7 @@
             const dir = await dialog.open({ directory: true, multiple: false });
             if (!dir) return;
             if (isArray(dir)) return toast.error('Please select a single directory');
-            fetch_all_files(dir);
+            await fetch_all_files(dir);
         }}>Browse Directory</button
     >
     <div class="grid grid-cols-[3fr_1fr] join join-item w-full">
