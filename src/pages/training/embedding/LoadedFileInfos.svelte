@@ -41,7 +41,8 @@
 </script>
 
 <button class="w-max btn btn-sm btn-outline" on:click={() => (refresh = !refresh)}>
-    <RefreshCcw />
+    <span>Refresh</span>
+    <RefreshCcw size="20" />
 </button>
 
 {#key refresh}
