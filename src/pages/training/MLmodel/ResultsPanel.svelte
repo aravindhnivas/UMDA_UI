@@ -1,9 +1,7 @@
 <script lang="ts">
     import {
         current_pretrained_file,
-        cv_fold,
         include_training_file_in_plot,
-        learning_curve,
         model,
         model_names,
         plot_data,
@@ -173,7 +171,7 @@
         // plot_from_datfile();
         on_plot_data_ready(data_file);
     }
-    // $cv_fold = 10;
+
     const plot_from_datfile = async () => {
         await get_pretrained_file();
         await on_plot_data_ready(datfile);
@@ -264,17 +262,19 @@
 </script>
 
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
-    {#await fs.exists(datfile) then file_exists}
-        {#if file_exists}
-            <div class="grid grid-cols-[4fr_1fr] items-center gap-4">
-                <div class="alert alert-success">
-                    <CheckCheck />
-                    <span>Locally saved computed results are available to plot</span>
+    {#key plot_data_ready}
+        {#await fs.exists(datfile) then file_exists}
+            {#if file_exists}
+                <div class="grid grid-cols-[4fr_1fr] items-center gap-4">
+                    <div class="alert alert-success">
+                        <CheckCheck />
+                        <span>Locally saved computed results are available to plot</span>
+                    </div>
+                    <button class="btn btn-outline" on:click={plot_from_datfile}>Plot</button>
                 </div>
-                <button class="btn btn-outline" on:click={plot_from_datfile}>Plot</button>
-            </div>
-        {/if}
-    {/await}
+            {/if}
+        {/await}
+    {/key}
 
     <div class="flex my-2">
         <Checkbox
