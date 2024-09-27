@@ -198,6 +198,7 @@
         <Paper transition {elevation} style={paper_style}>
             <Subtitle>Learning curve</Subtitle>
             <Content>
+                <p class="prose text-sm">Predicting scalability of training data size</p>
                 <Checkbox bind:value={$learning_curve.active} label="Learning curve" check="checkbox" />
                 <CustomInput
                     label="min, max, length - Relative train sizes"
