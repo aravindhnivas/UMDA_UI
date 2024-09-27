@@ -180,10 +180,10 @@
                     {@const rcv = r.cv_scores?.train}
                     <div class="grid grid-cols-6 gap-2 items-center w-3xl">
                         <span class="badge col-span-2">{r.cv_fold}-fold CV:</span>
-                        <span class="badge">{rcv.r2.mean} ({rcv.r2.std})</span>
-                        <span class="badge">{rcv.mse.mean} ({rcv.mse.std})</span>
-                        <span class="badge">{rcv.rmse.mean} ({rcv.rmse.std})</span>
-                        <span class="badge">{rcv.mae.mean} ({rcv.mae.std})</span>
+                        <span class="badge">{rcv.r2.mean.toFixed(2)} ({rcv.r2.std.toFixed(2)})</span>
+                        <span class="badge">{rcv.mse.mean.toFixed(2)} ({rcv.mse.std.toFixed(2)})</span>
+                        <span class="badge">{rcv.rmse.mean.toFixed(2)} ({rcv.rmse.std.toFixed(2)})</span>
+                        <span class="badge">{rcv.mae.mean.toFixed(2)} ({rcv.mae.std.toFixed(2)})</span>
                     </div>
                 {/if}
 
@@ -202,10 +202,10 @@
                     {@const rcv = r.cv_scores?.test}
                     <div class="grid grid-cols-6 gap-2 items-center w-3xl">
                         <span class="badge col-span-2">{r.cv_fold}-fold CV:</span>
-                        <span class="badge">{rcv.r2.mean} ({rcv.r2.std})</span>
-                        <span class="badge">{rcv.mse.mean} ({rcv.mse.std})</span>
-                        <span class="badge">{rcv.rmse.mean} ({rcv.rmse.std})</span>
-                        <span class="badge">{rcv.mae.mean} ({rcv.mae.std})</span>
+                        <span class="badge">{rcv.r2.mean.toFixed(2)} ({rcv.r2.std.toFixed(2)})</span>
+                        <span class="badge">{rcv.mse.mean.toFixed(2)} ({rcv.mse.std.toFixed(2)})</span>
+                        <span class="badge">{rcv.rmse.mean.toFixed(2)} ({rcv.rmse.std.toFixed(2)})</span>
+                        <span class="badge">{rcv.mae.mean.toFixed(2)} ({rcv.mae.std.toFixed(2)})</span>
                     </div>
                 {/if}
 
