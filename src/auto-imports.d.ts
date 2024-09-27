@@ -43,6 +43,8 @@ declare global {
   const path: typeof import('@tauri-apps/api')['path']
   const platform: typeof import('@tauri-apps/api/os')['platform']
   const readable: typeof import('svelte/store')['readable']
+  const safeJsonParse: typeof import('$lib/utils/index')['safeJsonParse']
+  const safeJsonStringify: typeof import('$lib/utils/index')['safeJsonStringify']
   const scale: typeof import('svelte/transition')['scale']
   const setContext: typeof import('svelte')['setContext']
   const shell: typeof import('@tauri-apps/api')['shell']

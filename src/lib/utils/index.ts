@@ -82,3 +82,21 @@ export const PlotlyColors = {
 export function typeSafeObjectKeys<T extends object>(obj: T): Array<keyof T> {
     return Object.keys(obj) as Array<keyof T>;
 }
+
+export const safeJsonParse = <T>(str: string) => {
+    try {
+        const jsonValue: T = JSON.parse(str);
+        return jsonValue;
+    } catch {
+        return undefined;
+    }
+};
+
+export const safeJsonStringify = (obj: any) => {
+    try {
+        const jsonString: string = JSON.stringify(obj);
+        return jsonString;
+    } catch {
+        return undefined;
+    }
+};
