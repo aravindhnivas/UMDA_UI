@@ -71,6 +71,7 @@
                 },
             ];
             if (!$include_training_file_in_plot) return;
+
             $plot_data[$model] = [
                 {
                     x: train_data[$model].y_true,
@@ -103,20 +104,23 @@
     const include_training_plot_if_required = async () => {
         console.log('include_training_plot_if_required', $include_training_file_in_plot);
         console.log($plot_data[$model]);
+        if (!$plot_data?.[$model]) return;
+
         if (!$plot_data[$model]?.length) {
             console.warn('No plot data found');
             return;
         }
+
         if (!(train_data[$model] && test_data[$model])) {
             console.log({ train_data, test_data, $model });
             console.warn('No training data found');
             return;
         }
 
-        if ($plot_data[$model].some(d => d.name?.includes('TRAIN'))) {
+        if ($plot_data[$model]?.some(d => d.name?.includes('TRAIN'))) {
             console.warn('Removing training data from plot');
             if ($include_training_file_in_plot) return;
-            $plot_data[$model] = $plot_data[$model].filter(d => !d.name?.includes('TRAIN'));
+            $plot_data[$model] = $plot_data[$model]?.filter(d => !d.name?.includes('TRAIN')) ?? [];
             console.log($plot_data[$model]);
             return;
         }
