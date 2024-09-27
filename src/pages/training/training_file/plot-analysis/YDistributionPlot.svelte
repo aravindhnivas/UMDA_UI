@@ -148,7 +148,7 @@
             const kdePlotTrace: Partial<Plotly.PlotData> = {
                 x: data.kde.x,
                 y: data.kde.y,
-                type: 'scattergl',
+                type: 'scatter',
                 mode: 'lines',
                 name: 'KDE',
             };
