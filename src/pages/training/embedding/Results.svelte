@@ -38,7 +38,9 @@
                 </pre>
                 <div class="flex gap-1">
                     <!-- <span>Invalid smiles file: </span> -->
-                    <span class="badge badge-info text-wrap break-all">{data.invalid_smiles_file}</span>
+                    <div role="alert" class="alert p-2">
+                        <span class="text-wrap break-all">{data.invalid_smiles_file}</span>
+                    </div>
                 </div>
                 <VirtualList height="300px" items={invalid_smiles_indexed} let:item>
                     <div>
