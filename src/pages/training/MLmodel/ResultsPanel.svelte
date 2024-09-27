@@ -298,7 +298,7 @@
                     <span class="badge badge-warning">{train_stats.rmse}</span>
                     <span class="badge badge-warning">{train_stats.mae}</span>
                 </div>
-                {#if r.cross_validation && r.cv_scores?.train}
+                {#if r.cv_scores?.train}
                     {@const rcv = r.cv_scores?.train}
                     <div class="grid grid-cols-6 gap-2 items-center w-3xl">
                         <span class="badge col-span-2">{r.cv_fold}-fold CV:</span>
@@ -320,7 +320,7 @@
                     <span class="badge badge-info">{test_stats.mae}</span>
                 </div>
 
-                {#if r.cross_validation && r.cv_scores?.test}
+                {#if r.cv_scores?.test}
                     {@const rcv = r.cv_scores?.test}
                     <div class="grid grid-cols-6 gap-2 items-center w-3xl">
                         <span class="badge col-span-2">{r.cv_fold}-fold CV:</span>
