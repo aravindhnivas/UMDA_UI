@@ -42,6 +42,7 @@ declare global {
   const onMount: typeof import('svelte')['onMount']
   const path: typeof import('@tauri-apps/api')['path']
   const platform: typeof import('@tauri-apps/api/os')['platform']
+  const readJSON: typeof import('$lib/utils/index')['readJSON']
   const readable: typeof import('svelte/store')['readable']
   const safeJsonParse: typeof import('$lib/utils/index')['safeJsonParse']
   const safeJsonStringify: typeof import('$lib/utils/index')['safeJsonStringify']
@@ -57,4 +58,5 @@ declare global {
   const typeSafeObjectKeys: typeof import('$lib/utils/index')['typeSafeObjectKeys']
   const writable: typeof import('svelte/store')['writable']
   const writable_store: typeof import('@macfja/svelte-persistent-store')['writable']
+  const writeJSON: typeof import('$lib/utils/index')['writeJSON']
 }

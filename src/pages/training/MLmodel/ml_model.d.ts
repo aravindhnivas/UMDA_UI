@@ -22,13 +22,14 @@ interface CurrentModel {
 type ParametersArgs = Record<string, Record<string, string | boolean | number | null>>;
 
 type CV_scoring_methods = 'r2' | 'mse' | 'rmse' | 'mae';
-interface CV_scores {
+interface CVScores {
     mean: number;
     std: number;
     scores: number[];
 }
 
 type LearningCurveData = Record<string, Record<'test' | 'train', { mean: string; std: string; scores: number[] }>>;
+type CVScoresData = Record<'test' | 'train', Record<CV_scoring_methods, CVScores>>;
 
 interface MLResults {
     learning_curve_plotly_data?: {
@@ -62,10 +63,7 @@ interface MLResults {
     bootstrap_nsamples?: number;
     cross_validation: boolean;
     cv_fold?: number;
-    cv_scores?: {
-        test: Record<CV_scoring_methods, CV_scores>;
-        train: Record<CV_scoring_methods, CV_scores>;
-    };
+    cv_scores?: CVScoresData;
     timeframe: string;
     best_params?: Record<string, string | number | boolean | null>;
     best_score?: number;

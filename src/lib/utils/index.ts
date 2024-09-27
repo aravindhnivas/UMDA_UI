@@ -100,3 +100,53 @@ export const safeJsonStringify = (obj: any) => {
         return undefined;
     }
 };
+
+export const readJSON = async <T>(file: string) => {
+    if (!file) return undefined;
+    if (!(await fs.exists(file))) return undefined;
+    const contents = await fs.readTextFile(file);
+    return safeJsonParse<T>(contents);
+};
+
+export const writeJSON = async (file: string, data: any, append: boolean = false) => {
+    if (!file) return;
+    if (!data) return;
+    if (typeof data === 'function') return;
+
+    if (isObject(data) && Object.keys(data).length === 0) {
+        toast.error('Empty data object');
+        return;
+    }
+
+    if (isArray(data) && data.length === 0) {
+        toast.error('Empty data array');
+        return;
+    }
+
+    if (typeof data === 'string' && data.trim() === '') {
+        toast.error('Empty data string');
+        return;
+    }
+
+    if (typeof data === 'number' && isNaN(data)) {
+        toast.error('NaN data');
+        return;
+    }
+
+    if (typeof data === 'object' && data === null) {
+        toast.error('Null data');
+        return;
+    }
+
+    if (append) {
+        const existingData = await readJSON(file);
+        if (existingData) {
+            data = { ...existingData, ...data };
+        }
+    }
+
+    const jsonString = safeJsonStringify(data);
+    if (jsonString) {
+        await fs.writeTextFile(file, jsonString);
+    }
+};

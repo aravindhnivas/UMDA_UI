@@ -1,7 +1,9 @@
 <script lang="ts">
     import {
         current_pretrained_file,
+        cv_fold,
         include_training_file_in_plot,
+        learning_curve,
         model,
         model_names,
         plot_data,
@@ -152,6 +154,7 @@
     let datfile: string = '';
     let resultsfile: string = '';
     let learning_curve_file: string = '';
+    let cv_scores_file: string = '';
 
     const get_pretrained_file = async () => {
         let pretrained_file = await $current_pretrained_file;
@@ -162,38 +165,46 @@
         datfile = pretrained_file + '.dat.json';
         resultsfile = pretrained_file + '.results.json';
         learning_curve_file = pretrained_file + '.learning_curve.json';
+        cv_scores_file = pretrained_file + '.cv_scores.json';
     };
 
     $: if ($model) get_pretrained_file();
     $: if (plot_data_ready && data_file) {
-        plot_from_datfile();
+        // plot_from_datfile();
+        on_plot_data_ready(data_file);
     }
-
+    // $cv_fold = 10;
     const plot_from_datfile = async () => {
         await get_pretrained_file();
         await on_plot_data_ready(datfile);
         console.log('Reading results file', resultsfile);
 
-        if (!(await fs.exists(resultsfile))) return;
-
-        const results_data = await fs.readTextFile(resultsfile);
-        const parsed_results = safeJsonParse<MLResults>(results_data);
+        const parsed_results = await readJSON<MLResults>(resultsfile);
         if (!parsed_results) return;
 
         console.log(parsed_results);
-        if (!$results) $results = {};
 
         $results[$model] = parsed_results;
-        const learning_curve_plotly_data = await get_learning_curve_data(learning_curve_file);
-        if (!learning_curve_plotly_data) return;
-        $results[$model].learning_curve_plotly_data = learning_curve_plotly_data;
+        await get_learning_curve_data(learning_curve_file);
+        await get_cv_scores(cv_scores_file);
+    };
+
+    const get_cv_scores = async (filename: string) => {
+        const cv_scores_data = await readJSON<Record<string, CVScoresData>>(filename);
+        if (!cv_scores_data) return;
+        const nfolds = Object.keys(cv_scores_data).map(Number);
+        if (!nfolds.length) return;
+
+        const max_nfold = Math.max(...nfolds);
+        console.log(cv_scores_data, max_nfold);
+        if (!$results[$model]) return;
+
+        $results[$model].cv_fold = max_nfold;
+        $results[$model].cv_scores = cv_scores_data[`${max_nfold}`];
     };
 
     const get_learning_curve_data = async (filename: string) => {
-        if (!(await fs.exists(filename))) return;
-
-        const fileContents = await fs.readTextFile(filename);
-        const learningCurveData = safeJsonParse<LearningCurveData>(fileContents);
+        const learningCurveData = await readJSON<LearningCurveData>(filename);
         if (!learningCurveData) return;
 
         // Prepare the data for plotting
@@ -244,7 +255,11 @@
             },
         };
 
-        return { data: [trainTrace, testTrace], layout };
+        const learning_curve_plotly_data = { data: [trainTrace, testTrace], layout };
+        if (!$results[$model]) return;
+        $results[$model].learning_curve_plotly_data = learning_curve_plotly_data;
+
+        return learning_curve_plotly_data;
     };
 </script>
 
@@ -254,7 +269,7 @@
             <div class="grid grid-cols-[4fr_1fr] items-center gap-4">
                 <div class="alert alert-success">
                     <CheckCheck />
-                    <span>Computed results are available to plot</span>
+                    <span>Locally saved computed results are available to plot</span>
                 </div>
                 <button class="btn btn-outline" on:click={plot_from_datfile}>Plot</button>
             </div>
@@ -362,7 +377,7 @@
                     />
                 {/if}
             </div>
-            {#if $results[model_name]?.learning_curve_plotly_data}
+            {#if $learning_curve.active && $results[model_name]?.learning_curve_plotly_data}
                 {@const { data, layout } = $results[model_name].learning_curve_plotly_data}
                 <div style="height: 500px;" class:hidden={model_name !== $model}>
                     <Plot {data} {layout} fillParent={true} debounce={250} />
