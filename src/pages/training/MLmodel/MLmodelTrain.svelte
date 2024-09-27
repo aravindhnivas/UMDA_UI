@@ -238,7 +238,7 @@
             training_column_name_y: $training_column_name_y,
             parameters: $default_parameter_mode ? {} : clonedValues,
             fine_tuned_values: $default_parameter_mode ? {} : clonedFineTunedValues,
-            fine_tune_model: $fine_tune_model,
+            fine_tune_model: $fine_tune_model && !$default_parameter_mode && !isEmpty(clonedFineTunedValues),
             bootstrap: $bootstrap,
             bootstrap_nsamples: Number($bootstrap_nsamples),
             noise_percentage: Number($noise_percentage),
