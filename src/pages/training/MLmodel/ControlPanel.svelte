@@ -70,6 +70,9 @@
                 {#if $skip_invalid_y_values}
                     <span class="badge badge-warning">skip_invalid_y_values</span>
                 {/if}
+                {#if $learning_curve.active}
+                    <span class="badge badge-warning">learning_curve</span>
+                {/if}
             {/if}
         </div>
     </svelte:fragment>
