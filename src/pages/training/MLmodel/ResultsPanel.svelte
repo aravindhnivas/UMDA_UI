@@ -362,27 +362,29 @@
             {/if}
         {/if}
 
-        {#each model_names as model_name (model_name)}
-            <div style="height: 500px;" class:hidden={model_name !== $model}>
-                {#if $plot_data[model_name] && $results[model_name]}
-                    <Plot
-                        data={$plot_data[model_name]}
-                        layout={{
-                            title: `${model_name.toLocaleUpperCase()} Regressor`,
-                            xaxis: { title: 'y_true' },
-                            yaxis: { title: 'y_pred' },
-                        }}
-                        fillParent={true}
-                        debounce={250}
-                    />
-                {/if}
-            </div>
-            {#if $results[model_name]?.learning_curve_plotly_data}
-                {@const { data, layout } = $results[model_name].learning_curve_plotly_data}
-                <div style="height: 500px;" class:hidden={model_name !== $model}>
-                    <Plot {data} {layout} fillParent={true} debounce={250} />
-                </div>
+        <!-- {#each model_names as model_name (model_name)} -->
+        <!-- <div style="height: 500px;" class:hidden={model_name !== $model}> -->
+        <div style="height: 500px;">
+            {#if $plot_data[$model] && $results[$model]}
+                <Plot
+                    data={$plot_data[$model]}
+                    layout={{
+                        title: `${$model.toLocaleUpperCase()} Regressor`,
+                        xaxis: { title: 'y_true' },
+                        yaxis: { title: 'y_pred' },
+                    }}
+                    fillParent={true}
+                    debounce={250}
+                />
             {/if}
-        {/each}
+        </div>
+        {#if $results[$model]?.learning_curve_plotly_data}
+            {@const { data, layout } = $results[$model].learning_curve_plotly_data}
+            <!-- <div style="height: 500px;" class:hidden={model_name !== $model}> -->
+            <div style="height: 500px;">
+                <Plot {data} {layout} fillParent={true} debounce={250} />
+            </div>
+        {/if}
+        <!-- {/each} -->
     </div>
 </CustomPanel>
