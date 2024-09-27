@@ -23,8 +23,8 @@ type ParametersArgs = Record<string, Record<string, string | boolean | number | 
 
 type CV_scoring_methods = 'r2' | 'mse' | 'rmse' | 'mae';
 interface CV_scores {
-    mean: string;
-    std: string;
+    mean: number;
+    std: number;
     scores: number[];
 }
 interface Results {
