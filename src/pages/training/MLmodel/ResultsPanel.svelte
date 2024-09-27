@@ -14,6 +14,7 @@
     import { PlotlyColors } from '$lib/utils';
     import Plot from 'svelte-plotly.js';
     import { CheckCheck } from 'lucide-svelte/icons';
+    import { CustomInput } from '$lib/components';
 
     export let data_file: string;
     export let plot_data_ready = false;
@@ -263,6 +264,8 @@
 
         return learning_curve_plotly_data;
     };
+    let significant_digits = 2;
+    $: fixedDigits = significant_digits < 1 ? 1 : significant_digits;
 </script>
 
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
@@ -280,11 +283,21 @@
         {/await}
     {/key}
 
-    <div class="flex my-2">
+    <div class="flex my-2 gap-4 items-end">
         <Checkbox
             bind:value={$include_training_file_in_plot}
             label="Plot training data"
             on:change={include_training_plot_if_required}
+        />
+
+        <CustomInput
+            bind:value={significant_digits}
+            label="significant_digits"
+            type="number"
+            min="1"
+            on:change={() => {
+                if (significant_digits < 1) significant_digits = 1;
+            }}
         />
     </div>
 
@@ -319,12 +332,20 @@
                 </div>
                 {#if r.cv_scores?.train}
                     {@const rcv = r.cv_scores?.train}
+
                     <div class="grid grid-cols-6 gap-2 items-center w-3xl">
                         <span class="badge col-span-2">{r.cv_fold}-fold CV:</span>
-                        <span class="badge">{rcv.r2.mean.toFixed(2)} ({rcv.r2.std.toFixed(2)})</span>
-                        <span class="badge">{rcv.mse.mean.toFixed(2)} ({rcv.mse.std.toFixed(2)})</span>
-                        <span class="badge">{rcv.rmse.mean.toFixed(2)} ({rcv.rmse.std.toFixed(2)})</span>
-                        <span class="badge">{rcv.mae.mean.toFixed(2)} ({rcv.mae.std.toFixed(2)})</span>
+                        <span class="badge">{rcv.r2.mean.toFixed(fixedDigits)} ({rcv.r2.std.toFixed(fixedDigits)})</span
+                        >
+                        <span class="badge"
+                            >{rcv.mse.mean.toFixed(fixedDigits)} ({rcv.mse.std.toFixed(fixedDigits)})</span
+                        >
+                        <span class="badge"
+                            >{rcv.rmse.mean.toFixed(fixedDigits)} ({rcv.rmse.std.toFixed(fixedDigits)})</span
+                        >
+                        <span class="badge"
+                            >{rcv.mae.mean.toFixed(fixedDigits)} ({rcv.mae.std.toFixed(fixedDigits)})</span
+                        >
                     </div>
                 {/if}
 
@@ -343,10 +364,17 @@
                     {@const rcv = r.cv_scores?.test}
                     <div class="grid grid-cols-6 gap-2 items-center w-3xl">
                         <span class="badge col-span-2">{r.cv_fold}-fold CV:</span>
-                        <span class="badge">{rcv.r2.mean.toFixed(2)} ({rcv.r2.std.toFixed(2)})</span>
-                        <span class="badge">{rcv.mse.mean.toFixed(2)} ({rcv.mse.std.toFixed(2)})</span>
-                        <span class="badge">{rcv.rmse.mean.toFixed(2)} ({rcv.rmse.std.toFixed(2)})</span>
-                        <span class="badge">{rcv.mae.mean.toFixed(2)} ({rcv.mae.std.toFixed(2)})</span>
+                        <span class="badge">{rcv.r2.mean.toFixed(fixedDigits)} ({rcv.r2.std.toFixed(fixedDigits)})</span
+                        >
+                        <span class="badge"
+                            >{rcv.mse.mean.toFixed(fixedDigits)} ({rcv.mse.std.toFixed(fixedDigits)})</span
+                        >
+                        <span class="badge"
+                            >{rcv.rmse.mean.toFixed(fixedDigits)} ({rcv.rmse.std.toFixed(fixedDigits)})</span
+                        >
+                        <span class="badge"
+                            >{rcv.mae.mean.toFixed(fixedDigits)} ({rcv.mae.std.toFixed(fixedDigits)})</span
+                        >
                     </div>
                 {/if}
 
