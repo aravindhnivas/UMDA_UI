@@ -151,11 +151,13 @@
     let resultsfile: string = '';
 
     const get_pretrained_file = async () => {
-        const pretrained_file = await $current_pretrained_file;
-        if (!pretrained_file.endsWith('.dat.json')) {
-            datfile = pretrained_file + '.dat.json';
-            resultsfile = pretrained_file + '.results.json';
+        let pretrained_file = await $current_pretrained_file;
+        if (pretrained_file.endsWith('.pkl')) {
+            pretrained_file = pretrained_file.replace('.pkl', '');
         }
+
+        datfile = pretrained_file + '.dat.json';
+        resultsfile = pretrained_file + '.results.json';
     };
 
     $: if ($model) get_pretrained_file();
