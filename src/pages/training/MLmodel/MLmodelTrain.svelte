@@ -266,7 +266,7 @@
         };
 
         $results[$model] = null;
-        $plot_data[$model] = null;
+        // $plot_data[$model] = null;
         // console.warn(args);
         // return;
         return { pyfile: 'training.ml_model', args };

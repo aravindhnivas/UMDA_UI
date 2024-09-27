@@ -236,12 +236,7 @@
             },
             yaxis: {
                 title: `R<sup>2</sup> - Score (${Nfold_CV}-fold CV)`,
-                // range: [0.6, 1.1], // Adjusted to better show the error bars
             },
-            // legend: {
-            //     x: 0.1,
-            //     y: 1,
-            // },
         };
 
         return { data: [trainTrace, testTrace], layout };
@@ -358,7 +353,7 @@
 
         {#each model_names as model_name (model_name)}
             <div style="height: 500px;" class:hidden={model_name !== $model}>
-                {#if $plot_data[model_name]}
+                {#if $plot_data[model_name] && $results[model_name]}
                     <Plot
                         data={$plot_data[model_name]}
                         layout={{
