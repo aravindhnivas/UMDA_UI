@@ -28,7 +28,7 @@
                 <Notification dismissable={false}>
                     <span>Save location: {save_loc_name}</span>
                     <button
-                        class="btn btn-xs btn-outline"
+                        class="btn btn-sm btn-outline"
                         on:click={async () => {
                             if (!save_loc_name) return;
                             await shell.open(save_loc_name);
