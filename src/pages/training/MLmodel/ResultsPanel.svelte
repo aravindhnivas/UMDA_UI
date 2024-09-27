@@ -265,7 +265,11 @@
         return learning_curve_plotly_data;
     };
     let significant_digits = 2;
-    $: fixedDigits = significant_digits < 0 ? 0 : significant_digits;
+    let fixedDigits = 2;
+    $: if (significant_digits < 0) fixedDigits = 0;
+    $: if (significant_digits > 10) fixedDigits = 10;
+    $: if (significant_digits >= 0 && significant_digits <= 10) fixedDigits = significant_digits;
+    // $: fixedDigits = significant_digits < 0 ? 0 : significant_digits;
 </script>
 
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
@@ -295,8 +299,10 @@
             label="significant_digits"
             type="number"
             min="0"
+            max="10"
             on:change={() => {
                 if (significant_digits < 0) significant_digits = 0;
+                if (significant_digits > 10) significant_digits = 10;
             }}
         />
     </div>
