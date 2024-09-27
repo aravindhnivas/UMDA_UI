@@ -1,9 +1,18 @@
 <script lang="ts">
-    import { include_training_file_in_plot, model, model_names, plot_data, results, test_size } from './stores';
+    import {
+        current_pretrained_file,
+        include_training_file_in_plot,
+        model,
+        model_names,
+        plot_data,
+        results,
+        test_size,
+    } from './stores';
     import Checkbox from '$lib/components/Checkbox.svelte';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import { PlotlyColors } from '$lib/utils';
     import Plot from 'svelte-plotly.js';
+    import { CheckCheck } from 'lucide-svelte';
 
     export let data_file: string;
     export let plot_data_ready = false;
@@ -24,14 +33,14 @@
     let test_data = {} as Record<MLModel, ParsedData['test']>;
     let train_data = {} as Record<MLModel, ParsedData['train']>;
 
-    const on_plot_data_ready = async () => {
+    const on_plot_data_ready = async (datfile: string) => {
         try {
-            const filename = await path.basename(data_file);
+            const filename = await path.basename(datfile);
             const file_model = filename.split('_')[0] as MLModel;
             $model = file_model;
             console.log('Reading plot data\n', filename, file_model, $model);
 
-            const saved_file_contents = await fs.readTextFile(data_file);
+            const saved_file_contents = await fs.readTextFile(datfile);
             const parsed = JSON.parse(saved_file_contents) as ParsedData;
             console.warn({ parsed });
 
@@ -88,7 +97,7 @@
     };
 
     $: if (plot_data_ready && data_file) {
-        on_plot_data_ready();
+        on_plot_data_ready(data_file);
     }
 
     const include_training_plot_if_required = async () => {
@@ -134,11 +143,55 @@
             },
             ...$plot_data[$model],
         ];
+
         console.log($plot_data[$model]);
     };
+
+    let datfile: string = '';
+    let resultsfile: string = '';
+
+    const get_pretrained_file = async () => {
+        const pretrained_file = await $current_pretrained_file;
+        if (!pretrained_file.endsWith('.dat.json')) {
+            datfile = pretrained_file + '.dat.json';
+            resultsfile = pretrained_file + '.results.json';
+        }
+    };
+
+    $: if ($model) get_pretrained_file();
+
+    const plot_from_datfile = async () => {
+        await on_plot_data_ready(datfile);
+        console.log('Reading results file', resultsfile);
+
+        if (!(await fs.exists(resultsfile))) return;
+
+        const results_data = await fs.readTextFile(resultsfile);
+        const parsed_results = JSON.parse(results_data);
+
+        if (!$results) $results = {};
+        $results[$model] = parsed_results;
+    };
+
+    onMount(async () => {
+        if (!datfile) return;
+        await get_pretrained_file();
+        await plot_from_datfile();
+    });
 </script>
 
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
+    {#await fs.exists(datfile) then file_exists}
+        {#if file_exists}
+            <div class="grid grid-cols-[4fr_1fr] items-center gap-4">
+                <div class="alert alert-success">
+                    <CheckCheck />
+                    <span>Computed results are available to plot</span>
+                </div>
+                <button class="btn btn-outline" on:click={plot_from_datfile}>Plot</button>
+            </div>
+        {/if}
+    {/await}
     <div class="flex my-2">
         <Checkbox
             bind:value={$include_training_file_in_plot}
