@@ -28,10 +28,10 @@
     }
 
     const ncols = 3;
-    $: console.log($fine_tuned_values[$model][key]);
-    $: if (Object.values($fine_tuned_values[$model][key]).some(f => f)) {
-        console.log('fine_tuned_values', $fine_tuned_values[$model][key]);
-    }
+    // $: console.log($fine_tuned_values[$model][key]);
+    // $: if (Object.values($fine_tuned_values[$model][key]).some(f => f)) {
+    //     console.log('fine_tuned_values', $fine_tuned_values[$model][key]);
+    // }
 </script>
 
 <div class="grid m-2">
