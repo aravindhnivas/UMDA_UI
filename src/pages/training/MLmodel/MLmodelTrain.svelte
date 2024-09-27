@@ -30,6 +30,7 @@
         fine_tuned_values,
         learning_curve,
         analyse_shapley_values,
+        plot_data,
     } from './stores';
     import { embedding, use_PCA } from '../embedding/stores';
     import { NPARTITIONS, use_dask } from '$lib/stores/system';
@@ -265,6 +266,7 @@
         };
 
         $results[$model] = null;
+        $plot_data[$model] = null;
         // console.warn(args);
         // return;
         return { pyfile: 'training.ml_model', args };

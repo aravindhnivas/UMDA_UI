@@ -331,6 +331,7 @@
                     </div>
                     <hr />
                 {/if}
+
                 {#if learning_curve_data}
                     {@const { data, layout } = get_learning_curve_data(learning_curve_data)}
                     <div style="height: 500px;">
@@ -357,8 +358,4 @@
             </div>
         {/each}
     </div>
-
-    <!-- <div style="height: 500px;">
-        <Plot data={fill_between().data} layout={fill_between().layout} fillParent={true} debounce={250} />
-    </div> -->
 </CustomPanel>
