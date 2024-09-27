@@ -173,11 +173,11 @@
         $results[$model] = parsed_results;
     };
 
-    onMount(async () => {
-        if (!datfile) return;
-        await get_pretrained_file();
-        await plot_from_datfile();
-    });
+    // onMount(async () => {
+    //     if (!datfile) return;
+    //     await get_pretrained_file();
+    //     await plot_from_datfile();
+    // });
 </script>
 
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
