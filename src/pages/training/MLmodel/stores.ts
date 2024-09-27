@@ -88,6 +88,13 @@ export const learning_curve = localWritable('learning_curve', {
     active: false,
     train_sizes: '0.1, 1.0, 10',
 });
+export const ensemble_regressors = localWritable<{
+    active: boolean;
+    regressors: string[];
+}>('ensemble_regressors', {
+    active: false,
+    regressors: [],
+});
 export const n_jobs = localWritable('n_jobs', -2);
 export const backends: ParallelComputationBackend[] = ['loky', 'threading', 'multiprocessing', 'dask'];
 export const parallel_computation_backend = localWritable<ParallelComputationBackend>(
