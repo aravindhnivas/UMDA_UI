@@ -186,7 +186,7 @@
         const trainStd = trainingSizes.map(size => parseFloat(learningCurveData[size].train.std));
 
         // Create traces for test and train scores with error bars
-        const testTrace = {
+        const testTrace: Partial<Plotly.Data> = {
             x: trainingSizes,
             y: testScores,
             error_y: {
@@ -199,7 +199,7 @@
             type: 'scattergl',
         };
 
-        const trainTrace = {
+        const trainTrace: Partial<Plotly.Data> = {
             x: trainingSizes,
             y: trainScores,
             error_y: {
