@@ -2,6 +2,7 @@
     import {
         current_pretrained_file,
         include_training_file_in_plot,
+        learning_curve,
         model,
         model_names,
         plot_data,
@@ -44,8 +45,6 @@
             const parsed = JSON.parse(saved_file_contents) as ParsedData;
             console.warn({ parsed });
 
-            await get_pretrained_file();
-
             test_data[$model] = parsed.test;
             train_data[$model] = parsed.train;
 
@@ -72,28 +71,33 @@
                     line: { color: PlotlyColors.muted_blue },
                 },
             ];
-            if (!$include_training_file_in_plot) return;
+            if ($include_training_file_in_plot) {
+                $plot_data[$model] = [
+                    {
+                        x: train_data[$model].y_true,
+                        y: train_data[$model].y_pred,
+                        mode: 'markers',
+                        type: 'scattergl',
+                        name: 'TRAIN: Predicted',
+                        opacity: 0.5,
+                        marker: { color: PlotlyColors.safety_orange },
+                    },
+                    {
+                        x: train_data[$model].y_true,
+                        y: train_data[$model].y_linear_fit,
+                        mode: 'lines',
+                        type: 'scattergl',
+                        name: 'TRAIN: Linear fit',
+                        line: { color: PlotlyColors.safety_orange },
+                    },
+                    ...$plot_data[$model],
+                ];
+            }
 
-            $plot_data[$model] = [
-                {
-                    x: train_data[$model].y_true,
-                    y: train_data[$model].y_pred,
-                    mode: 'markers',
-                    type: 'scattergl',
-                    name: 'TRAIN: Predicted',
-                    opacity: 0.5,
-                    marker: { color: PlotlyColors.safety_orange },
-                },
-                {
-                    x: train_data[$model].y_true,
-                    y: train_data[$model].y_linear_fit,
-                    mode: 'lines',
-                    type: 'scattergl',
-                    name: 'TRAIN: Linear fit',
-                    line: { color: PlotlyColors.safety_orange },
-                },
-                ...$plot_data[$model],
-            ];
+            await get_pretrained_file();
+            if ($learning_curve.active) {
+                await get_learning_curve_data(learning_curve_file);
+            }
         } catch (error) {
             toast.error('Error reading plot data\n' + error);
         }
