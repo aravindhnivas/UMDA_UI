@@ -7,7 +7,7 @@
     } from './plot-analysis/stores';
     import { load_analysis_dir, training_file } from './stores';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
-    import { RefreshCcw, ExternalLink } from 'lucide-svelte/icons';
+    import { RefreshCcw, ExternalLink, AlertCircle } from 'lucide-svelte/icons';
     import { onMount } from 'svelte';
     import { Checkbox } from '$lib/components';
 
@@ -47,11 +47,16 @@
     });
 </script>
 
+<hr />
+
 {#await $current_post_analysis_files_directory then filedir}
     <div class="flex gap-1 items-center">
-        <span class="badge">{filedir}</span>
+        <div role="alert" class="alert alert-info">
+            <AlertCircle />
+            <span>{filedir}</span>
+        </div>
         <button
-            class="btn btn-xs btn-outline"
+            class="btn btn-sm btn-outline"
             on:click={async () => {
                 await shell.open(filedir);
             }}><ExternalLink size="20" /></button
