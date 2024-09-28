@@ -66,6 +66,11 @@
     );
 
     let predicted_value: number | string = '';
+    let predicted_value_significance = 2;
+    // $: console.log({ predicted_value_significance });
+    $: if (predicted_value_significance < 0) predicted_value_significance = 0;
+    $: if (predicted_value_significance > 10) predicted_value_significance = 10;
+
     const width = localWritable('ml_prediction_molecular_svg_width', 500);
     const height = localWritable('ml_prediction_molecular_svg_height', 400);
 </script>
@@ -92,13 +97,23 @@
 </div>
 
 {#if test_mode}
-    <div class="flex items-start gap-1">
+    <div class="flex items-start gap-4">
         <Molecule bind:smiles={$smiles} bind:width={$width} bind:height={$height} />
+        <CustomInput
+            bind:value={predicted_value_significance}
+            label="Significance"
+            type="number"
+            disabled={!isNumber(predicted_value)}
+            min="0"
+            max="10"
+        />
         <div class="grid gap-2">
             <div class="text-sm">Predicted value</div>
             <div class="rounded-1 p-1" style="background-color: antiquewhite;">
                 <span class="select-text">
-                    {isNumber(predicted_value) ? predicted_value.toFixed(2) : predicted_value}
+                    {isNumber(predicted_value)
+                        ? predicted_value.toFixed(predicted_value_significance)
+                        : predicted_value}
                 </span>
             </div>
         </div>
