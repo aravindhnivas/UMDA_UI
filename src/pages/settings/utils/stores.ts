@@ -69,9 +69,21 @@ interface RunningProcess {
 }
 
 export const create_running_processes_store = () => {
-    const { set, subscribe, update } = writable<{
+    const {
+        set,
+        subscribe,
+        update: storeUpdate,
+    } = writable<{
         [key: string]: RunningProcess;
     }>({});
+
+    const update = (fn: (p: { [key: string]: RunningProcess }) => { [key: string]: RunningProcess }) => {
+        storeUpdate(p => {
+            if (!p) p = {};
+            const updated = fn(p);
+            return updated;
+        });
+    };
 
     const add = (pid: number, obj: RunningProcess) => {
         update(p => {
