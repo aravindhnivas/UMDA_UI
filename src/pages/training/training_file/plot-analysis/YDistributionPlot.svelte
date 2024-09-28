@@ -2,18 +2,13 @@
     import { use_dask } from '$lib/stores/system';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import { training_column_name_y, training_file } from '../stores';
-    import {
-        active_tab,
-        current_post_analysis_files_directory,
-        current_training_data_file,
-        filtered_dir,
-        YDistributionFilter,
-    } from './stores';
+    import { active_tab, current_training_data_file, filtered_dir, YDistributionFilter } from './stores';
     import {
         savefilename,
         min_yvalue,
         max_yvalue,
         ytransformation,
+        y_data_distribution_savefilename,
         save_loc_for_ydistribution_data,
     } from './YdataPlots/stores';
     import YdataStats from './YdataPlots/YdataStats.svelte';
@@ -43,6 +38,9 @@
             });
             if (!overwrite) return read_and_plot(savefile);
         }
+        if (auto_transform_data) {
+            $ytransformation = 'None';
+        }
 
         return {
             pyfile: 'training.y_data_distribution',
@@ -53,7 +51,7 @@
                 use_dask: $use_dask,
                 property_column: $training_column_name_y,
                 save_loc,
-                savefilename: $savefilename,
+                savefilename: $y_data_distribution_savefilename,
                 bin_size,
                 auto_transform_data,
                 ytransformation: $ytransformation === 'None' ? null : $ytransformation,
@@ -119,6 +117,7 @@
             $max_yvalue = String(data.descriptive_statistics.max);
 
             applied_transformation = data?.applied_transformation || 'None';
+            console.warn({ applied_transformation });
             $ytransformation = applied_transformation;
 
             const histogramTrace: Partial<Plotly.PlotData> = {
