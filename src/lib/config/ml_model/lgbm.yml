@@ -17,6 +17,26 @@ hyperparameters:
     value: 31
     description: 'Maximum number of leaves in one tree'
     type: integer
+  min_child_samples:
+    value: 20
+    description: 'Minimum number of data needed in a child (leaf)'
+    type: integer
+  subsample:
+    value: 1.0
+    description: 'Subsample ratio of the training instance'
+    type: float
+  colsample_bytree:
+    value: 1.0
+    description: 'Subsample ratio of columns when constructing each tree'
+    type: float
+  reg_alpha:
+    value: 0.0
+    description: 'L1 regularization term on weights'
+    type: float
+  reg_lambda:
+    value: 0.0
+    description: 'L2 regularization term on weights'
+    type: float
 parameters:
   objective:
     value:
