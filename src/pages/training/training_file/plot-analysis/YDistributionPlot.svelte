@@ -30,16 +30,39 @@
         if (!(await fs.exists(save_loc))) {
             await fs.createDir(save_loc, { recursive: true });
         }
-        const savefile = await path.join(save_loc, $savefilename);
-        if (await fs.exists(savefile)) {
-            const overwrite = await dialog.confirm('File already exists. Do you want to overwrite?', {
-                title: 'Overwrite file?',
-                type: 'warning',
-            });
-            if (!overwrite) return read_and_plot(savefile);
-        }
+
         if (auto_transform_data) {
             $ytransformation = 'None';
+            const all_skewness_savefile = await path.join(save_loc, 'skewness_after_all_transformation.json');
+            if (await fs.exists(all_skewness_savefile)) {
+                const overwrite = await dialog.confirm(
+                    'All skew values computed file already exists. Do you want to overwrite?',
+                    {
+                        title: 'Overwrite file?',
+                        type: 'warning',
+                    },
+                );
+                if (!overwrite) {
+                    const parsed_contents = await readJSON<{
+                        best_skew_key: string;
+                        skews: Record<string, number>;
+                    }>(all_skewness_savefile);
+                    if (!parsed_contents) return;
+
+                    $ytransformation = parsed_contents.best_skew_key;
+                    await read_and_plot();
+                    return;
+                }
+            }
+        } else {
+            const savefile = await path.join(save_loc, $savefilename);
+            if (await fs.exists(savefile)) {
+                const overwrite = await dialog.confirm('File already exists. Do you want to overwrite?', {
+                    title: 'Overwrite file?',
+                    type: 'warning',
+                });
+                if (!overwrite) return read_and_plot(savefile);
+            }
         }
 
         return {
