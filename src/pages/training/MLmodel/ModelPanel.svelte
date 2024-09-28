@@ -86,9 +86,10 @@
         }
         uploadedfile = null;
 
-        const contents = await fs.readTextFile(uploadloc);
         try {
-            const parsed = JSON.parse(contents);
+            const parsed = await readJSON(uploadloc);
+            if (!parsed) return;
+
             console.log('parsed', parsed);
             if ($model !== parsed.model) {
                 toast.error('Error: Model mismatch');
