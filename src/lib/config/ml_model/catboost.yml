@@ -18,10 +18,6 @@ hyperparameters:
     value: 3
     description: 'L2 regularization coefficient'
     type: float
-  random_strength:
-    value: 1
-    description: 'Amount of randomness to use for scoring splits'
-    type: float
   border_count:
     value: 254
     description: 'Number of splits for numerical features'
@@ -30,8 +26,16 @@ hyperparameters:
     value: 0.8
     description: 'Subsample ratio of the training instance'
     type: float
+  colsample_bylevel:
+    value: 0.8
+    description: 'Subsample ratio of columns for each level'
+    type: float
 
 parameters:
+  random_strength:
+      value: 1
+      description: 'Amount of randomness to use for scoring splits'
+      type: float
   nan_mode:
     value:
       default: 'Min'
@@ -143,7 +147,6 @@ parameters:
         Random: 'Random'
     description: 'Feature border type'
     type: str
-
   model_size_reg:
     value: 0.5
     description: 'Model size regularization'
