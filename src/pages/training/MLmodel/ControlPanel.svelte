@@ -33,12 +33,13 @@
     import Paper, { Subtitle, Content } from '@smui/paper';
 
     const grid_search_methods = [
+        'Optuna',
         'GridSearchCV',
         'RandomizedSearchCV',
         'HalvingGridSearchCV',
         'HalvingRandomSearchCV',
         'DaskGridSearchCV',
-        'DaskRandomSearchCV',
+        'DaskRandomizedSearchCV',
     ];
     const elevation = 3;
     const paper_style = 'background-color: transparent;';
@@ -145,14 +146,18 @@
                     bind:value={$randomzied_gridsearch_niter}
                     min="2"
                     type="number"
-                    disabled={!$fine_tune_model}
+                    disabled={!$fine_tune_model ||
+                        $grid_search_method === 'Optuna' ||
+                        !$grid_search_method.includes('RandomizedSearchCV')}
                 />
                 <CustomInput
                     label="Halving factor"
                     bind:value={$halving_factor}
                     min="2"
                     type="number"
-                    disabled={!$fine_tune_model}
+                    disabled={!$fine_tune_model ||
+                        $grid_search_method === 'Optuna' ||
+                        !$grid_search_method.includes('Halving')}
                 />
             </Content>
         </Paper>
