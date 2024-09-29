@@ -91,7 +91,7 @@
 
         let clonedFineTunedValues: Record<string, any> = {};
 
-        if ($fine_tune_model) {
+        if ($fine_tune_model && $grid_search_method !== 'Optuna') {
             if ($default_parameter_mode) {
                 toast.error('Cannot fine tune model with default parameters');
                 return;
