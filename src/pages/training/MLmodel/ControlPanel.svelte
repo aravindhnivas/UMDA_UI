@@ -1,6 +1,7 @@
 <script lang="ts">
     import {
         fine_tune_model,
+        optuna_n_trials,
         cv_fold,
         bootstrap_nsamples,
         noise_percentage,
@@ -140,6 +141,13 @@
                     min="2"
                     type="number"
                     disabled={!($cross_validation || $fine_tune_model)}
+                />
+                <CustomInput
+                    label="n_trials (Optuna)"
+                    bind:value={$optuna_n_trials}
+                    min="2"
+                    type="number"
+                    disabled={!$fine_tune_model || $grid_search_method !== 'Optuna'}
                 />
                 <CustomInput
                     label="n_iter"

@@ -76,6 +76,7 @@ export const fine_tune_model = writable(false);
 export const cross_validation = localWritable('cross_validation', true);
 export const cv_fold = localWritable('cv_fold', 5);
 export const halving_factor = localWritable('halving_factor', 3);
+export const optuna_n_trials = localWritable('optuna_n_trials', 100);
 export const randomzied_gridsearch_niter = localWritable<number>('randomzied_gridsearch_niter', 10);
 export const bootstrap_nsamples = localWritable<number>('bootstrap_nsamples', 800);
 export const bootstrap = localWritable('bootstrap', false);

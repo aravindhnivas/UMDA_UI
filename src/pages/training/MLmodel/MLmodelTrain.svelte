@@ -31,6 +31,7 @@
         learning_curve,
         analyse_shapley_values,
         plot_data,
+        optuna_n_trials,
     } from './stores';
     import { embedding, use_PCA } from '../embedding/stores';
     import { NPARTITIONS, use_dask } from '$lib/stores/system';
@@ -241,6 +242,7 @@
                 filetype: $training_file.filetype,
                 filename: final_training_file,
             },
+            optuna_n_trials: isString($optuna_n_trials) ? parseInt($optuna_n_trials) : $optuna_n_trials,
             training_column_name_y: $training_column_name_y,
             parameters: $default_parameter_mode ? {} : clonedValues,
             fine_tuned_values: $default_parameter_mode ? {} : clonedFineTunedValues,
