@@ -36,7 +36,8 @@ export async function startServer() {
         pyServerReady.set(false);
         await updateServerInfo();
     }
-    if (get(developerMode) && !get(pythonscript)) {
+    if (get(developerMode) && !(await fs.exists(get(pythonscript)))) {
+        pyServerFailed.set(true);
         toast.error('pythonscript not found. Please set python source file in settings');
         return serverInfo.error('pythonscript not found');
     }
