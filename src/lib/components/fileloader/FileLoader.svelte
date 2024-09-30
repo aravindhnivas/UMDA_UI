@@ -134,6 +134,9 @@
             class="input input-sm input-bordered join-item"
             placeholder="Browse Directory"
             bind:value={filelocation}
+            on:change={async () => {
+                filename = await path.join(filelocation, fname);
+            }}
             autocomplete="off"
             autocapitalize="off"
             autocorrect="off"
