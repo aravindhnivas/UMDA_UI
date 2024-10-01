@@ -264,6 +264,7 @@
 
         return learning_curve_plotly_data;
     };
+
     let significant_digits = 2;
     let fixedDigits = 2;
     $: if (significant_digits < 0) fixedDigits = 0;
@@ -335,10 +336,10 @@
                     <span class="badge badge-warning col-span-2"
                         >Train stats ({100 - $test_size}% data = {r.data_shapes.y_train}):
                     </span>
-                    <span class="badge badge-warning">{train_stats.r2}</span>
-                    <span class="badge badge-warning">{train_stats.mse}</span>
-                    <span class="badge badge-warning">{train_stats.rmse}</span>
-                    <span class="badge badge-warning">{train_stats.mae}</span>
+                    <span class="badge badge-warning">{train_stats.r2.toFixed(fixedDigits)}</span>
+                    <span class="badge badge-warning">{train_stats.mse.toFixed(fixedDigits)}</span>
+                    <span class="badge badge-warning">{train_stats.rmse.toFixed(fixedDigits)}</span>
+                    <span class="badge badge-warning">{train_stats.mae.toFixed(fixedDigits)}</span>
                 </div>
                 {#if r.cv_scores?.train}
                     {@const rcv = r.cv_scores?.train}
@@ -363,11 +364,11 @@
                     <span class="badge badge-info col-span-2"
                         >Test stats ({$test_size}% data = {r.data_shapes.y_test}):
                     </span>
-                    <span class="badge badge-info">{test_stats.r2}</span>
+                    <span class="badge badge-info">{test_stats.r2.toFixed(fixedDigits)}</span>
 
-                    <span class="badge badge-info">{test_stats.mse}</span>
-                    <span class="badge badge-info">{test_stats.rmse}</span>
-                    <span class="badge badge-info">{test_stats.mae}</span>
+                    <span class="badge badge-info">{test_stats.mse.toFixed(fixedDigits)}</span>
+                    <span class="badge badge-info">{test_stats.rmse.toFixed(fixedDigits)}</span>
+                    <span class="badge badge-info">{test_stats.mae.toFixed(fixedDigits)}</span>
                 </div>
 
                 {#if r.cv_scores?.test}
