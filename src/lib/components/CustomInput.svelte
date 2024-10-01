@@ -35,18 +35,21 @@
 
     <div class="flex items-center gap-2">
         <slot name="pre-input" />
-        <input
-            {id}
-            class="w-full input input-sm {element_disabled ? 'bg-gray-600/25' : ''}"
-            bind:value
-            {...$$restProps}
-            on:change
-            on:keydown
-            disabled={element_disabled}
-            autocomplete="off"
-            autocapitalize="off"
-            autocorrect="off"
-        />
+        <label class="input input-sm {element_disabled ? 'bg-gray-600/25' : ''} flex items-center gap-2">
+            <slot name="pre-input-within" />
+            <input
+                {id}
+                bind:value
+                {...$$restProps}
+                on:change
+                on:keydown
+                disabled={element_disabled}
+                autocomplete="off"
+                autocapitalize="off"
+                autocorrect="off"
+            />
+            <slot name="post-input-within" />
+        </label>
         <slot />
     </div>
 
