@@ -1,7 +1,7 @@
 <script lang="ts">
     import Modal from '$lib/components/modal/Modal.svelte';
     import { suppressed_warnings } from '$lib/pyserver/stores';
-    import { Trash2 } from 'lucide-svelte/icons';
+    import { Trash2, AlertTriangle } from 'lucide-svelte/icons';
 
     onMount(() => {
         if (!import.meta.env.DEV) return;
@@ -22,7 +22,10 @@
         <svelte:fragment let:openModal let:label slot="button-slot">
             <div class="indicator">
                 <span class="indicator-item badge">{Object.keys($suppressed_warnings).length}</span>
-                <button class="btn btn-sm btn-warning" on:click={openModal}>{label}</button>
+                <button class="btn btn-sm btn-warning" on:click={openModal}>
+                    <AlertTriangle size="18" />
+                    <span>{label}</span>
+                </button>
             </div>
         </svelte:fragment>
 
@@ -70,8 +73,8 @@
                                                         }
                                                     }}
                                                 >
-                                                    <Trash2 size="20" />
-                                                    Dismiss
+                                                    <Trash2 size="12" />
+                                                    <span>Dismiss</span>
                                                 </button>
                                                 <p class="text-sm font-400 select-text">
                                                     {#each warnings as w, ind}
