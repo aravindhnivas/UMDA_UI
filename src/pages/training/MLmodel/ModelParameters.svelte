@@ -12,7 +12,7 @@
     import Kernel from './Kernel.svelte';
     import Notification from '$lib/components/Notification.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
-    import { LockKeyhole, UnlockKeyhole, TriangleAlert } from 'lucide-svelte/icons';
+    import { LockKeyhole, UnlockKeyhole, TriangleAlert, Search } from 'lucide-svelte/icons';
     import BaseLockAndTuneInput from '$lib/components/BaseLockAndTuneInput.svelte';
 
     export let values: Record<string, any>;
@@ -28,10 +28,8 @@
     }
 
     const ncols = 3;
-    // $: console.log($fine_tuned_values[$model][key]);
-    // $: if (Object.values($fine_tuned_values[$model][key]).some(f => f)) {
-    //     console.log('fine_tuned_values', $fine_tuned_values[$model][key]);
-    // }
+    let include_fields = Object.keys($current_model[key]);
+    let search_key = '';
 </script>
 
 <div class="grid m-2">
@@ -77,52 +75,71 @@
 </div>
 
 {#if !$default_parameter_mode}
+    <CustomInput
+        label="Search {key}"
+        bind:value={search_key}
+        on:change={() => {
+            if (!search_key) {
+                include_fields = Object.keys($current_model[key]);
+            } else {
+                include_fields = Object.keys($current_model[key]).filter(f =>
+                    f.toLowerCase().includes(search_key.toLowerCase()),
+                );
+            }
+        }}
+    >
+        <svelte:fragment slot="post-input-within">
+            <Search size="20" />
+        </svelte:fragment>
+    </CustomInput>
     <div class="grid gap-4 grid-cols-{ncols} hyperparameters__div p-2" style="">
         {#each Object.keys($current_model[key]) as label (label)}
-            {@const { value, description } = $current_model[key][label]}
-            {#if $model === 'gpr' && label === 'kernel'}
-                <div class="grid gap-2 col-span-{ncols}">
-                    <Kernel bind:value={values[label]} />
-                </div>
-            {:else if label in values}
-                {#if typeof value === 'object' && value}
-                    <BaseLockAndTuneInput
-                        component="select"
-                        label={`${label} (${value.options[values[label]]})`}
-                        helper={description}
-                        helperHighlight={`Default: ${$default_param_values[key][label]}`}
-                        items={Object.keys(value.options)}
-                        bind:value={values[label]}
-                        bind:lock={$all_params_lock_status[$model][key][label]}
-                        fine_tune={false}
-                        bind:fine_tuned_value={$fine_tuned_values[$model][key][label]}
-                    >
-                        {#if values[label] === 'float'}
-                            <CustomInput
-                                id="{unique_id}_{label}"
-                                label={`Enter ${label}`}
-                                value=""
-                                helper={description}
-                                helperHighlight={`Default: ${$default_param_values[key][label]}`}
-                                bind:lock={$all_params_lock_status[$model][key][label]}
-                                on:keydown={validateInput}
-                            />
-                        {/if}
-                    </BaseLockAndTuneInput>
+            {#if include_fields.includes(label)}
+                {@const { value, description } = $current_model[key][label]}
+                {#if $model === 'gpr' && label === 'kernel'}
+                    <div class="grid gap-2 col-span-{ncols}">
+                        <Kernel bind:value={values[label]} />
+                    </div>
+                {:else if label in values}
+                    {#if typeof value === 'object' && value}
+                        <BaseLockAndTuneInput
+                            component="select"
+                            label={`${label} (${value.options[values[label]]})`}
+                            helper={description}
+                            helperHighlight={`Default: ${$default_param_values[key][label]}`}
+                            items={Object.keys(value.options)}
+                            bind:value={values[label]}
+                            bind:lock={$all_params_lock_status[$model][key][label]}
+                            fine_tune={false}
+                            bind:fine_tuned_value={$fine_tuned_values[$model][key][label]}
+                        >
+                            {#if values[label] === 'float'}
+                                <CustomInput
+                                    id="{unique_id}_{label}"
+                                    label={`Enter ${label}`}
+                                    value=""
+                                    helper={description}
+                                    helperHighlight={`Default: ${$default_param_values[key][label]}`}
+                                    bind:lock={$all_params_lock_status[$model][key][label]}
+                                    on:keydown={validateInput}
+                                />
+                            {/if}
+                        </BaseLockAndTuneInput>
+                    {:else}
+                        <BaseLockAndTuneInput
+                            component={typeof value === 'boolean' ? 'checkbox' : 'input'}
+                            {label}
+                            helper={description}
+                            helperHighlight={`Default: ${$default_param_values[key][label]}`}
+                            bind:value={values[label]}
+                            bind:lock={$all_params_lock_status[$model][key][label]}
+                            fine_tune={false}
+                            bind:fine_tuned_value={$fine_tuned_values[$model][key][label]}
+                        />
+                    {/if}
                 {:else}
-                    <BaseLockAndTuneInput
-                        component={typeof value === 'boolean' ? 'checkbox' : 'input'}
-                        {label}
-                        helper={description}
-                        helperHighlight={`Default: ${$default_param_values[key][label]}`}
-                        bind:value={values[label]}
-                        bind:lock={$all_params_lock_status[$model][key][label]}
-                        fine_tune={false}
-                        bind:fine_tuned_value={$fine_tuned_values[$model][key][label]}
-                    />
+                    <span class="text-sm bg-red">{label} not defined in object</span>
                 {/if}
-            {:else}
-                <span class="text-sm bg-red">{label} not defined in object</span>
             {/if}
         {/each}
     </div>
