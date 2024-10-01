@@ -5,9 +5,9 @@ import { fetchServerROOT, start_and_check_umdapy_with_toast } from './umdapyServ
 import { pyServerReady, get, developerMode, pyProgram, suppressed_warnings } from './stores';
 import { Alert } from '$utils/stores';
 
-interface ComputePyType {
+interface ComputePyType<T extends object = Record<string, string>> {
     pyfile: string;
-    args: Object;
+    args: T;
     target: HTMLButtonElement;
     subprocess?: boolean;
     cancelToken?: any;
