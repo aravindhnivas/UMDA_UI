@@ -28,23 +28,25 @@
     $: if (serverReady) starting_server = false;
 
     let port_lock = true;
+    // $: console.log({ port_lock });
     const fetch_port = async () => {
-        if (port_lock) throw toast.warning('Port is locked');
+        if (port_lock) return toast.warning('Port is locked');
         const _port = await invoke<number>('get_tcp_port');
-        if (_port) port = _port;
-        throw toast.error('Failed to fetch port');
+        if (_port) {
+            port = _port;
+            return;
+        }
+        return toast.error('Failed to fetch port');
     };
 </script>
 
 <div class="grid gap-4">
     <div class="flex items-end gap-2">
-        <div class="flex">
-            <CustomInput bind:lock={port_lock} bind:value={port} label="ServerPORT" type="number">
-                <svelte:fragment slot="pre-input">
-                    <button on:click={fetch_port}><RefreshCcw size="18" /></button>
-                </svelte:fragment>
-            </CustomInput>
-        </div>
+        <CustomInput bind:lock={port_lock} bind:value={port} label="ServerPORT" type="number">
+            <svelte:fragment slot="post-input-within">
+                <button on:click={fetch_port} disabled={port_lock}><RefreshCcw size="18" /></button>
+            </svelte:fragment>
+        </CustomInput>
         <button
             disabled={(!serverFailed && serverReady) || (!serverFailed && starting_server)}
             class="btn btn-sm btn-outline"
@@ -59,8 +61,8 @@
                 }
             }}
         >
+            <span>Start Server</span>
             <span class:loading={!serverFailed && starting_server} class="loading-spinner"></span>
-            Start Server
         </button>
         <button
             class="btn btn-sm btn-error"
