@@ -60,7 +60,13 @@
     <h1>Configuration</h1>
     <div class="flex">
         <CustomInput bind:value={$fontSize} label="font-size" type="number" max="25">
-            <button on:click={() => ($fontSize = 16)}><RefreshCcw /></button>
+            <button
+                class="btn btn-xs btn-outline"
+                on:click={() => {
+                    $fontSize = 16;
+                    toast.success('Default font-size is set');
+                }}><RefreshCcw size="20" /></button
+            >
         </CustomInput>
     </div>
     <div class="divider"></div>
