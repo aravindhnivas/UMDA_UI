@@ -12,7 +12,7 @@
     import Kernel from './Kernel.svelte';
     import Notification from '$lib/components/Notification.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
-    import { LockKeyhole, UnlockKeyhole, TriangleAlert, Search } from 'lucide-svelte/icons';
+    import { LockKeyhole, UnlockKeyhole, TriangleAlert, Search, XOctagon } from 'lucide-svelte/icons';
     import BaseLockAndTuneInput from '$lib/components/BaseLockAndTuneInput.svelte';
 
     export let values: Record<string, any>;
@@ -37,6 +37,18 @@
     $: if ($model && !search_key[$model]) {
         search_key[$model] = '';
     }
+
+    const search_update = (field: string) => {
+        if (!field) {
+            include_fields[$model] = Object.keys($current_model[key]);
+            return;
+        }
+        include_fields[$model] = Object.keys($current_model[key]).filter(f =>
+            f.toLowerCase().includes(field.toLowerCase()),
+        );
+    };
+
+    $: search_update(search_key[$model]);
 </script>
 
 <div class="grid m-2">
@@ -82,21 +94,14 @@
 </div>
 
 {#if !$default_parameter_mode}
-    <CustomInput
-        label="Search {key}"
-        bind:value={search_key[$model]}
-        on:change={() => {
-            if (!search_key[$model]) {
-                include_fields[$model] = Object.keys($current_model[key]);
-            } else {
-                include_fields[$model] = Object.keys($current_model[key]).filter(f =>
-                    f.toLowerCase().includes(search_key[$model].toLowerCase()),
-                );
-            }
-        }}
-    >
-        <svelte:fragment slot="post-input-within">
+    <CustomInput label="Search {key}" bind:value={search_key[$model]}>
+        <svelte:fragment slot="pre-input-within">
             <Search size="20" />
+        </svelte:fragment>
+        <svelte:fragment slot="post-input-within">
+            <button on:click={() => (search_key[$model] = '')}>
+                <XOctagon size="20" color="red" />
+            </button>
         </svelte:fragment>
     </CustomInput>
     <div class="grid gap-4 grid-cols-{ncols} hyperparameters__div p-2" style="">
