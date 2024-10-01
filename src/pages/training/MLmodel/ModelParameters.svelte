@@ -28,8 +28,15 @@
     }
 
     const ncols = 3;
-    let include_fields = Object.keys($current_model[key]);
-    let search_key = '';
+    let include_fields: Record<MLModel, string[]> = {} as Record<MLModel, string[]>;
+
+    $: if ($model && !include_fields[$model]) {
+        include_fields[$model] = Object.keys($current_model[key]);
+    }
+    let search_key: Record<MLModel, string> = {} as Record<MLModel, string>;
+    $: if ($model && !search_key[$model]) {
+        search_key[$model] = '';
+    }
 </script>
 
 <div class="grid m-2">
@@ -77,13 +84,13 @@
 {#if !$default_parameter_mode}
     <CustomInput
         label="Search {key}"
-        bind:value={search_key}
+        bind:value={search_key[$model]}
         on:change={() => {
-            if (!search_key) {
-                include_fields = Object.keys($current_model[key]);
+            if (!search_key[$model]) {
+                include_fields[$model] = Object.keys($current_model[key]);
             } else {
-                include_fields = Object.keys($current_model[key]).filter(f =>
-                    f.toLowerCase().includes(search_key.toLowerCase()),
+                include_fields[$model] = Object.keys($current_model[key]).filter(f =>
+                    f.toLowerCase().includes(search_key[$model].toLowerCase()),
                 );
             }
         }}
@@ -94,7 +101,7 @@
     </CustomInput>
     <div class="grid gap-4 grid-cols-{ncols} hyperparameters__div p-2" style="">
         {#each Object.keys($current_model[key]) as label (label)}
-            {#if include_fields.includes(label)}
+            {#if include_fields[$model].includes(label)}
                 {@const { value, description } = $current_model[key][label]}
                 {#if $model === 'gpr' && label === 'kernel'}
                     <div class="grid gap-2 col-span-{ncols}">
