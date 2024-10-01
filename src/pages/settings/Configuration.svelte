@@ -60,13 +60,14 @@
     <h1>Configuration</h1>
     <div class="flex">
         <CustomInput bind:value={$fontSize} label="font-size" type="number" max="25">
-            <button
-                class="btn btn-xs btn-outline"
-                on:click={() => {
-                    $fontSize = 16;
-                    toast.success('Default font-size is set');
-                }}><RefreshCcw size="20" /></button
-            >
+            <svelte:fragment slot="post-input-within">
+                <button
+                    on:click={() => {
+                        $fontSize = 16;
+                        toast.success('Default font-size is set');
+                    }}><RefreshCcw size="18" /></button
+                >
+            </svelte:fragment>
         </CustomInput>
     </div>
     <div class="divider"></div>
