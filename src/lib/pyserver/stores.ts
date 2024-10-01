@@ -18,7 +18,16 @@ export const pyServerFailed = writable(false);
 export const pyVersion = writable('');
 export const umdapyVersion = writable('');
 export const pyServerPORT = localWritable('pyServerPORT', 5051);
-export const pyServerURL = derived(pyServerPORT, $pyServerPORT => `http://localhost:${$pyServerPORT}`);
+export const use_server = writable(false);
+export const cloudServerURL = localWritable('cloudServerURL', 'http://herzberg.mit.edu');
+export const cloudServerPORT = localWritable('cloudServerPORT', 18704);
+// export const pyServerURL = derived(pyServerPORT, $pyServerPORT => `http://localhost:${$pyServerPORT}`);
+export const pyServerURL = derived(
+    [pyServerPORT, use_server, cloudServerPORT, cloudServerURL],
+    ([$pyServerPORT, $use_server, $cloudServerPORT, $cloudServerURL]) => {
+        return $use_server ? `${$cloudServerURL}:${$cloudServerPORT}` : `http://localhost:${$pyServerPORT}`;
+    },
+);
 export const mainpyfile = derived([developerMode, pythonscript], async ([$developerMode, $pythonscript]) => {
     return $developerMode ? await path.join($pythonscript, 'main.py') : '';
 });
