@@ -35,7 +35,7 @@ interface MLStats {
     mae: number;
 }
 
-type LearningCurveData = Record<string, Record<'test' | 'train', { mean: string; std: string; scores: number[] }>>;
+type LearningCurveData = Record<string, Record<'test' | 'train', CVScores>>;
 type CVScoresData = Record<'test' | 'train', Record<CV_scoring_methods, CVScores>>;
 
 interface MLResults {
