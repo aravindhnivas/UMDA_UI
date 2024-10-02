@@ -13,7 +13,7 @@
     export { className as class };
 
     $: element_disabled = disabled || lock;
-    $: console.log({ element_disabled });
+    // $: console.log({ element_disabled });
 </script>
 
 <div class="grid gap-1 {className}">
