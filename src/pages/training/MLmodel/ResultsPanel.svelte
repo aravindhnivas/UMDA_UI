@@ -335,7 +335,6 @@
                     <hr />
                     <div class="grid gap-2">
                         <h3>Best parameters</h3>
-                        <!-- <span class="text-sm">Best score: {r.best_score}</span> -->
                         <div class="flex gap-2 flex-wrap">
                             {#each Object.entries(r.best_params) as [key, value]}
                                 <span class="badge badge-info">{key}: {value}</span>
@@ -347,8 +346,6 @@
             {/if}
         {/if}
 
-        <!-- {#each model_names as model_name (model_name)} -->
-        <!-- <div style="height: 500px;" class:hidden={model_name !== $model}> -->
         <div style="height: 500px;">
             {#if $plot_data[$model] && $results[$model]}
                 <Plot
@@ -364,12 +361,13 @@
             {/if}
         </div>
         {#if $results[$model]?.learning_curve_plotly_data}
-            {@const { data, layout } = $results[$model].learning_curve_plotly_data}
-            <!-- <div style="height: 500px;" class:hidden={model_name !== $model}> -->
-            <div style="height: 500px;">
-                <Plot {data} {layout} fillParent={true} debounce={250} />
-            </div>
+            {@const plotlyData = $results[$model]?.learning_curve_plotly_data}
+            {#if plotlyData}
+                {@const { data, layout } = plotlyData}
+                <div style="height: 500px;">
+                    <Plot {data} {layout} fillParent={true} debounce={250} />
+                </div>
+            {/if}
         {/if}
-        <!-- {/each} -->
     </div>
 </CustomPanel>
