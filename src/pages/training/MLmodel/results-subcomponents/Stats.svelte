@@ -7,7 +7,7 @@
 </script>
 
 <div class="grid grid-cols-6 gap-2 items-center w-3xl">
-    <span class="badge badge-{bg_color} col-span-2"><slot></slot> </span>
+    <span class="badge badge-{bg_color} col-span-2"><slot /></span>
     <span class="badge badge-{bg_color}">{stats.r2.toFixed(significant_digits)}</span>
     <span class="badge badge-{bg_color}">{stats.mse.toFixed(significant_digits)}</span>
     <span class="badge badge-{bg_color}">{stats.rmse.toFixed(significant_digits)}</span>
