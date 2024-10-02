@@ -4,18 +4,15 @@
         include_training_file_in_plot,
         learning_curve,
         model,
-        model_names,
         plot_data,
         results,
-        test_size,
     } from './stores';
     import Checkbox from '$lib/components/Checkbox.svelte';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import { PlotlyColors } from '$lib/utils';
-    import Plot from 'svelte-plotly.js';
     import { CheckCheck } from 'lucide-svelte/icons';
     import { CustomInput } from '$lib/components';
-    import Stats from './results-subcomponents/Stats.svelte';
+    import ResultsStats from './results-subcomponents/ResultsStats.svelte';
 
     export let data_file: string;
     export let plot_data_ready = false;
@@ -212,16 +209,18 @@
         if (!learningCurveData) return;
 
         // Prepare the data for plotting
-        const trainingSizes = Object.keys(learningCurveData).map(Number);
-        const testScores = trainingSizes.map(size => parseFloat(learningCurveData[size].test.mean));
-        const testStd = trainingSizes.map(size => parseFloat(learningCurveData[size].test.std));
-        const trainScores = trainingSizes.map(size => parseFloat(learningCurveData[size].train.mean));
-        const trainStd = trainingSizes.map(size => parseFloat(learningCurveData[size].train.std));
+        let trainingSizes = Object.keys(learningCurveData);
+
+        const testScores = trainingSizes.map(size => learningCurveData[size].test.mean);
+        const testStd = trainingSizes.map(size => learningCurveData[size].test.std);
+        const trainScores = trainingSizes.map(size => learningCurveData[size].train.mean);
+        const trainStd = trainingSizes.map(size => learningCurveData[size].train.std);
         const Nfold_CV = learningCurveData[trainingSizes[0]].test.scores.length;
 
+        const x = trainingSizes.map(Number);
         // Create traces for test and train scores with error bars
         const testTrace: Partial<Plotly.Data> = {
-            x: trainingSizes,
+            x,
             y: testScores,
             error_y: {
                 type: 'data',
@@ -234,7 +233,7 @@
         };
 
         const trainTrace: Partial<Plotly.Data> = {
-            x: trainingSizes,
+            x,
             y: trainScores,
             error_y: {
                 type: 'data',
@@ -252,7 +251,7 @@
             xaxis: {
                 title: 'Training Data Size',
                 tickmode: 'array',
-                tickvals: trainingSizes,
+                tickvals: x,
             },
             yaxis: {
                 title: `R<sup>2</sup> - Score (${Nfold_CV}-fold CV)`,
@@ -289,7 +288,6 @@
             {/await}
         {/await}
     {/key}
-
     <div class="flex my-2 gap-4 items-end">
         <Checkbox
             bind:value={$include_training_file_in_plot}
@@ -299,77 +297,5 @@
 
         <CustomInput bind:value={significant_digits} label="significant_digits" type="number" min="0" max="10" />
     </div>
-
-    <div class="grid gap-2">
-        {#if $results?.[$model]}
-            {@const r = $results[$model]}
-            {#if r}
-                <div class="flex gap-1">
-                    <span class="badge badge-primary">
-                        {r.time ? `completed in ${r.time}` : ''}
-                    </span>
-                    <span class="badge badge-primary">Dataset size: {r.data_shapes.y}</span>
-                </div>
-
-                <div class="grid grid-cols-6 gap-2 items-center w-3xl">
-                    <span class="col-span-2"></span>
-                    <span class="badge">R<sup>2</sup></span>
-                    <span class="badge">MSE</span>
-                    <span class="badge">RMSE</span>
-                    <span class="badge">MAE</span>
-                </div>
-
-                <Stats stats={r.train_stats} rcv={r.cv_scores?.train} cv_fold={r.cv_fold} {significant_digits}>
-                    Train stats ({100 - $test_size}% data = {r.data_shapes.y_train})
-                </Stats>
-                <Stats
-                    bg_color="info"
-                    stats={r.test_stats}
-                    rcv={r.cv_scores?.test}
-                    cv_fold={r.cv_fold}
-                    {significant_digits}
-                >
-                    Test stats ({$test_size}% data = {r.data_shapes.y_test})
-                </Stats>
-
-                {#if r.best_params}
-                    <hr />
-                    <div class="grid gap-2">
-                        <h3>Best parameters</h3>
-                        <div class="flex gap-2 flex-wrap">
-                            {#each Object.entries(r.best_params) as [key, value]}
-                                <span class="badge badge-info">{key}: {value}</span>
-                            {/each}
-                        </div>
-                    </div>
-                    <hr />
-                {/if}
-            {/if}
-        {/if}
-
-        <div style="height: 500px;">
-            {#if $plot_data[$model] && $results[$model]}
-                <Plot
-                    data={$plot_data[$model]}
-                    layout={{
-                        title: `${$model.toLocaleUpperCase()} Regressor`,
-                        xaxis: { title: 'y_true' },
-                        yaxis: { title: 'y_pred' },
-                    }}
-                    fillParent={true}
-                    debounce={250}
-                />
-            {/if}
-        </div>
-
-        {#if $results[$model]?.learning_curve_plotly_data}
-            {@const plotlyData = $results[$model]?.learning_curve_plotly_data}
-            {#if plotlyData}
-                {@const { data, layout } = plotlyData}
-                <div style="height: 500px;">
-                    <Plot {data} {layout} fillParent={true} debounce={250} />
-                </div>
-            {/if}
-        {/if}
-    </div>
+    <ResultsStats {significant_digits} />
 </CustomPanel>
