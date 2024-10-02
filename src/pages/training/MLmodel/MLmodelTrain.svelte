@@ -273,10 +273,8 @@
             analyse_shapley_values: $analyse_shapley_values,
         };
 
-        $results[$model] = null;
-        // $plot_data[$model] = null;
-        // console.warn(args);
-        // return;
+        // $results[$model] = null;
+        delete $results[$model];
         return { pyfile: 'training.ml_model', args };
     };
 
@@ -293,16 +291,12 @@
         console.log('Pre-trained file', result_file);
         if (await fs.exists(result_file)) {
             toast.success('Model trained successfully');
-            try {
-                const saved_file_contents = await fs.readTextFile(result_file);
-                $results[$model] = JSON.parse(saved_file_contents);
-                if (!$results[$model]) {
-                    toast.error('Error: Results not found');
-                    return;
-                }
-            } catch (error) {
-                toast.error('Error saving results\n' + error);
+            const saved_results = await readJSON<MLResults>(result_file);
+            if (!saved_results) {
+                toast.error('Error: Results not found');
+                return;
             }
+            $results[$model] = saved_results;
         } else {
             toast.error('Error: Model not saved');
         }

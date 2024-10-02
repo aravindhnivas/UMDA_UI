@@ -19,11 +19,9 @@
 </div>
 
 {#if $results[$model]?.learning_curve_plotly_data}
-    {@const plotlyData = $results[$model]?.learning_curve_plotly_data}
-    {#if plotlyData}
-        {@const { data, layout } = plotlyData}
-        <div style="height: 500px;">
-            <Plot {data} {layout} fillParent={true} debounce={250} />
-        </div>
-    {/if}
+    {@const plotlyData = $results[$model].learning_curve_plotly_data}
+    {@const { data, layout } = plotlyData}
+    <div style="height: 500px;">
+        <Plot {data} {layout} fillParent={true} debounce={250} />
+    </div>
 {/if}
