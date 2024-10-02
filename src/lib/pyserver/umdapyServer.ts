@@ -81,10 +81,12 @@ export async function startServer() {
     });
 
     py.on('error', error => {
+        console.error(error);
         Alert.error(error);
         serverInfo.error(error);
         pyServerReady.set(false);
-        return Promise.reject(error);
+        pyServerFailed.set(true);
+        // return Promise.reject(error);
     });
 
     py.stderr.on('data', async stderr => {
