@@ -310,6 +310,7 @@
                     </span>
                     <span class="badge badge-primary">Dataset size: {r.data_shapes.y}</span>
                 </div>
+
                 <div class="grid grid-cols-6 gap-2 items-center w-3xl">
                     <span class="col-span-2"></span>
                     <span class="badge">R<sup>2</sup></span>
@@ -360,6 +361,7 @@
                 />
             {/if}
         </div>
+
         {#if $results[$model]?.learning_curve_plotly_data}
             {@const plotlyData = $results[$model]?.learning_curve_plotly_data}
             {#if plotlyData}
