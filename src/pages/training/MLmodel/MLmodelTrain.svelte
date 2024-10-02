@@ -273,8 +273,8 @@
             analyse_shapley_values: $analyse_shapley_values,
         };
 
-        // $results[$model] = null;
         delete $results[$model];
+        $results = $results; // make it reactive
         return { pyfile: 'training.ml_model', args };
     };
 
