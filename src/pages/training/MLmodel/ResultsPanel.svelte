@@ -15,6 +15,7 @@
     import Plot from 'svelte-plotly.js';
     import { CheckCheck } from 'lucide-svelte/icons';
     import { CustomInput } from '$lib/components';
+    import Stats from './results-subcomponents/Stats.svelte';
 
     export let data_file: string;
     export let plot_data_ready = false;
@@ -266,11 +267,8 @@
     };
 
     let significant_digits = 2;
-    let fixedDigits = 2;
-    $: if (significant_digits < 0) fixedDigits = 0;
-    $: if (significant_digits > 10) fixedDigits = 10;
-    $: if (significant_digits >= 0 && significant_digits <= 10) fixedDigits = significant_digits;
-    // $: fixedDigits = significant_digits < 0 ? 0 : significant_digits;
+    $: if (significant_digits < 0) significant_digits = 0;
+    $: if (significant_digits > 10) significant_digits = 10;
 </script>
 
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
@@ -299,26 +297,13 @@
             on:change={include_training_plot_if_required}
         />
 
-        <CustomInput
-            bind:value={significant_digits}
-            label="significant_digits"
-            type="number"
-            min="0"
-            max="10"
-            on:change={() => {
-                if (significant_digits < 0) significant_digits = 0;
-                if (significant_digits > 10) significant_digits = 10;
-            }}
-        />
+        <CustomInput bind:value={significant_digits} label="significant_digits" type="number" min="0" max="10" />
     </div>
 
     <div class="grid gap-2">
         {#if $results?.[$model]}
             {@const r = $results[$model]}
             {#if r}
-                {@const train_stats = r.train_stats}
-                {@const test_stats = r.test_stats}
-
                 <div class="flex gap-1">
                     <span class="badge badge-primary">
                         {r.time ? `completed in ${r.time}` : ''}
@@ -332,68 +317,25 @@
                     <span class="badge">RMSE</span>
                     <span class="badge">MAE</span>
                 </div>
-                <div class="grid grid-cols-6 gap-2 items-center w-3xl">
-                    <span class="badge badge-warning col-span-2"
-                        >Train stats ({100 - $test_size}% data = {r.data_shapes.y_train}):
-                    </span>
-                    <span class="badge badge-warning">{train_stats.r2.toFixed(fixedDigits)}</span>
-                    <span class="badge badge-warning">{train_stats.mse.toFixed(fixedDigits)}</span>
-                    <span class="badge badge-warning">{train_stats.rmse.toFixed(fixedDigits)}</span>
-                    <span class="badge badge-warning">{train_stats.mae.toFixed(fixedDigits)}</span>
-                </div>
-                {#if r.cv_scores?.train}
-                    {@const rcv = r.cv_scores?.train}
 
-                    <div class="grid grid-cols-6 gap-2 items-center w-3xl">
-                        <span class="badge col-span-2">{r.cv_fold}-fold CV:</span>
-                        <span class="badge">{rcv.r2.mean.toFixed(fixedDigits)} ({rcv.r2.std.toFixed(fixedDigits)})</span
-                        >
-                        <span class="badge"
-                            >{rcv.mse.mean.toFixed(fixedDigits)} ({rcv.mse.std.toFixed(fixedDigits)})</span
-                        >
-                        <span class="badge"
-                            >{rcv.rmse.mean.toFixed(fixedDigits)} ({rcv.rmse.std.toFixed(fixedDigits)})</span
-                        >
-                        <span class="badge"
-                            >{rcv.mae.mean.toFixed(fixedDigits)} ({rcv.mae.std.toFixed(fixedDigits)})</span
-                        >
-                    </div>
-                {/if}
-
-                <div class="grid grid-cols-6 gap-2 items-center w-3xl">
-                    <span class="badge badge-info col-span-2"
-                        >Test stats ({$test_size}% data = {r.data_shapes.y_test}):
-                    </span>
-                    <span class="badge badge-info">{test_stats.r2.toFixed(fixedDigits)}</span>
-
-                    <span class="badge badge-info">{test_stats.mse.toFixed(fixedDigits)}</span>
-                    <span class="badge badge-info">{test_stats.rmse.toFixed(fixedDigits)}</span>
-                    <span class="badge badge-info">{test_stats.mae.toFixed(fixedDigits)}</span>
-                </div>
-
-                {#if r.cv_scores?.test}
-                    {@const rcv = r.cv_scores?.test}
-                    <div class="grid grid-cols-6 gap-2 items-center w-3xl">
-                        <span class="badge col-span-2">{r.cv_fold}-fold CV:</span>
-                        <span class="badge">{rcv.r2.mean.toFixed(fixedDigits)} ({rcv.r2.std.toFixed(fixedDigits)})</span
-                        >
-                        <span class="badge"
-                            >{rcv.mse.mean.toFixed(fixedDigits)} ({rcv.mse.std.toFixed(fixedDigits)})</span
-                        >
-                        <span class="badge"
-                            >{rcv.rmse.mean.toFixed(fixedDigits)} ({rcv.rmse.std.toFixed(fixedDigits)})</span
-                        >
-                        <span class="badge"
-                            >{rcv.mae.mean.toFixed(fixedDigits)} ({rcv.mae.std.toFixed(fixedDigits)})</span
-                        >
-                    </div>
-                {/if}
+                <Stats stats={r.train_stats} rcv={r.cv_scores?.train} cv_fold={r.cv_fold} {significant_digits}>
+                    Train stats ({100 - $test_size}% data = {r.data_shapes.y_train})
+                </Stats>
+                <Stats
+                    bg_color="info"
+                    stats={r.test_stats}
+                    rcv={r.cv_scores?.test}
+                    cv_fold={r.cv_fold}
+                    {significant_digits}
+                >
+                    Test stats ({$test_size}% data = {r.data_shapes.y_test})
+                </Stats>
 
                 {#if r.best_params}
                     <hr />
                     <div class="grid gap-2">
                         <h3>Best parameters</h3>
-                        <span class="text-sm">Best score: {r.best_score}</span>
+                        <!-- <span class="text-sm">Best score: {r.best_score}</span> -->
                         <div class="flex gap-2 flex-wrap">
                             {#each Object.entries(r.best_params) as [key, value]}
                                 <span class="badge badge-info">{key}: {value}</span>

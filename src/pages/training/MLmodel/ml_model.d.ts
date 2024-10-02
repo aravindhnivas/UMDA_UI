@@ -28,6 +28,13 @@ interface CVScores {
     scores: number[];
 }
 
+interface MLStats {
+    r2: number;
+    mse: number;
+    rmse: number;
+    mae: number;
+}
+
 type LearningCurveData = Record<string, Record<'test' | 'train', { mean: string; std: string; scores: number[] }>>;
 type CVScoresData = Record<'test' | 'train', Record<CV_scoring_methods, CVScores>>;
 
@@ -46,18 +53,8 @@ interface MLResults {
         X_train: number[];
         y_train: number[];
     };
-    train_stats: {
-        r2: number;
-        mse: number;
-        rmse: number;
-        mae: number;
-    };
-    test_stats: {
-        r2: number;
-        mse: number;
-        rmse: number;
-        mae: number;
-    };
+    train_stats: MLStats;
+    test_stats: MLStats;
     model: string;
     bootstrap: boolean;
     bootstrap_nsamples?: number;
