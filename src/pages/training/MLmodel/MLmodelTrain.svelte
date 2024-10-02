@@ -30,9 +30,10 @@
         fine_tuned_values,
         learning_curve,
         analyse_shapley_values,
-        plot_data,
         optuna_n_trials,
     } from './stores';
+    import { copyText } from 'svelte-copy';
+
     import { embedding, use_PCA } from '../embedding/stores';
     import { NPARTITIONS, use_dask } from '$lib/stores/system';
     import { embedd_savefile_path } from '../embedding/stores';
@@ -51,7 +52,6 @@
     import SaveModelPanel from './SaveModelPanel.svelte';
     import ResultsPanel from './ResultsPanel.svelte';
     import Effects from './Effects.svelte';
-    import { difference } from 'lodash-es';
     import { current_training_data_file } from '../training_file/plot-analysis/stores';
 
     export let id: string = 'ml_model-train-container';
@@ -322,5 +322,19 @@
             <ResultsPanel {plot_data_ready} {data_file} />
         </Accordion>
     </div>
-    <Loadingbtn class="m-auto " name="Begin training" callback={fit_function} subprocess={true} on:result={onResult} />
+    <div class="flex m-auto gap-4">
+        <Loadingbtn class="" name="Begin training" callback={fit_function} subprocess={true} on:result={onResult} />
+        <button
+            class="flex btn btn-sm btn-outline"
+            on:click={async () => {
+                const data = await fit_function();
+                if (!data) return toast.error('Error: No data found');
+                const { args } = data;
+                copyText(JSON.stringify(args, null, 4));
+                toast.success('copied to clipboard');
+            }}
+        >
+            Copy training data info
+        </button>
+    </div>
 </div>
