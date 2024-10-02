@@ -197,9 +197,8 @@
         if (!nfolds.length) return;
 
         const max_nfold = Math.max(...nfolds);
-        console.log(cv_scores_data, max_nfold);
-        if (!$results[$model]) return;
-
+        // console.log({ cv_scores_data, max_nfold });
+        if (!$results?.[$model]) return;
         $results[$model].cv_fold = max_nfold;
         $results[$model].cv_scores = cv_scores_data[`${max_nfold}`];
     };
