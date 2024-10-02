@@ -274,7 +274,7 @@
         };
 
         delete $results[$model];
-        $results = $results; // make it reactive
+        $results = $results; // force - make it reactive
         return { pyfile: 'training.ml_model', args };
     };
 
