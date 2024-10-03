@@ -13,35 +13,23 @@
     export { className as class };
 
     $: element_disabled = disabled || lock;
-    // $: console.log({ element_disabled });
 </script>
 
 <div class="grid gap-1 {className}">
     {#if label}
-        <div class="flex items-center gap-1">
-            <!-- {#if lock !== null}
-                <button on:click={() => (lock = !lock)}>
-                    {#if lock}
-                        <LockKeyhole size="20" class="text-gray-700" />
-                    {:else}
-                        <UnlockKeyhole size="20" />
-                    {/if}
-                </button>
-            {/if} -->
-            <span class="text-xs {element_disabled ? 'text-gray-600/75' : ''}">
-                {label}
-            </span>
-        </div>
+        <span class="text-xs {element_disabled ? 'text-gray-600/75' : ''}">
+            {label}
+        </span>
     {/if}
 
     <div class="flex items-center gap-2">
         <slot name="pre-input" />
 
-        <label class="input input-sm flex items-center gap-2">
+        <label class="input input-sm flex items-center gap-2 w-full">
             <slot name="pre-input-within" />
 
             <input
-                class={element_disabled ? 'bg-gray-600/25' : ''}
+                class="{element_disabled ? 'bg-gray-600/25' : ''} w-full"
                 {id}
                 bind:value
                 {...$$restProps}
