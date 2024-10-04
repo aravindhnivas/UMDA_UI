@@ -138,9 +138,11 @@
         {/if}
     </div>
 
-    {#if helper}
+    {#if helper || helperHighlight}
         <div class="grid grid-cols-[1fr_auto] gap-1 text-xs text-wrap break-words">
-            <span class={element_disabled ? 'text-gray-600/75' : ''}>{helper}</span>
+            {#if helper}
+                <span class={element_disabled ? 'text-gray-600/75' : ''}>{helper}</span>
+            {/if}
             {#if helperHighlight}
                 <div class="badge badge-sm badge-neutral {element_disabled ? 'text-gray' : ''}">
                     {helperHighlight}
