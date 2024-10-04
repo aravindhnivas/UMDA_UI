@@ -112,9 +112,9 @@ export const skip_invalid_y_values = localWritable('skip_invalid_y_values', fals
 export const analyse_shapley_values = localWritable('analyse_shapley_values', false);
 export const pre_trained_filename = localWritable('pre_trained_filename', '');
 export const current_pretrained_file = derived(
-    [current_training_processed_data_directory, pre_trained_filename],
-    async ([$current_training_processed_data_directory, $pre_trained_filename]) => {
-        const dir = await path.join(await $current_training_processed_data_directory, 'pretrained_models');
+    [current_training_processed_data_directory, pre_trained_filename, model],
+    async ([$current_training_processed_data_directory, $pre_trained_filename, $model]) => {
+        const dir = await path.join(await $current_training_processed_data_directory, 'pretrained_models', $model);
         return await path.join(dir, $pre_trained_filename.trim());
     },
 );
