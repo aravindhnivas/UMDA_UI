@@ -194,7 +194,7 @@
         <Checkbox label="PCA" bind:value={$use_PCA} />
         <div class="grid gap-2 items-end" style="grid-auto-flow: column; grid-template-columns: auto 1fr auto;">
             <CustomSelect label="embedding" bind:value={$embedding} items={embeddings} />
-            <CustomInput label="Embeddings filename" bind:value={$embedd_savefile} />
+            <CustomInput label="Embeddings filename" bind:value={$embedd_savefile} lock={true} />
             <Loadingbtn callback={embedd_data} subprocess={true} on:result={onResult} />
         </div>
     {/if}

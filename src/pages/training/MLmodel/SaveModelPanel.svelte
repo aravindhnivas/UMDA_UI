@@ -22,7 +22,7 @@
         <div class="flex gap-1">
             <Checkbox bind:value={$save_pretrained_model} label="Save" check="checkbox" />
         </div>
-        <CustomInput bind:value={$pre_trained_filename} label="save filename (.pkl)" />
+        <CustomInput bind:value={$pre_trained_filename} label="save filename (.pkl)" lock={true} />
         {#await $current_pretrained_file then value}
             {#await path.dirname(value) then save_loc_name}
                 <Notification dismissable={false}>
