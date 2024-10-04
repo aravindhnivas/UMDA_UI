@@ -83,10 +83,12 @@
                     {/each}
                 {/if}
             </select>
-            {#if helper}
+            {#if helper || helperHighlight}
                 <span class="text-xs pl-1 text-wrap break-words {element_disabled ? 'text-gray-600/75' : ''}">
-                    {helper}
-                    <br />
+                    {#if helper}
+                        {helper}
+                        <br />
+                    {/if}
                     {#if helperHighlight}
                         <div class="badge badge-sm badge-neutral {element_disabled ? 'text-gray' : ''}">
                             {helperHighlight}

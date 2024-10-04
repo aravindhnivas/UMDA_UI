@@ -31,6 +31,7 @@
         learning_curve,
         analyse_shapley_values,
         optuna_n_trials,
+        optuna_n_warmup_steps,
     } from './stores';
     import { copyText } from 'svelte-copy';
 
@@ -243,6 +244,9 @@
                 filename: final_training_file,
             },
             optuna_n_trials: isString($optuna_n_trials) ? parseInt($optuna_n_trials) : $optuna_n_trials,
+            optuna_n_warmup_steps: isString($optuna_n_warmup_steps)
+                ? parseInt($optuna_n_warmup_steps)
+                : $optuna_n_warmup_steps,
             training_column_name_y: $training_column_name_y,
             parameters: $default_parameter_mode ? {} : clonedValues,
             fine_tuned_values: $default_parameter_mode ? {} : clonedFineTunedValues,

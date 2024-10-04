@@ -23,12 +23,9 @@
         inverse_scaling,
         inverse_transform,
         learning_curve,
-        // model,
-        // model_names,
-        // ensemble_regressors,
         analyse_shapley_values,
+        optuna_n_warmup_steps,
     } from './stores';
-    import Chip, { Set, Text } from '@smui/chips';
     import { Checkbox, CustomSelect, CustomInput } from '$lib/components';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import Paper, { Subtitle, Content } from '@smui/paper';
@@ -39,8 +36,8 @@
         'RandomizedSearchCV',
         'HalvingGridSearchCV',
         'HalvingRandomSearchCV',
-        'DaskGridSearchCV',
-        'DaskRandomizedSearchCV',
+        // 'DaskGridSearchCV',
+        // 'DaskRandomizedSearchCV',
     ];
     const elevation = 3;
     const paper_style = 'background-color: transparent;';
@@ -128,15 +125,18 @@
         </Paper>
         <Paper transition {elevation} style={paper_style}>
             <Subtitle>Fine tuning parameters and Cross-validation metrics</Subtitle>
-            <Content class="grid grid-cols-2 gap-1">
+            <Content class="grid grid-cols-2 gap-1 items-start">
                 <Checkbox bind:value={$fine_tune_model} label="Grid search" check="checkbox" />
                 <Checkbox bind:value={$cross_validation} label="Cross validation" check="checkbox" />
                 <CustomSelect
+                    label="Choose grid search method"
                     items={grid_search_methods}
                     bind:value={$grid_search_method}
                     disabled={!$fine_tune_model}
+                    helperHighlight={$fine_tune_model ? 'Recommended: Optuna' : ''}
                 />
                 <CustomInput
+                    label="cv_fold"
                     bind:value={$cv_fold}
                     min="2"
                     type="number"
@@ -146,6 +146,15 @@
                     label="n_trials (Optuna)"
                     bind:value={$optuna_n_trials}
                     min="2"
+                    type="number"
+                    disabled={!$fine_tune_model || $grid_search_method !== 'Optuna'}
+                />
+                <CustomInput
+                    label="n_warmup_steps (Optuna)"
+                    helper="Number of steps before pruning the trials"
+                    bind:value={$optuna_n_warmup_steps}
+                    min="2"
+                    max={$optuna_n_trials}
                     type="number"
                     disabled={!$fine_tune_model || $grid_search_method !== 'Optuna'}
                 />
