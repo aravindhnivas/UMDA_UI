@@ -2,10 +2,10 @@
     import Lockbutton from './Lockbutton.svelte';
     import { SlidersHorizontal } from 'lucide-svelte/icons';
 
-    export let value: string | number | boolean = 'name';
-    export let items: string[] | null = ['name', 'name2'];
+    export let value: string | boolean = 'name';
+    // export let items: string[] | null = ['name', 'name2'];
     // export let value: string | number | boolean = true;
-    // export let items: string[] | null = null;
+    export let items: string[] | null = null;
     export let label: string = 'label';
     export let description: string = 'description';
     export let type: 'int' | 'float' = 'float';
@@ -45,6 +45,14 @@
                 placeholder="min, max, step"
                 bind:value={fine_tuned_values}
                 disabled={lock}
+                on:change={() => {
+                    if (!isString(fine_tuned_values)) return;
+                    const arr = fine_tuned_values.split(',').map(v => v.trim());
+                    if (arr.length > 1) return;
+                    fine_tune = false;
+                    value = arr[0];
+                    return;
+                }}
             />
         {/if}
         {#if component === 'input'}
@@ -84,6 +92,14 @@
             placeholder="value"
             bind:value
             disabled={lock}
+            on:change={() => {
+                if (!isString(value)) return;
+                const arr = value.split(',').map(v => v.trim());
+                if (arr.length === 1) return;
+                fine_tune = true;
+                fine_tuned_values = arr.join(', ');
+                return;
+            }}
         />
     {/if}
     <button
