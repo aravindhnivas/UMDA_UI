@@ -14,6 +14,8 @@
     import CustomInput from '$lib/components/CustomInput.svelte';
     import { LockKeyhole, UnlockKeyhole, TriangleAlert, Search, XOctagon } from 'lucide-svelte/icons';
     import BaseLockAndTuneInput from '$lib/components/BaseLockAndTuneInput.svelte';
+    import Lockbutton from '$lib/components/Lockbutton.svelte';
+    import OptunaTuneInput from '$lib/components/OptunaTuneInput.svelte';
 
     export let values: Record<string, any>;
     export let key: 'hyperparameters' | 'parameters';
@@ -104,7 +106,9 @@
             </button>
         </svelte:fragment>
     </CustomInput>
-    <div class="grid gap-4 grid-cols-{ncols} hyperparameters__div p-2" style="">
+
+    <div class="grid gap-4 grid-cols-{ncols} hyperparameters__div p-2">
+        <OptunaTuneInput />
         {#each Object.keys($current_model[key]) as label (label)}
             {#if include_fields[$model].includes(label)}
                 {@const { value, description } = $current_model[key][label]}
