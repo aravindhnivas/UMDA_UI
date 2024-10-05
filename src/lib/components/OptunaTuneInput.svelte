@@ -12,7 +12,7 @@
 </script>
 
 <div class="grid grid-cols-5 join border border-rounded p-2" class:border-gray-600={lock}>
-    <span class="flex items-center gap-4 mb-1 col-span-5">
+    <span class="flex items-end gap-2 mb-1 col-span-5">
         <Lockbutton class="join-item" bind:lock />
         <span class="text-sm {lock ? 'text-gray-600/75' : ''}">{label}</span>
     </span>
