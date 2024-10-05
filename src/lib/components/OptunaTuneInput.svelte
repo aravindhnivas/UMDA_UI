@@ -70,7 +70,7 @@
         </select>
     {:else if isBoolean(value)}
         <div class="flex items-center gap-2 col-span-5">
-            <input type="checkbox" bind:checked={value} class="checkbox" />
+            <input type="checkbox" bind:checked={value} class="checkbox" disabled={lock} />
             <span>{value}</span>
         </div>
     {:else if isString(value) || isNumber(value)}
@@ -83,6 +83,7 @@
     {/if}
 
     <button
+        disabled={lock}
         class="flex gap-1 items-center btn btn-sm btn-square join-item"
         class:btn-info={fine_tune}
         on:click={() => {
