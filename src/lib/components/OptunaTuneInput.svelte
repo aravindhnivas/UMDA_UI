@@ -13,12 +13,15 @@
     export let scale: 'log' | '' = 'log';
     export let lock: boolean = false;
     export let fine_tune: boolean = false;
+    export let fine_tuned_values = '';
 
     let component: 'input' | 'select' | 'checkbox';
     onMount(() => {
         if (isArray(items) && items.length > 0) {
-            component = 'select';
+            type = 'categorical';
+            fine_tuned_values = items.join(', ');
         } else if (isBoolean(value)) {
+            fine_tuned_values = 'true, false';
             component = 'checkbox';
         } else if (isString(value) || isNumber(value)) {
             component = 'input';
@@ -32,14 +35,14 @@
         <span class="text-sm {lock ? 'text-gray-600/75' : ''}">{label}</span>
     </span>
     {#if fine_tune}
-        {#if type === 'categorical'}
+        {#if type === 'categorical' || items?.length}
             <input
-                class="input input-bordered input-sm join-item col-span-3"
+                class="input input-bordered input-sm join-item col-span-5"
                 placeholder="categories"
-                bind:value={low}
+                bind:value={fine_tuned_values}
                 disabled={lock}
             />
-        {:else}
+        {:else if component === 'input'}
             <input class="input input-bordered input-sm join-item" placeholder="low" bind:value={low} disabled={lock} />
             <input
                 class="input input-bordered input-sm join-item"
@@ -53,25 +56,38 @@
                 bind:value={step}
                 disabled={lock}
             />
+        {:else if component === 'checkbox'}
+            <input
+                class="input input-bordered input-sm join-item col-span-5"
+                bind:value={fine_tuned_values}
+                disabled={true}
+            />
         {/if}
-        {#if type === 'float'}
+        {#if type === 'float' && component === 'input'}
             <select class="select select-bordered select-sm join-item" bind:value={scale} disabled={lock}>
                 <option disabled selected>type</option>
                 <option>log</option>
                 <option></option>
             </select>
         {/if}
-        <select
-            class="select select-bordered select-sm join-item"
-            class:col-span-2={type !== 'float'}
-            bind:value={type}
-            disabled={lock}
-        >
-            <option disabled selected>type</option>
-            <option>int</option>
-            <option>float</option>
-            <option>categorical</option>
-        </select>
+
+        {#if component === 'input'}
+            <select
+                class="select select-bordered select-sm join-item"
+                class:col-span-2={type !== 'float'}
+                bind:value={type}
+                disabled={lock}
+            >
+                <option disabled selected>type</option>
+                <!-- {#if component === 'input'} -->
+                <option>int</option>
+                <option>float</option>
+                <!-- {/if} -->
+                <!-- {#if component === 'select'}
+                    <option>categorical</option>
+                {/if} -->
+            </select>
+        {/if}
     {:else if isArray(items) && items?.length > 0}
         <select class="select select-bordered select-sm join-item col-span-5" bind:value disabled={lock}>
             <option disabled selected>Choose a value</option>
