@@ -1,0 +1,263 @@
+xgboost:
+  params:
+    min_child_weight:
+      type: int
+      low: 1
+      high: 10
+    subsample:
+      type: float
+      low: 0.1
+      high: 1.0
+    colsample_bytree:
+      type: float
+      low: 0.1
+      high: 1.0
+    alpha:
+      type: float
+      low: 1e-8
+      high: 1.0
+      log: True
+    lambda:
+      type: float
+      low: 1e-8
+      high: 1.0
+      log: True
+    booster:
+      type: categorical
+      choices: ["gbtree", "gblinear", "dart"]
+    max_depth:
+      type: int
+      low: 1
+      high: 9
+    learning_rate:
+      type: float
+      low: 1e-8
+      high: 1.0
+      log: True
+    gamma:
+      type: float
+      low: 1e-8
+      high: 1.0
+      log: True
+    grow_policy:
+      type: categorical
+      choices: ["depthwise", "lossguide"]
+    sample_type:
+      type: categorical
+      choices: ["uniform", "weighted"]
+    normalize_type:
+      type: categorical
+      choices: ["tree", "forest"]
+    rate_drop:
+      type: float
+      low: 1e-8
+      high: 1.0
+      log: True
+    skip_drop:
+      type: float
+      low: 1e-8
+      high: 1.0
+      log: True
+
+catboost:
+  params:
+    iterations:
+      type: int
+      low: 100
+      high: 1000
+    learning_rate:
+      type: float
+      low: 1e-3
+      high: 1.0
+      log: True
+    depth:
+      type: int
+      low: 1
+      high: 16
+    l2_leaf_reg:
+      type: float
+      low: 1e-8
+      high: 1.0
+      log: True
+    border_count:
+      type: int
+      low: 1
+      high: 255
+    colsample_bylevel:
+      type: float
+      low: 0.5
+      high: 1.0
+    boosting_type:
+      type: categorical
+      choices: ["Ordered", "Plain"]
+    bootstrap_type:
+      type: categorical
+      choices: ["Bayesian", "Bernoulli", "MVS"]
+    bagging_temperature:
+      type: float
+      low: 0
+      high: 10
+    subsample:
+      type: float
+      low: 0.1
+      high: 1
+
+lgbm:
+  params:
+    num_leaves:
+      type: int
+      low: 2
+      high: 256
+    max_depth:
+      type: int
+      low: 1
+      high: 9
+    learning_rate:
+      type: float
+      low: 1e-3
+      high: 1.0
+      log: True
+    min_child_weight:
+      type: int
+      low: 1
+      high: 10
+    min_child_samples:
+      type: int
+      low: 5
+      high: 100
+    subsample:
+      type: float
+      low: 0.5
+      high: 1.0
+    colsample_bytree:
+      type: float
+      low: 0.5
+      high: 1.0
+    reg_alpha:
+      type: float
+      low: 1e-8
+      high: 10.0
+      log: True
+    reg_lambda:
+      type: float
+      low: 1e-8
+      high: 10.0
+      log: True
+    bagging_fraction:
+      type: float
+      low: 0.4
+      high: 1.0
+    bagging_freq:
+      type: int
+      low: 1
+      high: 7
+
+ridge:
+  params:
+    alpha:
+      type: float
+      low: 1e-8
+      high: 1.0
+      log: True
+    solver:
+      type: categorical
+      choices: ["auto", "svd", "cholesky", "lsqr", "sparse_cg", "sag", "saga"]
+
+svr:
+  params:
+    C:
+      type: float
+      low: 1e-8
+      high: 1.0
+      log: True
+    degree:
+      type: int
+      low: 1
+      high: 5
+    kernel:
+      type: categorical
+      choices: ["linear", "poly", "rbf", "sigmoid", "precomputed"]
+    gamma:
+      type: categorical
+      choices: ["scale", "auto"]
+
+knn:
+  params:
+    n_neighbors:
+      type: int
+      low: 1
+      high: 100
+    weights:
+      type: categorical
+      choices: ["uniform", "distance"]
+    algorithm:
+      type: categorical
+      choices: ["auto", "ball_tree", "kd_tree", "brute"]
+    leaf_size:
+      type: int
+      low: 1
+      high: 100
+
+rfr:
+  params:
+    n_estimators:
+      type: int
+      low: 100
+      high: 1000
+    max_depth:
+      type: int
+      low: 1
+      high: 9
+    min_samples_split:
+      type: int
+      low: 2
+      high: 10
+    min_samples_leaf:
+      type: int
+      low: 1
+      high: 10
+    max_features:
+      type: categorical
+      choices: ["auto", "sqrt", "log2"]
+    bootstrap:
+      type: categorical
+      choices: [True, False]
+
+gbr:
+  params:
+    n_estimators:
+      type: int
+      low: 100
+      high: 1000
+    max_depth:
+      type: int
+      low: 1
+      high: 9
+    min_samples_split:
+      type: int
+      low: 2
+      high: 10
+    min_samples_leaf:
+      type: int
+      low: 1
+      high: 10
+    max_features:
+      type: categorical
+      choices: ["auto", "sqrt", "log2"]
+    subsample:
+      type: float
+      low: 0.5
+      high: 1.0
+    learning_rate:
+      type: float
+      low: 1e-3
+      high: 1.0
+      log: True
+
+gpr:
+  params:
+    alpha:
+      type: float
+      low: 1e-8
+      high: 1.0
+      log: True
