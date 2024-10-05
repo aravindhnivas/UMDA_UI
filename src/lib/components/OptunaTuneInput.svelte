@@ -2,7 +2,7 @@
     import Lockbutton from './Lockbutton.svelte';
     import { SlidersHorizontal } from 'lucide-svelte/icons';
 
-    export let value: string | number | boolean = true;
+    export let value: string | number | boolean = 'name';
     export let items: string[] | null = null;
     export let label: string = 'label';
     export let description: string = 'description';
@@ -13,6 +13,17 @@
     export let scale: 'log' | '' = 'log';
     export let lock: boolean = false;
     export let fine_tune: boolean = false;
+
+    let component: 'input' | 'select' | 'checkbox';
+    onMount(() => {
+        if (isArray(items) && items.length > 0) {
+            component = 'select';
+        } else if (isBoolean(value)) {
+            component = 'checkbox';
+        } else if (isString(value) || isNumber(value)) {
+            component = 'input';
+        }
+    });
 </script>
 
 <div class="grid grid-cols-5 join border border-rounded p-2" class:border-gray-600={lock}>
@@ -63,7 +74,7 @@
         </select>
     {:else if isArray(items) && items?.length > 0}
         <select class="select select-bordered select-sm join-item col-span-5" bind:value disabled={lock}>
-            <option disabled selected></option>
+            <option disabled selected>Choose a value</option>
             {#each items as item (item)}
                 <option>{item}</option>
             {/each}
