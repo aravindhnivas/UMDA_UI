@@ -79,13 +79,8 @@
                 disabled={lock}
             >
                 <option disabled selected>type</option>
-                <!-- {#if component === 'input'} -->
                 <option>int</option>
                 <option>float</option>
-                <!-- {/if} -->
-                <!-- {#if component === 'select'}
-                    <option>categorical</option>
-                {/if} -->
             </select>
         {/if}
     {:else if isArray(items) && items?.length > 0}
