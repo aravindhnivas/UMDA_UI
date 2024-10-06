@@ -12,7 +12,7 @@
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <Page id="Training">
     <svelte:fragment slot="body">
-        <Pane class="p-2" size={20} minSize={10} maxSize={20}>
+        <Pane class="p-2" size={10} minSize={5} maxSize={20}>
             <ul class="menu rounded-box">
                 <!-- <li><a>Item 1</a></li> -->
                 <li>
@@ -48,7 +48,7 @@
                 </li>
             </ul>
         </Pane>
-        <Pane minSize={80}>
+        <Pane minSize={90}>
             <div class="overflow-auto max-h-[100%] p-2">
                 <Mol2VecTrain display={$active_item.toLowerCase() === 'mol2vec' ? '' : 'none'} />
                 <VICGAETrain display={$active_item.toLowerCase() === 'vicgae' ? '' : 'none'} />
