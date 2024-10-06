@@ -25,8 +25,8 @@ importers:
         version: 2.1.7
     devDependencies:
       '@iconify/json':
-        specifier: ^2.2.251
-        version: 2.2.254
+        specifier: ^2.2.256
+        version: 2.2.256
       '@loadingio/loading.css':
         specifier: ^3.2.1
         version: 3.2.1
@@ -100,10 +100,10 @@ importers:
         specifier: ^3.3.3
         version: 3.3.3
       prettier-plugin-svelte:
-        specifier: ^3.2.6
+        specifier: ^3.2.7
         version: 3.2.7(prettier@3.3.3)(svelte@4.2.19)
       sass:
-        specifier: ^1.79.3
+        specifier: ^1.79.4
         version: 1.79.4
       svelte:
         specifier: ^4.2.19
@@ -127,10 +127,10 @@ importers:
         specifier: ^0.3.28
         version: 0.3.28(svelte@4.2.19)
       svelte-splitpanes:
-        specifier: ^8.0.5
-        version: 8.0.6(svelte@4.2.19)
+        specifier: ^8.0.8
+        version: 8.0.8(svelte@4.2.19)
       tailwindcss:
-        specifier: ^3.4.12
+        specifier: ^3.4.13
         version: 3.4.13
       ts-try:
         specifier: ^0.2.0
@@ -145,7 +145,7 @@ importers:
         specifier: ^0.18.3
         version: 0.18.3(rollup@4.22.5)
       vite:
-        specifier: ^5.4.7
+        specifier: ^5.4.8
         version: 5.4.8(@types/node@22.0.2)(sass@1.79.4)
 
 packages:
@@ -299,8 +299,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@iconify/json@2.2.254':
-    resolution: {integrity: sha512-Czl0QoUY6339X+VovtTmsguvBTbkT//IdO9CTIz9nUwpWE23cf0yKydoAsQpa1i3cxGI+03ytmaTQqwivFYumg==}
+  '@iconify/json@2.2.256':
+    resolution: {integrity: sha512-u2RwfBUuDE3A8qx3vnXdcJMtirHc9QrRRULfGY6Il6/K76Odfrm4yVqS/fYIh+wXwWl/fZdAZEozqxpZftfnIQ==}
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
@@ -1302,10 +1302,6 @@ packages:
   minimatch@3.1.2:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
 
-  minimatch@9.0.4:
-    resolution: {integrity: sha512-KqWh+VchfxcMNRAJjj2tnsSJdNbHsVgnkBhTNrW7AjVo6OvLtxw8zfT9oLw1JSohlFzJ8jCoTgaoXvJ+kHt6fw==}
-    engines: {node: '>=16 || 14 >=14.17'}
-
   minimatch@9.0.5:
     resolution: {integrity: sha512-G6T0ZX48xgozx7587koeX9Ys2NYy6Gmv//P89sEte9V9whIapMNF4idKxnW2QtCcLiTWlb/wfCabAtAFWhhBow==}
     engines: {node: '>=16 || 14 >=14.17'}
@@ -1671,8 +1667,8 @@ packages:
     peerDependencies:
       svelte: ^3.0.0 || ^4.0.0 || ^5.0.0-next.1
 
-  svelte-splitpanes@8.0.6:
-    resolution: {integrity: sha512-HlJFdaoc33sd2Lt2GT/RC2aBWLSgs7cXNEII2MYncQGmSYNLsok7q9/dLBryJol4heRuv4e+YulhjKDSfv3DKQ==}
+  svelte-splitpanes@8.0.8:
+    resolution: {integrity: sha512-GmEXRNOqsNouUxWbrM/b88Q7eHLzbt8lspXU6Z5xSnzfL38xP/TnKct+m9t1GW2WF2NxGcXAJ/SPU9EcmgD6Qw==}
     peerDependencies:
       svelte: ^4.2.19
 
@@ -1902,7 +1898,7 @@ snapshots:
   '@esbuild/win32-x64@0.21.5':
     optional: true
 
-  '@iconify/json@2.2.254':
+  '@iconify/json@2.2.256':
     dependencies:
       '@iconify/types': 2.0.0
       pathe: 1.1.2
@@ -3423,7 +3419,7 @@ snapshots:
     dependencies:
       foreground-child: 3.1.1
       jackspeak: 2.3.6
-      minimatch: 9.0.4
+      minimatch: 9.0.5
       minipass: 7.0.4
       path-scurry: 1.10.2
 
@@ -3556,10 +3552,6 @@ snapshots:
   minimatch@3.1.2:
     dependencies:
       brace-expansion: 1.1.11
-
-  minimatch@9.0.4:
-    dependencies:
-      brace-expansion: 2.0.1
 
   minimatch@9.0.5:
     dependencies:
@@ -3784,7 +3776,7 @@ snapshots:
     dependencies:
       chokidar: 4.0.1
       immutable: 4.3.5
-      source-map-js: 1.2.0
+      source-map-js: 1.2.1
 
   scule@1.3.0: {}
 
@@ -3963,7 +3955,7 @@ snapshots:
     dependencies:
       svelte: 4.2.19
 
-  svelte-splitpanes@8.0.6(svelte@4.2.19):
+  svelte-splitpanes@8.0.8(svelte@4.2.19):
     dependencies:
       esm-env-robust: 0.0.3
       svelte: 4.2.19
@@ -4007,7 +3999,7 @@ snapshots:
       micromatch: 4.0.5
       normalize-path: 3.0.0
       object-hash: 3.0.0
-      picocolors: 1.0.0
+      picocolors: 1.1.0
       postcss: 8.4.47
       postcss-import: 15.1.0(postcss@8.4.47)
       postcss-js: 4.0.1(postcss@8.4.47)
