@@ -2,14 +2,14 @@
     import Lockbutton from './Lockbutton.svelte';
     import { SlidersHorizontal } from 'lucide-svelte/icons';
 
-    export let value: string | boolean = 'name';
-    // export let items: string[] | null = ['name', 'name2'];
+    export let value: string | boolean = '1';
     // export let value: string | number | boolean = true;
+    // export let items: string[] | null = ['1', '2', '3'];
     export let items: string[] | null = null;
     export let label: string = 'label';
     export let description: string = 'description';
     export let type: 'int' | 'float' = 'float';
-    export let scale: 'log' | '' = 'log';
+    export let scale: 'log' | 'linear' = 'log';
     export let lock: boolean = false;
     export let fine_tune: boolean = false;
     export let fine_tuned_values = '';
@@ -27,7 +27,7 @@
     });
 </script>
 
-<div class="grid grid-cols-5 join border border-rounded p-2" class:border-gray-600={lock}>
+<div class="grid grid-cols-5 join">
     <span class="flex items-end gap-2 mb-1 col-span-6">
         <Lockbutton class="join-item" bind:lock />
         <span class="text-sm {lock ? 'text-gray-600/75' : ''}">{label}</span>
@@ -48,27 +48,28 @@
                 on:change={() => {
                     if (!isString(fine_tuned_values)) return;
                     const arr = fine_tuned_values.split(',').map(v => v.trim());
-                    if (arr.length > 1) return;
-                    fine_tune = false;
-                    value = arr[0];
-                    return;
+                    console.log({ component, arr });
+                    if (component === 'input') {
+                        if (arr.length > 3) {
+                            fine_tuned_values = arr.slice(0, 3).join(', ');
+                            return toast.error('Max 3 values allowed for int/float type - min, max, step');
+                        }
+                        if (arr.length === 1) {
+                            fine_tune = false;
+                            value = arr[0];
+                            return;
+                        }
+                    }
                 }}
             />
         {/if}
         {#if component === 'input'}
-            {#if type === 'float'}
-                <select class="select select-bordered select-sm join-item" bind:value={scale} disabled={lock}>
-                    <option disabled selected>type</option>
-                    <option>log</option>
-                    <option></option>
-                </select>
-            {/if}
-            <select
-                class="select select-bordered select-sm join-item"
-                class:col-span-2={type !== 'float'}
-                bind:value={type}
-                disabled={lock}
-            >
+            <select class="select select-bordered select-sm join-item" bind:value={scale} disabled={lock}>
+                <option disabled selected>type</option>
+                <option>log</option>
+                <option>linear</option>
+            </select>
+            <select class="select select-bordered select-sm join-item" bind:value={type} disabled={lock}>
                 <option disabled selected>type</option>
                 <option>int</option>
                 <option>float</option>
@@ -96,6 +97,11 @@
                 if (!isString(value)) return;
                 const arr = value.split(',').map(v => v.trim());
                 if (arr.length === 1) return;
+                if (arr.length > 3) {
+                    fine_tune = true;
+                    fine_tuned_values = arr.slice(0, 3).join(', ');
+                    return toast.error('Max 3 values allowed - min, max, step');
+                }
                 fine_tune = true;
                 fine_tuned_values = arr.join(', ');
                 return;
