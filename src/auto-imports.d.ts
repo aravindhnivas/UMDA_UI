@@ -6,7 +6,6 @@
 // biome-ignore lint: disable
 export {}
 declare global {
-  const Panel: (typeof import('svelte-splitpanes'))['Panel']
   const Toaster: typeof import('svelte-sonner')['Toaster']
   const afterUpdate: typeof import('svelte')['afterUpdate']
   const axios: typeof import('axios')['default']
@@ -14,7 +13,6 @@ declare global {
   const blur: typeof import('svelte/transition')['blur']
   const computePy: typeof import('$lib/pyserver/computePy')['default']
   const createEventDispatcher: typeof import('svelte')['createEventDispatcher']
-  const createPersistanceStore: (typeof import('$utils/'))['createPersistanceStore']
   const crossfade: typeof import('svelte/transition')['crossfade']
   const derived: typeof import('svelte/store')['derived']
   const dialog: typeof import('@tauri-apps/api')['dialog']
@@ -52,11 +50,9 @@ declare global {
   const sleep: typeof import('$lib/utils/initialise')['sleep']
   const slide: typeof import('svelte/transition')['slide']
   const tempdir: typeof import('@tauri-apps/api/os')['tempdir']
-  const textfield: (typeof import('@smui/textfield'))['default']
   const tick: typeof import('svelte')['tick']
   const toast: typeof import('svelte-sonner')['toast']
   const typeSafeObjectKeys: typeof import('$lib/utils/index')['typeSafeObjectKeys']
   const writable: typeof import('svelte/store')['writable']
-  const writable_store: typeof import('@macfja/svelte-persistent-store')['writable']
   const writeJSON: typeof import('$lib/utils/index')['writeJSON']
 }

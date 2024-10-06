@@ -15,8 +15,8 @@ importers:
         specifier: ^1.6.2
         version: 1.6.2
       lucide-svelte:
-        specifier: 0.446.0
-        version: 0.446.0(svelte@4.2.19)
+        specifier: 0.447.0
+        version: 0.447.0(svelte@4.2.19)
       plotly.js-dist-min:
         specifier: ^2.35.2
         version: 2.35.2
@@ -1265,8 +1265,8 @@ packages:
     resolution: {integrity: sha512-9hp3Vp2/hFQUiIwKo8XCeFVnrg8Pk3TYNPIR7tJADKi5YfcF7vEaK7avFHTlSy3kOKYaJQaalfEo6YuXdceBOQ==}
     engines: {node: 14 || >=16.14}
 
-  lucide-svelte@0.446.0:
-    resolution: {integrity: sha512-ofx/Ykes1q1/sb0t4weezIt0SrMZd4x5Ox1APeR/ZgAHB7taXHqEExS9aGVImFqS35CfnjNGUqMr16/GwTd2lQ==}
+  lucide-svelte@0.447.0:
+    resolution: {integrity: sha512-DDCVy79q9H1IAGmrbGDG4GZmCZK+5elK3Fxzu0RzbHKr2Khg7EMc8S6C12bzWcnfW263raqo3grthEjB5gxAjw==}
     peerDependencies:
       svelte: ^3 || ^4 || ^5.0.0-next.42
 
@@ -3520,7 +3520,7 @@ snapshots:
 
   lru-cache@10.2.2: {}
 
-  lucide-svelte@0.446.0(svelte@4.2.19):
+  lucide-svelte@0.447.0(svelte@4.2.19):
     dependencies:
       svelte: 4.2.19
 
