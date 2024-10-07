@@ -93,7 +93,8 @@
 
         let clonedFineTunedValues: Record<string, any> = {};
 
-        if ($fine_tune_model && $grid_search_method !== 'Optuna') {
+        if ($fine_tune_model) {
+            // if($grid_search_method === 'Optuna') return toast.error('Optuna fine tuning not supported yet');
             if ($default_parameter_mode) {
                 toast.error('Cannot fine tune model with default parameters');
                 return;
@@ -111,7 +112,7 @@
                     if ($all_params_lock_status[$model][key][label]) return;
                     if (!cloned_obj[label]) return;
 
-                    const { active, value } = cloned_obj[label];
+                    const { active, value, type, scale } = cloned_obj[label];
                     if (!(active && value)) return;
                     clonedFineTunedValues[label] = value.split(',').map(f => {
                         f = f.trim();
@@ -124,6 +125,11 @@
                             console.error('Error parsing', f, error);
                         }
                     });
+                    clonedFineTunedValues[label] = {
+                        value: clonedFineTunedValues[label],
+                        type,
+                        scale,
+                    };
                     console.log(label, cloned_obj[label], clonedFineTunedValues[label]);
                 });
             });
