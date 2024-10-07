@@ -124,6 +124,9 @@
                     });
                 });
             } else {
+                if (!parsed.values) return;
+                if (parsed.mode !== 'normal') return toast.error('Error: Invalid mode');
+
                 Object.keys($hyperparameters[$model]).forEach(label => {
                     if (!(label in parsed.values)) return;
                     if (isObject(parsed.values[label])) return;
