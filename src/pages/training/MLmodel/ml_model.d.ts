@@ -100,8 +100,17 @@ type FineTunedValues = Record<
     >
 >;
 
+type SavedParamsSubType = string | number | boolean | null;
 interface SavedParams {
-    values: Record<string, string | number | boolean | null>;
+    values: Record<
+        string,
+        | SavedParamsSubType
+        | {
+              value: SavedParamsSubType[];
+              type: ModelParametersType['type'];
+              scale: 'linear' | 'log' | null;
+          }
+    >;
     model: MLModel;
     timestamp: string;
     mode: 'fine_tuned' | 'normal';
