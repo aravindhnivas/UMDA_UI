@@ -48,7 +48,7 @@
                 </li>
             </ul>
         </Pane>
-        <Pane minSize={90}>
+        <Pane minSize={80}>
             <div class="overflow-auto max-h-[100%] p-2">
                 <Mol2VecTrain display={$active_item.toLowerCase() === 'mol2vec' ? '' : 'none'} />
                 <VICGAETrain display={$active_item.toLowerCase() === 'vicgae' ? '' : 'none'} />
