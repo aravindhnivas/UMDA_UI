@@ -19,7 +19,7 @@
                 let opts = Object.keys(obj.value.options);
                 if (opts.includes('float')) {
                     opts = opts.filter(f => f !== 'float');
-                    opts.push('10');
+                    // opts.push('10');
                 }
                 fine_tune_options = opts.join(', ');
             } else if (obj.value === null) {
@@ -32,7 +32,10 @@
             fine_tune_options = fine_tune_options.trim();
             // remove trailing comma
             if (fine_tune_options.endsWith(',')) fine_tune_options = fine_tune_options.slice(0, -1);
-            $fine_tuned_values[$model][key][label] = fine_tune_options;
+            $fine_tuned_values[$model][key][label] = {
+                value: fine_tune_options,
+                active: false,
+            };
         });
     };
     const set_model_params = () => {

@@ -35,7 +35,7 @@
         if ($fine_tune_model) {
             v.forEach(key => {
                 Object.keys($fine_tuned_values[$model][key]).forEach(label => {
-                    values[label] = structuredClone($fine_tuned_values[$model][key][label]);
+                    values[label] = structuredClone($fine_tuned_values[$model][key][label].value);
                 });
             });
         } else {
@@ -87,7 +87,7 @@
         uploadedfile = null;
 
         try {
-            const parsed = await readJSON(uploadloc);
+            const parsed = await readJSON<SavedParams>(uploadloc);
             if (!parsed) return;
 
             console.log('parsed', parsed);
@@ -106,7 +106,7 @@
                 v.forEach(key => {
                     Object.keys($fine_tuned_values[$model][key]).forEach(label => {
                         if (!(label in parsed.values)) return;
-                        $fine_tuned_values[$model][key][label] = parsed.values[label];
+                        $fine_tuned_values[$model][key][label].value = `${parsed.values[label]}`;
                         $all_params_lock_status[$model][key][label] = false;
                     });
                 });

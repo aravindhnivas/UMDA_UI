@@ -80,8 +80,20 @@ type MLParamsLockStatus = Record<
 
 type FineTunedValues = Record<
     MLModel,
-    {
-        parameters: Record<string, string>;
-        hyperparameters: Record<string, string>;
-    }
+    Record<
+        'parameters' | 'hyperparameters',
+        Record<
+            string,
+            {
+                value: string;
+                active: boolean;
+            }
+        >
+    >
 >;
+
+interface SavedParams {
+    values: Record<string, string | number | boolean | null>;
+    model: string;
+    timestamp: string;
+}

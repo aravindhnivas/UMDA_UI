@@ -110,7 +110,10 @@
                 Object.keys(cloned_obj).forEach(label => {
                     if ($all_params_lock_status[$model][key][label]) return;
                     if (!cloned_obj[label]) return;
-                    clonedFineTunedValues[label] = cloned_obj[label].split(',').map(f => {
+
+                    const { active, value } = cloned_obj[label];
+                    if (!(active && value)) return;
+                    clonedFineTunedValues[label] = value.split(',').map(f => {
                         f = f.trim();
                         try {
                             if (f === 'true' || f === 'false' || f === 'null') return JSON.parse(f);
