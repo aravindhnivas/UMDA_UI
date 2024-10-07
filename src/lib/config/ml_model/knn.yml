@@ -12,7 +12,7 @@ hyperparameters:
                 uniform: 'All points in each neighborhood are weighted equally'
                 distance: 'Weight points by the inverse of their distance'
         description: 'Weight function used in prediction'
-        type: str
+        type: string
     metric:
         value:
             default: 'minkowski'
@@ -23,7 +23,7 @@ hyperparameters:
                 nan_euclidean: 'Euclidean distance ignoring NaN values'
                 manhattan: 'Manhattan distance'
         description: 'Metric to use for distance computation'
-        type: str
+        type: string
 parameters:
     algorithm:
         value:
@@ -34,7 +34,7 @@ parameters:
                 kd_tree: 'KDTree algorithm'
                 brute: 'Brute-force search algorithm'
         description: 'Algorithm used to compute the nearest neighbors'
-        type: str
+        type: string
     leaf_size:
         value: 30
         description: 'Leaf size passed to BallTree or KDTree'

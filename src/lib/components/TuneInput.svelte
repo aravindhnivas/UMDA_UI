@@ -7,7 +7,7 @@
     export let label: string = 'label';
     export let helper: string = 'description';
     export let helperHighlight: string = 'Default: ...';
-    export let type: 'int' | 'float' | 'string' = 'int';
+    export let type: 'integer' | 'float' | 'string' = 'integer';
     export let scale: 'log' | 'linear' = 'linear';
     export let lock: boolean = false;
     export let fine_tune: boolean = false;
@@ -71,7 +71,7 @@
                 class:col-span-2={type === 'string'}
             >
                 <option disabled selected>type</option>
-                <option>int</option>
+                <option>integer</option>
                 <option>float</option>
                 <option>string</option>
             </select>

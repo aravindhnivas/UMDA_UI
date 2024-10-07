@@ -35,7 +35,7 @@ parameters:
                 huber: 'Huber loss for robust regression'
                 quantile: 'Quantile regression'
         description: 'Loss function to be optimized'
-        type: str
+        type: string
     criterion:
         value:
             default: 'friedman_mse'
@@ -43,7 +43,7 @@ parameters:
                 friedman_mse: 'Mean squared error with improvement score by Friedman'
                 squared_error: 'Mean squared error'
         description: 'Function to measure the quality of a split'
-        type: str
+        type: string
     min_weight_fraction_leaf:
         value: 0.0
         description: 'Minimum weighted fraction of the sum total of weights required to be at a leaf node'
@@ -65,7 +65,7 @@ parameters:
                 null: 'n_features'
                 float: 'n_features'
         description: 'Number of features to consider when looking for the best split'
-        type: str
+        type: string
     alpha:
         value: 0.9
         description: 'The alpha-quantile of the huber loss function and the quantile loss function'

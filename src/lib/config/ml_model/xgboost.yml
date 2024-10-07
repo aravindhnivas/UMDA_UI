@@ -55,7 +55,7 @@ parameters:
                 rank:ndcg: 'Learning to rank with NDCG loss'
                 rank:map: 'Learning to rank with MAP loss'
         description: 'Specify the learning task and the corresponding learning objective'
-        type: str
+        type: string
     booster:
         value:
             default: 'gbtree'
@@ -64,7 +64,7 @@ parameters:
                 gblinear: 'Linear models'
                 dart: 'Dropouts meet Multiple Additive Regression Trees'
         description: 'Specify which booster to use'
-        type: str
+        type: string
     verbosity:
         value: 0
         description: 'Verbosity of printing messages'
@@ -72,7 +72,7 @@ parameters:
     importance_type:
         value: ''
         description: 'The feature importance type for the feature_importances_ property'
-        type: str
+        type: string
     early_stopping_rounds:
         value: null
         description: 'Activates early stopping. Validation error needs to decrease at least every early_stopping_rounds to continue training'
@@ -89,11 +89,11 @@ parameters:
                 mlogloss: 'Multiclass logloss'
                 auc: 'Area under the curve'
         description: 'The metric to use for validation data'
-        type: str
+        type: string
     tree_method:
         value: null
         description: 'The tree construction algorithm used in XGBoost'
-        type: str
+        type: string
     scale_pos_weight:
         value: 1
         description: 'Control the balance of positive and negative weights, useful for unbalanced classes'
@@ -125,7 +125,7 @@ parameters:
                 uniform: 'Uniform sampling'
                 gradient_based: 'Gradient-based sampling'
         description: 'The method to use to sample the training data'
-        type: str
+        type: string
     colsample_bylevel:
         value: 1.0
         description: 'Subsample ratio of columns for each level'
@@ -146,7 +146,7 @@ parameters:
                 gpu: 'Use GPU'
                 cuda: 'Use CUDA'
         description: 'Device ordinal or the special "cpu" string'
-        type: str
+        type: string
     validate_parameters:
         value: false
         description: 'Check that the parameters are valid'
@@ -154,5 +154,5 @@ parameters:
     multi_strategy:
         value: 'one_output_per_tree'
         description: 'The multi-class strategy if target is multi-class'
-        type: str
+        type: string
     

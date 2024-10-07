@@ -11,7 +11,7 @@ hyperparameters:
                 sigmoid: 'Sigmoid kernel'
                 precomputed: 'Precomputed kernel'
         description: 'Specifies the kernel type to be used in the algorithm'
-        type: str
+        type: string
     gamma:
         value:
             default: 'scale'
@@ -20,7 +20,7 @@ hyperparameters:
                 auto: '1 / n_features'
                 float: 'must be non-negative'
         description: 'Kernel coefficient for rbf, poly and sigmoid.'
-        type: str
+        type: string
     C:
         value: 1.0
         description: 'Regularization parameter'

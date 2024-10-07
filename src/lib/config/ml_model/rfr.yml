@@ -27,7 +27,7 @@ parameters:
                 friedman_mse: 'Mean squared error with improvement score by Friedman'
                 poisson: 'Mean squared error for Poisson distribution'
         description: 'Function to measure the quality of a split'
-        type: str
+        type: string
     min_samples_split:
         value: 2
         description: 'Minimum number of samples required to split an internal node'
@@ -45,7 +45,7 @@ parameters:
                 null: 'n_features'
                 float: 'n_features'
         description: 'Number of features to consider when looking for the best split'
-        type: str
+        type: string
     min_impurity_decrease:
         value: 0.0
         description: 'A node will be split if this split induces a decrease of the impurity greater than or equal to this value'

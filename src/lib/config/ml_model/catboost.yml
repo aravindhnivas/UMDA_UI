@@ -44,7 +44,7 @@ parameters:
         Max: 'Replace NaN with maximum value'
         Forbidden: 'Forbidden NaN values'
     description: 'The way to process NaN values in the learn set'
-    type: str
+    type: string
   eval_metric:
     value:
       default: 'RMSE'
@@ -57,7 +57,7 @@ parameters:
         MAPE: 'Mean Absolute Percentage Error'
         Huber: 'Huber loss'
     description: 'The metric used for overfitting detection and best model selection'
-    type: str
+    type: string
   loss_function:
     value:
       default: 'RMSE'
@@ -70,7 +70,7 @@ parameters:
         MAPE: 'Mean Absolute Percentage Error'
         Huber: 'Huber loss'
     description: 'The metric to use in training'
-    type: str
+    type: string
   leaf_estimation_method:
     value:
       default: 'Newton'
@@ -79,7 +79,7 @@ parameters:
         Gradient: 'Gradient method'
         Exact: 'Exact method'
     description: 'The method used to calculate the values in leaves'
-    type: str
+    type: string
   leaf_estimation_iterations:
     value: null
     description: 'Number of iterations to build the tree'
@@ -92,7 +92,7 @@ parameters:
         Depthwise: 'Depthwise'
         Lossguide: 'Lossguide'
     description: 'The tree growing policy'
-    type: str
+    type: string
   bootstrap_type:
     value:
       default: 'MVS'
@@ -102,7 +102,7 @@ parameters:
         MVS: 'MVS bootstrap'
         No: 'No bootstrap'
     description: 'Bootstrap type'
-    type: str
+    type: string
   use_best_model:
     value: false
     description: 'If true, the best model is used after training'
@@ -114,7 +114,7 @@ parameters:
         CPU: 'Train on CPU'
         GPU: 'Train on GPU'
     description: 'Whether to train on CPU or GPU'
-    type: str
+    type: string
   posterior_sampling:
     value: false
     description: 'If true, use posterior sampling'
@@ -126,7 +126,7 @@ parameters:
         Constant: 'Constant model shrinkage'
         Decreasing: 'Decreasing model shrinkage'
     description: 'Model shrinkage mode'
-    type: str
+    type: string
   model_shrink_rate:
     value: 0
     description: 'Model shrinkage rate'
@@ -146,7 +146,7 @@ parameters:
         GreedyLogSum: 'Greedy log sum'
         Random: 'Random'
     description: 'Feature border type'
-    type: str
+    type: string
   model_size_reg:
     value: 0.5
     description: 'Model size regularization'
@@ -158,7 +158,7 @@ parameters:
         PerTree: 'Per tree'
         PerTreeLevel: 'Per tree level'
     description: 'Sampling frequency'
-    type: str
+    type: string
   score_function:
     value:
       default: 'Cosine'
@@ -168,7 +168,7 @@ parameters:
         NewtonCosine: 'Newton cosine similarity (do not use this score type with the Lossguide tree growing policy)'
         NewtonL2: 'Newton L2 distance'
     description: 'Score function'
-    type: str
+    type: string
   sparse_features_conflict_fraction:
     value: 0
     description: 'Sparse features conflict fraction'
@@ -181,7 +181,7 @@ parameters:
         AnyImprovement: 'Any improvement'
         Armijo: 'Armijo rule'
     description: 'Leaf estimation backtracking'
-    type: str
+    type: string
   best_model_min_trees:
     value: null
     description: 'Minimum number of trees for best model'
@@ -201,7 +201,7 @@ parameters:
         Plain: 'Plain boosting'
         Ordered: 'Ordered boosting'
     description: 'Boosting type'
-    type: str
+    type: string
   # boost_from_average:
   #   value: false
   #   description: 'Boost from average'
@@ -225,11 +225,11 @@ parameters:
   input_borders:
     value: null
     description: 'Load Custom quantization borders and missing value modes from a file (do not generate them).'
-    type: str
+    type: string
   output_borders:
     value: null
     description: 'Save quantization borders for the current dataset to a file.'
-    type: str
+    type: string
   fold_permutation_block:
     value: 1
     description: 'Fold permutation block'
@@ -262,7 +262,7 @@ parameters:
 #         Balanced: 'Balanced class weights'
 #         SqrtBalanced: 'Square root balanced class weights'
 #     description: 'Auto class weights'
-#     type: str
+#     type: string
 
 # NOT USED
 # custom_metric

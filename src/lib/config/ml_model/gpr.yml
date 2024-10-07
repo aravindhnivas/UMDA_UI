@@ -17,7 +17,7 @@ parameters:
     optimizer:
         value: 'fmin_l_bfgs_b'
         description: 'The optimizer to use for optimizing the kernel parameters'
-        type: str
+        type: string
     normalize_y:
         value: false
         description: 'Whether to normalize the target values y by removing the mean and scaling to unit-variance. This is recommended for cases where zero-mean, unit-variance priors are used.'

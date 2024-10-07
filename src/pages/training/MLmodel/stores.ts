@@ -36,14 +36,12 @@ export const variable_type = derived(current_model, $current_model => {
     if (!$current_model) return {};
     const hyperparameters = $current_model.hyperparameters;
     const parameters = $current_model.parameters;
-    return Object.keys({ ...hyperparameters, ...parameters }).reduce(
-        (acc, key) => {
-            const type = hyperparameters[key]?.type || parameters[key]?.type;
-            acc[key] = type;
-            return acc;
-        },
-        {} as Record<string, string>,
-    );
+
+    let obj: Record<string, string> = {};
+    Object.keys({ ...hyperparameters, ...parameters }).forEach(key => {
+        obj[key] = hyperparameters[key]?.type || parameters[key]?.type;
+    });
+    return obj;
 });
 
 export const get_params_from_current_model = (key: 'hyperparameters' | 'parameters', data: CurrentModel) => {

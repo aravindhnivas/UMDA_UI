@@ -174,7 +174,7 @@
         Object.entries(values).forEach(([key, value], ind) => {
             // console.log(ind, { key, value, type: $variable_type[key] });
 
-            if (typeof value === 'string' && $variable_type[key] === 'str' && value !== 'float') {
+            if (typeof value === 'string' && $variable_type[key] === 'string' && value !== 'float') {
                 clonedValues[key] = value?.trim() || null;
                 return;
             }

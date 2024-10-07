@@ -39,4 +39,4 @@ parameters:
                 sag: 'Stochastic Average Gradient descent'
                 saga: 'SAGA solver'
         description: 'Solver to use in the computational routines'
-        type: str
+        type: string

@@ -9,14 +9,20 @@ type MLParameterValue =
           options: Record<string, string | number>;
       };
 
-type ModelHyperParameters = Record<string, { value: MLParameterValue; description: string; type: string }>;
-type ModelParameters = Record<string, { value: MLParameterValue; description: string; type: string }>;
+// type ModelHyperParameters = Record<string, { value: MLParameterValue; description: string; type: string }>;
+// type ModelParameters = Record<string, { value: MLParameterValue; description: string; type: string }>;
+
+interface ModelParametersType {
+    value: MLParameterValue;
+    description: string;
+    type: 'string' | 'integer' | 'float' | 'bool';
+}
 
 interface CurrentModel {
     name: string;
     description: string;
-    hyperparameters: ModelHyperParameters;
-    parameters: ModelParameters;
+    hyperparameters: Record<string, ModelParametersType>;
+    parameters: Record<string, ModelParametersType>;
 }
 
 type ParametersArgs = Record<string, Record<string, string | boolean | number | null>>;
@@ -87,6 +93,8 @@ type FineTunedValues = Record<
             {
                 value: string;
                 active: boolean;
+                type: ModelParametersType['type'];
+                scale: 'linear' | 'log' | null;
             }
         >
     >

@@ -46,4 +46,4 @@ parameters:
         binary: 'Binary classification task'
         multiclass: 'Multiclass classification task'
     description: 'Type of task'
-    type: str
+    type: string
