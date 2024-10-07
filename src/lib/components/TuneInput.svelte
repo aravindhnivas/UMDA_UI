@@ -1,6 +1,6 @@
 <script lang="ts">
     import Lockbutton from './Lockbutton.svelte';
-    import { SlidersHorizontal } from 'lucide-svelte/icons';
+    import { SlidersHorizontal, TriangleAlert } from 'lucide-svelte/icons';
 
     export let value: string | number | boolean | null = null;
     export let items: string[] | null = null;
@@ -35,6 +35,15 @@
 
 <div class="grid grid-cols-5 join">
     <span class="flex items-center gap-2 mb-1 col-span-6">
+        {#if !lock && fine_tune && component === 'input'}
+            {@const arr = fine_tuned_values
+                .split(',')
+                .map(v => v.trim())
+                .filter(v => v !== '')}
+            {#if arr.length < 2 || arr.length > 3}
+                <TriangleAlert size="20" color="red" />
+            {/if}
+        {/if}
         <Lockbutton class="join-item" bind:lock />
         <span class="text-sm {lock ? 'text-gray-600/75' : ''}">{label}</span>
     </span>
