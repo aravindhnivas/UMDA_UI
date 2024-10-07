@@ -27,7 +27,6 @@
         });
     }
 
-    const ncols = 3;
     let include_fields: Record<MLModel, string[]> = {} as Record<MLModel, string[]>;
 
     $: if ($model && !include_fields[$model]) {
@@ -105,12 +104,12 @@
                 </button>
             </svelte:fragment>
         </CustomInput>
-        <div class="grid gap-4 grid-cols-{ncols} hyperparameters__div py-5 px-2">
+        <div class="grid gap-4 grid-cols-3 hyperparameters__div py-5 px-2">
             {#each Object.keys($current_model[key]) as label (label)}
                 {#if include_fields[$model].includes(label)}
                     {@const { value, description } = $current_model[key][label]}
                     {#if $model === 'gpr' && label === 'kernel'}
-                        <div class="grid gap-2 col-span-{ncols}">
+                        <div class="grid gap-2 col-span-3">
                             <Kernel bind:value={values[label]} />
                         </div>
                     {:else if label in values}
