@@ -54,8 +54,6 @@
         $default_fine_tuned_values[$model] ??= { hyperparameters: {}, parameters: {} };
 
         Object.keys($current_model.optuna_grid).forEach(okey => {
-            if (!isEmpty($default_fine_tuned_values[$model]?.hyperparameters)) return;
-            if (!isEmpty($default_fine_tuned_values[$model]?.parameters)) return;
             console.log('Setting default fine tuned values', $model, okey);
 
             const { type, low, high, step, options, log } = $current_model.optuna_grid[okey];
@@ -74,13 +72,14 @@
 
             const hparams_keys = Object.keys($current_model.hyperparameters);
             const params_keys = Object.keys($current_model.parameters);
-
+            console.log({ hparams_keys, params_keys, okey });
             if (hparams_keys.includes(okey)) {
                 $default_fine_tuned_values[$model].hyperparameters[okey] = { value, type, scale, active: false };
             } else if (params_keys.includes(okey)) {
                 $default_fine_tuned_values[$model].parameters[okey] = { value, type, scale, active: false };
             }
         });
+        console.log($default_fine_tuned_values?.[$model]);
 
         // setting fine tuned hyperparameters
         $fine_tuned_values[$model] ??= { hyperparameters: {}, parameters: {} };
