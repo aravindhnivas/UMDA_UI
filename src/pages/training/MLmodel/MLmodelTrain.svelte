@@ -114,7 +114,7 @@
 
                     const { active, value, type, scale } = cloned_obj[label];
                     if (!(active && value)) return;
-                    clonedFineTunedValues[label] = value.split(',').map(f => {
+                    const tuned_val = value.split(',').map(f => {
                         f = f.trim();
                         try {
                             if (f === 'true' || f === 'false' || f === 'null') return JSON.parse(f);
@@ -125,8 +125,12 @@
                             console.error('Error parsing', f, error);
                         }
                     });
+                    if (tuned_val.length < 2) {
+                        toast.error(`Error: Fine tuned hyperparameter '${label}' must have at least 2 values`);
+                        return;
+                    }
                     clonedFineTunedValues[label] = {
-                        value: clonedFineTunedValues[label],
+                        value: tuned_val,
                         type,
                         scale,
                     };
