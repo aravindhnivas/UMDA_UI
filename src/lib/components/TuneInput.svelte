@@ -104,17 +104,30 @@
             disabled={lock}
             on:change={() => {
                 if (!isString(value)) return;
-                const arr = value.split(',').map(v => v.trim());
-                if (arr.length === 1) return;
+                if (!value.includes(',')) return;
+
+                const arr = value
+                    .trim()
+                    .split(',')
+                    .map(v => v.trim())
+                    .filter(v => v !== '');
+
                 value = arr[0];
-                if (arr.length > 3) {
+                if (arr.length === 1) {
+                    return;
+                }
+
+                if (arr.length === 2 || arr.length === 3) {
+                    fine_tuned_values = arr.join(', ');
                     fine_tune = true;
+                    return;
+                }
+
+                if (arr.length > 3) {
                     fine_tuned_values = arr.slice(0, 3).join(', ');
+                    fine_tune = true;
                     return toast.error('Max 3 values allowed - min, max, step');
                 }
-                fine_tune = true;
-                fine_tuned_values = arr.join(', ');
-                return;
             }}
         />
     {:else if component === null}
