@@ -124,6 +124,8 @@
                                 bind:lock={$all_params_lock_status[$model][key][label]}
                                 bind:fine_tune={$fine_tuned_values[$model][key][label].active}
                                 bind:fine_tuned_values={$fine_tuned_values[$model][key][label].value}
+                                bind:scale={$fine_tuned_values[$model][key][label].scale}
+                                bind:type={$fine_tuned_values[$model][key][label].type}
                             >
                                 {#if values[label] === 'float'}
                                     <CustomInput
@@ -147,6 +149,8 @@
                                 bind:lock={$all_params_lock_status[$model][key][label]}
                                 bind:fine_tune={$fine_tuned_values[$model][key][label].active}
                                 bind:fine_tuned_values={$fine_tuned_values[$model][key][label].value}
+                                bind:scale={$fine_tuned_values[$model][key][label].scale}
+                                bind:type={$fine_tuned_values[$model][key][label].type}
                             />
                         {/if}
                     {:else}
