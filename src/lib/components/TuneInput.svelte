@@ -34,8 +34,8 @@
 </script>
 
 <div class="grid grid-cols-5 join">
-    <span class="flex items-center gap-2 mb-1 col-span-6">
-        {#if !lock && fine_tune && component === 'input'}
+    <span class="flex items-end gap-2 mb-1 col-span-6">
+        {#if component === 'input' && !lock && fine_tune}
             {@const arr = fine_tuned_values
                 .split(',')
                 .map(v => v.trim())
