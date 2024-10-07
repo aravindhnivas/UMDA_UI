@@ -119,7 +119,7 @@
                         try {
                             if (f === 'true' || f === 'false' || f === 'null') return JSON.parse(f);
                             if (f === 'None') return null;
-                            if (!isNaN(Number(f))) return Number(f);
+                            // if (!isNaN(Number(f))) return Number(f);
                             return f;
                         } catch (error) {
                             console.error('Error parsing', f, error);
