@@ -1,259 +1,302 @@
 name: 'CatBoost Regressor'
-description: 'CatBoost is a gradient boosting library that uses decision trees as base predictors. It''s particularly good at handling categorical features.'
+description: "CatBoost is a gradient boosting library that uses decision trees as base predictors. It's particularly good at handling categorical features."
 
 hyperparameters:
-  iterations:
-    value: 1000
-    description: 'The maximum number of trees that can be built'
-    type: integer
-  learning_rate:
-    value: 0.03
-    description: 'Step size shrinkage used to prevent overfitting'
-    type: float
-  depth:
-    value: 6
-    description: 'Depth of the tree'
-    type: integer
-  l2_leaf_reg:
-    value: 3
-    description: 'L2 regularization coefficient'
-    type: float
-  border_count:
-    value: 254
-    description: 'Number of splits for numerical features'
-    type: integer
-  subsample:
-    value: 0.8
-    description: 'Subsample ratio of the training instance'
-    type: float
-  colsample_bylevel:
-    value: 0.8
-    description: 'Subsample ratio of columns for each level'
-    type: float
+    iterations:
+        value: 1000
+        description: 'The maximum number of trees that can be built'
+        type: integer
+    learning_rate:
+        value: 0.03
+        description: 'Step size shrinkage used to prevent overfitting'
+        type: float
+    depth:
+        value: 6
+        description: 'Depth of the tree'
+        type: integer
+    l2_leaf_reg:
+        value: 3
+        description: 'L2 regularization coefficient'
+        type: float
+    border_count:
+        value: 254
+        description: 'Number of splits for numerical features'
+        type: integer
+    subsample:
+        value: 0.8
+        description: 'Subsample ratio of the training instance'
+        type: float
+    colsample_bylevel:
+        value: 0.8
+        description: 'Subsample ratio of columns for each level'
+        type: float
 
 parameters:
-  random_strength:
-      value: 1
-      description: 'Amount of randomness to use for scoring splits'
-      type: float
-  nan_mode:
-    value:
-      default: 'Min'
-      options:
-        Min: 'Replace NaN with minimum value'
-        Max: 'Replace NaN with maximum value'
-        Forbidden: 'Forbidden NaN values'
-    description: 'The way to process NaN values in the learn set'
-    type: string
-  eval_metric:
-    value:
-      default: 'RMSE'
-      options:
-        RMSE: 'Root Mean Squared Error'
-        MAE: 'Mean Absolute Error'
-        Quantile: 'Quantile regression'
-        LogLinQuantile: 'Log Linear Quantile regression'
-        Poisson: 'Poisson regression'
-        MAPE: 'Mean Absolute Percentage Error'
-        Huber: 'Huber loss'
-    description: 'The metric used for overfitting detection and best model selection'
-    type: string
-  loss_function:
-    value:
-      default: 'RMSE'
-      options:
-        RMSE: 'Root Mean Squared Error'
-        MAE: 'Mean Absolute Error'
-        Quantile: 'Quantile regression'
-        LogLinQuantile: 'Log Linear Quantile regression'
-        Poisson: 'Poisson regression'
-        MAPE: 'Mean Absolute Percentage Error'
-        Huber: 'Huber loss'
-    description: 'The metric to use in training'
-    type: string
-  leaf_estimation_method:
-    value:
-      default: 'Newton'
-      options:
-        Newton: 'Newton method'
-        Gradient: 'Gradient method'
-        Exact: 'Exact method'
-    description: 'The method used to calculate the values in leaves'
-    type: string
-  leaf_estimation_iterations:
-    value: null
-    description: 'Number of iterations to build the tree'
-    type: integer
-  grow_policy:
-    value:
-      default: 'SymmetricTree'
-      options:
-        SymmetricTree: 'Symmetric tree'
-        Depthwise: 'Depthwise'
-        Lossguide: 'Lossguide'
-    description: 'The tree growing policy'
-    type: string
-  bootstrap_type:
-    value:
-      default: 'MVS'
-      options:
-        Bayesian: 'Bayesian bootstrap'
-        Bernoulli: 'Bernoulli bootstrap'
-        MVS: 'MVS bootstrap'
-        No: 'No bootstrap'
-    description: 'Bootstrap type'
-    type: string
-  use_best_model:
-    value: false
-    description: 'If true, the best model is used after training'
-    type: bool
-  task_type:
-    value:
-      default: 'CPU'
-      options:
-        CPU: 'Train on CPU'
-        GPU: 'Train on GPU'
-    description: 'Whether to train on CPU or GPU'
-    type: string
-  posterior_sampling:
-    value: false
-    description: 'If true, use posterior sampling'
-    type: bool
-  model_shrink_mode:
-    value:
-      default: 'Constant'
-      options:
-        Constant: 'Constant model shrinkage'
-        Decreasing: 'Decreasing model shrinkage'
-    description: 'Model shrinkage mode'
-    type: string
-  model_shrink_rate:
-    value: 0
-    description: 'Model shrinkage rate'
-    type: float
-  min_data_in_leaf:
-    value: 1
-    description: 'Minimum number of data points in a leaf'
-    type: integer
-  max_leaves:
-    value: 31
-    description: 'Maximum number of leaves'
-    type: integer
-  feature_border_type:
-    value:
-      default: 'GreedyLogSum'
-      options:
-        GreedyLogSum: 'Greedy log sum'
-        Random: 'Random'
-    description: 'Feature border type'
-    type: string
-  model_size_reg:
-    value: 0.5
-    description: 'Model size regularization'
-    type: float
-  sampling_frequency:
-    value:
-      default: 'PerTreeLevel'
-      options:
-        PerTree: 'Per tree'
-        PerTreeLevel: 'Per tree level'
-    description: 'Sampling frequency'
-    type: string
-  score_function:
-    value:
-      default: 'Cosine'
-      options:
-        Cosine: 'Cosine similarity'
-        L2: 'L2 distance'
-        NewtonCosine: 'Newton cosine similarity (do not use this score type with the Lossguide tree growing policy)'
-        NewtonL2: 'Newton L2 distance'
-    description: 'Score function'
-    type: string
-  sparse_features_conflict_fraction:
-    value: 0
-    description: 'Sparse features conflict fraction'
-    type: float
-  leaf_estimation_backtracking:
-    value:
-      default: 'AnyImprovement'
-      options:
-        No: 'No backtracking'
-        AnyImprovement: 'Any improvement'
-        Armijo: 'Armijo rule'
-    description: 'Leaf estimation backtracking'
-    type: string
-  best_model_min_trees:
-    value: null
-    description: 'Minimum number of trees for best model'
-    type: integer
-  eval_fraction:
-    value: 0
-    description: 'Evaluation fraction'
-    type: float
-  penalties_coefficient:
-    value: 1
-    description: 'Penalties coefficient'
-    type: float
-  boosting_type:
-    value:
-      default: 'Plain'
-      options:
-        Plain: 'Plain boosting'
-        Ordered: 'Ordered boosting'
-    description: 'Boosting type'
-    type: string
-  # boost_from_average:
-  #   value: false
-  #   description: 'Boost from average'
-  #   type: bool
-  bagging_temperature:
-    value: 1
-    description: 'Bagging temperature'
-    type: float
-  ignored_features:
-    value: null
-    description: 'Ignored features'
-    type: null
-  has_time:
-    value: false
-    description: 'Has time'
-    type: bool
-  rsm:
-    value: 1
-    description: 'Random subspace method'
-    type: float
-  input_borders:
-    value: null
-    description: 'Load Custom quantization borders and missing value modes from a file (do not generate them).'
-    type: string
-  output_borders:
-    value: null
-    description: 'Save quantization borders for the current dataset to a file.'
-    type: string
-  fold_permutation_block:
-    value: 1
-    description: 'Fold permutation block'
-    type: integer
-  fold_len_multiplier:
-    value: 2
-    description: 'Fold length multiplier'
-    type: integer
-  approx_on_full_history:
-    value: false
-    description: 'Approximate on full history'
-    type: bool
-  langevin:
-    value: false
-    description: 'Langevin'
-    type: bool
-  diffusion_temperature:
-    value: 10000
-    description: 'Diffusion temperature'
-    type: float
-  allow_const_label:
-    value: false
-    description: 'Allow constant label'
-    type: bool
+    random_strength:
+        value: 1
+        description: 'Amount of randomness to use for scoring splits'
+        type: float
+    nan_mode:
+        value:
+            default: 'Min'
+            options:
+                Min: 'Replace NaN with minimum value'
+                Max: 'Replace NaN with maximum value'
+                Forbidden: 'Forbidden NaN values'
+        description: 'The way to process NaN values in the learn set'
+        type: string
+    eval_metric:
+        value:
+            default: 'RMSE'
+            options:
+                RMSE: 'Root Mean Squared Error'
+                MAE: 'Mean Absolute Error'
+                Quantile: 'Quantile regression'
+                LogLinQuantile: 'Log Linear Quantile regression'
+                Poisson: 'Poisson regression'
+                MAPE: 'Mean Absolute Percentage Error'
+                Huber: 'Huber loss'
+        description: 'The metric used for overfitting detection and best model selection'
+        type: string
+    loss_function:
+        value:
+            default: 'RMSE'
+            options:
+                RMSE: 'Root Mean Squared Error'
+                MAE: 'Mean Absolute Error'
+                Quantile: 'Quantile regression'
+                LogLinQuantile: 'Log Linear Quantile regression'
+                Poisson: 'Poisson regression'
+                MAPE: 'Mean Absolute Percentage Error'
+                Huber: 'Huber loss'
+        description: 'The metric to use in training'
+        type: string
+    leaf_estimation_method:
+        value:
+            default: 'Newton'
+            options:
+                Newton: 'Newton method'
+                Gradient: 'Gradient method'
+                Exact: 'Exact method'
+        description: 'The method used to calculate the values in leaves'
+        type: string
+    leaf_estimation_iterations:
+        value: null
+        description: 'Number of iterations to build the tree'
+        type: integer
+    grow_policy:
+        value:
+            default: 'SymmetricTree'
+            options:
+                SymmetricTree: 'Symmetric tree'
+                Depthwise: 'Depthwise'
+                Lossguide: 'Lossguide'
+        description: 'The tree growing policy'
+        type: string
+    bootstrap_type:
+        value:
+            default: 'MVS'
+            options:
+                Bayesian: 'Bayesian bootstrap'
+                Bernoulli: 'Bernoulli bootstrap'
+                MVS: 'MVS bootstrap'
+                No: 'No bootstrap'
+        description: 'Bootstrap type'
+        type: string
+    use_best_model:
+        value: false
+        description: 'If true, the best model is used after training'
+        type: bool
+    task_type:
+        value:
+            default: 'CPU'
+            options:
+                CPU: 'Train on CPU'
+                GPU: 'Train on GPU'
+        description: 'Whether to train on CPU or GPU'
+        type: string
+    posterior_sampling:
+        value: false
+        description: 'If true, use posterior sampling'
+        type: bool
+    model_shrink_mode:
+        value:
+            default: 'Constant'
+            options:
+                Constant: 'Constant model shrinkage'
+                Decreasing: 'Decreasing model shrinkage'
+        description: 'Model shrinkage mode'
+        type: string
+    model_shrink_rate:
+        value: 0
+        description: 'Model shrinkage rate'
+        type: float
+    min_data_in_leaf:
+        value: 1
+        description: 'Minimum number of data points in a leaf'
+        type: integer
+    max_leaves:
+        value: 31
+        description: 'Maximum number of leaves'
+        type: integer
+    feature_border_type:
+        value:
+            default: 'GreedyLogSum'
+            options:
+                GreedyLogSum: 'Greedy log sum'
+                Random: 'Random'
+        description: 'Feature border type'
+        type: string
+    model_size_reg:
+        value: 0.5
+        description: 'Model size regularization'
+        type: float
+    sampling_frequency:
+        value:
+            default: 'PerTreeLevel'
+            options:
+                PerTree: 'Per tree'
+                PerTreeLevel: 'Per tree level'
+        description: 'Sampling frequency'
+        type: string
+    score_function:
+        value:
+            default: 'Cosine'
+            options:
+                Cosine: 'Cosine similarity'
+                L2: 'L2 distance'
+                NewtonCosine: 'Newton cosine similarity (do not use this score type with the Lossguide tree growing policy)'
+                NewtonL2: 'Newton L2 distance'
+        description: 'Score function'
+        type: string
+    sparse_features_conflict_fraction:
+        value: 0
+        description: 'Sparse features conflict fraction'
+        type: float
+    leaf_estimation_backtracking:
+        value:
+            default: 'AnyImprovement'
+            options:
+                No: 'No backtracking'
+                AnyImprovement: 'Any improvement'
+                Armijo: 'Armijo rule'
+        description: 'Leaf estimation backtracking'
+        type: string
+    best_model_min_trees:
+        value: null
+        description: 'Minimum number of trees for best model'
+        type: integer
+    eval_fraction:
+        value: 0
+        description: 'Evaluation fraction'
+        type: float
+    penalties_coefficient:
+        value: 1
+        description: 'Penalties coefficient'
+        type: float
+    boosting_type:
+        value:
+            default: 'Plain'
+            options:
+                Plain: 'Plain boosting'
+                Ordered: 'Ordered boosting'
+        description: 'Boosting type'
+        type: string
+    # boost_from_average:
+    #   value: false
+    #   description: 'Boost from average'
+    #   type: bool
+    bagging_temperature:
+        value: 1
+        description: 'Bagging temperature'
+        type: float
+    ignored_features:
+        value: null
+        description: 'Ignored features'
+        type: null
+    has_time:
+        value: false
+        description: 'Has time'
+        type: bool
+    rsm:
+        value: 1
+        description: 'Random subspace method'
+        type: float
+    input_borders:
+        value: null
+        description: 'Load Custom quantization borders and missing value modes from a file (do not generate them).'
+        type: string
+    output_borders:
+        value: null
+        description: 'Save quantization borders for the current dataset to a file.'
+        type: string
+    fold_permutation_block:
+        value: 1
+        description: 'Fold permutation block'
+        type: integer
+    fold_len_multiplier:
+        value: 2
+        description: 'Fold length multiplier'
+        type: integer
+    approx_on_full_history:
+        value: false
+        description: 'Approximate on full history'
+        type: bool
+    langevin:
+        value: false
+        description: 'Langevin'
+        type: bool
+    diffusion_temperature:
+        value: 10000
+        description: 'Diffusion temperature'
+        type: float
+    allow_const_label:
+        value: false
+        description: 'Allow constant label'
+        type: bool
+
+optuna_grid:
+    iterations:
+        low: 100
+        high: 1000
+        log: false
+        type: integer
+    learning_rate:
+        low: 1e-3
+        high: 1.0
+        log: true
+        type: float
+    depth:
+        low: 1
+        high: 16
+        log: false
+        type: integer
+    l2_leaf_reg:
+        low: 1e-8
+        high: 1.0
+        log: true
+        type: float
+    border_count:
+        low: 1
+        high: 255
+        log: false
+        type: integer
+    colsample_bylevel:
+        low: 0.5
+        high: 1.0
+        log: false
+        type: float
+    boosting_type:
+        options:
+            - 'Ordered'
+            - 'Plain'
+        type: string
+    bootstrap_type:
+        options:
+            - 'Bayesian'
+            - 'Bernoulli'
+            - 'MVS'
+        type: string
 # auto_class_weights:
 #     value:
 #       default: 'None'

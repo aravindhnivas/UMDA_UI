@@ -14,3 +14,9 @@ parameters:
         value: false
         description: 'Specifies whether to enforce positive coefficients'
         type: bool
+optuna_grid:
+    fit_intercept:
+        options:
+            - true
+            - false
+        type: bool

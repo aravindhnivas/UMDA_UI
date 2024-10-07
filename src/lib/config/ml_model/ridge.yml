@@ -40,3 +40,20 @@ parameters:
                 saga: 'SAGA solver'
         description: 'Solver to use in the computational routines'
         type: string
+
+optuna_grid:
+    alpha:
+        low: 1e-8
+        high: 1.0
+        type: float
+        log: true
+    solver:
+        options:
+            - 'auto'
+            - 'svd'
+            - 'cholesky'
+            - 'lsqr'
+            - 'sparse_cg'
+            - 'sag'
+            - 'saga'
+        type: string

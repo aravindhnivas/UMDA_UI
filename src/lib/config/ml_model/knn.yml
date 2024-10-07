@@ -47,3 +47,24 @@ parameters:
         value: null
         description: 'Additional keyword arguments for the metric function'
         type: dict
+optuna_grid:
+    n_neighbors:
+        low: 1
+        high: 100
+        type: integer
+    leaf_size:
+        low: 1
+        high: 100
+        type: integer
+    weights:
+        options:
+            - 'uniform'
+            - 'distance'
+        type: string
+    algorithm:
+        options:
+            - 'auto'
+            - 'ball_tree'
+            - 'kd_tree'
+            - 'brute'
+        type: string

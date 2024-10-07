@@ -23,6 +23,17 @@ interface CurrentModel {
     description: string;
     hyperparameters: Record<string, ModelParametersType>;
     parameters: Record<string, ModelParametersType>;
+    optuna_grid: Record<
+        string,
+        {
+            type: 'integer' | 'float' | 'string' | 'bool';
+            options?: string[];
+            low?: number | string;
+            high?: number | string;
+            step?: number;
+            log?: boolean;
+        }
+    >;
 }
 
 type ParametersArgs = Record<string, Record<string, string | boolean | number | null>>;

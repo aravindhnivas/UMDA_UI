@@ -30,3 +30,9 @@ parameters:
         value: null
         description: 'The number of dimensions of the target values. Used to decide the number of outputs when sampling from the prior distributions (i.e. calling sample_y before fit). This parameter is ignored once fit has been called'
         type: integer
+optuna_grid:
+    alpha:
+        low: 1e-10
+        high: 1.0
+        type: float
+        log: true

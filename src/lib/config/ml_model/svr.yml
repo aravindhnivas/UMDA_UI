@@ -58,3 +58,27 @@ parameters:
         value: -1
         description: 'Hard limit on iterations within solver, or -1 for no limit'
         type: integer
+
+optuna_grid:
+    C:
+        low: 1e-8
+        high: 1.0
+        type: float
+        log: true
+    degree:
+        low: 1
+        high: 5
+        type: integer
+    kernel:
+        options:
+            - 'linear'
+            - 'poly'
+            - 'rbf'
+            - 'sigmoid'
+            - 'precomputed'
+        type: string
+    gamma:
+        options:
+            - 'scale'
+            - 'auto'
+        type: string

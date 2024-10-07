@@ -78,3 +78,32 @@ parameters:
     #     value: null
     #     description: 'List of constraints to impose monotonicity on features. 1: monotonically increasing, 0: no constraint, -1: monotonically decreasing'
     #     type: null
+
+optuna_grid:
+    n_estimators:
+        low: 100
+        high: 1000
+        type: integer
+    max_depth:
+        low: 1
+        high: 9
+        type: integer
+    min_samples_split:
+        low: 2
+        high: 10
+        type: integer
+    min_samples_leaf:
+        low: 1
+        high: 10
+        type: integer
+    max_features:
+        options:
+            - 'auto'
+            - 'sqrt'
+            - 'log2'
+        type: string
+    bootstrap:
+        options:
+            - true
+            - false
+        type: bool
