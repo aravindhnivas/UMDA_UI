@@ -48,6 +48,7 @@
     };
 
     $: search_update(search_key[$model]);
+    const ncols = localWritable('ncols_ml_model_panel', 3);
 </script>
 
 <div class="grid m-2">
@@ -94,22 +95,25 @@
 
 {#if !$default_parameter_mode}
     <div class="grid gap-2">
-        <CustomInput label="Search {key}" bind:value={search_key[$model]}>
-            <svelte:fragment slot="pre-input-within">
-                <Search size="20" />
-            </svelte:fragment>
-            <svelte:fragment slot="post-input-within">
-                <button on:click={() => (search_key[$model] = '')}>
-                    <XOctagon size="20" color="red" />
-                </button>
-            </svelte:fragment>
-        </CustomInput>
-        <div class="grid gap-4 grid-cols-3 hyperparameters__div py-5 px-2">
+        <div class="flex gap-4">
+            <CustomInput label="#columns" bind:value={$ncols} type="number" min="1" max="5" />
+            <CustomInput label="Search {key}" bind:value={search_key[$model]}>
+                <svelte:fragment slot="pre-input-within">
+                    <Search size="20" />
+                </svelte:fragment>
+                <svelte:fragment slot="post-input-within">
+                    <button on:click={() => (search_key[$model] = '')}>
+                        <XOctagon size="20" color="red" />
+                    </button>
+                </svelte:fragment>
+            </CustomInput>
+        </div>
+        <div class="grid gap-4 grid-cols-{$ncols} hyperparameters__div py-5 px-2">
             {#each Object.keys($current_model[key]) as label (label)}
                 {#if include_fields[$model].includes(label)}
                     {@const { value, description } = $current_model[key][label]}
                     {#if $model === 'gpr' && label === 'kernel'}
-                        <div class="grid gap-2 col-span-3">
+                        <div class="grid gap-2 col-span-{$ncols}">
                             <Kernel bind:value={values[label]} />
                         </div>
                     {:else if label in values}
