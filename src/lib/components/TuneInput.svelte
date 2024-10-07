@@ -7,8 +7,8 @@
     export let label: string = 'label';
     export let helper: string = 'description';
     export let helperHighlight: string = 'Default: ...';
-    export let type: 'integer' | 'float' | 'string' = 'integer';
-    export let scale: 'log' | 'linear' = 'linear';
+    export let type: ModelParametersType['type'] = 'integer';
+    export let scale: 'log' | 'linear' | null = null;
     export let lock: boolean = false;
     export let fine_tune: boolean = false;
     export let fine_tuned_values = '';
@@ -80,6 +80,7 @@
                     <option disabled selected>type</option>
                     <option>log</option>
                     <option>linear</option>
+                    <!-- <option>null</option> -->
                 </select>
             {/if}
         {/if}
