@@ -57,7 +57,7 @@
         {:else}
             <input
                 class="input input-bordered input-sm join-item {component === 'input' ? 'col-span-3' : 'col-span-5'}"
-                placeholder={type === 'string' ? 'value1, value2, ...' : 'min, max, step'}
+                placeholder={type === 'string' ? 'value1, value2, ...' : 'min, max, #N'}
                 bind:value={fine_tuned_values}
                 disabled={lock}
                 on:change={() => {
@@ -69,7 +69,7 @@
                     if (component === 'input') {
                         if (arr.length > 3 && type !== 'string') {
                             fine_tuned_values = arr.slice(0, 3).join(', ');
-                            return toast.error('Max 3 values allowed for int/float type - min, max, step');
+                            return toast.error('Max 3 values allowed for int/float type - min, max, #N');
                         }
                     }
                 }}
@@ -138,7 +138,7 @@
                 if (arr.length > 3) {
                     fine_tuned_values = arr.slice(0, 3).join(', ');
                     fine_tune = true;
-                    return toast.error('Max 3 values allowed - min, max, step');
+                    return toast.error('Max 3 values allowed - min, max, #N');
                 }
             }}
         />
