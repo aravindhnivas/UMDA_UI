@@ -35,6 +35,7 @@
 
 <div class="grid grid-cols-5 join">
     <span class="flex items-end gap-2 mb-1 col-span-6">
+        <Lockbutton class="join-item" bind:lock />
         {#if component === 'input' && !lock && fine_tune}
             {@const arr = fine_tuned_values
                 .split(',')
@@ -44,7 +45,6 @@
                 <TriangleAlert size="20" color="red" />
             {/if}
         {/if}
-        <Lockbutton class="join-item" bind:lock />
         <span class="text-sm {lock ? 'text-gray-600/75' : ''}">{label}</span>
     </span>
     {#if fine_tune}
