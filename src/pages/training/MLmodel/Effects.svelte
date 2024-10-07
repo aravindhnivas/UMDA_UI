@@ -72,7 +72,7 @@
 
             const hparams_keys = Object.keys($current_model.hyperparameters);
             const params_keys = Object.keys($current_model.parameters);
-            console.log({ hparams_keys, params_keys, okey });
+            // console.log({ hparams_keys, params_keys, okey });
             if (hparams_keys.includes(okey)) {
                 $default_fine_tuned_values[$model].hyperparameters[okey] = { value, type, scale, active: false };
             } else if (params_keys.includes(okey)) {
