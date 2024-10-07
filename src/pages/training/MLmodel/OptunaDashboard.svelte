@@ -6,7 +6,7 @@
     const open_dashboard = () => {
         webview = new WebviewWindow('optuna-dashboard', {
             title: 'Optuna Dashboard',
-            url: 'http://localhost:8081',
+            url: 'http://localhost:8080',
         });
         webview.once('tauri://created', function () {
             toast.info('webview window successfully created');
