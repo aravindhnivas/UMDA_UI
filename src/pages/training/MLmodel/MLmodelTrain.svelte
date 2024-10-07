@@ -1,61 +1,59 @@
 <script lang="ts">
-    import {
-        model,
-        hyperparameters,
-        parameters,
-        fine_tune_model,
-        variable_type,
-        cv_fold,
-        bootstrap_nsamples,
-        noise_percentage,
-        results,
-        cross_validation,
-        bootstrap,
-        test_size,
-        save_pretrained_model,
-        grid_search_method,
-        randomzied_gridsearch_niter,
-        halving_factor,
-        parallel_computation,
-        n_jobs,
-        parallel_computation_backend,
-        default_parameter_mode,
-        skip_invalid_y_values,
-        current_pretrained_file,
-        ytransformation,
-        yscaling,
-        inverse_scaling,
-        inverse_transform,
-        all_params_lock_status,
-        fine_tuned_values,
-        learning_curve,
-        analyse_shapley_values,
-        optuna_n_trials,
-        optuna_n_warmup_steps,
-    } from './stores';
-    import { copyText } from 'svelte-copy';
-
-    import { embedding, use_PCA } from '../embedding/stores';
-    import { NPARTITIONS, use_dask } from '$lib/stores/system';
-    import { embedd_savefile_path } from '../embedding/stores';
     import { Loadingbtn } from '$lib/components';
+    import { NPARTITIONS, use_dask } from '$lib/stores/system';
     import Accordion from '@smui-extra/accordion';
+    import { copyText } from 'svelte-copy';
+    import { embedd_savefile_path, embedding, use_PCA } from '../embedding/stores';
+    import { current_training_data_file } from '../training_file/plot-analysis/stores';
     import {
         loaded_df_columns,
         training_column_name_X,
         training_column_name_y,
         training_file,
     } from '../training_file/stores';
-    import TrainingFilePanel from './TrainingFilePanel.svelte';
     import ControlPanel from './ControlPanel.svelte';
+    import Effects from './Effects.svelte';
     import ModelPanel from './ModelPanel.svelte';
     import MoreOptionsPanel from './MoreOptionsPanel.svelte';
-    import SaveModelPanel from './SaveModelPanel.svelte';
-    import ResultsPanel from './ResultsPanel.svelte';
-    import Effects from './Effects.svelte';
-    import { current_training_data_file } from '../training_file/plot-analysis/stores';
-    import { parse_fine_tuned_values } from './utils';
     import OptunaDashboard from './OptunaDashboard.svelte';
+    import ResultsPanel from './ResultsPanel.svelte';
+    import SaveModelPanel from './SaveModelPanel.svelte';
+    import {
+        all_params_lock_status,
+        analyse_shapley_values,
+        bootstrap,
+        bootstrap_nsamples,
+        cross_validation,
+        current_pretrained_file,
+        cv_fold,
+        default_parameter_mode,
+        fine_tune_model,
+        fine_tuned_values,
+        grid_search_method,
+        halving_factor,
+        hyperparameters,
+        inverse_scaling,
+        inverse_transform,
+        learning_curve,
+        model,
+        n_jobs,
+        noise_percentage,
+        optuna_n_trials,
+        optuna_n_warmup_steps,
+        parallel_computation,
+        parallel_computation_backend,
+        parameters,
+        randomzied_gridsearch_niter,
+        results,
+        save_pretrained_model,
+        skip_invalid_y_values,
+        test_size,
+        variable_type,
+        yscaling,
+        ytransformation,
+    } from './stores';
+    import TrainingFilePanel from './TrainingFilePanel.svelte';
+    import { parse_fine_tuned_values } from './utils';
 
     export let id: string = 'ml_model-train-container';
     export let display: string = 'none';
@@ -149,11 +147,8 @@
         });
 
         let clonedValues: Record<string, string | boolean | number | null> = {};
-        // console.log({ values, $variable_type });
 
         Object.entries(values).forEach(([key, value], ind) => {
-            // console.log(ind, { key, value, type: $variable_type[key] });
-
             if (typeof value === 'string' && $variable_type[key] === 'string' && value !== 'float') {
                 clonedValues[key] = value?.trim() || null;
                 return;
