@@ -38,7 +38,7 @@
                 value: fine_tune_options,
                 active: false,
                 type: obj.type,
-                scale: null,
+                scale: obj.type === 'string' ? null : 'linear',
             };
         });
     };
