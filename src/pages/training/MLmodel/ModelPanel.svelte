@@ -109,18 +109,29 @@
                 v.forEach(key => {
                     Object.keys($fine_tuned_values[$model][key]).forEach(label => {
                         if (!(label in parsed.values)) return;
-                        $fine_tuned_values[$model][key][label].value = `${parsed.values[label]}`;
+                        if (!isObject(parsed.values[label])) return;
+
+                        const { value, type, scale } = parsed.values[label];
+
+                        $fine_tuned_values[$model][key][label] = {
+                            value: isArray(value) ? value.join(', ') : value,
+                            type,
+                            scale,
+                            active: true,
+                        };
                         $all_params_lock_status[$model][key][label] = false;
                     });
                 });
             } else {
                 Object.keys($hyperparameters[$model]).forEach(label => {
                     if (!(label in parsed.values)) return;
+                    if (isObject(parsed.values[label])) return;
                     $hyperparameters[$model][label] = parsed.values[label];
                     $all_params_lock_status[$model].hyperparameters[label] = false;
                 });
                 Object.keys($parameters[$model]).forEach(label => {
                     if (!(label in parsed.values)) return;
+                    if (isObject(parsed.values[label])) return;
                     $parameters[$model][label] = parsed.values[label];
                     $all_params_lock_status[$model].parameters[label] = false;
                 });
