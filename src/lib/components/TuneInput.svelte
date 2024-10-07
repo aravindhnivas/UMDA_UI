@@ -15,6 +15,10 @@
 
     let component: 'input' | 'select' | 'checkbox';
     onMount(() => {
+        if (isArray(fine_tuned_values)) {
+            fine_tuned_values = fine_tuned_values.join(', ');
+        }
+
         if (isArray(items) && items.length > 0 && value) {
             fine_tuned_values ||= items.join(', ');
             component = 'select';
