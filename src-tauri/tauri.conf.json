@@ -103,7 +103,8 @@
             },
             "window": {
                 "all": false,
-                "close": true
+                "close": true,
+                "create": true
             }
         },
         "bundle": {

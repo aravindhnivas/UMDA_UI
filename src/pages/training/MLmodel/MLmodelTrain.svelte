@@ -55,6 +55,7 @@
     import Effects from './Effects.svelte';
     import { current_training_data_file } from '../training_file/plot-analysis/stores';
     import { parse_fine_tuned_values } from './utils';
+    import OptunaDashboard from './OptunaDashboard.svelte';
 
     export let id: string = 'ml_model-train-container';
     export let display: string = 'none';
@@ -199,8 +200,10 @@
                 toast.error('Error: Learning curve train sizes not provided');
                 return;
             }
+
             learning_curve_train_sizes = $learning_curve.train_sizes.split(',').map(f => Number(f));
             console.log({ learning_curve_train_sizes });
+
             if (learning_curve_train_sizes.length !== 3) {
                 toast.error('Error: Learning curve train sizes must be 3 values');
                 return;
@@ -322,5 +325,6 @@
         >
             Copy training data info
         </button>
+        <OptunaDashboard />
     </div>
 </div>
