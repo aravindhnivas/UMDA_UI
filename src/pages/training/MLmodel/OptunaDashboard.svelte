@@ -1,29 +1,29 @@
 <script lang="ts">
+    import { Alert } from '$utils/stores';
     import { WebviewWindow } from '@tauri-apps/api/window';
 
     let webview: WebviewWindow;
     const open_dashboard = () => {
         webview = new WebviewWindow('optuna-dashboard', {
-            url: 'http://localhost:8080',
+            title: 'Optuna Dashboard',
+            url: 'http://localhost:8081',
         });
-        console.log(webview);
-        // since the webview window is created asynchronously,
-        // Tauri emits the `tauri://created` and `tauri://error` to notify you of the creation response
         webview.once('tauri://created', function () {
-            console.warn('webview window successfully created');
+            toast.info('webview window successfully created');
         });
         webview.once('tauri://error', function (e) {
             console.error('an error occurred during webview window creation');
-            console.error(e);
+            Alert.error(e);
         });
         webview.once('tauri://destroyed', function () {
-            console.warn('webview window successfully destroyed');
+            toast.warning('webview window successfully destroyed');
         });
     };
 
     onDestroy(async () => {
         if (webview) {
             await webview.close();
+            toast.warning('webview window successfully closed');
         }
     });
 </script>
