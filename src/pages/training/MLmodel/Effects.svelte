@@ -14,8 +14,8 @@
 
     const set_fine_tuned_values = (key: 'hyperparameters' | 'parameters') => {
         const cloned_obj = structuredClone($current_model[key]);
-        console.log({ $current_model });
-        console.log('Setting fine tuned values', $model, key, cloned_obj);
+        // console.log({ $current_model });
+        // console.log('Setting fine tuned values', $model, key, cloned_obj);
         Object.keys(cloned_obj).forEach(label => {
             const obj = cloned_obj[label];
             let fine_tune_options = '';
