@@ -9,6 +9,8 @@
         all_params_lock_status,
         fine_tune_model,
         fine_tuned_values,
+        grid_search_method,
+        cv_fold,
     } from './stores';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import ModelParameters from './ModelParameters.svelte';
@@ -16,6 +18,7 @@
     import { Checkbox } from '$lib/components';
     import ModelTab from './ModelTab.svelte';
     import { RotateCcw, Save, Download } from 'lucide-svelte/icons';
+    import { parse_fine_tuned_values } from './utils';
 
     let savedfile: string;
     let uploadedfile: { fullname: string; name: string; model: string } | null = null;
@@ -33,11 +36,7 @@
 
         let values: Record<string, any> = {};
         if ($fine_tune_model) {
-            v.forEach(key => {
-                Object.keys($fine_tuned_values[$model][key]).forEach(label => {
-                    values[label] = structuredClone($fine_tuned_values[$model][key][label].value);
-                });
-            });
+            values = parse_fine_tuned_values();
         } else {
             v.forEach(key => {
                 Object.keys($all_params_lock_status[$model][key]).forEach(label => {
@@ -57,15 +56,19 @@
             return;
         }
 
-        const save_content = JSON.stringify(
-            {
-                values,
-                model: $model,
-                timestamp: new Date().toLocaleString(),
-            },
-            null,
-            2,
-        );
+        let save_json: SavedParams = {
+            values,
+            model: $model,
+            timestamp: new Date().toLocaleString(),
+            mode: $fine_tune_model ? 'fine_tuned' : 'normal',
+        };
+
+        if ($fine_tune_model) {
+            save_json.grid_search_method = $grid_search_method;
+            save_json.cv_fold = $cv_fold;
+        }
+
+        const save_content = JSON.stringify(save_json, null, 2);
         await fs.writeTextFile(savedfile, save_content);
         toast.success('Parameters saved successfully');
     };

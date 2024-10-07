@@ -54,6 +54,7 @@
     import ResultsPanel from './ResultsPanel.svelte';
     import Effects from './Effects.svelte';
     import { current_training_data_file } from '../training_file/plot-analysis/stores';
+    import { parse_fine_tuned_values } from './utils';
 
     export let id: string = 'ml_model-train-container';
     export let display: string = 'none';
@@ -104,39 +105,7 @@
                 toast.error('Error: Fine tuned hyperparameters not found');
                 return;
             }
-
-            const v = ['hyperparameters', 'parameters'] as const;
-            v.forEach(key => {
-                const cloned_obj = structuredClone($fine_tuned_values[$model][key]);
-                Object.keys(cloned_obj).forEach(label => {
-                    if ($all_params_lock_status[$model][key][label]) return;
-                    if (!cloned_obj[label]) return;
-
-                    const { active, value, type, scale } = cloned_obj[label];
-                    if (!(active && value)) return;
-                    const tuned_val = value.split(',').map(f => {
-                        f = f.trim();
-                        try {
-                            if (f === 'true' || f === 'false' || f === 'null') return JSON.parse(f);
-                            if (f === 'None') return null;
-                            // if (!isNaN(Number(f))) return Number(f);
-                            return f;
-                        } catch (error) {
-                            console.error('Error parsing', f, error);
-                        }
-                    });
-                    if (tuned_val.length < 2) {
-                        toast.error(`Skipped: Fine tuned hyperparameter '${label}' must have at least 2 values`);
-                        return;
-                    }
-                    clonedFineTunedValues[label] = {
-                        value: tuned_val,
-                        type,
-                        scale,
-                    };
-                    console.log(label, cloned_obj[label], clonedFineTunedValues[label]);
-                });
-            });
+            clonedFineTunedValues = parse_fine_tuned_values();
             console.log('fine tuned values', clonedFineTunedValues);
             if (isEmpty(clonedFineTunedValues)) {
                 toast.error('Error: Fine tuned hyperparameters not found');

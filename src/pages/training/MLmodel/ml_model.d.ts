@@ -102,6 +102,9 @@ type FineTunedValues = Record<
 
 interface SavedParams {
     values: Record<string, string | number | boolean | null>;
-    model: string;
+    model: MLModel;
     timestamp: string;
+    mode: 'fine_tuned' | 'normal';
+    cv_fold?: number;
+    grid_search_method?: string;
 }
