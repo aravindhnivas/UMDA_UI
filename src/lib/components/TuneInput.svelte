@@ -62,7 +62,10 @@
                 disabled={lock}
                 on:change={() => {
                     if (!isString(fine_tuned_values)) return;
-                    const arr = fine_tuned_values.split(',').map(v => v.trim());
+                    const arr = fine_tuned_values
+                        .split(',')
+                        .map(v => v.trim())
+                        .filter(v => v !== '');
                     if (component === 'input') {
                         if (arr.length > 3 && type !== 'string') {
                             fine_tuned_values = arr.slice(0, 3).join(', ');
