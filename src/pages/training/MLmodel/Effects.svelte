@@ -79,7 +79,7 @@
                 $default_fine_tuned_values[$model].parameters[okey] = { value, type, scale, active: false };
             }
         });
-        console.log($default_fine_tuned_values?.[$model]);
+        // console.log($default_fine_tuned_values?.[$model]);
 
         // setting fine tuned hyperparameters
         $fine_tuned_values[$model] ??= { hyperparameters: {}, parameters: {} };
