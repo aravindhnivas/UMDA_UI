@@ -126,7 +126,7 @@
                         }
                     });
                     if (tuned_val.length < 2) {
-                        toast.error(`Error: Fine tuned hyperparameter '${label}' must have at least 2 values`);
+                        toast.error(`Skipped: Fine tuned hyperparameter '${label}' must have at least 2 values`);
                         return;
                     }
                     clonedFineTunedValues[label] = {
