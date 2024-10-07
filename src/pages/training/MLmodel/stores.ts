@@ -65,13 +65,11 @@ export const default_param_values = derived(current_model, $current_model => {
     return { hyperparameters, parameters };
 });
 
-export const default_fine_tuned_values = derived(current_model, $current_model => {
-    console.log('derived current_model', $current_model);
-});
+export const default_fine_tuned_values = writable<FineTunedValues>({} as FineTunedValues);
+export const fine_tuned_values = writable<FineTunedValues>(structuredClone(default_values_for_models));
 
 export const hyperparameters = writable<ParametersArgs>({});
 export const parameters = writable<ParametersArgs>({});
-export const fine_tuned_values = writable<FineTunedValues>(structuredClone(default_values_for_models));
 
 export const fine_tune_model = writable(false);
 

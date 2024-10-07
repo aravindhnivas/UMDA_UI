@@ -2,6 +2,7 @@
     import { embedd_savefile } from '../embedding/stores';
     import {
         current_model,
+        default_fine_tuned_values,
         default_param_values,
         fine_tuned_values,
         hyperparameters,
@@ -9,6 +10,7 @@
         parameters,
         pre_trained_filename,
     } from './stores';
+    import { set_default_fine_tuned_values } from './utils';
 
     const set_fine_tuned_values = (key: 'hyperparameters' | 'parameters') => {
         const cloned_obj = structuredClone($current_model[key]);
@@ -21,7 +23,6 @@
                 let opts = Object.keys(obj.value.options);
                 if (opts.includes('float')) {
                     opts = opts.filter(f => f !== 'float');
-                    // opts.push('10');
                 }
                 fine_tune_options = opts.join(', ');
             } else if (obj.value === null) {
@@ -50,14 +51,46 @@
         // Set the default values if they don't exist
         $hyperparameters[$model] ??= structuredClone($default_param_values.hyperparameters);
         $parameters[$model] ??= structuredClone($default_param_values.parameters);
+        $default_fine_tuned_values[$model] ??= { hyperparameters: {}, parameters: {} };
+
+        Object.keys($current_model.optuna_grid).forEach(okey => {
+            if (!isEmpty($default_fine_tuned_values[$model]?.hyperparameters)) return;
+            if (!isEmpty($default_fine_tuned_values[$model]?.parameters)) return;
+            console.log('Setting default fine tuned values', $model, okey);
+
+            const { type, low, high, step, options, log } = $current_model.optuna_grid[okey];
+
+            let value: string;
+
+            let scale: 'log' | 'linear' = 'linear';
+            if (log) scale = 'log';
+
+            if (type === 'string' && options) value = options?.join(', ');
+            else if (type === 'bool') value = 'true, false';
+            else {
+                value = `${low}, ${high}`;
+                if (step) value += `, ${step}`;
+            }
+
+            const hparams_keys = Object.keys($current_model.hyperparameters);
+            const params_keys = Object.keys($current_model.parameters);
+
+            if (hparams_keys.includes(okey)) {
+                $default_fine_tuned_values[$model].hyperparameters[okey] = { value, type, scale, active: false };
+            } else if (params_keys.includes(okey)) {
+                $default_fine_tuned_values[$model].parameters[okey] = { value, type, scale, active: false };
+            }
+        });
 
         // setting fine tuned hyperparameters
         $fine_tuned_values[$model] ??= { hyperparameters: {}, parameters: {} };
         if (isEmpty($fine_tuned_values[$model].hyperparameters)) {
             set_fine_tuned_values('hyperparameters');
+            set_default_fine_tuned_values('hyperparameters');
         }
         if (isEmpty($fine_tuned_values[$model].parameters)) {
             set_fine_tuned_values('parameters');
+            set_default_fine_tuned_values('parameters');
         }
 
         // Set the pre-trained model filename

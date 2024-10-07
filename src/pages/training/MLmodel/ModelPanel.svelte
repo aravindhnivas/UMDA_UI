@@ -18,7 +18,7 @@
     import { Checkbox } from '$lib/components';
     import ModelTab from './ModelTab.svelte';
     import { RotateCcw, Save, Download } from 'lucide-svelte/icons';
-    import { parse_fine_tuned_values } from './utils';
+    import { parse_fine_tuned_values, set_default_fine_tuned_values } from './utils';
 
     let savedfile: string;
     let uploadedfile: { fullname: string; name: string; model: string } | null = null;
@@ -158,6 +158,8 @@
         Object.keys($all_params_lock_status[$model].parameters).forEach(key => {
             $all_params_lock_status[$model].parameters[key] = true;
         });
+
+        set_default_fine_tuned_values('all');
     };
 </script>
 
