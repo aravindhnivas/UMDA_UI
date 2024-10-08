@@ -72,6 +72,7 @@ export const hyperparameters = writable<ParametersArgs>({});
 export const parameters = writable<ParametersArgs>({});
 
 export const fine_tune_model = writable(false);
+export const ncols_ml_model_panel = localWritable('ncols_ml_model_panel', 3);
 
 export const cross_validation = localWritable('cross_validation', true);
 export const cv_fold = localWritable('cv_fold', 5);

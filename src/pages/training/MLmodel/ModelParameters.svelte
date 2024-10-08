@@ -7,20 +7,13 @@
         model,
         default_parameter_mode,
         all_params_lock_status,
+        ncols_ml_model_panel,
     } from './stores';
     import { validateInput } from '$lib/utils';
     import Kernel from './Kernel.svelte';
     import Notification from '$lib/components/Notification.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
-    import {
-        LockKeyhole,
-        UnlockKeyhole,
-        TriangleAlert,
-        Ban,
-        Search,
-        XOctagon,
-        SlidersHorizontal,
-    } from 'lucide-svelte/icons';
+    import { LockKeyhole, UnlockKeyhole, Ban, Search, XOctagon, SlidersHorizontal } from 'lucide-svelte/icons';
     import TuneInput from '$lib/components/TuneInput.svelte';
 
     export let values: Record<string, any>;
@@ -56,7 +49,6 @@
     };
 
     $: search_update(search_key[$model]);
-    const ncols = localWritable('ncols_ml_model_panel', 3);
 
     let all_keys_locked = Object.values($all_params_lock_status[$model][key]).every(f => f);
     let all_in_fine_tune_mode = Object.values($fine_tuned_values[$model][key]).every(f => f.active);
@@ -135,7 +127,7 @@
 {#if !$default_parameter_mode}
     <div class="grid gap-2">
         <div class="grid grid-cols-[auto_auto_auto_1fr] gap-4 items-end">
-            <CustomInput label="#columns" bind:value={$ncols} type="number" min="1" max="5" />
+            <CustomInput label="#columns" bind:value={$ncols_ml_model_panel} type="number" min="1" max="5" />
             <button
                 class="btn btn-sm"
                 class:btn-neutral={!all_keys_locked}
@@ -182,12 +174,12 @@
                 </svelte:fragment>
             </CustomInput>
         </div>
-        <div class="grid gap-4 grid-cols-{$ncols} hyperparameters__div py-5 px-2">
+        <div class="grid gap-4 grid-cols-{$ncols_ml_model_panel} hyperparameters__div py-5 px-2">
             {#each Object.keys($current_model[key]) as label (label)}
                 {#if include_fields[$model].includes(label)}
                     {@const { value, description } = $current_model[key][label]}
                     {#if $model === 'gpr' && label === 'kernel'}
-                        <div class="grid gap-2 col-span-{$ncols}">
+                        <div class="grid gap-2 col-span-{$ncols_ml_model_panel}">
                             <Kernel bind:value={values[label]} />
                         </div>
                     {:else if label in values}
