@@ -12,7 +12,14 @@
     import Kernel from './Kernel.svelte';
     import Notification from '$lib/components/Notification.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
-    import { LockKeyhole, UnlockKeyhole, TriangleAlert, Search, XOctagon } from 'lucide-svelte/icons';
+    import {
+        LockKeyhole,
+        UnlockKeyhole,
+        TriangleAlert,
+        Search,
+        XOctagon,
+        SlidersHorizontal,
+    } from 'lucide-svelte/icons';
     import TuneInput from '$lib/components/TuneInput.svelte';
 
     export let values: Record<string, any>;
@@ -49,6 +56,25 @@
 
     $: search_update(search_key[$model]);
     const ncols = localWritable('ncols_ml_model_panel', 3);
+
+    let all_keys_locked = Object.values($all_params_lock_status[$model][key]).every(f => f);
+    let all_in_fine_tune_mode = Object.values($fine_tuned_values[$model][key]).every(f => f.active);
+
+    const onLockChange = (e: CustomEvent<boolean>) => {
+        const locked_obj_values = Object.values($all_params_lock_status[$model][key]);
+        const total_len = locked_obj_values.length;
+        const locked_len = locked_obj_values.filter(f => f).length;
+        const unlocked_len = total_len - locked_len;
+        all_keys_locked = unlocked_len === 0;
+    };
+
+    const onTuneModeChange = (e: CustomEvent<boolean>) => {
+        const fine_tune_obj_values = Object.values($fine_tuned_values[$model][key]);
+        const total_len = fine_tune_obj_values.length;
+        const active_len = fine_tune_obj_values.filter(f => f.active).length;
+        const inactive_len = total_len - active_len;
+        all_in_fine_tune_mode = inactive_len === 0;
+    };
 </script>
 
 <div class="grid m-2">
@@ -95,7 +121,7 @@
 
 {#if !$default_parameter_mode}
     <div class="grid gap-2">
-        <div class="flex gap-4">
+        <div class="flex gap-4 items-end">
             <CustomInput label="#columns" bind:value={$ncols} type="number" min="1" max="5" />
             <CustomInput label="Search {key}" bind:value={search_key[$model]}>
                 <svelte:fragment slot="pre-input-within">
@@ -107,6 +133,36 @@
                     </button>
                 </svelte:fragment>
             </CustomInput>
+            <button
+                class="btn btn-sm"
+                class:btn-neutral={!all_keys_locked}
+                on:click={() => {
+                    all_keys_locked = !all_keys_locked;
+                    Object.keys($all_params_lock_status[$model][key]).forEach(label => {
+                        $all_params_lock_status[$model][key][label] = all_keys_locked;
+                    });
+                }}
+            >
+                <span>{all_keys_locked ? 'unlock-all' : 'lock-all'}</span>
+                {#if all_keys_locked}
+                    <UnlockKeyhole size="20" />
+                {:else}
+                    <LockKeyhole size="20" />
+                {/if}
+            </button>
+            <button
+                class="btn btn-sm"
+                class:btn-primary={all_in_fine_tune_mode}
+                on:click={() => {
+                    all_in_fine_tune_mode = !all_in_fine_tune_mode;
+                    Object.keys($fine_tuned_values[$model][key]).forEach(label => {
+                        $fine_tuned_values[$model][key][label].active = all_in_fine_tune_mode;
+                    });
+                }}
+            >
+                <span>Fine tune all: Turn - {all_in_fine_tune_mode ? 'OFF' : 'ON'}</span>
+                <SlidersHorizontal size="20" />
+            </button>
         </div>
         <div class="grid gap-4 grid-cols-{$ncols} hyperparameters__div py-5 px-2">
             {#each Object.keys($current_model[key]) as label (label)}
@@ -129,6 +185,8 @@
                                 bind:fine_tuned_values={$fine_tuned_values[$model][key][label].value}
                                 bind:scale={$fine_tuned_values[$model][key][label].scale}
                                 bind:type={$fine_tuned_values[$model][key][label].type}
+                                on:lockchange={onLockChange}
+                                on:tuneModeChange={onTuneModeChange}
                             >
                                 {#if values[label] === 'float'}
                                     <CustomInput
@@ -140,6 +198,7 @@
                                         helperHighlight={`Default: ${$default_param_values[key][label]}`}
                                         bind:lock={$all_params_lock_status[$model][key][label]}
                                         on:keydown={validateInput}
+                                        on:lockchange={onLockChange}
                                     />
                                 {/if}
                             </TuneInput>
@@ -154,6 +213,8 @@
                                 bind:fine_tuned_values={$fine_tuned_values[$model][key][label].value}
                                 bind:scale={$fine_tuned_values[$model][key][label].scale}
                                 bind:type={$fine_tuned_values[$model][key][label].type}
+                                on:lockchange={onLockChange}
+                                on:tuneModeChange={onTuneModeChange}
                             />
                         {/if}
                     {:else}

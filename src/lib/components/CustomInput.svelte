@@ -1,5 +1,6 @@
 <script lang="ts">
     import { UnlockKeyhole, LockKeyhole } from 'lucide-svelte/icons';
+    import Lockbutton from './Lockbutton.svelte';
 
     export let id: string = getID(5);
     export let value: string | number;
@@ -42,18 +43,7 @@
             />
             <slot name="post-input-within" />
             {#if lock !== null}
-                <button
-                    on:click={() => {
-                        console.log('clicked', lock);
-                        lock = !lock;
-                    }}
-                >
-                    {#if lock}
-                        <LockKeyhole size="20" class="text-gray-700" />
-                    {:else}
-                        <UnlockKeyhole size="20" />
-                    {/if}
-                </button>
+                <Lockbutton bind:lock on:lockchange />
             {/if}
         </label>
         <slot />

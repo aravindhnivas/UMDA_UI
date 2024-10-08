@@ -4,9 +4,16 @@
 
     let className = '';
     export { className as class };
+    const dispatch = createEventDispatcher();
 </script>
 
-<button class={className} on:click={() => (lock = !lock)}>
+<button
+    class={className}
+    on:click={() => {
+        lock = !lock;
+        dispatch('lockchange', lock);
+    }}
+>
     {#if lock}
         <LockKeyhole size="20" class="text-gray-700" />
     {:else}

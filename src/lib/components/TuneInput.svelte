@@ -13,6 +13,8 @@
     export let fine_tune: boolean = false;
     export let fine_tuned_values = '';
 
+    const dispatch = createEventDispatcher();
+
     let component: 'input' | 'select' | 'checkbox';
     onMount(() => {
         if (isArray(fine_tuned_values)) {
@@ -39,7 +41,7 @@
 
 <div class="grid grid-cols-5 join">
     <span class="flex items-end gap-2 mb-1 col-span-6">
-        <Lockbutton class="join-item" bind:lock />
+        <Lockbutton class="join-item" bind:lock on:lockchange />
         {#if component === 'input' && !lock && fine_tune}
             {@const arr = fine_tuned_values
                 .split(',')
@@ -160,6 +162,7 @@
         class:btn-info={fine_tune}
         on:click={() => {
             fine_tune = !fine_tune;
+            dispatch('tuneModeChange', fine_tune);
         }}
     >
         <SlidersHorizontal size="20" />
