@@ -110,17 +110,17 @@
     {/if} -->
 
     {#if $fine_tune_model}
-        <!-- <span class="badge badge-info m-auto w-full">Grid search mode turned ON</span>
-        <span class="badge badge-info m-auto w-full font-bold">
+        <span class="badge badge-info m-auto w-full">Grid search mode turned ON</span>
+        <!-- <span class="badge badge-info m-auto w-full font-bold">
             Please unlock the parameters to fine-tune i.e., enter 'min, max, #size' values
         </span> -->
         {#if !Object.values($fine_tuned_values[$model][key]).some(f => f.active)}
             <span class="badge badge-warning m-auto w-full flex gap-2">
                 <Ban size="15" />
                 <span class="flex items-center gap-1">
-                    Grid search mode turned ON. Try to unlock and fine-tune
+                    Grid search mode turned ON. Try to unlock and fine-tune (enter 'min, max, #size' values)
                     <SlidersHorizontal size="15" />
-                    atleast 2 parameters
+                    for atleast 2 parameters
                 </span>
             </span>
         {/if}
