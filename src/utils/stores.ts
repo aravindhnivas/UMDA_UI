@@ -11,23 +11,27 @@ function openModalStore() {
 
     const { subscribe, set, update } = writable(defaultValues);
 
+    const add_log = (log: unknown, type: 'error' | 'info' | 'warn') => {
+        let content: string;
+        if (log instanceof Error) content = log.message + '\n' + log.stack;
+        else if (typeof log === 'object') content = JSON.stringify(log);
+        else if (typeof log === 'string') content = log;
+        else content = 'An error occurred';
+        update(_n => ({ content, type, open: true }));
+    };
+
     return {
         subscribe,
         set,
         update,
         error(err: unknown) {
-            const content = err instanceof Error ? err.stack || err.message : <string>err;
-            update(_n => ({ content, type: 'error', open: true }));
+            add_log(err, 'error');
         },
-        info(content: string) {
-            update(_n => {
-                return { content, type: 'info', open: true };
-            });
+        info(content: string | Record<string, unknown>) {
+            add_log(content, 'info');
         },
-        warn(content: string) {
-            update(_n => {
-                return { content, type: 'warn', open: true };
-            });
+        warn(content: string | Record<string, unknown>) {
+            add_log(content, 'warn');
         },
         reset: () => set(defaultValues),
     };
