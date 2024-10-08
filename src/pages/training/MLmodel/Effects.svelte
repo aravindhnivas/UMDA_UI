@@ -54,7 +54,7 @@
         $default_fine_tuned_values[$model] ??= { hyperparameters: {}, parameters: {} };
 
         Object.keys($current_model.optuna_grid).forEach(okey => {
-            console.log('Setting default fine tuned values', $model, okey);
+            // console.log('Setting default fine tuned values', $model, okey);
 
             const { type, low, high, step, options, log } = $current_model.optuna_grid[okey];
 
