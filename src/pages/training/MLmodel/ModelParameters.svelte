@@ -60,12 +60,20 @@
     let all_keys_locked = Object.values($all_params_lock_status[$model][key]).every(f => f);
     let all_in_fine_tune_mode = Object.values($fine_tuned_values[$model][key]).every(f => f.active);
 
-    const onLockChange = (e: CustomEvent<boolean>) => {
+    const onLockChange = (e: CustomEvent<boolean>, label: string) => {
         const locked_obj_values = Object.values($all_params_lock_status[$model][key]);
         const total_len = locked_obj_values.length;
         const locked_len = locked_obj_values.filter(f => f).length;
         const unlocked_len = total_len - locked_len;
         all_keys_locked = unlocked_len === 0;
+
+        const lock = e.detail;
+        if (!lock && all_in_fine_tune_mode) {
+            $fine_tuned_values[$model][key][label].active = true;
+        }
+        if (lock && $fine_tuned_values[$model][key][label].active) {
+            $fine_tuned_values[$model][key][label].active = false;
+        }
     };
 
     const onTuneModeChange = (e: CustomEvent<boolean>) => {
@@ -155,12 +163,14 @@
                 class:btn-primary={all_in_fine_tune_mode}
                 on:click={() => {
                     all_in_fine_tune_mode = !all_in_fine_tune_mode;
+                    if (all_keys_locked) return;
                     Object.keys($fine_tuned_values[$model][key]).forEach(label => {
+                        if ($all_params_lock_status[$model][key][label]) return;
                         $fine_tuned_values[$model][key][label].active = all_in_fine_tune_mode;
                     });
                 }}
             >
-                <span>Fine tune all: Turn - {all_in_fine_tune_mode ? 'OFF' : 'ON'}</span>
+                <span>Fine tune all (unlocked): Turn - {all_in_fine_tune_mode ? 'OFF' : 'ON'}</span>
                 <SlidersHorizontal size="20" />
             </button>
         </div>
@@ -185,7 +195,7 @@
                                 bind:fine_tuned_values={$fine_tuned_values[$model][key][label].value}
                                 bind:scale={$fine_tuned_values[$model][key][label].scale}
                                 bind:type={$fine_tuned_values[$model][key][label].type}
-                                on:lockchange={onLockChange}
+                                on:lockchange={e => onLockChange(e, label)}
                                 on:tuneModeChange={onTuneModeChange}
                             >
                                 {#if values[label] === 'float'}
@@ -198,7 +208,7 @@
                                         helperHighlight={`Default: ${$default_param_values[key][label]}`}
                                         bind:lock={$all_params_lock_status[$model][key][label]}
                                         on:keydown={validateInput}
-                                        on:lockchange={onLockChange}
+                                        on:lockchange={e => onLockChange(e, label)}
                                     />
                                 {/if}
                             </TuneInput>
@@ -213,7 +223,7 @@
                                 bind:fine_tuned_values={$fine_tuned_values[$model][key][label].value}
                                 bind:scale={$fine_tuned_values[$model][key][label].scale}
                                 bind:type={$fine_tuned_values[$model][key][label].type}
-                                on:lockchange={onLockChange}
+                                on:lockchange={e => onLockChange(e, label)}
                                 on:tuneModeChange={onTuneModeChange}
                             />
                         {/if}
