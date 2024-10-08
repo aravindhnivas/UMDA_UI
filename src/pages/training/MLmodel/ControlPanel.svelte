@@ -133,7 +133,7 @@
                     {#if $fine_tune_model}
                         <span class="col-span-2 flex gap-1 badge-sm badge-error rounded-sm">
                             <Ban size="15" />
-                            y-transformation for grid-search methods is not yet supported.
+                            y-transformation and y-scaling for grid-search methods is not yet supported.
                         </span>
                     {/if}
                 </div>
