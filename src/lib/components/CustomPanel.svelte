@@ -4,9 +4,10 @@
 
     export let title: string = 'Panel title';
     export let open: boolean = false;
+    export let style = 'background-color: rgba(255, 127, 80, .5);';
 </script>
 
-<Panel style="background-color: coral;" bind:open>
+<Panel {style} bind:open>
     <Header>
         <div class="flex justify-between items-center">
             <slot name="title" {open}><span>{title}</span></slot>
