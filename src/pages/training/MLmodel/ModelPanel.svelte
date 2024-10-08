@@ -113,7 +113,6 @@
                         if (!isObject(parsed.values[label])) return;
 
                         const { value, type, scale } = parsed.values[label];
-
                         $fine_tuned_values[$model][key][label] = {
                             value: isArray(value) ? value.join(', ') : value,
                             type,
@@ -126,7 +125,6 @@
             } else {
                 if (!parsed.values) return;
                 if (parsed.mode !== 'normal') return toast.error('Error: Invalid mode');
-
                 Object.keys($hyperparameters[$model]).forEach(label => {
                     if (!(label in parsed.values)) return;
                     if (isObject(parsed.values[label])) return;
@@ -151,10 +149,10 @@
         uploadedfile = null;
         $hyperparameters[$model] = structuredClone($default_param_values.hyperparameters);
         $parameters[$model] = structuredClone($default_param_values.parameters);
-
         Object.keys($all_params_lock_status[$model].hyperparameters).forEach(key => {
             $all_params_lock_status[$model].hyperparameters[key] = true;
         });
+
         Object.keys($all_params_lock_status[$model].parameters).forEach(key => {
             $all_params_lock_status[$model].parameters[key] = true;
         });
