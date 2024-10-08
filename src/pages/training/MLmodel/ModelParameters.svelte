@@ -170,7 +170,7 @@
                     });
                 }}
             >
-                <span>Fine tune all (unlocked): Turn - {all_in_fine_tune_mode ? 'OFF' : 'ON'}</span>
+                <span>Fine tune all: {all_in_fine_tune_mode ? 'ON' : 'OFF'}</span>
                 <SlidersHorizontal size="20" />
             </button>
         </div>
