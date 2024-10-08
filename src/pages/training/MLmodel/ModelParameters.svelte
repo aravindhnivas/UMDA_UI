@@ -129,18 +129,8 @@
 
 {#if !$default_parameter_mode}
     <div class="grid gap-2">
-        <div class="flex gap-4 items-end">
+        <div class="grid grid-cols-[auto_auto_auto_1fr] gap-4 items-end">
             <CustomInput label="#columns" bind:value={$ncols} type="number" min="1" max="5" />
-            <CustomInput label="Search {key}" bind:value={search_key[$model]}>
-                <svelte:fragment slot="pre-input-within">
-                    <Search size="20" />
-                </svelte:fragment>
-                <svelte:fragment slot="post-input-within">
-                    <button on:click={() => (search_key[$model] = '')}>
-                        <XOctagon size="20" color="red" />
-                    </button>
-                </svelte:fragment>
-            </CustomInput>
             <button
                 class="btn btn-sm"
                 class:btn-neutral={!all_keys_locked}
@@ -176,6 +166,16 @@
                 <span>Fine tune all: {all_in_fine_tune_mode ? 'ON' : 'OFF'}</span>
                 <SlidersHorizontal size="20" />
             </button>
+            <CustomInput label="Search {key}" bind:value={search_key[$model]}>
+                <svelte:fragment slot="pre-input-within">
+                    <Search size="20" />
+                </svelte:fragment>
+                <svelte:fragment slot="post-input-within">
+                    <button on:click={() => (search_key[$model] = '')}>
+                        <XOctagon size="20" color="red" />
+                    </button>
+                </svelte:fragment>
+            </CustomInput>
         </div>
         <div class="grid gap-4 grid-cols-{$ncols} hyperparameters__div py-5 px-2">
             {#each Object.keys($current_model[key]) as label (label)}
