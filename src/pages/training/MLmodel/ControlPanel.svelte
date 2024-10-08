@@ -29,6 +29,7 @@
     import { Checkbox, CustomSelect, CustomInput } from '$lib/components';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import Paper, { Subtitle, Content } from '@smui/paper';
+    import { Ban, TriangleAlert } from 'lucide-svelte/icons';
 
     const grid_search_methods = [
         'Optuna',
@@ -96,30 +97,45 @@
                             items={available_transformations}
                             label="y-transformation"
                             bind:value={$ytransformation}
+                            disabled={$fine_tune_model}
                         />
                         {#if $ytransformation !== 'None'}
                             <Checkbox
                                 bind:value={$inverse_transform}
                                 label="apply inverse_transform"
                                 check="checkbox"
+                                disabled={$fine_tune_model}
                             />
                         {/if}
                     </div>
                     <div class="grid">
-                        <CustomSelect items={available_scalers} label="y-scaling" bind:value={$yscaling} />
+                        <CustomSelect
+                            items={available_scalers}
+                            label="y-scaling"
+                            bind:value={$yscaling}
+                            disabled={$fine_tune_model}
+                        />
                         {#if $yscaling !== 'None'}
-                            <Checkbox bind:value={$inverse_scaling} label="apply inverse_scaling" check="checkbox" />
+                            <Checkbox
+                                bind:value={$inverse_scaling}
+                                label="apply inverse_scaling"
+                                check="checkbox"
+                                disabled={$fine_tune_model}
+                            />
                         {/if}
                     </div>
 
-                    <!-- {#if !$inverse_scaling || !$inverse_transform} -->
-                    <span class="col-span-2">
-                        <span class="badge-sm badge-warning rounded-xl">
-                            Always inverse the transformations and scaling applied to your target variable before
-                            calculating metrics.
-                        </span>
+                    <span class="col-span-2 flex gap-1 badge-sm badge-warning rounded-sm">
+                        <TriangleAlert size="15" />
+                        Always inverse the transformations and scaling applied to your target variable before calculating
+                        metrics.
                     </span>
-                    <!-- {/if} -->
+                    {#if $fine_tune_model}
+                        <span class="col-span-2 flex gap-1 badge-sm badge-error rounded-sm">
+                            <Ban size="15" />
+                            y-transformation for grid-search methods is not yet supported.
+                        </span>
+                    {/if}
                 </div>
             </Content>
         </Paper>
