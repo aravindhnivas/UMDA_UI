@@ -181,8 +181,6 @@
                     <CustomInput
                         label="resume_id"
                         bind:value={$optuna_resume_study.id}
-                        min="1"
-                        type="number"
                         disabled={!$optuna_resume_study.resume}
                     />
                 {:else}
