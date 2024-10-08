@@ -13,7 +13,8 @@
         });
         webview.once('tauri://error', function (e) {
             console.error('an error occurred during webview window creation');
-            Alert.error(e);
+            console.error(e);
+            Alert.error(JSON.stringify(e));
         });
         webview.once('tauri://destroyed', function () {
             toast.warning('webview window successfully destroyed');
