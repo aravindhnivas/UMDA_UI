@@ -52,6 +52,10 @@
 
     let all_keys_locked = Object.values($all_params_lock_status[$model][key]).every(f => f);
     let all_in_fine_tune_mode = Object.values($fine_tuned_values[$model][key]).every(f => f.active);
+    $: if ($model) {
+        all_keys_locked = Object.values($all_params_lock_status[$model][key]).every(f => f);
+        all_in_fine_tune_mode = Object.values($fine_tuned_values[$model][key]).every(f => f.active);
+    }
 
     const onLockChange = (e: CustomEvent<boolean>, label: string) => {
         const locked_obj_values = Object.values($all_params_lock_status[$model][key]);
