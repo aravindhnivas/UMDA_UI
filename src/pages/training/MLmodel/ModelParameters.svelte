@@ -16,6 +16,7 @@
         LockKeyhole,
         UnlockKeyhole,
         TriangleAlert,
+        Ban,
         Search,
         XOctagon,
         SlidersHorizontal,
@@ -86,11 +87,11 @@
 </script>
 
 <div class="grid m-2">
-    <span class="badge m-auto w-full flex gap-2">
+    <!-- <span class="badge m-auto w-full flex gap-2">
         Click <LockKeyhole size="16" /> to unlock <UnlockKeyhole size="16" /> parameters to change the value
-    </span>
+    </span> -->
 
-    {#if Object.values($all_params_lock_status[$model][key]) && !$default_parameter_mode}
+    <!-- {#if Object.values($all_params_lock_status[$model][key]) && !$default_parameter_mode}
         {@const locked_obj_values = Object.values($all_params_lock_status[$model][key])}
         {@const total_len = locked_obj_values.length}
         {@const locked_len = locked_obj_values.filter(f => f).length}
@@ -106,23 +107,27 @@
                 </span>
             {/if}
         </div>
-    {/if}
+    {/if} -->
 
     {#if $fine_tune_model}
-        <span class="badge badge-info m-auto w-full">Grid search mode turned ON</span>
+        <!-- <span class="badge badge-info m-auto w-full">Grid search mode turned ON</span>
         <span class="badge badge-info m-auto w-full font-bold">
-            Please unlock the parameters to fine-tune i.e., enter comma separated values
-        </span>
+            Please unlock the parameters to fine-tune i.e., enter 'min, max, #size' values
+        </span> -->
         {#if !Object.values($fine_tuned_values[$model][key]).some(f => f.active)}
-            <span class="badge badge-error m-auto w-full flex gap-2">
-                <TriangleAlert size="20" />
-                <span>Grid search mode turned ON. Fine-tune the parameters to use the grid search</span>
+            <span class="badge badge-warning m-auto w-full flex gap-2">
+                <Ban size="15" />
+                <span class="flex items-center gap-1">
+                    Grid search mode turned ON. Try to unlock and fine-tune
+                    <SlidersHorizontal size="15" />
+                    atleast 2 parameters
+                </span>
             </span>
         {/if}
     {:else if Object.values($fine_tuned_values[$model][key]).some(f => f.active)}
-        <span class="badge badge-error m-auto w-full flex gap-2">
-            <TriangleAlert size="20" />
-            <span>Turn on grid search mode to use the fine-tuned search parameters in the model</span>
+        <span class="badge badge-warning m-auto w-full flex gap-2">
+            <Ban size="15" />
+            <span>Turn on grid search mode to use the fine-tuned search parameters</span>
         </span>
     {/if}
 </div>
