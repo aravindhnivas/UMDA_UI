@@ -91,7 +91,7 @@
         Click <LockKeyhole size="16" /> to unlock <UnlockKeyhole size="16" /> parameters to change the value
     </span> -->
 
-    <!-- {#if Object.values($all_params_lock_status[$model][key]) && !$default_parameter_mode}
+    {#if Object.values($all_params_lock_status[$model][key]) && !$default_parameter_mode}
         {@const locked_obj_values = Object.values($all_params_lock_status[$model][key])}
         {@const total_len = locked_obj_values.length}
         {@const locked_len = locked_obj_values.filter(f => f).length}
@@ -107,7 +107,7 @@
                 </span>
             {/if}
         </div>
-    {/if} -->
+    {/if}
 
     {#if $fine_tune_model}
         <span class="badge badge-info m-auto w-full">Grid search mode turned ON</span>
