@@ -40,6 +40,7 @@
         noise_percentage,
         optuna_n_trials,
         optuna_n_warmup_steps,
+        optuna_resume_study,
         parallel_computation,
         parallel_computation_backend,
         parameters,
@@ -255,6 +256,7 @@
             inverse_transform: $fine_tune_model ? false : $inverse_transform,
             learning_curve_train_sizes,
             analyse_shapley_values: $analyse_shapley_values,
+            optuna_resume_study: $optuna_resume_study,
         };
 
         delete $results[$model];

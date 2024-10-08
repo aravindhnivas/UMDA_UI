@@ -1,35 +1,36 @@
 <script lang="ts">
+    import { Checkbox, CustomInput, CustomSelect } from '$lib/components';
+    import CustomPanel from '$lib/components/CustomPanel.svelte';
+    import Paper, { Content, Subtitle } from '@smui/paper';
+    import { Ban, TriangleAlert } from 'lucide-svelte/icons';
     import {
-        fine_tune_model,
-        optuna_n_trials,
-        cv_fold,
-        bootstrap_nsamples,
-        noise_percentage,
-        cross_validation,
-        bootstrap,
-        test_size,
-        grid_search_method,
-        randomzied_gridsearch_niter,
-        halving_factor,
-        parallel_computation,
-        n_jobs,
-        parallel_computation_backend,
-        backends,
-        skip_invalid_y_values,
-        available_transformations,
+        analyse_shapley_values,
         available_scalers,
-        ytransformation,
-        yscaling,
+        available_transformations,
+        backends,
+        bootstrap,
+        bootstrap_nsamples,
+        cross_validation,
+        cv_fold,
+        fine_tune_model,
+        grid_search_method,
+        halving_factor,
         inverse_scaling,
         inverse_transform,
         learning_curve,
-        analyse_shapley_values,
+        n_jobs,
+        noise_percentage,
+        optuna_n_trials,
         optuna_n_warmup_steps,
+        optuna_resume_study,
+        parallel_computation,
+        parallel_computation_backend,
+        randomzied_gridsearch_niter,
+        skip_invalid_y_values,
+        test_size,
+        yscaling,
+        ytransformation,
     } from './stores';
-    import { Checkbox, CustomSelect, CustomInput } from '$lib/components';
-    import CustomPanel from '$lib/components/CustomPanel.svelte';
-    import Paper, { Subtitle, Content } from '@smui/paper';
-    import { Ban, TriangleAlert } from 'lucide-svelte/icons';
 
     const grid_search_methods = [
         'Optuna',
@@ -158,40 +159,53 @@
                     type="number"
                     disabled={!($cross_validation || $fine_tune_model)}
                 />
-                <CustomInput
-                    label="n_trials (Optuna)"
-                    bind:value={$optuna_n_trials}
-                    min="2"
-                    type="number"
-                    disabled={!$fine_tune_model || $grid_search_method !== 'Optuna'}
-                />
-                <CustomInput
-                    label="n_warmup_steps (Optuna)"
-                    helper="Number of steps before pruning the trials"
-                    bind:value={$optuna_n_warmup_steps}
-                    min="2"
-                    max={$optuna_n_trials}
-                    type="number"
-                    disabled={!$fine_tune_model || $grid_search_method !== 'Optuna'}
-                />
-                <CustomInput
-                    label="n_iter"
-                    bind:value={$randomzied_gridsearch_niter}
-                    min="2"
-                    type="number"
-                    disabled={!$fine_tune_model ||
-                        $grid_search_method === 'Optuna' ||
-                        !$grid_search_method.includes('RandomizedSearchCV')}
-                />
-                <CustomInput
-                    label="Halving factor"
-                    bind:value={$halving_factor}
-                    min="2"
-                    type="number"
-                    disabled={!$fine_tune_model ||
-                        $grid_search_method === 'Optuna' ||
-                        !$grid_search_method.includes('Halving')}
-                />
+
+                {#if $grid_search_method === 'Optuna'}
+                    <CustomInput
+                        label="n_trials (Optuna)"
+                        bind:value={$optuna_n_trials}
+                        min="2"
+                        type="number"
+                        disabled={!$fine_tune_model || $grid_search_method !== 'Optuna'}
+                    />
+                    <CustomInput
+                        label="n_warmup_steps (Optuna)"
+                        helper="Number of steps before pruning the trials"
+                        bind:value={$optuna_n_warmup_steps}
+                        min="2"
+                        max={$optuna_n_trials}
+                        type="number"
+                        disabled={!$fine_tune_model || $grid_search_method !== 'Optuna'}
+                    />
+                    <Checkbox bind:value={$optuna_resume_study.resume} label="resume_optuna_study" check="checkbox" />
+                    <CustomInput
+                        label="resume_id"
+                        bind:value={$optuna_resume_study.id}
+                        min="1"
+                        type="number"
+                        disabled={!$optuna_resume_study.resume}
+                    />
+                {:else}
+                    <CustomInput
+                        label="n_iter"
+                        bind:value={$randomzied_gridsearch_niter}
+                        min="2"
+                        type="number"
+                        disabled={!$fine_tune_model ||
+                            $grid_search_method === 'Optuna' ||
+                            !$grid_search_method.includes('RandomizedSearchCV')}
+                    />
+
+                    <CustomInput
+                        label="Halving factor"
+                        bind:value={$halving_factor}
+                        min="2"
+                        type="number"
+                        disabled={!$fine_tune_model ||
+                            $grid_search_method === 'Optuna' ||
+                            !$grid_search_method.includes('Halving')}
+                    />
+                {/if}
             </Content>
         </Paper>
         <Paper transition {elevation} style={paper_style}>
@@ -253,17 +267,6 @@
                 />
             </Content>
         </Paper>
-        <!-- <Paper transition {elevation} style={paper_style}>
-            <Subtitle>Ensemble regressors</Subtitle>
-            <Content>
-                <Checkbox bind:value={$ensemble_regressors.active} label="Use ensamble regressors" check="checkbox" />
-                <Set chips={model_names} let:chip filter bind:selected={$ensemble_regressors.regressors}>
-                    <Chip {chip} touch>
-                        <Text>{chip}</Text>
-                    </Chip>
-                </Set>
-            </Content>
-        </Paper> -->
         <Paper transition {elevation} style={paper_style}>
             <Subtitle>Misc</Subtitle>
             <Content>
