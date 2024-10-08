@@ -148,6 +148,9 @@
                     all_keys_locked = !all_keys_locked;
                     Object.keys($all_params_lock_status[$model][key]).forEach(label => {
                         $all_params_lock_status[$model][key][label] = all_keys_locked;
+                        if (!all_keys_locked && all_in_fine_tune_mode) {
+                            $fine_tuned_values[$model][key][label].active = true;
+                        }
                     });
                 }}
             >
