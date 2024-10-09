@@ -61,7 +61,12 @@
 </script>
 
 <div class="flex gap-2 items-center {className}">
-    <button on:click={() => (subprocess = !subprocess)}>
+    <button
+        on:click={() => {
+            if (loading) return toast.error('Operation in progress');
+            subprocess = !subprocess;
+        }}
+    >
         {#if subprocess}
             <Cpu />
         {:else}
@@ -92,6 +97,7 @@
             class="btn btn-sm btn-error"
             on:click={() => {
                 if (!source) return toast.error('No operation to cancel');
+                console.log({ source });
                 source?.cancel('Operation canceled by the user.');
                 toast.error('Operation canceled');
             }}><X /></button
