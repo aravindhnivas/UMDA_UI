@@ -133,6 +133,7 @@
 
             const locked = $all_params_lock_status[$model].parameters[params];
             if (!locked) return;
+            if ($model === 'gpr' && params === 'kernel') return;
             delete values[params];
         });
 
@@ -147,6 +148,7 @@
             delete values[hparams];
         });
 
+        // console.log({ values });
         let clonedValues: Record<string, string | boolean | number | null> = {};
 
         Object.entries(values).forEach(([key, value], ind) => {
@@ -188,7 +190,8 @@
             n_iter: Number($randomzied_gridsearch_niter),
             factor: Number($halving_factor),
         };
-        console.warn({ clonedValues, fine_tuned_values: $fine_tuned_values[$model], clonedFineTunedValues });
+
+        console.warn({ values, clonedValues, fine_tuned_values: $fine_tuned_values[$model], clonedFineTunedValues });
 
         let learning_curve_train_sizes = null;
         if ($learning_curve.active) {
