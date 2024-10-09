@@ -126,6 +126,7 @@
         const values = structuredClone({ ...$hyperparameters[$model], ...$parameters[$model] });
 
         Object.keys($all_params_lock_status[$model].parameters).forEach(params => {
+            console.log({ params, val: values[params], fine: clonedFineTunedValues[params] });
             if (params in clonedFineTunedValues && clonedFineTunedValues[params] !== null) {
                 delete values[params];
                 return;
@@ -133,7 +134,8 @@
 
             const locked = $all_params_lock_status[$model].parameters[params];
             if (!locked) return;
-            if ($model === 'gpr' && params === 'kernel') return;
+            if ($model === 'gpr' && params === 'kernel' && values[params]) return;
+            console.warn('deleting', params);
             delete values[params];
         });
 
@@ -148,6 +150,8 @@
             delete values[hparams];
         });
 
+        // throw new Error('stop');
+        return;
         // console.log({ values });
         let clonedValues: Record<string, string | boolean | number | null> = {};
 
