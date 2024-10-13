@@ -145,11 +145,12 @@
 
             const hist_bin_size = data.histogram.bin_size;
             console.warn({ hist_bin_size });
+
             const histogramTrace: Partial<Plotly.PlotData> = {
                 x: data.histogram.bin_edges.slice(0, -1),
                 y: data.histogram.counts,
                 type: 'bar',
-                name: `bin size: ${hist_bin_size.toFixed(2)}`,
+                name: `Bins: ${data.histogram.counts.length}, bin_size: ${hist_bin_size.toFixed(2)}`,
                 showlegend: true,
             };
 
