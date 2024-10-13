@@ -147,7 +147,7 @@
             console.warn({ hist_bin_size });
 
             const histogramTrace: Partial<Plotly.PlotData> = {
-                x: data.histogram.bin_edges.slice(0, -1),
+                x: data.histogram.bin_edges.slice(0, -1), // Remove the last bin edge to match the number of counts
                 y: data.histogram.counts,
                 type: 'bar',
                 name: `Bins: ${data.histogram.counts.length}, bin_size: ${hist_bin_size.toFixed(2)}`,
