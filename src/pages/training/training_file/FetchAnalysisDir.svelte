@@ -16,7 +16,6 @@
         const analysis_dir = await $load_analysis_dir;
         const search_dir = await path.join(analysis_dir, 'filtered');
         if (!(await fs.exists(search_dir))) {
-            // if (warn) toast.error(`Directory ${search_dir} does not exist`);
             if (warn) toast.warning('No filtered data found');
             $filtered_dir = 'default';
             dir_items_for_plotting = ['default'];
