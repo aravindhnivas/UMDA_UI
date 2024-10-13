@@ -50,39 +50,44 @@
         <div class="flex flex-col gap-1 {className}">
             <div class="flex gap-1 items-center">
                 {#if label}
-                    {#if enabled_lock_mode}
-                        <button on:click={() => (lock = !lock)}>
-                            {#if lock}
-                                <LockKeyhole size="20" class="text-gray-700" />
-                            {:else}
-                                <UnlockKeyhole size="20" />
-                            {/if}
-                        </button>
-                    {/if}
                     <span class="text-xs pl-1 {element_disabled ? 'text-gray-600/75' : ''}">{label}</span>
                 {/if}
             </div>
-            <select
-                class="select select-sm select-bordered {element_disabled ? 'bg-gray-600/25' : ''}"
-                bind:value
-                on:change
-                disabled={element_disabled}
-            >
-                {#if isArray(items) && items.length > 0}
-                    <option disabled selected>{label}</option>
-                    {#each items as item}
-                        <option>{item}</option>
-                    {/each}
-                {:else if isObject(items)}
-                    {#each Object.keys(items) as key}
-                        {@const nested_items = items[key]}
-                        <option disabled selected>{key}</option>
-                        {#each nested_items as item}
+            <div class="join">
+                <slot name="pre-within" {lock} />
+                <select
+                    class="select select-sm select-bordered join-item {element_disabled ? 'bg-gray-600/25' : ''}"
+                    bind:value
+                    on:change
+                    disabled={element_disabled}
+                >
+                    {#if isArray(items) && items.length > 0}
+                        <option disabled selected>{label}</option>
+                        {#each items as item}
                             <option>{item}</option>
                         {/each}
-                    {/each}
+                    {:else if isObject(items)}
+                        {#each Object.keys(items) as key}
+                            {@const nested_items = items[key]}
+                            <option disabled selected>{key}</option>
+                            {#each nested_items as item}
+                                <option>{item}</option>
+                            {/each}
+                        {/each}
+                    {/if}
+                </select>
+                <slot name="post-within" />
+                {#if enabled_lock_mode}
+                    <button class="btn btn-sm btn-square btn-outline join-item" on:click={() => (lock = !lock)}>
+                        {#if lock}
+                            <LockKeyhole size="20" />
+                        {:else}
+                            <UnlockKeyhole size="20" />
+                        {/if}
+                    </button>
                 {/if}
-            </select>
+            </div>
+
             {#if helper || helperHighlight}
                 <span class="text-xs pl-1 text-wrap break-words {element_disabled ? 'text-gray-600/75' : ''}">
                     {#if helper}
