@@ -37,14 +37,6 @@
         };
     };
 
-    setContext('MolecularAnalysis', MolecularAnalysis);
-
-    const onResult = (e: CustomEvent) => {
-        console.log(e.detail);
-        const { dataFromPython } = e.detail;
-        if (!dataFromPython) return;
-        console.log(dataFromPython);
-    };
     let duplicates: number = 0;
     let deduplicated_filename = '';
     const onRemoveDuplicatesOnXColumn = (e: CustomEvent) => {
@@ -69,7 +61,7 @@
         }
     };
 
-    const ApplyFilterForMolecularAnalysis = async () => {
+    const ApplyFilterForMolecularAnalysis = async (filtered_filename: string) => {
         console.log('ApplyFilterForMolecularAnalysis');
 
         if ($filtered_dir !== 'default') {
@@ -142,7 +134,9 @@
         const pyfile = 'training.check_duplicates_on_x_column';
         return { pyfile, args };
     };
-    let filtered_filename = 'topelements';
+    // let filtered_filename = 'topelements';
+    setContext('MolecularAnalysis', MolecularAnalysis);
+    setContext('ApplyFilterForMolecularAnalysis', ApplyFilterForMolecularAnalysis);
 </script>
 
 {#if $index_column_valid}
@@ -154,11 +148,10 @@
             callback={() => CheckDuplicatesOnXColumn()}
             on:result={onRemoveDuplicatesOnXColumn}
         />
-        <Loadingbtn
+        <!-- <Loadingbtn
             name="Begin full analysis"
             subprocess={true}
             callback={() => MolecularAnalysis('all')}
-            on:result={onResult}
         />
         <Loadingbtn
             name="Apply Xdata filters"
@@ -166,7 +159,7 @@
             callback={() => ApplyFilterForMolecularAnalysis()}
             on:result={e => console.log(e.detail)}
         />
-        <CustomInput bind:value={filtered_filename} label="Enter filter name" />
+        <CustomInput bind:value={filtered_filename} label="Enter filter name" /> -->
     </div>
 
     {#if duplicates > 0}
@@ -184,8 +177,7 @@
             </svelte:fragment>
         </Notification>
     {/if}
-
-    <hr />
+    <div class="divider"></div>
     <PlotAnalysis />
 {:else}
     <div class="badge badge-error">Make sure INDEX column is valid and available in the training file</div>

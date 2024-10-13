@@ -4,6 +4,9 @@ type AnalysisItemsType =
     | 'structural_distribution'
     | 'elemental_distribution';
 type MolecularAnalysisFunction = (mode: string) => Promise<{ pyfile: string; args: Record<string, any> }>;
+type ApplyFilterForMolecularAnalysisFunction = (
+    filtered_filename: string,
+) => Promise<{ pyfile: string; args: Record<string, any> }>;
 type YDistributionPlotNames = 'histogram' | 'kde' | 'box_plot' | 'qq_plot';
 type YDistributionPlotData = Record<YDistributionPlotNames, Partial<Plotly.PlotData>[]>;
 

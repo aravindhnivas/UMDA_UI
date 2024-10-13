@@ -8,6 +8,7 @@
     import CustomTabs from '$lib/components/CustomTabs.svelte';
     import { Atom, Filter, ChartCandlestick, Pyramid, Ruler, Scale3D } from 'lucide-svelte/icons';
     import YDistributionPlot from './YDistributionPlot.svelte';
+    import { CustomInput, Loadingbtn } from '$lib/components';
 
     const tab_items = [
         { tab: 'y-data_distribution', component: Ruler },
@@ -36,6 +37,11 @@
     };
     setContext('GetData', GetData);
     let current_active_analysis_tab = 'Plots';
+    const MolecularAnalysis = getContext<MolecularAnalysisFunction>('MolecularAnalysis');
+    const ApplyFilterForMolecularAnalysis = getContext<ApplyFilterForMolecularAnalysisFunction>(
+        'ApplyFilterForMolecularAnalysis',
+    );
+    let filtered_filename = 'topelements';
 </script>
 
 <CustomTabs
@@ -48,6 +54,22 @@
 
 <div class:hidden={current_active_analysis_tab !== 'Plots'} class="grid gap-2">
     <CustomTabs class="bordered" tabs={tab_items} bind:active={$active_tab} />
+    {#if $active_tab !== 'y-data_distribution'}
+        <div class="flex gap-1 items-end justify-center">
+            <Loadingbtn
+                name="Run full distribution analysis"
+                subprocess={true}
+                callback={async () => await MolecularAnalysis('all')}
+            />
+            <Loadingbtn
+                name="Apply Xdata filters"
+                subprocess={true}
+                callback={async () => await ApplyFilterForMolecularAnalysis(filtered_filename)}
+            />
+            <CustomInput bind:value={filtered_filename} label="Enter filter name" />
+        </div>
+        <div class="divider"></div>
+    {/if}
     {#await $current_training_data_file then _}
         <YDistributionPlot />
         <SizeDistributionPlot />

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { current_post_analysis_files_directory, current_analysis_file } from './stores';
-    import { Loadingbtn } from '$lib/components';
+    import { CustomInput, Loadingbtn } from '$lib/components';
     import { ChartColumnBig } from 'lucide-svelte/icons';
     import CheckFileStatus from '../CheckFileStatus.svelte';
 
@@ -31,6 +31,7 @@
         console.log('running', name);
         return await MolecularAnalysis(name);
     };
+
     let recheck_files = false;
     onMount(async () => {
         recheck_files = !recheck_files;
@@ -41,7 +42,7 @@
     <div class="flex justify-between">
         <div class="flex gap-2 items-end">
             <Loadingbtn
-                name="Run analysis"
+                name="Run {name} analysis"
                 callback={async () => await RunAnalysis(name)}
                 subprocess={true}
                 on:result={async () => {

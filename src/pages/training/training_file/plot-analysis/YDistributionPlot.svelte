@@ -207,7 +207,9 @@
 </script>
 
 <div class="grid gap-2" class:hidden={$active_tab !== 'y-data_distribution'}>
-    <span class="badge badge-primary">{$training_column_name_y}</span>
+    {#if $training_column_name_y}
+        <span class="badge badge-primary">{$training_column_name_y}</span>
+    {/if}
     <div class="flex items-end gap-1">
         <Checkbox bind:value={auto_transform_data} label="auto_transform_data" />
         <CustomSelect
