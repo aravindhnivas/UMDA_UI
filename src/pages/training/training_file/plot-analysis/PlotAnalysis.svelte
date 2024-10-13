@@ -26,13 +26,15 @@
             return;
         }
         const { data } = await parse_csv_file(csv_file);
-
+        if (!data) {
+            toast.error(`File ${csv_file} is empty`);
+            return;
+        }
         const x = data.map(row => row[0]).filter(Boolean) as T[];
         const y = data
             .map(row => row[1])
             .filter(Boolean)
             .map(Number);
-
         return { x, y };
     };
     setContext('GetData', GetData);
