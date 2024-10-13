@@ -59,7 +59,9 @@ export function validateInput(event: KeyboardEvent) {
 }
 
 export const parse_csv_file = async (csv_file: string) => {
+    if (!(await fs.exists(csv_file))) return { columns: [], data: [] };
     const contents = await fs.readTextFile(csv_file);
+    if (!contents) return { columns: [], data: [] };
     const lines = contents.split('\n');
     const columns = lines[0].split(',');
     const data = lines.slice(1).map(line => line.split(','));
