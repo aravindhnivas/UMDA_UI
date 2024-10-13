@@ -100,7 +100,7 @@
             await fetch_all_files(filelocation);
         }}
     >
-        <RefreshCcw />
+        <RefreshCcw size="20" />
     </button>
     <select class="select select-sm select-bordered join-item" bind:value={filetype}>
         <option disabled selected>filetype</option>
@@ -160,7 +160,7 @@
         on:click={async () => {
             if (!filename) return toast.error('No file selected');
             await shell.open(await path.dirname(filename));
-        }}><ExternalLink /></button
+        }}><ExternalLink size="20" /></button
     >
 </div>
 
