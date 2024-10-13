@@ -1,7 +1,6 @@
 <script lang="ts">
     import {
         current_post_analysis_files_directory,
-        current_training_data_file,
         filtered_dir,
         use_filtered_data_for_training,
     } from './plot-analysis/stores';
