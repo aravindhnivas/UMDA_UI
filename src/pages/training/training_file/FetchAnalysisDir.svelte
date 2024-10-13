@@ -67,10 +67,17 @@
 
 <div class="flex items-end gap-2">
     <div class="flex gap-2 items-end">
-        <button class="btn btn-sm btn-square btn-outline" on:click={async () => await fetch_analysis_dir()}>
-            <RefreshCcw size="20" />
-        </button>
-        <CustomSelect label="Select filtered directory" bind:value={$filtered_dir} items={dir_items_for_plotting} />
+        <CustomSelect label="Select filtered directory" bind:value={$filtered_dir} items={dir_items_for_plotting}>
+            <svelte:fragment slot="pre-within" let:lock>
+                <button
+                    class="btn btn-sm btn-square btn-outline join-item"
+                    on:click={async () => await fetch_analysis_dir()}
+                    disabled={lock}
+                >
+                    <RefreshCcw size="20" />
+                </button>
+            </svelte:fragment>
+        </CustomSelect>
     </div>
     <Checkbox
         bind:value={$use_filtered_data_for_training}
