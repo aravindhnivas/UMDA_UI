@@ -48,10 +48,12 @@
 
 <div class:hidden={current_active_analysis_tab !== 'Plots'} class="grid gap-2">
     <CustomTabs class="bordered" tabs={tab_items} bind:active={$active_tab} />
-    <YDistributionPlot />
-    <SizeDistributionPlot />
-    <StructuralDistributionPlot />
-    <ElementalDistributionPlot />
+    {#await $current_training_data_file then _}
+        <YDistributionPlot />
+        <SizeDistributionPlot />
+        <StructuralDistributionPlot />
+        <ElementalDistributionPlot />
+    {/await}
 </div>
 
 <div class:hidden={current_active_analysis_tab !== 'load_filtered_data'} class="grid gap-2">
