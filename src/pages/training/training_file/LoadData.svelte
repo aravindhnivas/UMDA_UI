@@ -208,10 +208,10 @@
             </div>
 
             <FetchAnalysisDir />
-            <hr />
+            <div class="divider"></div>
             <h3>Loaded training file</h3>
             <LoadedFileInfos />
-            <hr />
+            <div class="divider"></div>
         {/await}
     </svelte:fragment>
 </FileLoader>

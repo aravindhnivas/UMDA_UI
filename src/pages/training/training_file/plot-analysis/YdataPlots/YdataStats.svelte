@@ -90,7 +90,7 @@
         <p class="text-sm">{saved_filter_filename}</p>
     </Notification>
 {/if}
-<hr />
+<div class="divider"></div>
 
 <div class="grid grid-cols-3 max-w-6xl gap-[50px]">
     {#if data?.descriptive_statistics && data?.skewness && data?.kurtosis && data?.anderson_darling_test}
@@ -99,7 +99,7 @@
             <p class="text-sm">
                 These statistics provide a summary of the central tendency and dispersion of the molecular property data
             </p>
-            <hr />
+            <div class="divider"></div>
 
             <div class="grid grid-cols-2 gap-1">
                 <p class="font-bold">Mean</p>
@@ -113,7 +113,7 @@
                 <p class="font-bold">Maximum</p>
                 <span>{data.descriptive_statistics.max.toFixed(4)}</span>
             </div>
-            <hr />
+            <div class="divider"></div>
             <div class="grid grid-cols-2">
                 <p class="font-bold">Percentile</p>
                 <p class="font-bold">Critical Value</p>
@@ -133,7 +133,7 @@
         <div class="grid gap-1" style="align-content: baseline;">
             <h3>Distribution Characteristics</h3>
             <p class="text-sm">These metrics provide information about the shape of the data distribution</p>
-            <hr />
+            <div class="divider"></div>
             <p class="font-bold">Skewness: {data.skewness.toFixed(4)}</p>
             <p class="text-sm">
                 Skewness: Measures the asymmetry of the distribution. A positive value indicates a right-skewed
@@ -152,7 +152,7 @@
                 <span class="badge badge-error"> The data is highly skewed. </span>
                 <p class="text-sm">Logarithmic, Reciprocal, or Box-Cox Transformation</p>
             {/if}
-            <hr />
+            <div class="divider"></div>
             <p class="font-bold">Kurtosis: {data.kurtosis.toFixed(4)}</p>
 
             <p class="text-sm">
@@ -163,12 +163,12 @@
         <div class="grid gap-1" style="align-content: baseline;">
             <h3>Anderson-Darling Test</h3>
             <p class="text-sm">This test is used to determine if the data follows a normal distribution</p>
-            <hr />
+            <div class="divider"></div>
             <p class="font-bold">Statistic: {data.anderson_darling_test.statistic.toFixed(4)}</p>
             <p class="text-sm">
                 Statistic: The test statistic. A smaller value suggests the data is closer to a normal distribution.
             </p>
-            <hr />
+            <div class="divider"></div>
             <div class="grid grid-cols-3 justify-items-start gap-1">
                 <!-- <p class="font-bold">Significance Level</p> -->
                 <p class="font-bold">Significance Level</p>
@@ -205,4 +205,4 @@
         </div>
     {/if}
 </div>
-<hr />
+<div class="divider"></div>

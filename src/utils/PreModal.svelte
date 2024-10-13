@@ -103,7 +103,7 @@
                 <SearchIcon size={20} />
             </div>
 
-            <hr />
+            <div class="divider"></div>
             <code class="select-text" style="white-space: pre-wrap; overflow: auto;">
                 {#if $Alert.content instanceof Error}
                     {$Alert.content.stack}

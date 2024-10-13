@@ -75,7 +75,7 @@
                 }}><Trash2 /> REMOVE</button
             >
         </div>
-        <hr />
+        <div class="divider"></div>
     {:else}
         <div class="grid">
             <div class="text-xs col-span-2">kernel</div>

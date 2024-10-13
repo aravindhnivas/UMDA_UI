@@ -48,7 +48,7 @@
     });
 </script>
 
-<hr />
+<div class="divider"></div>
 
 {#await $current_post_analysis_files_directory then filedir}
     <div class="flex gap-1 items-center">

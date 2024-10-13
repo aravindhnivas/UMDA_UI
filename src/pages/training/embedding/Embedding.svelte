@@ -200,11 +200,11 @@
     {/if}
 
     {#if !test_mode}
-        <hr />
+        <div class="divider"></div>
         <h3>Loaded training file</h3>
         <LoadedFileInfos />
         <span class="badge badge-info">{$training_column_name_X} (train column X) will be used for embedding</span>
-        <hr />
+        <div class="divider"></div>
     {/if}
     <Results data={dataFromPython?.file_mode} computed_time={dataFromPython?.computed_time} />
 </div>

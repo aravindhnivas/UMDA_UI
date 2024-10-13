@@ -32,7 +32,7 @@
         </Stats>
 
         {#if r.best_params}
-            <hr />
+            <div class="divider"></div>
             <div class="grid gap-2">
                 <h3>Best parameters</h3>
                 <div class="flex gap-2 flex-wrap">
@@ -41,7 +41,7 @@
                     {/each}
                 </div>
             </div>
-            <hr />
+            <div class="divider"></div>
         {/if}
     {/if}
 

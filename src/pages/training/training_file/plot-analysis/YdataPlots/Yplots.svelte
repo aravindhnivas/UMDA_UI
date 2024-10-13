@@ -104,7 +104,7 @@
                     >{plot_description.name} ({data?.[0].y?.length} data shape):
                 </span>{plot_description.description}
             </div>
-            <hr />
+            <div class="divider"></div>
         {/if}
     {/if}
 {/each}
