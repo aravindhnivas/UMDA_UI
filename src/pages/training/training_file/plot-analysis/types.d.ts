@@ -24,6 +24,7 @@ interface YDistributionStats {
     histogram: {
         counts: number[];
         bin_edges: number[];
+        bin_size: number;
     };
     box_plot: {
         min: number;
