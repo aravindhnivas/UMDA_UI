@@ -11,6 +11,7 @@
         fine_tuned_values,
         grid_search_method,
         cv_fold,
+        current_pretrained_file,
     } from './stores';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import ModelParameters from './ModelParameters.svelte';
@@ -73,24 +74,26 @@
         toast.success('Parameters saved successfully');
     };
 
-    const load_parameters = async () => {
-        const selected = await dialog.open({
-            title: 'Upload parameters',
-            filters: [{ name: 'JSON', extensions: ['json'] }],
-            defaultPath: `./${$model}.json`,
-        });
-        let uploadloc = selected;
-        if (Array.isArray(selected)) {
-            uploadloc = selected[0];
-        } else if (selected === null) {
-            return;
-        } else {
-            uploadloc = selected;
+    const load_parameters = async (filename: string | null = null) => {
+        if (!filename) {
+            const selected = await dialog.open({
+                title: 'Upload parameters',
+                filters: [{ name: 'JSON', extensions: ['json'] }],
+                defaultPath: `./${$model}.json`,
+            });
+            // filename = selected;
+            if (Array.isArray(selected)) {
+                filename = selected[0];
+            } else if (selected === null) {
+                return;
+            } else {
+                filename = selected;
+            }
         }
         uploadedfile = null;
 
         try {
-            const parsed = await readJSON<SavedParams>(uploadloc);
+            const parsed = await readJSON<SavedParams>(filename);
             if (!parsed) return;
 
             console.log('parsed', parsed);
@@ -98,9 +101,9 @@
                 toast.error('Error: Model mismatch');
                 return;
             }
-            const basefilename = await path.basename(uploadloc);
+            const basefilename = await path.basename(filename);
             uploadedfile = {
-                fullname: uploadloc,
+                fullname: filename,
                 name: basefilename,
                 model: parsed.model,
             };
@@ -126,16 +129,26 @@
                 if (!parsed.values) return;
                 if (parsed.mode !== 'normal') return toast.error('Error: Invalid mode');
                 Object.keys($hyperparameters[$model]).forEach(label => {
-                    if (!(label in parsed.values)) return;
+                    if (!(label in parsed.values)) {
+                        if (!(label in $all_params_lock_status[$model].hyperparameters)) return;
+                        $all_params_lock_status[$model].hyperparameters[label] = true;
+                        return;
+                    }
                     if (isObject(parsed.values[label])) return;
                     $hyperparameters[$model][label] = parsed.values[label];
                     $all_params_lock_status[$model].hyperparameters[label] = false;
+                    $fine_tuned_values[$model].hyperparameters[label].active = false;
                 });
                 Object.keys($parameters[$model]).forEach(label => {
-                    if (!(label in parsed.values)) return;
+                    if (!(label in parsed.values)) {
+                        if (!(label in $all_params_lock_status[$model].parameters)) return;
+                        $all_params_lock_status[$model].parameters[label] = true;
+                        return;
+                    }
                     if (isObject(parsed.values[label])) return;
                     $parameters[$model][label] = parsed.values[label];
                     $all_params_lock_status[$model].parameters[label] = false;
+                    $fine_tuned_values[$model].hyperparameters[label].active = false;
                 });
             }
 
@@ -184,7 +197,26 @@
                         <RotateCcw />
                         <span>Reset</span>
                     </button>
-                    <button class="btn btn-sm btn-outline" on:click={load_parameters}>
+                    <button
+                        class="btn btn-sm btn-outline"
+                        on:click={async () => {
+                            const pre_trained_file = await $current_pretrained_file;
+                            const loc = await path.dirname(pre_trained_file);
+                            const filename = await path.basename(pre_trained_file);
+                            // const extname = filename.split('.').at(-1);
+                            const best_params_filename = await path.join(
+                                loc,
+                                `${filename}.${$grid_search_method}.best_params.json`,
+                            );
+                            // console.log({ pre_trained_file, loc, best_params_filename });
+                            // console.log(best_params_filename);
+                            await load_parameters(best_params_filename);
+                        }}
+                    >
+                        <Download />
+                        <span>Load Best params</span>
+                    </button>
+                    <button class="btn btn-sm btn-outline" on:click={async () => await load_parameters()}>
                         <Download />
                         <span>Load</span>
                     </button>
