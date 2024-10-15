@@ -16,6 +16,11 @@
             <span class="badge badge-primary">Dataset size: {r.data_shapes.y}</span>
         </div>
 
+        <div class="flex gap-2">
+            <span class="text-sm">X = {r.data_shapes.X}</span>
+            <span class="text-sm">y = {r.data_shapes.y}</span>
+        </div>
+
         <div class="grid grid-cols-6 gap-2 items-center w-3xl">
             <span class="col-span-2"></span>
             <span class="badge">R<sup>2</sup></span>
