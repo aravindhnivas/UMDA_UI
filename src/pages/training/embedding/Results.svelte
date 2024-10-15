@@ -4,21 +4,13 @@
     import VirtualList from '@sveltejs/svelte-virtual-list';
 
     export let computed_time: string;
-    export let data: {
-        name: string;
-        shape: number;
-        invalid_smiles: string[];
-        invalid_smiles_file: string;
-        saved_file: string;
-    } | null = null;
-
-    console.log(data);
+    export let data: EmbeddingState['file_mode'];
 </script>
 
 {#if data}
     {@const { invalid_smiles, saved_file } = data}
 
-    <button class="btn btn-sm btn-error w-max ml-auto" on:click={() => (data = null)}>X</button>
+    <button class="btn btn-sm btn-error w-max ml-auto" on:click={() => (data = undefined)}>X</button>
     <div class=" flex flex-col gap-1">
         {#if saved_file}
             <div role="alert" class="alert alert-info p-2">

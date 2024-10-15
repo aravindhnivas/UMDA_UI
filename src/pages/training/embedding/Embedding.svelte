@@ -77,7 +77,9 @@
             if (!overwrite) return;
         }
 
-        dataFromPython = {};
+        // dataFromPython = {};
+        dataFromPython[$embedding] = null;
+
         $embeddings_computed = false;
         const pyfile = 'training.embedd_data';
         const final_training_file = await $current_training_data_file;
@@ -103,10 +105,12 @@
 
     const onResult = async (e: CustomEvent) => {
         const { pyfile } = e.detail;
-        dataFromPython = e.detail.dataFromPython;
+        dataFromPython[$embedding] = e.detail.dataFromPython;
 
-        if (test_mode && dataFromPython.test_mode) {
-            let vec = dataFromPython.test_mode.embedded_vector;
+        if (test_mode && dataFromPython[$embedding].test_mode) {
+            let vec = dataFromPython[$embedding]?.test_mode?.embedded_vector;
+            if (!vec) return toast.error('No data returned from python');
+
             test_result = `Embedded vector: ${vec.length} dimensions`;
             console.log({ vec });
             test_result += '\n[';
@@ -127,11 +131,12 @@
                     return;
                 }
                 const { invalid_smiles_file } = parsed_result?.file_mode;
-                dataFromPython = parsed_result;
-                if (!dataFromPython?.file_mode) return;
+                if (!parsed_result?.file_mode) return;
 
+                dataFromPython[$embedding] = parsed_result;
                 const invalid_smiles = await fs.readTextFile(invalid_smiles_file);
-                dataFromPython.file_mode.invalid_smiles = invalid_smiles?.split('\n').filter(Boolean) || [];
+                if (!dataFromPython[$embedding]?.file_mode) return toast.error('No data returned from python');
+                dataFromPython[$embedding].file_mode.invalid_smiles = invalid_smiles?.split('\n').filter(Boolean) || [];
                 $embeddings_computed = true;
             } catch (error) {
                 if (error instanceof Error) toast.error(error.message);
@@ -139,17 +144,7 @@
         }
     };
 
-    let dataFromPython: {
-        test_mode?: { embedded_vector: number[] };
-        file_mode?: {
-            name: string;
-            shape: number;
-            invalid_smiles: string[];
-            saved_file: string;
-            computed_time: string;
-        };
-        computed_time: string;
-    };
+    let dataFromPython = {} as Record<Embedding, EmbeddingState>;
 </script>
 
 <div class="grid content-start gap-2" {id} style:display>
@@ -206,5 +201,10 @@
         <span class="badge badge-info">{$training_column_name_X} (train column X) will be used for embedding</span>
         <div class="divider"></div>
     {/if}
-    <Results data={dataFromPython?.file_mode} computed_time={dataFromPython?.computed_time} />
+    {#if dataFromPython[$embedding]}
+        {@const { file_mode, computed_time } = dataFromPython[$embedding]}
+        {#if file_mode}
+            <Results data={file_mode} {computed_time} />
+        {/if}
+    {/if}
 </div>

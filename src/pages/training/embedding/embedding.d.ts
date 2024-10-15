@@ -18,3 +18,15 @@ interface EmbeddingResult {
 type Embedding = 'mol2vec' | 'VICGAE';
 
 type LoadedInfosFile = Record<string, { value: string; valid: boolean; basename: string }>;
+
+interface EmbeddingState {
+    test_mode?: { embedded_vector: number[] };
+    file_mode?: {
+        name: string;
+        shape: number;
+        invalid_smiles: string[];
+        saved_file: string;
+        computed_time: string;
+    };
+    computed_time: string;
+}
