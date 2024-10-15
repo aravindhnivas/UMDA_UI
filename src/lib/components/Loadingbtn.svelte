@@ -66,6 +66,7 @@
         }
     };
     let limit_to_one_process = true;
+    $: disabled = subprocess ? limit_to_one_process && loading : loading;
 </script>
 
 <div class="flex gap-2 items-center {className}">
@@ -85,7 +86,7 @@
     <button
         bind:this={btn}
         class:running={loading}
-        class:btn-disabled={subprocess && limit_to_one_process && loading}
+        class:btn-disabled={disabled}
         class="btn btn-sm btn-outline ld-ext-right w-max"
         on:click={run_callback}
         on:pyEvent
