@@ -147,7 +147,7 @@
     let dataFromPython = {} as Record<Embedding, EmbeddingState>;
 </script>
 
-<div class="grid content-start gap-2" {id} style:display>
+<div class="grid content-start gap-2 pr-5" {id} style:display>
     <div class="flex justify-between">
         <h2>Embeddings</h2>
         <Checkbox label="Test mode" bind:value={test_mode} />
@@ -187,7 +187,7 @@
         </div>
     {:else}
         <Checkbox label="PCA" bind:value={$use_PCA} />
-        <div class="grid gap-2 items-end" style="grid-auto-flow: column; grid-template-columns: auto 1fr auto;">
+        <div class="flex gap-2 items-end">
             <CustomSelect label="embedding" bind:value={$embedding} items={embeddings} />
             <CustomInput label="Embeddings filename" bind:value={$embedd_savefile} lock={true} />
             <Loadingbtn callback={embedd_data} subprocess={true} on:result={onResult} />
@@ -201,6 +201,7 @@
         <span class="badge badge-info">{$training_column_name_X} (train column X) will be used for embedding</span>
         <div class="divider"></div>
     {/if}
+
     {#if dataFromPython[$embedding]}
         {@const { file_mode, computed_time } = dataFromPython[$embedding]}
         {#if file_mode}
