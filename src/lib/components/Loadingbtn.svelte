@@ -103,7 +103,7 @@
     </button>
     {#if subprocess && loading}
         <button
-            aria-label={limit_to_one_process ? 'Limit to one process' : 'Allow multiple processes'}
+            aria-label={limit_to_one_process ? 'Limited to one process' : 'Allowing multiple processes'}
             data-cooltipz-dir="top"
             class="btn btn-sm"
             class:btn-outline={!limit_to_one_process}
