@@ -70,8 +70,8 @@
                     <code class="break-all text-sm p-1" class:bg-success={valid}>{value}</code>
                 </div>
             {/each}
-            <div class="divider col-span-4"></div>
             {#if metadata}
+                <div class="divider col-span-4"></div>
                 <div>Data shape (n_samples, n_features):</div>
                 <div class="col-span-3 border-rounded">({metadata.data_shape.join(', ')})</div>
                 <div>Invalid SMILES:</div>
