@@ -1,7 +1,7 @@
 <script lang="ts" generics="T">
     import { pyServerReady } from '$lib/pyserver/stores';
     import type { CancelTokenSource } from 'axios';
-    import { X, Server, Cpu } from 'lucide-svelte/icons';
+    import { X, Server, Cpu, CircleFadingPlus } from 'lucide-svelte/icons';
 
     export let name: string = 'Compute';
 
@@ -54,10 +54,18 @@
         } catch (error) {
             toast.error(error as string);
         } finally {
-            loading = false;
+            // loading = false;
             if (subprocess) process_count -= 1;
+            if (process_count === 0) {
+                console.log('All processes completed');
+                loading = false;
+            } else {
+                console.log('Still running processes:', process_count);
+                loading = true;
+            }
         }
     };
+    let limit_to_one_process = true;
 </script>
 
 <div class="flex gap-2 items-center {className}">
@@ -77,7 +85,7 @@
     <button
         bind:this={btn}
         class:running={loading}
-        class:btn-disabled={loading}
+        class:btn-disabled={subprocess && limit_to_one_process && loading}
         class="btn btn-sm btn-outline ld-ext-right w-max"
         on:click={run_callback}
         on:pyEvent
@@ -92,6 +100,17 @@
         {/if}
         <div class="ld ld-ring ld-spin" style="color: antiquewhite;"></div>
     </button>
+    {#if subprocess && loading}
+        <button
+            aria-label={limit_to_one_process ? 'Limit to one process' : 'Allow multiple processes'}
+            data-cooltipz-dir="top"
+            class="btn btn-sm"
+            class:btn-outline={!limit_to_one_process}
+            on:click={() => {
+                limit_to_one_process = !limit_to_one_process;
+            }}><CircleFadingPlus /></button
+        >
+    {/if}
     {#if !subprocess && source && loading}
         <button
             class="btn btn-sm btn-error"
