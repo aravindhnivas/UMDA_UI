@@ -34,7 +34,7 @@
                         <span class="text-wrap break-all">{data.invalid_smiles_file}</span>
                     </div>
                 </div>
-                <VirtualList height="300px" items={invalid_smiles_indexed} let:item>
+                <VirtualList height="250px" items={invalid_smiles_indexed} let:item>
                     <div>
                         <span>{item.ind + 1}: </span><span class="select-text text-wrap break-all"> {item.smiles}</span>
                     </div>
