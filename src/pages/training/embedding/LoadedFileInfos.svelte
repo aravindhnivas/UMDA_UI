@@ -15,9 +15,10 @@
         { name: 'Train y', key: 'columnY' },
     ];
 
-    let metadata: { data_shape: number[]; invalid_smiles: number } = { data_shape: [0, 0], invalid_smiles: 0 };
+    let metadata: { data_shape: number[]; invalid_smiles: number } | null = null;
 
     const refresh_data = async (tfile: Promise<string>, vfile: Promise<string>, columnX: string, columnY: string) => {
+        metadata = null;
         let loaded_files: LoadedInfosFile = {
             training_file: { value: '', valid: false, basename: '' },
             embedded_file: { value: '', valid: false, basename: '' },
@@ -27,12 +28,10 @@
         const [_training_file, _embedded_file] = await Promise.all([tfile, vfile]);
 
         const vector_metadata_file = _embedded_file.replace('.npy', '.metadata.json');
-        // console.log(vector_metadata_file);
         const _metadata = await readJSON<{ data_shape: number[]; invalid_smiles: number }>(vector_metadata_file);
         if (_metadata) {
             metadata = _metadata;
             const { data_shape, invalid_smiles } = metadata;
-            console.log({ data_shape, invalid_smiles });
         }
 
         loaded_files.training_file = {
