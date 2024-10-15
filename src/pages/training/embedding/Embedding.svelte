@@ -104,11 +104,11 @@
     };
 
     const onResult = async (e: CustomEvent) => {
-        const { pyfile } = e.detail;
-        dataFromPython[$embedding] = e.detail.dataFromPython;
+        const { pyfile, args } = e.detail;
+        dataFromPython[args.embedding] = e.detail.dataFromPython;
 
-        if (test_mode && dataFromPython[$embedding].test_mode) {
-            let vec = dataFromPython[$embedding]?.test_mode?.embedded_vector;
+        if (test_mode && dataFromPython[args.embedding].test_mode) {
+            let vec = dataFromPython[args.embedding]?.test_mode?.embedded_vector;
             if (!vec) return toast.error('No data returned from python');
 
             test_result = `Embedded vector: ${vec.length} dimensions`;
@@ -133,10 +133,11 @@
                 const { invalid_smiles_file } = parsed_result?.file_mode;
                 if (!parsed_result?.file_mode) return;
 
-                dataFromPython[$embedding] = parsed_result;
+                dataFromPython[args.embedding] = parsed_result;
                 const invalid_smiles = await fs.readTextFile(invalid_smiles_file);
-                if (!dataFromPython[$embedding]?.file_mode) return toast.error('No data returned from python');
-                dataFromPython[$embedding].file_mode.invalid_smiles = invalid_smiles?.split('\n').filter(Boolean) || [];
+                if (!dataFromPython[args.embedding]?.file_mode) return toast.error('No data returned from python');
+                dataFromPython[args.embedding].file_mode.invalid_smiles =
+                    invalid_smiles?.split('\n').filter(Boolean) || [];
                 $embeddings_computed = true;
             } catch (error) {
                 if (error instanceof Error) toast.error(error.message);
