@@ -271,21 +271,21 @@
 
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
     {#key plot_data_ready}
-        {#await $current_pretrained_file then _pretrained_file}
+        <!-- {#await $current_pretrained_file then _pretrained_file}
             {@const pretrained_file = _pretrained_file.replace('.pkl', '')}
-            {@const _datfile = pretrained_file + '.dat.json'}
-            {#await fs.exists(_datfile) then file_exists}
-                {#if file_exists}
-                    <div class="grid grid-cols-[4fr_1fr] items-center gap-4">
-                        <div class="alert alert-success">
-                            <CheckCheck />
-                            <span>Locally saved computed results are available to plot</span>
-                        </div>
-                        <button class="btn btn-outline" on:click={plot_from_datfile}>Plot</button>
+            {@const _datfile = pretrained_file + '.dat.json'} -->
+        {#await fs.exists(datfile) then file_exists}
+            {#if file_exists}
+                <div class="grid grid-cols-[4fr_1fr] items-center gap-4">
+                    <div class="alert alert-success">
+                        <CheckCheck />
+                        <span>Locally saved computed results are available to plot</span>
                     </div>
-                {/if}
-            {/await}
+                    <button class="btn btn-outline" on:click={plot_from_datfile}>Plot</button>
+                </div>
+            {/if}
         {/await}
+        <!-- {/await} -->
     {/key}
     <div class="flex my-2 gap-4 items-end">
         <Checkbox
