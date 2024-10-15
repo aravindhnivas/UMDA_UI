@@ -29,10 +29,7 @@
 
         const vector_metadata_file = _embedded_file.replace('.npy', '.metadata.json');
         const _metadata = await readJSON<{ data_shape: number[]; invalid_smiles: number }>(vector_metadata_file);
-        if (_metadata) {
-            metadata = _metadata;
-            const { data_shape, invalid_smiles } = metadata;
-        }
+        if (_metadata) metadata = _metadata;
 
         loaded_files.training_file = {
             value: _training_file,
@@ -70,7 +67,7 @@
                     <code class="break-all text-sm p-1" class:bg-success={valid}>{value}</code>
                 </div>
             {/each}
-            {#if metadata}
+            {#if metadata?.data_shape && metadata?.invalid_smiles}
                 <div class="divider col-span-4"></div>
                 <div>Data shape (n_samples, n_features):</div>
                 <div class="col-span-3 border-rounded">({metadata.data_shape.join(', ')})</div>
