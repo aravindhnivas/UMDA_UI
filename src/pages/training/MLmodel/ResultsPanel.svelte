@@ -13,6 +13,7 @@
     import { CheckCheck } from 'lucide-svelte/icons';
     import { CustomInput } from '$lib/components';
     import ResultsStats from './results-subcomponents/ResultsStats.svelte';
+    import CustomSelect from '$lib/components/CustomSelect.svelte';
 
     export let data_file: string;
     export let plot_data_ready = false;
@@ -171,7 +172,6 @@
 
     $: if ($model) get_pretrained_file();
     $: if (plot_data_ready && data_file) {
-        // plot_from_datfile();
         on_plot_data_ready(data_file);
     }
 
@@ -183,8 +183,6 @@
         const parsed_results = await readJSON<MLResults>(resultsfile);
         if (!parsed_results) return;
 
-        console.log(parsed_results);
-
         $results[$model] = parsed_results;
         if (await fs.exists(learning_curve_file)) {
             await get_learning_curve_data(learning_curve_file);
@@ -192,18 +190,24 @@
         if (await fs.exists(cv_scores_file)) {
             await get_cv_scores(cv_scores_file);
         }
-        // await get_learning_curve_data(learning_curve_file);
-        // await get_cv_scores(cv_scores_file);
     };
 
+    let cv_scores_data: Record<string, CVScoresData> = {};
+
     const get_cv_scores = async (filename: string) => {
-        const cv_scores_data = await readJSON<Record<string, CVScoresData>>(filename);
-        if (!cv_scores_data) return;
+        const data = await readJSON<Record<string, CVScoresData>>(filename);
+        if (!data) return;
+
+        cv_scores_data = data;
+
         const nfolds = Object.keys(cv_scores_data).map(Number);
         if (!nfolds.length) return;
 
+        available_cv_folds = nfolds.map(String);
         const max_nfold = Math.max(...nfolds);
-        // console.log({ cv_scores_data, max_nfold });
+        current_cv_fold = String(max_nfold);
+
+        console.log({ cv_scores_data, nfolds, max_nfold });
         if (!$results?.[$model]) return;
         $results[$model].cv_fold = max_nfold;
         $results[$model].cv_scores = cv_scores_data[`${max_nfold}`];
@@ -273,6 +277,8 @@
     let significant_digits = 2;
     $: if (significant_digits < 0) significant_digits = 0;
     $: if (significant_digits > 10) significant_digits = 10;
+    let available_cv_folds: string[] = [];
+    let current_cv_fold = '';
 </script>
 
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
@@ -299,8 +305,17 @@
             label="Plot training data"
             on:change={include_training_plot_if_required}
         />
-
         <CustomInput bind:value={significant_digits} label="significant_digits" type="number" min="0" max="10" />
+        <CustomSelect
+            bind:value={current_cv_fold}
+            items={available_cv_folds}
+            label="CV Folds"
+            on:change={() => {
+                if (!$results?.[$model]) return;
+                $results[$model].cv_fold = Number(current_cv_fold);
+                $results[$model].cv_scores = cv_scores_data[current_cv_fold];
+            }}
+        />
     </div>
     <ResultsStats {significant_digits} />
 </CustomPanel>
