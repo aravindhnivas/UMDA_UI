@@ -186,8 +186,14 @@
         console.log(parsed_results);
 
         $results[$model] = parsed_results;
-        await get_learning_curve_data(learning_curve_file);
-        await get_cv_scores(cv_scores_file);
+        if (await fs.exists(learning_curve_file)) {
+            await get_learning_curve_data(learning_curve_file);
+        }
+        if (await fs.exists(cv_scores_file)) {
+            await get_cv_scores(cv_scores_file);
+        }
+        // await get_learning_curve_data(learning_curve_file);
+        // await get_cv_scores(cv_scores_file);
     };
 
     const get_cv_scores = async (filename: string) => {
