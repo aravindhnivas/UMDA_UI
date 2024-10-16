@@ -37,6 +37,13 @@ interface CurrentModel {
 }
 
 type ParametersArgs = Record<string, Record<string, string | boolean | number | null>>;
+type ModelTuneParameters = Record<
+    MLModel,
+    {
+        parameters: ParametersArgs;
+        hyperparameters: ParametersArgs;
+    }
+>;
 
 type CV_scoring_methods = 'r2' | 'mse' | 'rmse' | 'mae';
 interface CVScores {

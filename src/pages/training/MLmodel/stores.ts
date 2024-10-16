@@ -70,6 +70,7 @@ export const fine_tuned_values = writable<FineTunedValues>(structuredClone(defau
 
 export const hyperparameters = writable<ParametersArgs>({});
 export const parameters = writable<ParametersArgs>({});
+export const tune_parameters = writable<ModelTuneParameters>({} as ModelTuneParameters);
 
 export const fine_tune_model = writable(false);
 export const ncols_ml_model_panel = localWritable('ncols_ml_model_panel', 3);
