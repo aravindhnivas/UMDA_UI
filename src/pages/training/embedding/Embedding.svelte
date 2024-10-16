@@ -167,11 +167,11 @@
     {/if}
 
     {#if test_mode}
-        <div class="grid grid-cols-6 items-end gap-2">
+        <div class="grid grid-cols-[auto_auto_1fr_auto] items-end gap-2">
             <Checkbox label="PCA" bind:value={$use_PCA} />
             <CustomSelect label="embedding" bind:value={$embedding} items={embeddings} />
-            <CustomInput class="col-span-2" label="Enter SMILES" bind:value={$test_smiles} placeholder="Enter SMILES" />
-            <Loadingbtn class="col-span-2" callback={embedd_data} on:result={onResult} />
+            <CustomInput label="Enter SMILES" bind:value={$test_smiles} placeholder="Enter SMILES" />
+            <Loadingbtn callback={embedd_data} on:result={onResult} />
         </div>
 
         <div class="grid items-center gap-1 overflow-auto">
