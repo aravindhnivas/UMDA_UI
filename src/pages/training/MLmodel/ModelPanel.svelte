@@ -101,6 +101,8 @@
                 toast.error('Error: Model mismatch');
                 return;
             }
+
+            $default_parameter_mode = false;
             const basefilename = await path.basename(filename);
             uploadedfile = {
                 fullname: filename,
