@@ -1,6 +1,7 @@
 <script lang="ts">
     import {
         current_pretrained_file,
+        default_parameter_mode,
         include_training_file_in_plot,
         learning_curve,
         model,
@@ -170,7 +171,8 @@
         cv_scores_file = pretrained_file + '.cv_scores.json';
     };
 
-    $: if ($model) get_pretrained_file();
+    $: if ($model || $default_parameter_mode) get_pretrained_file();
+
     $: if (plot_data_ready && data_file) {
         on_plot_data_ready(data_file);
     }
@@ -283,21 +285,19 @@
 
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
     {#key plot_data_ready}
-        <!-- {#await $current_pretrained_file then _pretrained_file}
-            {@const pretrained_file = _pretrained_file.replace('.pkl', '')}
-            {@const _datfile = pretrained_file + '.dat.json'} -->
         {#await fs.exists(datfile) then file_exists}
-            {#if file_exists}
-                <div class="grid grid-cols-[4fr_1fr] items-center gap-4">
-                    <div class="alert alert-success">
-                        <CheckCheck />
-                        <span>Locally saved computed results are available to plot</span>
+            {#await path.basename(datfile) then datfilename}
+                {#if file_exists}
+                    <div class="grid grid-cols-[4fr_1fr] items-center gap-4">
+                        <div class="alert alert-success">
+                            <CheckCheck />
+                            <span>Locally saved computed results are available to plot ({datfilename})</span>
+                        </div>
+                        <button class="btn btn-outline" on:click={plot_from_datfile}>Plot</button>
                     </div>
-                    <button class="btn btn-outline" on:click={plot_from_datfile}>Plot</button>
-                </div>
-            {/if}
+                {/if}
+            {/await}
         {/await}
-        <!-- {/await} -->
     {/key}
     <div class="flex my-2 gap-4 items-end">
         <Checkbox
