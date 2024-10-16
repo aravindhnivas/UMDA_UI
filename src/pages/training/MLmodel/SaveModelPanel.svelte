@@ -4,9 +4,10 @@
     import { Checkbox, CustomInput } from '$lib/components';
     import Notification from '$lib/components/Notification.svelte';
     import { ExternalLink } from 'lucide-svelte/icons';
+    import { message } from '@tauri-apps/api/dialog';
 </script>
 
-<CustomPanel>
+<CustomPanel open={true}>
     <svelte:fragment slot="title" let:open>
         <div class="flex-center">
             <span>Save Model</span>
@@ -26,16 +27,23 @@
         {#await $current_pretrained_file then value}
             {#await path.dirname(value) then save_loc_name}
                 <Notification dismissable={false}>
-                    <span>Save location: {save_loc_name}</span>
-                    <button
-                        class="btn btn-sm btn-outline"
-                        on:click={async () => {
-                            if (!save_loc_name) return;
-                            await shell.open(save_loc_name);
-                        }}
-                    >
-                        <ExternalLink />
-                    </button>
+                    <div class="grid gap-2">
+                        <span>Save location: {save_loc_name}</span>
+                        <button
+                            class="btn btn-sm btn-outline w-max ml-auto"
+                            on:click={async () => {
+                                if (!save_loc_name) return;
+                                try {
+                                    await shell.open(save_loc_name);
+                                } catch (error) {
+                                    if (error instanceof Error) toast.error(error?.message);
+                                }
+                            }}
+                        >
+                            <span>Open folder</span>
+                            <ExternalLink />
+                        </button>
+                    </div>
                 </Notification>
             {/await}
         {/await}
