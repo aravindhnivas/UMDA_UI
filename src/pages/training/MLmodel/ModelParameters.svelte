@@ -8,6 +8,7 @@
         default_parameter_mode,
         all_params_lock_status,
         ncols_ml_model_panel,
+        tune_parameters,
     } from './stores';
     import { validateInput } from '$lib/utils';
     import Kernel from './Kernel.svelte';
@@ -16,7 +17,7 @@
     import { LockKeyhole, UnlockKeyhole, Ban, Search, XOctagon, SlidersHorizontal } from 'lucide-svelte/icons';
     import TuneInput from '$lib/components/TuneInput.svelte';
 
-    export let values: Record<string, any>;
+    // export let values: Record<string, any>;
     export let key: 'hyperparameters' | 'parameters';
 
     const unique_id = getContext<string>('unique_id');
@@ -80,6 +81,7 @@
         const inactive_len = total_len - active_len;
         all_in_fine_tune_mode = inactive_len === 0;
     };
+    // $: console.log($tune_parameters[$model][key]);
 </script>
 
 <div class="grid m-2">
@@ -184,16 +186,16 @@
                     {@const { value, description } = $current_model[key][label]}
                     {#if $model === 'gpr' && label === 'kernel'}
                         <div class="grid gap-2 col-span-{$ncols_ml_model_panel}">
-                            <Kernel bind:value={values[label]} />
+                            <Kernel bind:value={$tune_parameters[$model][key][label]} />
                         </div>
-                    {:else if label in values}
+                    {:else if label in $tune_parameters[$model][key]}
                         {#if typeof value === 'object' && value}
                             <TuneInput
-                                label={`${label} (${value.options[values[label]]})`}
+                                label={`${label} (${value.options[$tune_parameters[$model][key][label]]})`}
                                 helper={description}
                                 helperHighlight={`Default: ${$default_param_values[key][label]}`}
                                 items={Object.keys(value.options)}
-                                bind:value={values[label]}
+                                bind:value={$tune_parameters[$model][key][label]}
                                 bind:lock={$all_params_lock_status[$model][key][label]}
                                 bind:fine_tune={$fine_tuned_values[$model][key][label].active}
                                 bind:fine_tuned_values={$fine_tuned_values[$model][key][label].value}
@@ -202,7 +204,7 @@
                                 on:lockchange={e => onLockChange(e, label)}
                                 on:tuneModeChange={onTuneModeChange}
                             >
-                                {#if values[label] === 'float'}
+                                {#if $tune_parameters[$model][key][label] === 'float'}
                                     <CustomInput
                                         class="col-span-6"
                                         id="{unique_id}_{label}"
@@ -221,7 +223,7 @@
                                 {label}
                                 helper={description}
                                 helperHighlight={`Default: ${$default_param_values[key][label]}`}
-                                bind:value={values[label]}
+                                bind:value={$tune_parameters[$model][key][label]}
                                 bind:lock={$all_params_lock_status[$model][key][label]}
                                 bind:fine_tune={$fine_tuned_values[$model][key][label].active}
                                 bind:fine_tuned_values={$fine_tuned_values[$model][key][label].value}

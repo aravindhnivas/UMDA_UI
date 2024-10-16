@@ -31,7 +31,6 @@
         fine_tuned_values,
         grid_search_method,
         halving_factor,
-        hyperparameters,
         inverse_scaling,
         inverse_transform,
         learning_curve,
@@ -43,12 +42,12 @@
         optuna_resume_study,
         parallel_computation,
         parallel_computation_backend,
-        parameters,
         randomzied_gridsearch_niter,
         results,
         save_pretrained_model,
         skip_invalid_y_values,
         test_size,
+        tune_parameters,
         variable_type,
         yscaling,
         ytransformation,
@@ -123,7 +122,10 @@
             if (!overwrite) return;
         }
 
-        const values = structuredClone({ ...$hyperparameters[$model], ...$parameters[$model] });
+        const values = structuredClone({
+            ...$tune_parameters[$model].hyperparameters,
+            ...$tune_parameters[$model].parameters,
+        });
 
         Object.keys($all_params_lock_status[$model].parameters).forEach(params => {
             console.log({ params, val: values[params], fine: clonedFineTunedValues[params] });

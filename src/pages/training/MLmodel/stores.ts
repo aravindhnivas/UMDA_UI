@@ -68,9 +68,9 @@ export const default_param_values = derived(current_model, $current_model => {
 export const default_fine_tuned_values = writable<FineTunedValues>({} as FineTunedValues);
 export const fine_tuned_values = writable<FineTunedValues>(structuredClone(default_values_for_models));
 
-export const hyperparameters = writable<ParametersArgs>({});
-export const parameters = writable<ParametersArgs>({});
-export const tune_parameters = writable<ModelTuneParameters>({} as ModelTuneParameters);
+// export const hyperparameters = writable<ParametersArgs>({});
+// export const parameters = writable<ParametersArgs>({});
+export const tune_parameters = writable({} as ModelTuneParameters);
 
 export const fine_tune_model = writable(false);
 export const ncols_ml_model_panel = localWritable('ncols_ml_model_panel', 3);

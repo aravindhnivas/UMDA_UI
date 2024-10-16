@@ -40,8 +40,8 @@ type ParametersArgs = Record<string, Record<string, string | boolean | number | 
 type ModelTuneParameters = Record<
     MLModel,
     {
-        parameters: ParametersArgs;
-        hyperparameters: ParametersArgs;
+        parameters: Record<string, string | boolean | number | null>;
+        hyperparameters: Record<string, string | boolean | number | null>;
     }
 >;
 

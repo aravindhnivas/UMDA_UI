@@ -5,9 +5,8 @@
         default_fine_tuned_values,
         default_param_values,
         fine_tuned_values,
-        hyperparameters,
         model,
-        parameters,
+        tune_parameters,
         pre_trained_filename,
         default_parameter_mode,
     } from './stores';
@@ -15,8 +14,7 @@
 
     const set_fine_tuned_values = (key: 'hyperparameters' | 'parameters') => {
         const cloned_obj = structuredClone($current_model[key]);
-        // console.log({ $current_model });
-        // console.log('Setting fine tuned values', $model, key, cloned_obj);
+
         Object.keys(cloned_obj).forEach(label => {
             const obj = cloned_obj[label];
             let fine_tune_options = '';
@@ -45,18 +43,13 @@
         });
     };
     const set_model_params = (model_name: string, embedding_name: string, default_mode: boolean) => {
-        // console.log('Setting model params', $current_model, $model);
         if (!$model) return;
         if (!$current_model) return;
 
-        // Set the default values if they don't exist
-        $hyperparameters[$model] ??= structuredClone($default_param_values.hyperparameters);
-        $parameters[$model] ??= structuredClone($default_param_values.parameters);
+        $tune_parameters[$model] ??= structuredClone($default_param_values);
         $default_fine_tuned_values[$model] ??= { hyperparameters: {}, parameters: {} };
 
         Object.keys($current_model.optuna_grid).forEach(okey => {
-            // console.log('Setting default fine tuned values', $model, okey);
-
             const { type, low, high, step, options, log } = $current_model.optuna_grid[okey];
 
             let value: string;
@@ -73,14 +66,12 @@
 
             const hparams_keys = Object.keys($current_model.hyperparameters);
             const params_keys = Object.keys($current_model.parameters);
-            // console.log({ hparams_keys, params_keys, okey });
             if (hparams_keys.includes(okey)) {
                 $default_fine_tuned_values[$model].hyperparameters[okey] = { value, type, scale, active: false };
             } else if (params_keys.includes(okey)) {
                 $default_fine_tuned_values[$model].parameters[okey] = { value, type, scale, active: false };
             }
         });
-        // console.log($default_fine_tuned_values?.[$model]);
 
         // setting fine tuned hyperparameters
         $fine_tuned_values[$model] ??= { hyperparameters: {}, parameters: {} };
@@ -96,10 +87,6 @@
         // Set the pre-trained model filename
         $pre_trained_filename = `${model_name}_${embedding_name}_pretrained_model${default_mode ? '_default' : ''}`;
     };
-
-    // onMount(() => {
-    //     set_model_params($model, $embedd_savefile, $default_parameter_mode);
-    // });
 
     $: set_model_params($model, $embedd_savefile, $default_parameter_mode);
 </script>

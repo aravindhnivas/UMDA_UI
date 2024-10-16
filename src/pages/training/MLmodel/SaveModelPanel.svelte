@@ -4,7 +4,6 @@
     import { Checkbox, CustomInput } from '$lib/components';
     import Notification from '$lib/components/Notification.svelte';
     import { ExternalLink } from 'lucide-svelte/icons';
-    import { message } from '@tauri-apps/api/dialog';
 </script>
 
 <CustomPanel open={true}>

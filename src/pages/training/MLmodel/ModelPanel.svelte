@@ -1,7 +1,5 @@
 <script lang="ts">
     import {
-        hyperparameters,
-        parameters,
         model,
         default_param_values,
         current_model,
@@ -12,6 +10,7 @@
         grid_search_method,
         cv_fold,
         current_pretrained_file,
+        tune_parameters,
     } from './stores';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import ModelParameters from './ModelParameters.svelte';
@@ -43,11 +42,7 @@
                 Object.keys($all_params_lock_status[$model][key]).forEach(label => {
                     const locked = $all_params_lock_status[$model][key][label];
                     if (locked) return;
-                    if (key === 'hyperparameters') {
-                        values[label] = structuredClone($hyperparameters[$model][label]);
-                    } else {
-                        values[label] = structuredClone($parameters[$model][label]);
-                    }
+                    values[label] = structuredClone($tune_parameters[$model][key][label]);
                 });
             });
         }
@@ -109,7 +104,7 @@
                 name: basefilename,
                 model: parsed.model,
             };
-            // console.log({ hyperparameters: $hyperparameters[$model], parameters: $parameters[$model] });
+
             $fine_tune_model = parsed.mode === 'fine_tuned';
             if ($fine_tune_model) {
                 v.forEach(key => {
@@ -130,27 +125,18 @@
             } else {
                 if (!parsed.values) return;
                 if (parsed.mode !== 'normal') return toast.error('Error: Invalid mode');
-                Object.keys($hyperparameters[$model]).forEach(label => {
-                    if (!(label in parsed.values)) {
-                        if (!(label in $all_params_lock_status[$model].hyperparameters)) return;
-                        $all_params_lock_status[$model].hyperparameters[label] = true;
-                        return;
-                    }
-                    if (isObject(parsed.values[label])) return;
-                    $hyperparameters[$model][label] = parsed.values[label];
-                    $all_params_lock_status[$model].hyperparameters[label] = false;
-                    $fine_tuned_values[$model].hyperparameters[label].active = false;
-                });
-                Object.keys($parameters[$model]).forEach(label => {
-                    if (!(label in parsed.values)) {
-                        if (!(label in $all_params_lock_status[$model].parameters)) return;
-                        $all_params_lock_status[$model].parameters[label] = true;
-                        return;
-                    }
-                    if (isObject(parsed.values[label])) return;
-                    $parameters[$model][label] = parsed.values[label];
-                    $all_params_lock_status[$model].parameters[label] = false;
-                    $fine_tuned_values[$model].hyperparameters[label].active = false;
+                v.forEach(key => {
+                    Object.keys($tune_parameters[$model][key]).forEach(label => {
+                        if (!(label in parsed.values)) {
+                            if (!(label in $all_params_lock_status[$model][key])) return;
+                            $all_params_lock_status[$model][key][label] = true;
+                            return;
+                        }
+                        if (isObject(parsed.values[label])) return;
+                        $tune_parameters[$model][key][label] = parsed.values[label];
+                        $all_params_lock_status[$model][key][label] = false;
+                        $fine_tuned_values[$model][key][label].active = false;
+                    });
                 });
             }
 
@@ -162,8 +148,7 @@
 
     const reset_parameters = () => {
         uploadedfile = null;
-        $hyperparameters[$model] = structuredClone($default_param_values.hyperparameters);
-        $parameters[$model] = structuredClone($default_param_values.parameters);
+        $tune_parameters[$model] = structuredClone($default_param_values);
         Object.keys($all_params_lock_status[$model].hyperparameters).forEach(key => {
             $all_params_lock_status[$model].hyperparameters[key] = true;
         });
@@ -234,8 +219,8 @@
         {/if}
     </div>
 
-    {#if $hyperparameters?.[$model]}
-        <ModelParameters key="hyperparameters" bind:values={$hyperparameters[$model]} />
+    {#if $tune_parameters[$model].hyperparameters}
+        <ModelParameters key="hyperparameters" />
     {:else}
         <Notification message="No hyperparameters found" type="error" />
     {/if}
