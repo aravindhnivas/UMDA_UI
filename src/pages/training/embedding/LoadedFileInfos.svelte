@@ -67,12 +67,16 @@
                     <code class="break-all text-sm p-1" class:bg-success={valid}>{value}</code>
                 </div>
             {/each}
-            {#if metadata?.data_shape && metadata?.invalid_smiles}
+            {#if metadata?.data_shape || metadata?.invalid_smiles}
                 <div class="divider col-span-4"></div>
                 <div>Data shape (n_samples, n_features):</div>
-                <div class="col-span-3 border-rounded">({metadata.data_shape.join(', ')})</div>
-                <div>Invalid SMILES:</div>
-                <div class="col-span-3 border-rounded">{metadata.invalid_smiles}</div>
+                <div class="col-span-3 border-rounded">({metadata.data_shape?.join(', ')})</div>
+                {#if metadata.invalid_smiles === 0}
+                    <div class="col-span-4 badge">All SMILES are valid - encoded</div>
+                {:else}
+                    <div>Invalid SMILES:</div>
+                    <div class="col-span-3 border-rounded">{metadata.invalid_smiles}</div>
+                {/if}
             {/if}
         </div>
     {/await}
