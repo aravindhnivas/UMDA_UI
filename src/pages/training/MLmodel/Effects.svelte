@@ -9,6 +9,7 @@
         model,
         parameters,
         pre_trained_filename,
+        default_parameter_mode,
     } from './stores';
     import { set_default_fine_tuned_values } from './utils';
 
@@ -43,7 +44,7 @@
             };
         });
     };
-    const set_model_params = () => {
+    const set_model_params = (model_name: string, embedding_name: string, default_mode: boolean) => {
         // console.log('Setting model params', $current_model, $model);
         if (!$model) return;
         if (!$current_model) return;
@@ -93,12 +94,12 @@
         }
 
         // Set the pre-trained model filename
-        $pre_trained_filename = `${$model}_${$embedd_savefile}_pretrained_model`;
+        $pre_trained_filename = `${model_name}_${embedding_name}_pretrained_model${default_mode ? '_default' : ''}`;
     };
 
-    onMount(() => {
-        set_model_params();
-    });
+    // onMount(() => {
+    //     set_model_params($model, $embedd_savefile, $default_parameter_mode);
+    // });
 
-    $: if ($model || $embedd_savefile) set_model_params();
+    $: set_model_params($model, $embedd_savefile, $default_parameter_mode);
 </script>
