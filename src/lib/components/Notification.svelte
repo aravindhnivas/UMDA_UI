@@ -18,7 +18,7 @@
 </script>
 
 {#if !dismiss}
-    <div class="{alert_classes[type]} max-w-5xl" role="alert">
+    <div class={alert_classes[type]} role="alert">
         <div class="flex items-center gap-2">
             {#if type === 'info'}
                 <Info />
