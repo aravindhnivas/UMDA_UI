@@ -109,7 +109,7 @@
                 name: basefilename,
                 model: parsed.model,
             };
-            console.log({ hyperparameters: $hyperparameters[$model], parameters: $parameters[$model] });
+            // console.log({ hyperparameters: $hyperparameters[$model], parameters: $parameters[$model] });
             $fine_tune_model = parsed.mode === 'fine_tuned';
             if ($fine_tune_model) {
                 v.forEach(key => {
