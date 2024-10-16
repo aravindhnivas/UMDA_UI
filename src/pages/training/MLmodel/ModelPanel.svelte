@@ -191,9 +191,10 @@
                             const loc = await path.dirname(pre_trained_file);
                             const filename = await path.basename(pre_trained_file);
                             // const extname = filename.split('.').at(-1);
+                            const name = $fine_tune_model ? 'fine_tuned_parameters' : 'best_params';
                             const best_params_filename = await path.join(
                                 loc,
-                                `${filename}.${$grid_search_method}.best_params.json`,
+                                `${filename}.${$grid_search_method}.${name}.json`,
                             );
                             // console.log({ pre_trained_file, loc, best_params_filename });
                             // console.log(best_params_filename);
