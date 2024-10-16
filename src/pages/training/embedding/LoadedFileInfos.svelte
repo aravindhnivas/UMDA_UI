@@ -74,8 +74,10 @@
                 {#if metadata.invalid_smiles === 0}
                     <div class="col-span-4 badge">All SMILES are valid - encoded</div>
                 {:else}
-                    <div>Invalid SMILES:</div>
+                    <div>Invalid SMILES embedding:</div>
                     <div class="col-span-3 border-rounded">{metadata.invalid_smiles}</div>
+                    <div>Total valid SMILES embedding:</div>
+                    <div>{metadata.data_shape[0] - metadata.invalid_smiles}</div>
                 {/if}
             {/if}
         </div>
