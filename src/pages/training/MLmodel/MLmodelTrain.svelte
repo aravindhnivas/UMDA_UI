@@ -51,6 +51,7 @@
         variable_type,
         yscaling,
         ytransformation,
+        optuna_storage_file,
     } from './stores';
     import TrainingFilePanel from './TrainingFilePanel.svelte';
     import { parse_fine_tuned_values } from './utils';
@@ -225,6 +226,12 @@
             }
         }
 
+        const optuna_storage = await $optuna_storage_file;
+        if ($fine_tune_model && $grid_search_method === 'Optuna' && !(await fs.exists(optuna_storage))) {
+            toast.error('Error: Optuna storage file not provided');
+            return;
+        }
+
         const args = {
             model: $model,
             vectors_file,
@@ -266,6 +273,7 @@
             learning_curve_train_sizes,
             analyse_shapley_values: $analyse_shapley_values,
             optuna_resume_study: $optuna_resume_study,
+            optuna_storage_file: optuna_storage,
         };
 
         delete $results[$model];

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { optuna_storage_file } from './stores';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import { isObject, isEmpty } from 'lodash-es';
     import LoadedFileInfos from '../embedding/LoadedFileInfos.svelte';
@@ -11,7 +12,7 @@
     };
 </script>
 
-<CustomPanel open={false}>
+<CustomPanel open={true}>
     <svelte:fragment slot="title" let:open>
         <div class="flex-center">
             <span>Loaded training file</span>
@@ -28,4 +29,9 @@
         </div>
     </svelte:fragment>
     <LoadedFileInfos on:refresh={get_loaded_files} />
+    <div class="divider"></div>
+    <h3>Optuna storage</h3>
+    {#await $optuna_storage_file then value}
+        <span class="text-sm">{value}</span>
+    {/await}
 </CustomPanel>

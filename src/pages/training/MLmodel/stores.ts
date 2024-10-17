@@ -1,6 +1,21 @@
 import supervised_ml_models from '$lib/config/ml_model/ml_models_parameters';
+import { training_save_directory, training_file } from '../training_file/stores';
 import { current_training_processed_data_directory } from '../training_file/plot-analysis/stores';
 import { embedd_savefile } from '../embedding/stores';
+
+export const optuna_storage_file = derived(
+    [training_save_directory, training_file],
+    async ([$training_save_directory, $training_file]) => {
+        const basename = await path.basename($training_file.filename, `.${$training_file.filetype}`);
+        const optuna_file = await path.join($training_save_directory, 'optuna', `optuna_${basename}.db`);
+        // if (!(await fs.exists(optuna_file))) {
+        //     const dir = await path.dirname(optuna_file);
+        //     await fs.createDir(dir, { recursive: true });
+        // }
+        return optuna_file;
+    },
+);
+
 export const model_names = Object.keys(supervised_ml_models) as MLModel[];
 export const model = localWritable<MLModel>('ml_model', 'ridge');
 

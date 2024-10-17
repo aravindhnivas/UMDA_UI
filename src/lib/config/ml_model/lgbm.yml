@@ -9,10 +9,6 @@ hyperparameters:
         value: 0.1
         description: 'Boosting learning rate'
         type: float
-    max_depth:
-        value: -1
-        description: 'Maximum tree depth for base learners, <=0 means no limit'
-        type: integer
     subsample:
         value: 1.0
         description: 'Subsample ratio of the training instance (alias for bagging_fraction)'
@@ -29,6 +25,10 @@ hyperparameters:
         value: 20
         description: 'Minimum number of data needed in a child (leaf)'
         type: integer
+    min_child_weight:
+        value: 0.001
+        description: 'Minimum sum hessian in one leaf'
+        type: float
     reg_alpha:
         value: 0.0
         description: 'L1 regularization term on weights'
@@ -38,6 +38,10 @@ hyperparameters:
         description: 'L2 regularization term on weights'
         type: float
 parameters:
+    max_depth:
+        value: -1
+        description: 'Maximum tree depth for base learners, <=0 means no limit'
+        type: integer
     objective:
         value:
             default: 'regression'
@@ -48,27 +52,19 @@ parameters:
         description: 'Type of task'
         type: string
 optuna_grid:
+    n_estimators:
+        low: 100
+        high: 1000
+        type: integer
     num_leaves:
         low: 2
         high: 256
-        type: integer
-    max_depth:
-        low: 1
-        high: 9
         type: integer
     learning_rate:
         low: 1e-3
         high: 1.0
         log: true
         type: float
-    min_child_weight:
-        low: 1
-        high: 10
-        type: integer
-    min_child_samples:
-        low: 5
-        high: 100
-        type: integer
     subsample:
         low: 0.5
         high: 1.0
@@ -77,6 +73,18 @@ optuna_grid:
         low: 0.5
         high: 1.0
         type: float
+    min_child_samples:
+        low: 5
+        high: 100
+        type: integer
+    max_depth:
+        low: 1
+        high: 9
+        type: integer
+    min_child_weight:
+        low: 1
+        high: 10
+        type: integer
     reg_alpha:
         low: 1e-8
         high: 10.0
