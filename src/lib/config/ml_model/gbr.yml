@@ -110,7 +110,7 @@ optuna_grid:
         type: float
     max_depth:
         low: 1
-        high: 9
+        high: 10
         type: integer
     min_samples_split:
         low: 2
@@ -124,9 +124,9 @@ optuna_grid:
         low: 0.5
         high: 1.0
         type: float
-    max_features:
-        options:
-            - 'auto'
-            - 'sqrt'
-            - 'log2'
-        type: string
+    # max_features:
+    #     options:
+    #         - 'auto'
+    #         - 'sqrt'
+    #         - 'log2'
+    #     type: string

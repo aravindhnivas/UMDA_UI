@@ -77,28 +77,28 @@ optuna_grid:
         low: 5
         high: 100
         type: integer
-    max_depth:
-        low: 1
-        high: 9
-        type: integer
-    min_child_weight:
-        low: 1
-        high: 10
-        type: integer
-    reg_alpha:
-        low: 1e-8
-        high: 10.0
-        log: true
-        type: float
-    reg_lambda:
-        low: 1e-8
-        high: 10.0
-        log: true
-        type: float
-    bagging_freq:
-        low: 1
-        high: 7
-        type: integer
+    # max_depth:
+    #     low: 1
+    #     high: 10
+    #     type: integer
+    # min_child_weight:
+    #     low: 1
+    #     high: 10
+    #     type: integer
+    # reg_alpha:
+    #     low: 1e-8
+    #     high: 10.0
+    #     log: true
+    #     type: float
+    # reg_lambda:
+    #     low: 1e-8
+    #     high: 10.0
+    #     log: true
+    #     type: float
+    # bagging_freq:
+    #     low: 1
+    #     high: 7
+    #     type: integer
 # NOTES:
 # bagging_fraction  = alias for subsample
 # bagging_freq = alias for subsample_freq

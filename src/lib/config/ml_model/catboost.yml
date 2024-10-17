@@ -14,18 +14,10 @@ hyperparameters:
         value: 6
         description: 'Depth of the tree'
         type: integer
-    l2_leaf_reg:
-        value: 3
-        description: 'L2 regularization coefficient'
-        type: float
     random_strength:
         value: 1
         description: 'Amount of randomness to use for scoring splits'
         type: float
-    border_count:
-        value: 254
-        description: 'Number of splits for numerical features'
-        type: integer
     subsample:
         value: 0.8
         description: 'Subsample ratio of the training instance'
@@ -33,6 +25,14 @@ hyperparameters:
     colsample_bylevel:
         value: 0.8
         description: 'Subsample ratio of columns for each level'
+        type: float
+    border_count:
+        value: 254
+        description: 'Number of splits for numerical features'
+        type: integer
+    l2_leaf_reg:
+        value: 3
+        description: 'L2 regularization coefficient'
         type: float
 
 parameters:
@@ -281,27 +281,31 @@ optuna_grid:
         high: 100
         log: true
         type: float
-    border_count:
-        low: 1
-        high: 255
-        log: false
-        type: integer
-    colsample_bylevel:
+    subsample:
         low: 0.5
         high: 1.0
-        log: false
         type: float
-    boosting_type:
-        options:
-            - 'Ordered'
-            - 'Plain'
-        type: string
-    bootstrap_type:
-        options:
-            - 'Bayesian'
-            - 'Bernoulli'
-            - 'MVS'
-        type: string
+    # colsample_bylevel:
+    #     low: 0.5
+    #     high: 1.0
+    #     log: false
+    #     type: float
+    # border_count:
+    #     low: 1
+    #     high: 255
+    #     log: false
+    #     type: integer
+    # boosting_type:
+    #     options:
+    #         - 'Ordered'
+    #         - 'Plain'
+    #     type: string
+    # bootstrap_type:
+    #     options:
+    #         - 'Bayesian'
+    #         - 'Bernoulli'
+    #         - 'MVS'
+    #     type: string
 # auto_class_weights:
 #     value:
 #       default: 'None'

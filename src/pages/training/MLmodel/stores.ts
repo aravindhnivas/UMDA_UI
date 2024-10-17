@@ -6,6 +6,7 @@ import { embedd_savefile } from '../embedding/stores';
 export const optuna_storage_file = derived(
     [training_save_directory, training_file],
     async ([$training_save_directory, $training_file]) => {
+        if (!$training_file) return '';
         const basename = await path.basename($training_file.filename, `.${$training_file.filetype}`);
         const optuna_file = await path.join($training_save_directory, 'optuna', `optuna_${basename}.db`);
         // if (!(await fs.exists(optuna_file))) {
