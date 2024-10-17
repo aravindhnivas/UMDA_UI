@@ -46,22 +46,15 @@
                 cancelToken: source.token,
             });
 
-            // loading = false;
-            // if (subprocess) process_count -= 1;
-
             dispatch('result', { dataFromPython, pyfile, args });
             console.log('done!!');
         } catch (error) {
             toast.error(error as string);
         } finally {
-            // loading = false;
             if (subprocess) process_count -= 1;
             if (process_count === 0) {
                 console.log('All processes completed');
                 loading = false;
-            } else {
-                console.log('Still running processes:', process_count);
-                loading = true;
             }
         }
     };
