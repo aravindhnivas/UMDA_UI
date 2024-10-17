@@ -13,6 +13,14 @@ hyperparameters:
         value: -1
         description: 'Maximum tree depth for base learners, <=0 means no limit'
         type: integer
+    subsample:
+        value: 1.0
+        description: 'Subsample ratio of the training instance (alias for bagging_fraction)'
+        type: float
+    colsample_bytree:
+        value: 1.0
+        description: 'Subsample ratio of columns when constructing each tree (alias for feature_fraction)'
+        type: float
     num_leaves:
         value: 31
         description: 'Maximum number of leaves in one tree'
@@ -21,14 +29,6 @@ hyperparameters:
         value: 20
         description: 'Minimum number of data needed in a child (leaf)'
         type: integer
-    subsample:
-        value: 1.0
-        description: 'Subsample ratio of the training instance'
-        type: float
-    colsample_bytree:
-        value: 1.0
-        description: 'Subsample ratio of columns when constructing each tree'
-        type: float
     reg_alpha:
         value: 0.0
         description: 'L1 regularization term on weights'
@@ -87,11 +87,11 @@ optuna_grid:
         high: 10.0
         log: true
         type: float
-    bagging_fraction:
-        low: 0.4
-        high: 1.0
-        type: float
     bagging_freq:
         low: 1
         high: 7
         type: integer
+# NOTES:
+# bagging_fraction  = alias for subsample
+# bagging_freq = alias for subsample_freq
+# feature_fraction = alias for colsample_bytree

@@ -18,6 +18,10 @@ hyperparameters:
         value: 3
         description: 'L2 regularization coefficient'
         type: float
+    random_strength:
+        value: 1
+        description: 'Amount of randomness to use for scoring splits'
+        type: float
     border_count:
         value: 254
         description: 'Number of splits for numerical features'
@@ -32,10 +36,6 @@ hyperparameters:
         type: float
 
 parameters:
-    random_strength:
-        value: 1
-        description: 'Amount of randomness to use for scoring splits'
-        type: float
     nan_mode:
         value:
             default: 'Min'
@@ -273,7 +273,12 @@ optuna_grid:
         type: integer
     l2_leaf_reg:
         low: 1e-8
-        high: 1.0
+        high: 100
+        log: true
+        type: float
+    random_strength:
+        low: 1e-8
+        high: 100
         log: true
         type: float
     border_count:

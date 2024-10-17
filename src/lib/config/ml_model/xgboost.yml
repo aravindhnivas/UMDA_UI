@@ -13,10 +13,6 @@ hyperparameters:
         value: 3
         description: 'Maximum tree depth for base learners'
         type: integer
-    min_child_weight:
-        value: 1
-        description: 'Minimum sum of instance weight (hessian) needed in a child'
-        type: integer
     subsample:
         value: 1.0
         description: 'Subsample ratio of the training instance'
@@ -25,18 +21,7 @@ hyperparameters:
         value: 1.0
         description: 'Subsample ratio of columns when constructing each tree'
         type: float
-    reg_alpha:
-        value: 0.0
-        description: 'L1 regularization term on weights'
-        type: float
-    reg_lambda:
-        value: 1.0
-        description: 'L2 regularization term on weights'
-        type: float
-    gamma:
-        value: 0.0
-        description: 'Minimum loss reduction required to make a further partition on a leaf node of the tree'
-        type: float
+
 parameters:
     objective:
         value:
@@ -56,6 +41,22 @@ parameters:
                 rank:map: 'Learning to rank with MAP loss'
         description: 'Specify the learning task and the corresponding learning objective'
         type: string
+    min_child_weight:
+        value: 1
+        description: 'Minimum sum of instance weight (hessian) needed in a child'
+        type: integer
+    alpha:
+        value: 0.0
+        description: 'L1 regularization term on weights'
+        type: float
+    lambda:
+        value: 1.0
+        description: 'L2 regularization term on weights'
+        type: float
+    gamma:
+        value: 0.0
+        description: 'Minimum loss reduction required to make a further partition on a leaf node of the tree'
+        type: float
     booster:
         value:
             default: 'gbtree'
@@ -155,7 +156,17 @@ parameters:
         value: 'one_output_per_tree'
         description: 'The multi-class strategy if target is multi-class'
         type: string
+
 optuna_grid:
+    n_estimators:
+        low: 100
+        high: 1000
+        type: integer
+    learning_rate:
+        low: 1e-3
+        high: 1.0
+        log: true
+        type: float
     min_child_weight:
         low: 1
         high: 10
@@ -168,6 +179,10 @@ optuna_grid:
         low: 0.1
         high: 1.0
         type: float
+    max_depth:
+        low: 1
+        high: 9
+        type: integer
     alpha:
         low: 1e-8
         high: 1.0

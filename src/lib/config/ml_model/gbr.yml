@@ -1,14 +1,14 @@
 name: 'Gradient Boosting Regression'
 description: 'Gradient Boosting builds an additive model in a forward stage-wise fashion; it allows for the optimization of arbitrary differentiable loss functions'
 hyperparameters:
-    learning_rate:
-        value: 0.1
-        description: 'Learning rate shrinks the contribution of each tree'
-        type: float
     n_estimators:
         value: 100
         description: 'The number of boosting stages to perform'
         type: integer
+    learning_rate:
+        value: 0.1
+        description: 'Learning rate shrinks the contribution of each tree'
+        type: float
     min_samples_split:
         value: 2
         description: 'Minimum number of samples required to split an internal node'
@@ -17,14 +17,14 @@ hyperparameters:
         value: 1
         description: 'Minimum number of samples required to be at a leaf node'
         type: float
-    subsample:
-        value: 1.0
-        description: 'The fraction of samples to be used for fitting the individual base learners'
-        type: float
     max_depth:
         value: 3
         description: 'Maximum depth of the individual regression estimators'
         type: integer
+    subsample:
+        value: 1.0
+        description: 'The fraction of samples to be used for fitting the individual base learners'
+        type: float
 parameters:
     loss:
         value:
@@ -103,30 +103,30 @@ optuna_grid:
         low: 100
         high: 1000
         type: integer
+    learning_rate:
+        low: 1e-3
+        high: 1.0
+        log: true
+        type: float
     max_depth:
         low: 1
         high: 9
         type: integer
     min_samples_split:
         low: 2
-        high: 10
+        high: 20
         type: integer
     min_samples_leaf:
         low: 1
         high: 10
         type: integer
+    subsample:
+        low: 0.5
+        high: 1.0
+        type: float
     max_features:
         options:
             - 'auto'
             - 'sqrt'
             - 'log2'
         type: string
-    subsample:
-        low: 0.5
-        high: 1.0
-        type: float
-    learning_rate:
-        low: 1e-3
-        high: 1.0
-        log: true
-        type: float
