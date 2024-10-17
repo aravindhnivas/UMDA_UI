@@ -56,6 +56,7 @@
                 console.log('All processes completed');
                 loading = false;
             }
+            console.warn({ process_count, loading });
         }
     };
     let limit_to_one_process = true;
