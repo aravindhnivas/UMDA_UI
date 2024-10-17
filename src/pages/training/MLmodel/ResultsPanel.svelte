@@ -286,8 +286,8 @@
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
     {#key plot_data_ready}
         {#await fs.exists(datfile) then file_exists}
-            {#await path.basename(datfile) then datfilename}
-                {#if file_exists}
+            {#if file_exists}
+                {#await path.basename(datfile) then datfilename}
                     <div class="grid grid-cols-[4fr_1fr] items-center gap-4">
                         <div class="alert alert-success">
                             <CheckCheck />
@@ -295,8 +295,8 @@
                         </div>
                         <button class="btn btn-outline" on:click={plot_from_datfile}>Plot</button>
                     </div>
-                {/if}
-            {/await}
+                {/await}
+            {/if}
         {/await}
     {/key}
     <div class="flex my-2 gap-4 items-end">
