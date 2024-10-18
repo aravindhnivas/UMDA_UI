@@ -96,7 +96,7 @@
                 ];
             }
 
-            await get_pretrained_file($current_pretrained_file);
+            const { learning_curve_file } = await get_pretrained_file($current_pretrained_file);
             if ($learning_curve.active) {
                 await get_learning_curve_data(learning_curve_file);
             }
@@ -155,10 +155,10 @@
         console.log($plot_data[$model]);
     };
 
-    let datfile: string = '';
-    let resultsfile: string = '';
-    let learning_curve_file: string = '';
-    let cv_scores_file: string = '';
+    // let datfile: string = '';
+    // let resultsfile: string = '';
+    // let learning_curve_file: string = '';
+    // let cv_scores_file: string = '';
 
     const get_pretrained_file = async (name: Promise<string>) => {
         let pretrained_file = await name;
@@ -166,10 +166,10 @@
             pretrained_file = pretrained_file.replace('.pkl', '');
         }
 
-        datfile = pretrained_file + '.dat.json';
-        resultsfile = pretrained_file + '.results.json';
-        learning_curve_file = pretrained_file + '.learning_curve.json';
-        cv_scores_file = pretrained_file + '.cv_scores.json';
+        const datfile = pretrained_file + '.dat.json';
+        const resultsfile = pretrained_file + '.results.json';
+        const learning_curve_file = pretrained_file + '.learning_curve.json';
+        const cv_scores_file = pretrained_file + '.cv_scores.json';
         return { datfile, resultsfile, learning_curve_file, cv_scores_file };
     };
 
@@ -179,7 +179,8 @@
     }
 
     const plot_from_datfile = async () => {
-        await get_pretrained_file($current_pretrained_file);
+        const { datfile, resultsfile, learning_curve_file, cv_scores_file } =
+            await get_pretrained_file($current_pretrained_file);
         await on_plot_data_ready(datfile);
         console.log('Reading results file', resultsfile);
 
@@ -286,15 +287,17 @@
 
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
     {#key plot_data_ready}
-        <FileExists name={datfile} let:basename={datfilename}>
-            <div class="grid grid-cols-[4fr_1fr] items-center gap-4">
-                <div class="alert alert-success">
-                    <CheckCheck />
-                    <span>Locally saved computed results are available to plot ({datfilename})</span>
+        {#await get_pretrained_file($current_pretrained_file) then { datfile }}
+            <FileExists name={datfile} let:basename={datfilename}>
+                <div class="grid grid-cols-[4fr_1fr] items-center gap-4">
+                    <div class="alert alert-success">
+                        <CheckCheck />
+                        <span>Locally saved computed results are available to plot ({datfilename})</span>
+                    </div>
+                    <button class="btn btn-outline" on:click={plot_from_datfile}>Plot</button>
                 </div>
-                <button class="btn btn-outline" on:click={plot_from_datfile}>Plot</button>
-            </div>
-        </FileExists>
+            </FileExists>
+        {/await}
     {/key}
     <div class="flex my-2 gap-4 items-end">
         <Checkbox
