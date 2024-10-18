@@ -131,15 +131,43 @@ export const default_parameter_mode = localWritable('default_parameter_mode', tr
 export const skip_invalid_y_values = localWritable('skip_invalid_y_values', false);
 export const analyse_shapley_values = localWritable('analyse_shapley_values', false);
 export const pre_trained_filename = localWritable('pre_trained_filename', '');
-export const current_pretrained_file = derived(
-    [current_training_processed_data_directory, pre_trained_filename, model, embedd_savefile],
-    async ([$current_training_processed_data_directory, $pre_trained_filename, $model, $embedd_savefile]) => {
-        const dir = await path.join(
+export const current_pretrained_dir = derived(
+    [
+        current_training_processed_data_directory,
+        model,
+        embedd_savefile,
+        default_parameter_mode,
+        fine_tune_model,
+        grid_search_method,
+    ],
+    async ([
+        $current_training_processed_data_directory,
+        $model,
+        $embedd_savefile,
+        $default_parameter_mode,
+        $fine_tune_model,
+        $grid_search_method,
+    ]) => {
+        let dir = await path.join(
             await $current_training_processed_data_directory,
             'pretrained_models',
             $model,
             $embedd_savefile,
         );
+
+        if ($default_parameter_mode) {
+            dir = await path.join(dir, 'default');
+        } else if ($fine_tune_model) {
+            dir = await path.join(dir, $grid_search_method);
+        }
+        return dir;
+    },
+);
+
+export const current_pretrained_file = derived(
+    [current_pretrained_dir, pre_trained_filename],
+    async ([$current_pretrained_dir, $pre_trained_filename]) => {
+        const dir = await $current_pretrained_dir;
         return await path.join(dir, $pre_trained_filename.trim());
     },
 );

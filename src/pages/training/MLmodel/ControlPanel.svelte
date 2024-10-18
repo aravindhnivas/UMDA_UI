@@ -149,7 +149,6 @@
                     label="Choose grid search method"
                     items={grid_search_methods}
                     bind:value={$grid_search_method}
-                    disabled={!$fine_tune_model}
                     helperHighlight={$fine_tune_model ? 'Recommended: Optuna' : ''}
                 />
                 <CustomInput

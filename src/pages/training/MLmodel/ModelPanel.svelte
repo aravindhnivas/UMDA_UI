@@ -188,7 +188,11 @@
                         class="btn btn-sm btn-outline"
                         on:click={async () => {
                             const pre_trained_file = await $current_pretrained_file;
-                            const loc = await path.dirname(pre_trained_file);
+                            let loc = await path.dirname(pre_trained_file);
+                            if (!$fine_tune_model) {
+                                loc = await path.join(loc, $grid_search_method);
+                            }
+
                             const filename = await path.basename(pre_trained_file);
                             // const extname = filename.split('.').at(-1);
                             const name = $fine_tune_model ? 'fine_tuned_parameters' : 'best_params';
@@ -196,6 +200,10 @@
                                 loc,
                                 `${filename}.${$grid_search_method}.${name}.json`,
                             );
+                            if (!(await fs.exists(best_params_filename))) {
+                                toast.error('Best params file not found');
+                                return;
+                            }
                             // console.log({ pre_trained_file, loc, best_params_filename });
                             // console.log(best_params_filename);
                             await load_parameters(best_params_filename);

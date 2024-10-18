@@ -4,6 +4,7 @@
     import { Checkbox, CustomInput } from '$lib/components';
     import Notification from '$lib/components/Notification.svelte';
     import { ExternalLink } from 'lucide-svelte/icons';
+    import FileExists from '$lib/components/FileExists.svelte';
 </script>
 
 <CustomPanel open={true}>
@@ -23,28 +24,26 @@
             <Checkbox bind:value={$save_pretrained_model} label="Save" check="checkbox" />
         </div>
         <CustomInput bind:value={$pre_trained_filename} label="save filename" lock={true} />
-        {#await $current_pretrained_file then value}
-            {#await path.dirname(value) then save_loc_name}
-                <Notification dismissable={false}>
-                    <div class="grid gap-2">
-                        <span>Save location: {save_loc_name}</span>
-                        <button
-                            class="btn btn-sm btn-outline w-max ml-auto"
-                            on:click={async () => {
-                                if (!save_loc_name) return;
-                                try {
-                                    await shell.open(save_loc_name);
-                                } catch (error) {
-                                    if (error instanceof Error) toast.error(error?.message);
-                                }
-                            }}
-                        >
-                            <span>Open folder</span>
-                            <ExternalLink />
-                        </button>
-                    </div>
-                </Notification>
-            {/await}
-        {/await}
+        <FileExists name={$current_pretrained_file} let:dirname={save_loc_name} show_if_not_exists>
+            <Notification dismissable={false}>
+                <div class="grid gap-2">
+                    <span>Save location: {save_loc_name}</span>
+                    <button
+                        class="btn btn-sm btn-outline w-max ml-auto"
+                        on:click={async () => {
+                            if (!save_loc_name) return;
+                            try {
+                                await shell.open(save_loc_name);
+                            } catch (error) {
+                                if (error instanceof Error) toast.error(error?.message);
+                            }
+                        }}
+                    >
+                        <span>Open folder</span>
+                        <ExternalLink />
+                    </button>
+                </div>
+            </Notification>
+        </FileExists>
     </div>
 </CustomPanel>
