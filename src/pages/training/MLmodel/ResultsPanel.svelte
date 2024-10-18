@@ -155,11 +155,6 @@
         console.log($plot_data[$model]);
     };
 
-    // let datfile: string = '';
-    // let resultsfile: string = '';
-    // let learning_curve_file: string = '';
-    // let cv_scores_file: string = '';
-
     const get_pretrained_file = async (name: Promise<string>) => {
         let pretrained_file = await name;
         if (pretrained_file.endsWith('.pkl')) {
