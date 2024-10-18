@@ -1,4 +1,5 @@
 <script lang="ts">
+    import FileExists from '$lib/components/FileExists.svelte';
     import { current_pretrained_file } from '../stores';
     const optuna_plots = [
         'contour',
@@ -20,24 +21,16 @@
 
 <h3>Optuna - Grid search plots</h3>
 <div class="join">
-    {#await get_optuna_fig_dir() then optuna_figures_dir}
-        {#await fs.exists(optuna_figures_dir) then dir_exists}
-            {#if dir_exists}
-                {#each optuna_plots as plot_name}
-                    {#await path.join(optuna_figures_dir, `${plot_name}.html`) then html_file}
-                        {#await fs.exists(html_file) then html_file_exists}
-                            {#if html_file_exists}
-                                <button
-                                    class="btn btn-sm btn-outline join-item"
-                                    on:click={async () => {
-                                        await shell.open(html_file);
-                                    }}>{plot_name}</button
-                                >
-                            {/if}
-                        {/await}
-                    {/await}
-                {/each}
-            {/if}
-        {/await}
-    {/await}
+    <FileExists name={get_optuna_fig_dir()} let:resolved={optuna_figures_dir}>
+        {#each optuna_plots as plot_name}
+            <FileExists name={path.join(optuna_figures_dir, `${plot_name}.html`)} let:resolved={html_file}>
+                <button
+                    class="btn btn-sm btn-outline join-item"
+                    on:click={async () => {
+                        await shell.open(html_file);
+                    }}>{plot_name}</button
+                >
+            </FileExists>
+        {/each}
+    </FileExists>
 </div>
