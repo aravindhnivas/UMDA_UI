@@ -50,6 +50,8 @@ interface CVScores {
     mean: number;
     std: number;
     scores: number[];
+    ci_upper: number;
+    ci_lower: number;
 }
 
 interface MLStats {
@@ -59,7 +61,13 @@ interface MLStats {
     mae: number;
 }
 
-type LearningCurveData = Record<string, Record<'test' | 'train', CVScores>>;
+interface LearningCurveData {
+    data: Record<string, Record<'test' | 'train', CVScores>>;
+    sizes: number[];
+    train_sizes: number[];
+    CV: number;
+    scoring: 'r2';
+}
 type CVScoresData = Record<'test' | 'train', Record<CV_scoring_methods, CVScores>>;
 
 interface MLResults {

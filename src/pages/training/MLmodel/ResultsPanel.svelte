@@ -217,16 +217,19 @@
         if (!learningCurveData) return;
 
         // Prepare the data for plotting
-        let trainingSizes = Object.keys(learningCurveData);
+        const { data } = learningCurveData;
+        if (!data) return toast.error('No data found in learning curve file');
 
-        const testScores = trainingSizes.map(size => learningCurveData[size].test.mean);
-        const testStd = trainingSizes.map(size => learningCurveData[size].test.std);
-        const trainScores = trainingSizes.map(size => learningCurveData[size].train.mean);
-        const trainStd = trainingSizes.map(size => learningCurveData[size].train.std);
-        const Nfold_CV = learningCurveData[trainingSizes[0]].test.scores.length;
+        let trainingSizes = Object.keys(data);
 
+        const testScores = trainingSizes.map(size => data[size].test.mean);
+        const testStd = trainingSizes.map(size => data[size].test.std);
+        const trainScores = trainingSizes.map(size => data[size].train.mean);
+        const trainStd = trainingSizes.map(size => data[size].train.std);
+
+        const Nfold_CV = learningCurveData.CV;
         const x = trainingSizes.map(Number);
-        // Create traces for test and train scores with error bars
+
         const testTrace: Partial<Plotly.Data> = {
             x,
             y: testScores,
@@ -265,11 +268,9 @@
                 title: `R<sup>2</sup> - Score (${Nfold_CV}-fold CV)`,
             },
         };
-
         const learning_curve_plotly_data = { data: [trainTrace, testTrace], layout };
         if (!$results[$model]) return;
         $results[$model].learning_curve_plotly_data = learning_curve_plotly_data;
-
         return learning_curve_plotly_data;
     };
 
