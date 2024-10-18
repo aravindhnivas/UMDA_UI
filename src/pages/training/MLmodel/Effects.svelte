@@ -9,6 +9,8 @@
         tune_parameters,
         pre_trained_filename,
         default_parameter_mode,
+        fine_tune_model,
+        grid_search_method,
     } from './stores';
     import { set_default_fine_tuned_values } from './utils';
 
@@ -42,7 +44,13 @@
             };
         });
     };
-    const set_model_params = (model_name: string, embedding_name: string, default_mode: boolean) => {
+    const set_model_params = (
+        model_name: string,
+        embedding_name: string,
+        default_mode: boolean,
+        fine_tune: boolean,
+        grid_name: string,
+    ) => {
         if (!$model) return;
         if (!$current_model) return;
 
@@ -85,8 +93,12 @@
         }
 
         // Set the pre-trained model filename
-        $pre_trained_filename = `${model_name}_${embedding_name}_pretrained_model${default_mode ? '_default' : ''}`;
+        let name = `${model_name}_${embedding_name}_pretrained_model`;
+        if (default_mode) name += '_default';
+        else if (fine_tune) name += `_${grid_name}`;
+        else name += '_normal';
+        $pre_trained_filename = name;
     };
 
-    $: set_model_params($model, $embedd_savefile, $default_parameter_mode);
+    $: set_model_params($model, $embedd_savefile, $default_parameter_mode, $fine_tune_model, $grid_search_method);
 </script>

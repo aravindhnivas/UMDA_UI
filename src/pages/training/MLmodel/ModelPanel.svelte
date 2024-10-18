@@ -196,10 +196,7 @@
                             const filename = await path.basename(pre_trained_file);
                             // const extname = filename.split('.').at(-1);
                             const name = $fine_tune_model ? 'fine_tuned_parameters' : 'best_params';
-                            const best_params_filename = await path.join(
-                                loc,
-                                `${filename}.${$grid_search_method}.${name}.json`,
-                            );
+                            const best_params_filename = await path.join(loc, `${filename}.${name}.json`);
                             if (!(await fs.exists(best_params_filename))) {
                                 toast.error('Best params file not found');
                                 return;
