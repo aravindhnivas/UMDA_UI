@@ -9,10 +9,6 @@ export const optuna_storage_file = derived(
         if (!$training_file) return '';
         const basename = await path.basename($training_file.filename, `.${$training_file.filetype}`);
         const optuna_file = await path.join($training_save_directory, 'optuna', `optuna_${basename}.db`);
-        // if (!(await fs.exists(optuna_file))) {
-        //     const dir = await path.dirname(optuna_file);
-        //     await fs.createDir(dir, { recursive: true });
-        // }
         return optuna_file;
     },
 );
