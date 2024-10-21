@@ -29,9 +29,10 @@
             <span>Start WS</span>
             <div class="ld ld-ring ld-spin" style="color: antiquewhite;"></div>
         </button>
-        <button class="btn btn-sm btn-success" on:click={connect_ws}>Connect WS</button>
+        <button class="btn btn-sm btn-success" on:click={connect_ws} disabled={$wsready}>Connect WS</button>
         <button
             class="btn btn-sm btn-info"
+            disabled={!$wsready}
             on:click={async () => {
                 const args = {
                     name: 'Svelte',
@@ -41,7 +42,7 @@
             }}>Send WS</button
         >
         <!-- <button class="btn btn-sm btn-error" on:click={disconnect_ws}>Disconnect WS</button> -->
-        <button class="btn btn-sm btn-error" on:click={stopServerWS}>STOP WS</button>
+        <button class="btn btn-sm btn-error" on:click={stopServerWS} disabled={!$wsready}>STOP WS</button>
         <ServerControl
             connection="http"
             bind:port={$pyServerPORT}
