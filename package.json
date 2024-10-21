@@ -16,7 +16,8 @@
     "@tauri-apps/cli": "^1.6.2",
     "lucide-svelte": "0.447.0",
     "plotly.js-dist-min": "^2.35.2",
-    "smiles-drawer": "^2.1.7"
+    "smiles-drawer": "^2.1.7",
+    "tauri-plugin-websocket-api": "github:tauri-apps/tauri-plugin-websocket#v1"
   },
   "devDependencies": {
     "@iconify/json": "^2.2.259",

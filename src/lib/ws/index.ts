@@ -1,65 +1,133 @@
-import computePy from '$lib/pyserver/computePy';
-import { serverInfo } from '$pages/settings/utils/stores';
+import WebSocket from 'tauri-plugin-websocket-api';
+import { pyProgram, developerMode, pythonscript } from '$lib/pyserver/stores';
+import { serverInfo } from '$settings/utils/stores';
+import type { Child } from '@tauri-apps/api/shell';
+import { Alert } from '$utils/stores';
 
-export const wsready = writable(false);
+export const ws = writable<WebSocket | null>(null);
 export const wsport = localWritable('wsport', 8765);
-export const socket = writable<WebSocket>();
-export const ws_readyState = {
-    0: 'CONNECTING',
-    1: 'OPEN',
-    2: 'CLOSING',
-    3: 'CLOSED',
-};
+export const wsready = writable(false);
 
-export const connect_websocket = () => {
-    if (get(socket)) serverInfo.info('ReadyState onstart: ' + ws_readyState[get(socket).readyState]);
-    if (get(socket)?.readyState === 1) {
-        get(socket).send('Hello from UMDA UI!');
-        return serverInfo.info('Already connected to Python server!');
-    }
-
-    socket.set(new WebSocket(`ws://localhost:${get(wsport)}`));
-    serverInfo.info('ReadyState: ' + ws_readyState[get(socket).readyState]);
-
-    get(socket).onopen = () => {
-        wsready.set(true);
-        serverInfo.info('Connected to Python server!');
-        get(socket).send('Hello from UMDA UI!');
-    };
-
-    get(socket).onmessage = message => {
-        serverInfo.info('Message received from Python server: ' + message.data);
-    };
-
-    get(socket).onerror = error => {
-        serverInfo.error('Error occurred!' + JSON.stringify(error, null, 2));
-    };
-
-    get(socket).onclose = () => {
-        wsready.set(false);
-        serverInfo.warn('Disconnected from Python server!');
-        serverInfo.info('ReadyState onclose: ' + ws_readyState[get(socket).readyState]);
-    };
-};
-
-export const stop_websocket = async () => {
-    serverInfo.info('Closing connection...');
-    if (!get(socket)) {
-        serverInfo.info('No connection to close!');
-        return;
-    }
-    get(socket).close();
-    wsready.set(false);
-    serverInfo.info('Connection closed!');
-
+export async function connect_ws() {
+    let $ws = get(ws);
+    if ($ws || get(wsready)) return toast.error('Websocket already connected');
     try {
-        await computePy({
-            pyfile: 'ws',
-            args: { wsport: get(wsport), action: 'stop' },
-            general: true,
-        });
-        serverInfo.info('Python server stopped!');
+        const conn = await WebSocket.connect(`ws://localhost:${get(wsport)}/pyfile`);
+        ws.set(conn);
+        wsready.set(true);
     } catch (error) {
-        serverInfo.error('Error stopping Python server!' + error);
+        console.error(error, typeof error);
+        toast.error('Websocket connection error' + error);
+        wsready.set(false);
     }
-};
+    $ws = get(ws);
+    if (!$ws) return toast.error('Websocket not connected');
+    toast.success('Websocket connected');
+
+    await $ws.addListener(message => {
+        if (message.type === 'Ping') return;
+        if (message.type === 'Close') {
+            console.warn('Websocket closed');
+            ws.set(null);
+            wsready.set(false);
+            return toast.error('Websocket closed');
+        }
+        console.warn('Received message:', message);
+        toast.info('Received message: ' + message.data);
+        console.log(JSON.parse(message.data as string));
+    });
+}
+export async function disconnect_ws() {
+    let $ws = get(ws);
+    if (!$ws) return;
+    await $ws.disconnect();
+    console.warn('Websocket disconnected');
+    ws.set(null);
+    wsready.set(false);
+}
+
+const server_started_keyword = 'WebSocket server started';
+export async function send_msg_ws(msg: Record<string, any>) {
+    let $ws = get(ws);
+    if (!$ws) return;
+    if (!isObject(msg)) return toast.error('Invalid message. Must be an object');
+    await $ws.send(JSON.stringify(msg));
+}
+
+export async function startServerWS(e: Event) {
+    if (get(developerMode) && !(await fs.exists(get(pythonscript)))) {
+        toast.error('pythonscript not found. Please set python source file in settings');
+        return serverInfo.error('pythonscript not found');
+    }
+    if (get(wsready) && get(ws)) return toast.warning('server already running');
+
+    wsready.set(false);
+
+    const pyfile = 'websocket';
+    const sendArgs = [pyfile, JSON.stringify({ wsport: get(wsport) })];
+    const mainPyFile = await path.join(get(pythonscript), 'main.py');
+
+    const pyArgs = get(developerMode) ? [mainPyFile, ...sendArgs] : sendArgs;
+    console.log(get(pyProgram), pyArgs);
+    const py = new shell.Command(get(pyProgram), pyArgs);
+
+    const [err, pyChild] = await oO<Child, string>(py.spawn());
+    if (err) {
+        toast.error(err);
+        return Promise.reject(err);
+    }
+    if (!pyChild) return Promise.reject('pyChild not found');
+
+    let full_stderr = '';
+    const target_btn = e.currentTarget as HTMLButtonElement;
+    // console.log({ target_btn });
+    if (target_btn) {
+        if (!target_btn.classList.contains('running')) target_btn.classList.add('running');
+    }
+    py.on('close', async () => {
+        serverInfo.warn('server closed');
+
+        if (full_stderr.includes('Traceback (most recent call last):')) {
+            const last_traceback =
+                '\nTraceback (most recent call last):' + full_stderr.split('Traceback (most recent call last):').pop();
+            console.log(last_traceback);
+            serverInfo.error(last_traceback);
+            serverInfo.error('Server closed with error');
+            if (target_btn) {
+                if (target_btn.classList.contains('running')) target_btn.classList.remove('running');
+            }
+            await disconnect_ws();
+        }
+    });
+
+    py.on('error', error => {
+        console.error(error);
+        Alert.error(error);
+        serverInfo.error(error);
+    });
+
+    py.stderr.on('data', async stderr => {
+        if (!stderr.trim()) return;
+        full_stderr += stderr;
+        serverInfo.warn(stderr.trim());
+        if (stderr.includes(server_started_keyword)) {
+            if (target_btn) {
+                if (target_btn.classList.contains('running')) target_btn.classList.remove('running');
+            }
+            await connect_ws();
+        }
+    });
+
+    py.stdout.on('data', stdout => {
+        if (!stdout.trim()) return;
+        serverInfo.info(stdout.trim());
+    });
+
+    return Promise.resolve('server started');
+}
+
+export async function stopServerWS() {
+    const $ws = get(ws);
+    if (!$ws) return;
+    await $ws.send('stop');
+}

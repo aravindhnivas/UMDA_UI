@@ -12,7 +12,7 @@ export default async function <T>({ pyfile, args, cancelToken }: ComputeFromServ
         console.warn({ pyfile, args });
 
         const response = await axios.post<T & { done: boolean; error: boolean; computed_time: string }>(
-            get(pyServerURL),
+            get(pyServerURL) + '/enqueue_job',
             { pyfile, args: { ...args } },
             {
                 headers: { 'Content-type': 'application/json' },

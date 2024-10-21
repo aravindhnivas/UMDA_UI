@@ -23,6 +23,9 @@ importers:
       smiles-drawer:
         specifier: ^2.1.7
         version: 2.1.7
+      tauri-plugin-websocket-api:
+        specifier: github:tauri-apps/tauri-plugin-websocket#v1
+        version: https://codeload.github.com/tauri-apps/tauri-plugin-websocket/tar.gz/5b30eb8c1a2e3b2223f766de5197e1d3816a99be
     devDependencies:
       '@iconify/json':
         specifier: ^2.2.259
@@ -1770,6 +1773,10 @@ packages:
     resolution: {integrity: sha512-KqjHOJKogOUt5Bs752ykCeiwvi0fKVkr5oqsFNt/8px/tA8scFPIlkygsf6jXrfCqGHz7VflA6+yytWuM+XhFw==}
     engines: {node: '>=14.0.0'}
     hasBin: true
+
+  tauri-plugin-websocket-api@https://codeload.github.com/tauri-apps/tauri-plugin-websocket/tar.gz/5b30eb8c1a2e3b2223f766de5197e1d3816a99be:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-websocket/tar.gz/5b30eb8c1a2e3b2223f766de5197e1d3816a99be}
+    version: 0.0.0
 
   thenify-all@1.6.0:
     resolution: {integrity: sha512-RNxQH/qI8/t3thXJDwcstUO4zeqo64+Uy/+sNVRBx4Xn2OX+OZ9oP+iJnNFqplFra2ZUVeKCSa2oVWi3T4uVmA==}
@@ -4155,6 +4162,10 @@ snapshots:
       sucrase: 3.35.0
     transitivePeerDependencies:
       - ts-node
+
+  tauri-plugin-websocket-api@https://codeload.github.com/tauri-apps/tauri-plugin-websocket/tar.gz/5b30eb8c1a2e3b2223f766de5197e1d3816a99be:
+    dependencies:
+      '@tauri-apps/api': 1.6.0
 
   thenify-all@1.6.0:
     dependencies:

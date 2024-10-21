@@ -52,6 +52,7 @@ fn main() {
             app.emit_all("single-instance", Payload { args: argv, cwd })
                 .unwrap();
         }))
+        .plugin(tauri_plugin_websocket::init())
         // .plugin(devtools)
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

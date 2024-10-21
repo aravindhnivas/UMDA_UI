@@ -2,7 +2,7 @@
     import { fetchServerROOT, updateServerInfo } from '$lib/pyserver/umdapyServer';
     import { checkNetstat, killPID } from '../utils/network';
     import { serverInfo } from '../utils/stores';
-    import { connect_websocket } from '$lib/ws';
+    // import { connect_websocket } from '$lib/ws';
     import { AxiosError } from 'axios';
     import { RefreshCcw } from 'lucide-svelte/icons';
     import { Checkbox, CustomInput } from '$lib/components';

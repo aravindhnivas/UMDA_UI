@@ -1,4 +1,5 @@
 import type { Child } from '@tauri-apps/api/shell';
+
 export { get } from 'svelte/store';
 
 export const pythonpath = localWritable('pythonpath', 'python');

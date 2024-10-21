@@ -55,12 +55,12 @@
             return;
         }
 
-        if (!$training_column_name_X) {
+        if (!test_mode && !$training_column_name_X) {
             toast.error('Please provide a column name');
             return;
         }
 
-        if (!$loaded_df_columns.includes($training_column_name_X)) {
+        if (!test_mode && !$loaded_df_columns.includes($training_column_name_X)) {
             toast.error('Column name not found in the loaded file');
             return;
         }

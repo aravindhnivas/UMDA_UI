@@ -5,8 +5,12 @@
     import ServerControl from './ServerControl.svelte';
     import { Panel, Header, Content } from '@smui-extra/accordion';
     import { ChevronDown, ChevronUp } from 'lucide-svelte/icons';
+    import { connect_ws, disconnect_ws, send_msg_ws, ws, startServerWS, wsready, stopServerWS } from '$lib/ws';
 
     let open = true;
+    $: console.log({ $wsready });
+    // onMount(connect_ws);
+    // onDestroy(disconnect_ws);
 </script>
 
 <Panel extend bind:open style="background-color: coral;">
@@ -21,6 +25,23 @@
         </div>
     </Header>
     <Content>
+        <button class="btn btn-sm btn-outline ld-ext-right" on:click={startServerWS} disabled={$wsready}>
+            <span>Start WS</span>
+            <div class="ld ld-ring ld-spin" style="color: antiquewhite;"></div>
+        </button>
+        <button class="btn btn-sm btn-success" on:click={connect_ws}>Connect WS</button>
+        <button
+            class="btn btn-sm btn-info"
+            on:click={async () => {
+                const args = {
+                    name: 'Svelte',
+                    age: 25,
+                };
+                await send_msg_ws(args);
+            }}>Send WS</button
+        >
+        <!-- <button class="btn btn-sm btn-error" on:click={disconnect_ws}>Disconnect WS</button> -->
+        <button class="btn btn-sm btn-error" on:click={stopServerWS}>STOP WS</button>
         <ServerControl
             connection="http"
             bind:port={$pyServerPORT}
