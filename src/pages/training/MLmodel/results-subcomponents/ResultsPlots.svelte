@@ -1,6 +1,14 @@
 <script lang="ts">
+    import { current_training_data_file } from './../../training_file/plot-analysis/stores';
     import { plot_data, results, model } from '../stores';
     import Plot from 'svelte-plotly.js';
+
+    const update_results = async (name: Promise<string>) => {
+        await name;
+        $plot_data = {} as any;
+        $results = {} as any;
+    };
+    $: update_results($current_training_data_file);
 </script>
 
 <div style="height: 500px;">
