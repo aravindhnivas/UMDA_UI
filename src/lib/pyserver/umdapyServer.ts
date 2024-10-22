@@ -20,8 +20,8 @@ import { sleep } from '$lib/utils/initialise';
 import { Alert } from '$utils/stores';
 import { check_umdapy_assets_status } from '$pages/settings/utils/assets-status';
 
-const server_started_keyword = 'Warm-up phase completed';
-// const server_started_keyword = 'Server running';
+// const server_started_keyword = 'Warm-up phase completed';
+const server_started_keyword = 'Server running';
 
 export const currentPortPID = localWritable<string[]>('pyserver-pid', []);
 
