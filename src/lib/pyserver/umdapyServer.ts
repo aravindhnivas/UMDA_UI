@@ -22,6 +22,7 @@ import { check_umdapy_assets_status } from '$pages/settings/utils/assets-status'
 
 // const server_started_keyword = 'Warm-up phase completed';
 const server_started_keyword = 'Server running';
+const server_stopped_keyword = 'Server stopped';
 
 export const currentPortPID = localWritable<string[]>('pyserver-pid', []);
 
@@ -100,6 +101,10 @@ export async function startServer() {
             if (get(pyServerReady)) {
                 const [err] = await oO(getPyVersion());
             }
+        }
+        if (stderr.includes(server_stopped_keyword)) {
+            pyServerReady.set(false);
+            pyServerFailed.set(true);
         }
     });
 
