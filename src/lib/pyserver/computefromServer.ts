@@ -25,7 +25,10 @@ export default async function <T>({ pyfile, args, cancelToken }: ComputeFromServ
         console.log({ response });
         const { data: dataFromPython } = response;
         console.warn({ response, dataFromPython });
-        if (response.statusText !== 'OK') {
+        // if (response.statusText !== 'OK') {
+        //     return Promise.reject(dataFromPython);
+        // }
+        if (response.status >= 400 && response.status < 600) {
             return Promise.reject(dataFromPython);
         }
 
