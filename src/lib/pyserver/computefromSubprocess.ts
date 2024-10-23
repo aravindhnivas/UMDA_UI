@@ -21,10 +21,9 @@ interface ComputeFromSubprocessType {
 }
 
 export default async function <T>({ target, pyfile, args }: ComputeFromSubprocessType) {
-    return new Promise(async resolve => {
+    return new Promise(async (resolve, reject) => {
         if (!get(pyVersion)) {
-            Alert.error('Python is not valid. Fix it in Settings --> Configuration');
-            return;
+            return reject('Python is not valid. Fix it in Settings --> Configuration');
         }
 
         console.info('Sending general arguments: ', args);
