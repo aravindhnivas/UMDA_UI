@@ -1,5 +1,5 @@
 import WebSocket from 'tauri-plugin-websocket-api';
-import { pyProgram, developerMode, pythonscript } from '$lib/pyserver/stores';
+import { pyProgram, developerMode, pythonscript, pyServerPORT } from '$lib/pyserver/stores';
 import { serverInfo } from '$settings/utils/stores';
 import type { Child } from '@tauri-apps/api/shell';
 import { Alert } from '$utils/stores';
@@ -12,7 +12,10 @@ export async function connect_ws() {
     let $ws = get(ws);
     if ($ws || get(wsready)) return toast.error('Websocket already connected');
     try {
-        const conn = await WebSocket.connect(`ws://localhost:${get(wsport)}/pyfile`);
+        // const conn = await WebSocket.connect(`ws://localhost:${get(wsport)}/pyfile`);
+        const conn = await WebSocket.connect(
+            `ws://localhost:${get(pyServerPORT)}/socket.io/?EIO=4&transport=websocket`,
+        );
         ws.set(conn);
         wsready.set(true);
     } catch (error) {

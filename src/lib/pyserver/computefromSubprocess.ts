@@ -27,7 +27,6 @@ export default async function <T>({ target, pyfile, args }: ComputeFromSubproces
         }
 
         console.info('Sending general arguments: ', args);
-        toast('Process Started');
 
         const sendArgs = [pyfile, JSON.stringify(args)];
         const mainPyFile = await path.join(get(pythonscript), computepyfile);

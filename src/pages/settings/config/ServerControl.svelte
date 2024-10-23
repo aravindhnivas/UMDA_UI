@@ -2,7 +2,6 @@
     import { fetchServerROOT, updateServerInfo } from '$lib/pyserver/umdapyServer';
     import { checkNetstat, killPID } from '../utils/network';
     import { serverInfo } from '../utils/stores';
-    // import { connect_websocket } from '$lib/ws';
     import { AxiosError } from 'axios';
     import { RefreshCcw } from 'lucide-svelte/icons';
     import { Checkbox, CustomInput } from '$lib/components';
@@ -16,6 +15,7 @@
     export let stopServer: () => void;
     export let connection: 'ws' | 'http' = 'http';
     export let suppress_warnings: boolean = false;
+    export let debug = false;
 
     const killpids = async () => {
         if (!pids.length) return serverInfo.error('No PID to kill');
@@ -28,7 +28,6 @@
     $: if (serverReady) starting_server = false;
 
     let port_lock = true;
-    // $: console.log({ port_lock });
     const fetch_port = async () => {
         if (port_lock) return toast.warning('Port is locked');
         const _port = await invoke<number>('get_tcp_port');
@@ -42,6 +41,7 @@
 
 <div class="grid gap-4">
     <div class="flex items-end gap-2">
+        <Checkbox bind:value={debug} label="debug" />
         <CustomInput bind:lock={port_lock} bind:value={port} label="ServerPORT" type="number">
             <svelte:fragment slot="post-input-within">
                 <button on:click={fetch_port} disabled={port_lock}><RefreshCcw size="18" /></button>

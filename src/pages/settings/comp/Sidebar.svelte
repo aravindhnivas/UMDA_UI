@@ -1,6 +1,6 @@
 <script>
     import { active_settings_tab } from '$settings/stores';
-    const items = ['Configuration', 'Update', 'Console', 'About', 'Credits'];
+    const items = ['Configuration', 'Update', 'Console', 'Process-Manager', 'About', 'Credits'];
 </script>
 
 <ul class="menu w-full rounded-box">

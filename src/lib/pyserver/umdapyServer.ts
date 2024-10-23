@@ -10,6 +10,7 @@ import {
     pyServerURL,
     pyVersion,
     pyServerFailed,
+    redis_server_mode,
 } from '$lib/pyserver/stores';
 import { serverInfo } from '$settings/utils/stores';
 import { python_asset_ready } from '$settings/utils/stores';
@@ -19,6 +20,7 @@ import { getPyVersion } from '$settings/utils/checkPython';
 import { sleep } from '$lib/utils/initialise';
 import { Alert } from '$utils/stores';
 import { check_umdapy_assets_status } from '$pages/settings/utils/assets-status';
+import { initializeSocket } from '$lib/websocket/utils';
 
 // const server_started_keyword = 'Warm-up phase completed';
 const server_started_keyword = 'Server running';
@@ -100,6 +102,7 @@ export async function startServer() {
             await updateServerInfo();
             if (get(pyServerReady)) {
                 const [err] = await oO(getPyVersion());
+                if (get(redis_server_mode)) initializeSocket();
             }
         }
         if (stderr.includes(server_stopped_keyword)) {

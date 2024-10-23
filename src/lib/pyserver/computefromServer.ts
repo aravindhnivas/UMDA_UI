@@ -1,23 +1,28 @@
-import { pyServerURL, get } from './stores';
-import axios from 'axios';
+import { pyServerURL, get, server_timeout_in_minutes } from './stores';
+import axios, { type CancelToken } from 'axios';
 
 interface ComputeFromServerType {
     pyfile: string;
-    args: Object;
-    cancelToken?: any;
+    args: Record<string, any>;
+    cancelToken?: CancelToken;
+    scheduler?: boolean;
 }
 
-export default async function <T>({ pyfile, args, cancelToken }: ComputeFromServerType) {
+export default async function <T>({ pyfile, args, cancelToken, scheduler }: ComputeFromServerType) {
     try {
         console.warn({ pyfile, args });
 
-        const response = await axios.post<T & { done: boolean; error: boolean; computed_time: string }>(
-            get(pyServerURL) + '/enqueue_job',
+        // const response = await axios.post<T & { done: boolean; error: boolean; computed_time: string }>(
+        const URL = get(pyServerURL) + (scheduler ? '/enqueue_job' : '/compute');
+        // console.warn({ URL, pyServerURL: get(pyServerURL) });
+        const timeout = get(server_timeout_in_minutes) ? Number(get(server_timeout_in_minutes)) : 5;
+        const response = await axios.post<T>(
+            URL,
             { pyfile, args: { ...args } },
             {
                 headers: { 'Content-type': 'application/json' },
-                // timeout: 1000 * 60 * 5, // 5 minutes,
-                timeout: 0, // infinite timeout
+                timeout: 1000 * 60 * timeout, // default 5 minutes,
+                // timeout: 0, // infinite timeout
                 cancelToken,
             },
         );
@@ -35,7 +40,7 @@ export default async function <T>({ pyfile, args, cancelToken }: ComputeFromServ
         if (!dataFromPython) {
             return Promise.reject('could not get file from python. check the output json file');
         }
-        toast.success(`${pyfile} completed in ${dataFromPython.computed_time}`);
+        // toast.success(`${pyfile} completed in ${dataFromPython.computed_time}`);
         console.warn(dataFromPython);
         return Promise.resolve(dataFromPython);
     } catch (err) {

@@ -1,5 +1,4 @@
 import type { Child } from '@tauri-apps/api/shell';
-
 export { get } from 'svelte/store';
 
 export const pythonpath = localWritable('pythonpath', 'python');
@@ -41,3 +40,6 @@ export const pyChildProcess = writable<Child>();
 export const suppressed_warnings = writable<Record<string, { timestamp: string; warnings: string[]; id: string }[]>>(
     {},
 );
+
+export const redis_server_mode = localWritable('redis_server_mode', false);
+export const server_timeout_in_minutes = localWritable('server_timeout_in_minutes', 10);

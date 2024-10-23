@@ -58,8 +58,6 @@
         if (!(await fs.exists($training_save_directory))) {
             await fs.createDir($training_save_directory);
             console.log(`Directory created: ${$training_save_directory}`);
-        } else {
-            console.warn(`Directory already exists: ${$training_save_directory}`);
         }
     };
 

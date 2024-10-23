@@ -7,12 +7,13 @@
         pyServerReady,
         pyVersion,
         umdapyVersion,
+        redis_server_mode,
+        server_timeout_in_minutes,
     } from '$lib/pyserver/stores';
     import { fontSize } from '$lib/stores/system';
     import { Checkbox } from '$components/index';
     import Layout from './comp/Layout.svelte';
     import { fetchServerROOT, start_and_check_umdapy_with_toast } from '$lib/pyserver/umdapyServer';
-    import { getPyVersion } from './utils/checkPython';
     import { install_umdapy_from_zipfile } from './utils/download-assets';
     import { check_umdapy_assets_status } from './utils/assets-status';
     import PyServerControl from './config/PyServerControl.svelte';
@@ -22,6 +23,8 @@
     import BrowseFile from '$lib/components/BrowseFile.svelte';
     import { Download, ExternalLink, RefreshCcw } from 'lucide-svelte/icons';
     import CustomInput from '$lib/components/CustomInput.svelte';
+    import Loadingbtn from '$lib/components/Loadingbtn.svelte';
+    import { asset_download_required } from './utils/stores';
 
     const get_local_dir = async () => {
         try {
@@ -58,7 +61,7 @@
 
 <Layout id="Configuration">
     <h1>Configuration</h1>
-    <div class="flex">
+    <div class="flex gap-2">
         <CustomInput bind:value={$fontSize} label="font-size" type="number" max="25">
             <svelte:fragment slot="post-input-within">
                 <button
@@ -69,6 +72,7 @@
                 >
             </svelte:fragment>
         </CustomInput>
+        <CustomInput lock bind:value={$server_timeout_in_minutes} label="server-timeout" type="number" max="25" />
     </div>
     <div class="divider"></div>
     <div class="flex-center justify-between">
@@ -80,11 +84,37 @@
             {/if}
             <div class="badge badge-{$serverCurrentStatus.type}">{$serverCurrentStatus.value}</div>
         </div>
-        <Checkbox bind:value={$developerMode} label="Developer mode" />
+        <div class="flex gap-2">
+            <Checkbox bind:value={$redis_server_mode} label="Redis-server" />
+            <Checkbox bind:value={$developerMode} label="Developer mode" />
+        </div>
     </div>
 
     <div class="flex items-center gap-1">
-        <button class="btn btn-sm btn-outline" on:click={async () => await getPyVersion()}>get PyVersion</button>
+        <!-- <button class="btn btn-sm btn-outline" on:click={async () => await getPyVersion()}>get PyVersion</button> -->
+        <Loadingbtn
+            name="get PyVersion"
+            callback={() => {
+                if (!$pyServerReady) {
+                    toast.error('start umdapy server first!');
+                    return;
+                }
+                return { pyfile: 'getVersion', args: [''] };
+            }}
+            on:result={e => {
+                console.log(e.detail);
+                const { dataFromPython } = e.detail;
+                console.log(dataFromPython);
+                if (!dataFromPython) return;
+
+                console.log('Received data from python');
+                $pyVersion = dataFromPython.python;
+                $umdapyVersion = dataFromPython.umdapy;
+                if ($umdapyVersion < import.meta.env.VITE_PY_MIN_VERSION) {
+                    $asset_download_required = true;
+                }
+            }}
+        />
     </div>
 
     {#if $developerMode}
@@ -114,7 +144,6 @@
     <div class="accordion-container">
         <Accordion>
             <PyServerControl />
-            <!-- <WebsocketServerControl /> -->
         </Accordion>
     </div>
     <TerminalBox bind:terminal={$serverInfo} />
