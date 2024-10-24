@@ -38,10 +38,12 @@
     <div style="overflow-y: auto; max-height: 500px;">
         <button class="btn btn-sm btn-error" on:click={() => ($jobStatus = {})}>Clear</button>
         {#each Object.entries($jobStatus) as [jobId, status]}
-            <div class="job-status">
-                <h3>Job: {jobId}</h3>
-                <p>Status: {status.status}</p>
-            </div>
+            {#if status.status !== 'completed'}
+                <div class="job-status">
+                    <h3>Job: {jobId}</h3>
+                    <p>Status: {status.status}</p>
+                </div>
+            {/if}
         {/each}
     </div>
 </Layout>
