@@ -33,6 +33,11 @@
                         "args": true
                     },
                     {
+                        "name": "umdapy-dev",
+                        "cmd": "/Users/aravindhnivas/Documents/GitHub/umdapy/scripts/dist/umdapy/umdapy",
+                        "args": true
+                    },
+                    {
                         "name": "python",
                         "cmd": "python",
                         "args": true

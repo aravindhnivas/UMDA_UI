@@ -9,6 +9,7 @@
         umdapyVersion,
         redis_server_mode,
         server_timeout_in_minutes,
+        umdapy,
     } from '$lib/pyserver/stores';
     import { fontSize } from '$lib/stores/system';
     import { Checkbox } from '$components/index';
@@ -90,8 +91,8 @@
         </div>
     </div>
 
-    <div class="flex items-center gap-1">
-        <!-- <button class="btn btn-sm btn-outline" on:click={async () => await getPyVersion()}>get PyVersion</button> -->
+    <div class="flex items-end gap-1">
+        <CustomInput bind:value={$umdapy} label="Python program" />
         <Loadingbtn
             name="get PyVersion"
             callback={() => {
