@@ -2,6 +2,17 @@ import { io } from 'socket.io-client';
 import { socket_connection_status, socket, jobStatus } from './stores';
 import { pyServerPORT, pyServerReady, redis_server_mode } from '$lib/pyserver/stores';
 
+function remove_job_from_status(job_id: string, timeout: number = 600000) {
+    setTimeout(() => {
+        console.log(get(jobStatus));
+        jobStatus.update(status => {
+            delete status[job_id];
+            return status;
+        });
+        console.warn('Job removed from status:', job_id, get(jobStatus));
+    }, timeout);
+}
+
 export function initializeSocket() {
     if (!get(redis_server_mode)) return toast.error('Redis server mode is not enabled');
     if (!get(pyServerReady)) return toast.error('Python server is not ready yet');
@@ -61,7 +72,7 @@ export function initializeSocket() {
             ...status,
             [data.job_id]: { status: 'completed', result: data.result, done: true },
         }));
-        // Trigger any callback or state update needed for your UI
+        remove_job_from_status(data.job_id);
     });
 
     $socket.on('job_error', (data: any) => {
@@ -70,6 +81,7 @@ export function initializeSocket() {
             ...status,
             [data.job_id]: { status: 'error', error: data.error, done: true },
         }));
+        remove_job_from_status(data.job_id, 30000);
     });
 
     // Error handling
