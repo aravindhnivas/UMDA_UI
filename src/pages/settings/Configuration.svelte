@@ -92,7 +92,7 @@
     </div>
 
     <div class="flex items-end gap-1">
-        <CustomInput bind:value={$umdapy} label="Python program" />
+        <CustomInput bind:value={$umdapy} label="Python program" lock />
         <Loadingbtn
             name="get PyVersion"
             callback={() => {
