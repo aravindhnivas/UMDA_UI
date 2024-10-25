@@ -15,7 +15,7 @@
     import Effects from './Effects.svelte';
     import ModelPanel from './ModelPanel.svelte';
     import MoreOptionsPanel from './MoreOptionsPanel.svelte';
-    import OptunaDashboard from './OptunaDashboard.svelte';
+    import Dashboard from '$pages/settings/dashboards/Dashboard.svelte';
     import ResultsPanel from './ResultsPanel.svelte';
     import SaveModelPanel from './SaveModelPanel.svelte';
     import {
@@ -339,6 +339,6 @@
         >
             Copy training data info
         </button>
-        <OptunaDashboard />
+        <Dashboard url="http://localhost:8080" name="Optuna-dashboard" />
     </div>
 </div>

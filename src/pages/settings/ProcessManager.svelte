@@ -1,7 +1,8 @@
 <script lang="ts">
-    import Layout from './comp/Layout.svelte';
-    import { redis_server_mode, pyServerReady } from '$lib/pyserver/stores';
+    import { redis_server_mode, pyServerReady, pyServerURL } from '$lib/pyserver/stores';
     import { jobStatus, socket, socket_connection_status } from '$lib/websocket/stores';
+    import Layout from './comp/Layout.svelte';
+    import Dashboard from '$pages/settings/dashboards/Dashboard.svelte';
     import { initializeSocket } from '$lib/websocket/utils';
 
     $: if ($socket_connection_status !== 'connected' && $pyServerReady && $redis_server_mode) {
@@ -25,6 +26,8 @@
             class:btn-disabled={$socket_connection_status !== 'connected'}
             on:click={() => $socket.disconnect()}>Disconnect</button
         >
+
+        <Dashboard name="RQ-Dashboard" url={$pyServerURL + '/rq'} />
     </div>
 
     {#if $socket_connection_status === 'connected'}

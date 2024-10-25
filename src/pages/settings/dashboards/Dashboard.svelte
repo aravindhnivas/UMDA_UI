@@ -2,11 +2,14 @@
     import { Alert } from '$utils/stores';
     import { WebviewWindow } from '@tauri-apps/api/window';
 
+    export let url: string;
+    export let name: string;
+
     let webview: WebviewWindow;
     const open_dashboard = () => {
-        webview = new WebviewWindow('optuna-dashboard', {
-            title: 'Optuna Dashboard',
-            url: 'http://localhost:8080',
+        webview = new WebviewWindow('rq-dashboard', {
+            title: name,
+            url,
         });
         webview.once('tauri://created', function () {
             toast.info('webview window successfully created');
@@ -28,4 +31,4 @@
     });
 </script>
 
-<button class="btn btn-sm btn-primary" on:click={open_dashboard}>Open optuna-dashboard</button>
+<button class="btn btn-sm btn-primary" on:click={open_dashboard}>Open {name}</button>
