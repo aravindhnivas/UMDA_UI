@@ -6,7 +6,8 @@
     export let name: string;
 
     let webview: WebviewWindow;
-    const open_dashboard = () => {
+    const open_dashboard = async () => {
+        await shell.open(url);
         webview = new WebviewWindow('rq-dashboard', {
             title: name,
             url,
@@ -31,4 +32,10 @@
     });
 </script>
 
-<button class="btn btn-sm btn-primary" on:click={open_dashboard}>Open {name}</button>
+<!-- <button class="btn btn-sm btn-primary" on:click={open_dashboard}>Open {name}</button> -->
+<button
+    class="btn btn-sm btn-primary"
+    on:click={async () => {
+        await shell.open(url);
+    }}>Open {name}</button
+>
