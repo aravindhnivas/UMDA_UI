@@ -80,8 +80,6 @@ export const default_param_values = derived(current_model, $current_model => {
 export const default_fine_tuned_values = writable<FineTunedValues>({} as FineTunedValues);
 export const fine_tuned_values = writable<FineTunedValues>(structuredClone(default_values_for_models));
 
-// export const hyperparameters = writable<ParametersArgs>({});
-// export const parameters = writable<ParametersArgs>({});
 export const tune_parameters = writable({} as ModelTuneParameters);
 
 export const fine_tune_model = writable(false);
@@ -92,20 +90,20 @@ export const optuna_resume_study = writable({
     resume: false,
 });
 
-export const cross_validation = localWritable('cross_validation', true);
-export const cv_fold = localWritable('cv_fold', 5);
-export const halving_factor = localWritable('halving_factor', 3);
-export const optuna_n_trials = localWritable('optuna_n_trials', 100);
-export const optuna_n_warmup_steps = localWritable('optuna_n_warmup_steps', 10);
-export const randomzied_gridsearch_niter = localWritable<number>('randomzied_gridsearch_niter', 10);
-export const bootstrap_nsamples = localWritable<number>('bootstrap_nsamples', 800);
-export const bootstrap = localWritable('bootstrap', false);
-export const test_size = localWritable('test_size', 20);
+export const cross_validation = writable(true);
+export const cv_fold = writable(5);
+export const halving_factor = writable(3);
+export const optuna_n_trials = writable(100);
+export const optuna_n_warmup_steps = writable(10);
+export const randomzied_gridsearch_niter = writable(10);
+export const bootstrap_nsamples = writable(800);
+export const bootstrap = writable(false);
+export const test_size = writable(20);
 export const grid_search_method = writable('Optuna');
-export const noise_percentage = localWritable('noise_percentage', 0.5);
-export const save_pretrained_model = localWritable('save_pretrained_model', true);
-export const parallel_computation = localWritable('parallel_computation', true);
-export const learning_curve = localWritable('learning_curve', {
+export const noise_percentage = writable(0.5);
+export const save_pretrained_model = writable(true);
+export const parallel_computation = writable(true);
+export const learning_curve = writable({
     active: false,
     train_sizes: '0.1, 1.0, 10',
 });
