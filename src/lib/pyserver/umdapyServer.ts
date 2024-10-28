@@ -68,20 +68,18 @@ export async function startServer() {
 
     let full_stderr = '';
     py.on('close', () => {
-        pyServerReady.set(false);
         currentPortPID.update(ports => ports.filter(p => p !== `${get(pyChildProcess)?.pid}`)); // remove pid from list
         serverInfo.warn('server closed');
-        pyServerFailed.set(true);
-        pyServerReady.set(false);
+
         if (full_stderr.includes('Traceback (most recent call last):')) {
             const last_traceback =
                 '\nTraceback (most recent call last):' + full_stderr.split('Traceback (most recent call last):').pop();
             console.log(last_traceback);
             serverInfo.error(last_traceback);
             serverInfo.error('Server closed with error');
-            pyServerFailed.set(true);
-            pyServerReady.set(false);
         }
+        pyServerFailed.set(true);
+        pyServerReady.set(false);
     });
 
     py.on('error', error => {
