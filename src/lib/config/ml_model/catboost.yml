@@ -22,6 +22,10 @@ hyperparameters:
         value: 0.8
         description: 'Subsample ratio of the training instance'
         type: float
+    l2_leaf_reg:
+        value: 3
+        description: 'L2 regularization coefficient'
+        type: float
     colsample_bylevel:
         value: 0.8
         description: 'Subsample ratio of columns for each level'
@@ -30,10 +34,6 @@ hyperparameters:
         value: 254
         description: 'Number of splits for numerical features'
         type: integer
-    l2_leaf_reg:
-        value: 3
-        description: 'L2 regularization coefficient'
-        type: float
 
 parameters:
     nan_mode:
