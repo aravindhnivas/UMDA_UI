@@ -10,6 +10,12 @@
 <div class="grid gap-2">
     {#if $results?.[$model]}
         {@const r = $results[$model]}
+        {@const total_len = r.data_shapes.y[0]}
+        {@const train_len = r.data_shapes.y_train[0]}
+        {@const test_len = r.data_shapes.y_test[0]}
+        {@const train_ratio = (train_len / total_len) * 100}
+        {@const test_ratio = (test_len / total_len) * 100}
+
         <div class="flex gap-1">
             <span class="badge badge-primary">
                 {r.time ? `completed in ${r.time}` : ''}
@@ -31,10 +37,10 @@
         </div>
 
         <Stats stats={r.train_stats} rcv={r.cv_scores?.train} cv_fold={r.cv_fold} {significant_digits}>
-            Train stats ({100 - $test_size}% data = {r.data_shapes.y_train})
+            Train stats ({train_ratio.toFixed(0)}% data = {r.data_shapes.y_train})
         </Stats>
         <Stats bg_color="info" stats={r.test_stats} rcv={r.cv_scores?.test} cv_fold={r.cv_fold} {significant_digits}>
-            Test stats ({$test_size}% data = {r.data_shapes.y_test})
+            Test stats ({test_ratio.toFixed(0)}% data = {r.data_shapes.y_test})
         </Stats>
 
         {#if r.best_params}
