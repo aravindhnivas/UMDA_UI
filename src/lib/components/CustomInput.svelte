@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { UnlockKeyhole, LockKeyhole } from 'lucide-svelte/icons';
     import Lockbutton from './Lockbutton.svelte';
 
     export let id: string = getID(5);
