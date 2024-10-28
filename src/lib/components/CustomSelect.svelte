@@ -62,14 +62,14 @@
                     disabled={element_disabled}
                 >
                     {#if isArray(items) && items.length > 0}
-                        <option disabled selected>{label}</option>
+                        <option disabled>{label}</option>
                         {#each items as item}
                             <option>{item}</option>
                         {/each}
                     {:else if isObject(items)}
                         {#each Object.keys(items) as key}
                             {@const nested_items = items[key]}
-                            <option disabled selected>{key}</option>
+                            <option disabled>{key}</option>
                             {#each nested_items as item}
                                 <option>{item}</option>
                             {/each}
