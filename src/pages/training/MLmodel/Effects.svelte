@@ -3,6 +3,7 @@
         current_model,
         default_fine_tuned_values,
         default_param_values,
+        experiment_id,
         fine_tuned_values,
         model,
         tune_parameters,
@@ -44,7 +45,9 @@
     const set_model_params = (model_name: MLModel) => {
         if (!model_name) return;
         if (!$current_model) return;
+
         console.warn('set_model_params', model_name);
+        $experiment_id[$model] ??= 'normal';
 
         $tune_parameters[model_name] ??= structuredClone($default_param_values);
         $default_fine_tuned_values[model_name] ??= { hyperparameters: {}, parameters: {} };

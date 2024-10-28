@@ -124,7 +124,7 @@ export const results = writable<Record<MLModel, MLResults>>({} as Record<MLModel
 export const plot_data = writable<Record<MLModel, Partial<Plotly.PlotData>[]>>(
     {} as Record<MLModel, Partial<Plotly.PlotData>[]>,
 );
-export const experiment_id = writable('normal');
+export const experiment_id = writable({} as Record<MLModel, string>);
 export const default_parameter_mode = localWritable('default_parameter_mode', true);
 export const skip_invalid_y_values = localWritable('skip_invalid_y_values', false);
 export const analyse_shapley_values = localWritable('analyse_shapley_values', false);
@@ -137,7 +137,7 @@ export const pre_trained_filename = derived(
         if ($default_parameter_mode) name += '_default';
         else if ($fine_tune_model) name += `_${$grid_search_method}`;
         // else name += '_normal';
-        else name += `_${$experiment_id}`;
+        else name += `_${$experiment_id[$model]}`;
 
         return name;
     },
@@ -174,7 +174,7 @@ export const current_pretrained_dir = derived(
         } else if ($fine_tune_model) {
             dir = await path.join(dir, $grid_search_method);
         } else {
-            dir = await path.join(dir, $experiment_id);
+            dir = await path.join(dir, $experiment_id[$model]);
         }
         return dir;
     },

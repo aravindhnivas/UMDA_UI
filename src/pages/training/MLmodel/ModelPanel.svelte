@@ -10,11 +10,11 @@
         fine_tuned_values,
         grid_search_method,
         cv_fold,
-        current_pretrained_file,
         current_pretrained_dir,
         pre_trained_filename,
         tune_parameters,
         experiment_id,
+        model_names,
     } from './stores';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import ModelParameters from './ModelParameters.svelte';
@@ -25,6 +25,7 @@
     import supervised_ml_models from '$lib/config/ml_model/ml_models_parameters';
     import CustomTabs from '$lib/components/CustomTabs.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
+    import { embedding } from '../embedding/stores';
 
     let savedfile: string;
     let uploadedfile: { fullname: string; name: string; model: string } | null = null;
@@ -149,21 +150,18 @@
         }
     };
 
-    const reset_parameters = () => {
+    const reset_parameters = (model_name: MLModel) => {
         uploadedfile = null;
-        $tune_parameters[$model] = structuredClone($default_param_values);
-        Object.keys($all_params_lock_status[$model].hyperparameters).forEach(key => {
-            $all_params_lock_status[$model].hyperparameters[key] = true;
+        $tune_parameters[model_name] = structuredClone($default_param_values);
+        Object.keys($all_params_lock_status[model_name].hyperparameters).forEach(key => {
+            $all_params_lock_status[model_name].hyperparameters[key] = true;
         });
-        Object.keys($all_params_lock_status[$model].parameters).forEach(key => {
-            $all_params_lock_status[$model].parameters[key] = true;
+        Object.keys($all_params_lock_status[model_name].parameters).forEach(key => {
+            $all_params_lock_status[model_name].parameters[key] = true;
         });
         set_default_fine_tuned_values('all');
-        $experiment_id = 'normal';
+        $experiment_id[model_name] = 'normal';
     };
-    $: if ($training_file.filename) {
-        reset_parameters();
-    }
 </script>
 
 <CustomPanel open={true}>
@@ -189,7 +187,7 @@
                 <h3>Hyperparameters</h3>
                 <div class="flex gap-2">
                     <Checkbox bind:value={$default_parameter_mode} label="defaults" />
-                    <button class="btn btn-sm btn-outline" on:click={reset_parameters}>
+                    <button class="btn btn-sm btn-outline" on:click={() => reset_parameters($model)}>
                         <RotateCcw />
                         <span>Reset</span>
                     </button>
@@ -202,7 +200,7 @@
                                 filename = filename.replace(`_default`, `_${$grid_search_method}`);
                             } else {
                                 filename = $pre_trained_filename.replace(
-                                    `_${$experiment_id}`,
+                                    `_${$experiment_id[$model]}`,
                                     `_${$grid_search_method}`,
                                 );
                             }
@@ -215,7 +213,7 @@
                                 return;
                             }
                             await load_parameters(best_params_filename);
-                            $experiment_id = 'best_model';
+                            $experiment_id[$model] = 'best_model';
                         }}
                     >
                         <Download />
@@ -239,7 +237,7 @@
 
     <div class="flex">
         <CustomInput
-            bind:value={$experiment_id}
+            bind:value={$experiment_id[$model]}
             label="Experiment id"
             disabled={$default_parameter_mode || $fine_tune_model}
         />
