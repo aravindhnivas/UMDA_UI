@@ -1,5 +1,6 @@
 <script lang="ts">
     import {
+        current_pretrained_dir,
         current_pretrained_file,
         default_parameter_mode,
         include_training_file_in_plot,
@@ -155,7 +156,7 @@
         console.log($plot_data[$model]);
     };
 
-    const get_pretrained_file = async (name: Promise<string>) => {
+    const get_pretrained_file = async (name: Promise<string> | string) => {
         let pretrained_file = await name;
         if (pretrained_file.endsWith('.pkl')) {
             pretrained_file = pretrained_file.replace('.pkl', '');
@@ -173,9 +174,24 @@
         on_plot_data_ready(data_file);
     }
 
-    const plot_from_datfile = async () => {
-        const { datfile, resultsfile, learning_curve_file, cv_scores_file } =
-            await get_pretrained_file($current_pretrained_file);
+    const plot_from_datfile = async (name: string | null = null) => {
+        let datfile, resultsfile, learning_curve_file, cv_scores_file;
+        // const { datfile, resultsfile, learning_curve_file, cv_scores_file } =
+        //     await get_pretrained_file(await $current_pretrained_file);
+        if (name) {
+            const files = await get_pretrained_file(name);
+            datfile = files.datfile;
+            resultsfile = files.resultsfile;
+            learning_curve_file = files.learning_curve_file;
+            cv_scores_file = files.cv_scores_file;
+        } else {
+            const files = await get_pretrained_file($current_pretrained_file);
+            datfile = files.datfile;
+            resultsfile = files.resultsfile;
+            learning_curve_file = files.learning_curve_file;
+            cv_scores_file = files.cv_scores_file;
+        }
+
         await on_plot_data_ready(datfile);
         console.log('Reading results file', resultsfile);
 
@@ -279,10 +295,40 @@
     $: if (significant_digits > 10) significant_digits = 10;
     let available_cv_folds: string[] = [];
     let current_cv_fold = '';
+
+    const get_valid_dirs = async (name: Promise<string>) => {
+        const dir = await path.dirname(await name);
+        // console.warn(dir);
+        if (!(await fs.exists(dir))) return;
+
+        const pretrained_models_dir = await fs.readDir(dir, { recursive: true });
+        console.warn(pretrained_models_dir);
+
+        let valid_dirs: Record<string, string> = {};
+
+        pretrained_models_dir.forEach(f => {
+            if (!f.children || f.children?.length === 0) return;
+            if (f.children.some(c => c && c?.name?.endsWith('.results.json'))) {
+                if (!f.name) return;
+                // valid_dirs.push(f.name);
+                const pkl_file = f.children.find(c => c?.name?.endsWith('.pkl'));
+                if (!pkl_file) return;
+                valid_dirs[f.name] = pkl_file.name ?? '';
+            }
+        });
+
+        console.warn(dir, valid_dirs);
+        return { dir, valid_dirs };
+    };
+
+    $: get_valid_dirs($current_pretrained_dir);
 </script>
 
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
     {#key plot_data_ready}
+        <!-- {#await get_valid_dirs($current_pretrained_dir) then [dir, valid_dirs]}
+            <CustomSelect value="default" items={valid_dirs} />
+        {/await} -->
         {#await get_pretrained_file($current_pretrained_file) then { datfile }}
             <FileExists name={datfile} let:basename={datfilename}>
                 <div class="grid grid-cols-[4fr_1fr] items-center gap-4">
@@ -290,7 +336,7 @@
                         <CheckCheck />
                         <span>Locally saved computed results are available to plot ({datfilename})</span>
                     </div>
-                    <button class="btn btn-outline" on:click={plot_from_datfile}>Plot</button>
+                    <button class="btn btn-outline" on:click={() => plot_from_datfile()}>Plot</button>
                 </div>
             </FileExists>
         {/await}
