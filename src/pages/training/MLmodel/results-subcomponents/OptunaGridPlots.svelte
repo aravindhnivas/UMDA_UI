@@ -1,6 +1,6 @@
 <script lang="ts">
     import FileExists from '$lib/components/FileExists.svelte';
-    import { current_pretrained_file, fine_tune_model, grid_search_method } from '../stores';
+    import { current_pretrained_file, grid_search_method } from '../stores';
     const optuna_plots = [
         'contour',
         'hyperparameter_importance',
@@ -19,7 +19,7 @@
     };
 </script>
 
-{#if $grid_search_method.toLocaleLowerCase() === 'optuna'}
+{#if $grid_search_method?.toLocaleLowerCase() === 'optuna'}
     <h3>Optuna - Grid search plots</h3>
     <div class="join">
         <FileExists name={get_optuna_fig_dir($current_pretrained_file)} let:resolved={optuna_figures_dir} let:dirname>

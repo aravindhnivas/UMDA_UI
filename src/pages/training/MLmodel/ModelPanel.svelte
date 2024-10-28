@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { training_file } from './../training_file/stores';
     import {
         model,
         default_param_values,
@@ -10,15 +11,20 @@
         grid_search_method,
         cv_fold,
         current_pretrained_file,
+        current_pretrained_dir,
+        pre_trained_filename,
         tune_parameters,
+        experiment_id,
     } from './stores';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import ModelParameters from './ModelParameters.svelte';
     import Notification from '$lib/components/Notification.svelte';
     import { Checkbox } from '$lib/components';
-    import ModelTab from './ModelTab.svelte';
     import { RotateCcw, Save, Download } from 'lucide-svelte/icons';
     import { parse_fine_tuned_values, set_default_fine_tuned_values } from './utils';
+    import supervised_ml_models from '$lib/config/ml_model/ml_models_parameters';
+    import CustomTabs from '$lib/components/CustomTabs.svelte';
+    import CustomInput from '$lib/components/CustomInput.svelte';
 
     let savedfile: string;
     let uploadedfile: { fullname: string; name: string; model: string } | null = null;
@@ -76,7 +82,6 @@
                 filters: [{ name: 'JSON', extensions: ['json'] }],
                 defaultPath: `./${$model}.json`,
             });
-            // filename = selected;
             if (Array.isArray(selected)) {
                 filename = selected[0];
             } else if (selected === null) {
@@ -96,7 +101,6 @@
                 toast.error('Error: Model mismatch');
                 return;
             }
-
             $default_parameter_mode = false;
             const basefilename = await path.basename(filename);
             uploadedfile = {
@@ -139,7 +143,6 @@
                     });
                 });
             }
-
             toast.success('Parameters uploaded successfully');
         } catch (e) {
             toast.error('Error: Invalid JSON file');
@@ -152,13 +155,15 @@
         Object.keys($all_params_lock_status[$model].hyperparameters).forEach(key => {
             $all_params_lock_status[$model].hyperparameters[key] = true;
         });
-
         Object.keys($all_params_lock_status[$model].parameters).forEach(key => {
             $all_params_lock_status[$model].parameters[key] = true;
         });
-
         set_default_fine_tuned_values('all');
+        $experiment_id = 'normal';
     };
+    $: if ($training_file.filename) {
+        reset_parameters();
+    }
 </script>
 
 <CustomPanel open={true}>
@@ -173,7 +178,11 @@
         </div>
     </svelte:fragment>
     <div class="grid gap-2">
-        <ModelTab />
+        <CustomTabs
+            class="bordered"
+            tabs={Object.keys(supervised_ml_models).map(f => ({ tab: f }))}
+            bind:active={$model}
+        />
         <span class="text-sm">{$current_model.description}</span>
         {#if $current_model}
             <div class="flex justify-between">
@@ -187,25 +196,26 @@
                     <button
                         class="btn btn-sm btn-outline"
                         on:click={async () => {
-                            let pre_trained_file = await $current_pretrained_file;
-                            pre_trained_file = pre_trained_file.replace('_normal', `_${$grid_search_method}`);
-                            let loc = await path.dirname(pre_trained_file);
-                            if (!$fine_tune_model) {
-                                loc = await path.join(loc, $grid_search_method);
+                            const loc = await path.join(await $current_pretrained_dir, '../', $grid_search_method);
+                            let filename = $pre_trained_filename;
+                            if ($default_parameter_mode) {
+                                filename = filename.replace(`_default`, `_${$grid_search_method}`);
+                            } else {
+                                filename = $pre_trained_filename.replace(
+                                    `_${$experiment_id}`,
+                                    `_${$grid_search_method}`,
+                                );
                             }
-
-                            const filename = await path.basename(pre_trained_file);
-                            // const extname = filename.split('.').at(-1);
+                            console.warn(filename);
                             const name = $fine_tune_model ? 'fine_tuned_parameters' : 'best_params';
                             const best_params_filename = await path.join(loc, `${filename}.${name}.json`);
                             if (!(await fs.exists(best_params_filename))) {
-                                console.warn({ best_params_filename });
+                                console.warn(best_params_filename);
                                 toast.error('Best params file not found');
                                 return;
                             }
-                            // console.log({ pre_trained_file, loc, best_params_filename });
-                            // console.log(best_params_filename);
                             await load_parameters(best_params_filename);
+                            $experiment_id = 'best_model';
                         }}
                     >
                         <Download />
@@ -227,6 +237,13 @@
         {/if}
     </div>
 
+    <div class="flex">
+        <CustomInput
+            bind:value={$experiment_id}
+            label="Experiment id"
+            disabled={$default_parameter_mode || $fine_tune_model}
+        />
+    </div>
     {#if $tune_parameters[$model].hyperparameters}
         <ModelParameters key="hyperparameters" />
     {:else}

@@ -101,7 +101,7 @@ export const randomzied_gridsearch_niter = localWritable<number>('randomzied_gri
 export const bootstrap_nsamples = localWritable<number>('bootstrap_nsamples', 800);
 export const bootstrap = localWritable('bootstrap', false);
 export const test_size = localWritable('test_size', 20);
-export const grid_search_method = localWritable('grid_search_method', 'Optuna');
+export const grid_search_method = writable('Optuna');
 export const noise_percentage = localWritable('noise_percentage', 0.5);
 export const save_pretrained_model = localWritable('save_pretrained_model', true);
 export const parallel_computation = localWritable('parallel_computation', true);
@@ -126,11 +126,25 @@ export const results = writable<Record<MLModel, MLResults>>({} as Record<MLModel
 export const plot_data = writable<Record<MLModel, Partial<Plotly.PlotData>[]>>(
     {} as Record<MLModel, Partial<Plotly.PlotData>[]>,
 );
-
+export const experiment_id = writable('normal');
 export const default_parameter_mode = localWritable('default_parameter_mode', true);
 export const skip_invalid_y_values = localWritable('skip_invalid_y_values', false);
 export const analyse_shapley_values = localWritable('analyse_shapley_values', false);
-export const pre_trained_filename = localWritable('pre_trained_filename', '');
+
+// export const pre_trained_filename = localWritable('pre_trained_filename', '');
+export const pre_trained_filename = derived(
+    [model, embedd_savefile, default_parameter_mode, fine_tune_model, grid_search_method, experiment_id],
+    ([$model, $embedd_savefile, $default_parameter_mode, $fine_tune_model, $grid_search_method, $experiment_id]) => {
+        let name = `${$model}_${$embedd_savefile}_pretrained_model`;
+        if ($default_parameter_mode) name += '_default';
+        else if ($fine_tune_model) name += `_${$grid_search_method}`;
+        // else name += '_normal';
+        else name += `_${$experiment_id}`;
+
+        return name;
+    },
+);
+
 export const current_pretrained_dir = derived(
     [
         current_training_processed_data_directory,
@@ -139,6 +153,7 @@ export const current_pretrained_dir = derived(
         default_parameter_mode,
         fine_tune_model,
         grid_search_method,
+        experiment_id,
     ],
     async ([
         $current_training_processed_data_directory,
@@ -147,6 +162,7 @@ export const current_pretrained_dir = derived(
         $default_parameter_mode,
         $fine_tune_model,
         $grid_search_method,
+        $experiment_id,
     ]) => {
         let dir = await path.join(
             await $current_training_processed_data_directory,
@@ -159,6 +175,8 @@ export const current_pretrained_dir = derived(
             dir = await path.join(dir, 'default');
         } else if ($fine_tune_model) {
             dir = await path.join(dir, $grid_search_method);
+        } else {
+            dir = await path.join(dir, $experiment_id);
         }
         return dir;
     },

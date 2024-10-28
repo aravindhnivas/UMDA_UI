@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { embedd_savefile } from '../embedding/stores';
     import {
         current_model,
         default_fine_tuned_values,
@@ -7,10 +6,6 @@
         fine_tuned_values,
         model,
         tune_parameters,
-        pre_trained_filename,
-        default_parameter_mode,
-        fine_tune_model,
-        grid_search_method,
     } from './stores';
     import { set_default_fine_tuned_values } from './utils';
 
@@ -44,61 +39,58 @@
             };
         });
     };
-    const set_model_params = (
-        model_name: string,
-        embedding_name: string,
-        default_mode: boolean,
-        fine_tune: boolean,
-        grid_name: string,
-    ) => {
-        if (!$model) return;
+    let model_params_updated = {} as Record<MLModel, boolean>;
+
+    const set_model_params = (model_name: MLModel) => {
+        if (!model_name) return;
         if (!$current_model) return;
+        console.warn('set_model_params', model_name);
 
-        $tune_parameters[$model] ??= structuredClone($default_param_values);
-        $default_fine_tuned_values[$model] ??= { hyperparameters: {}, parameters: {} };
+        $tune_parameters[model_name] ??= structuredClone($default_param_values);
+        $default_fine_tuned_values[model_name] ??= { hyperparameters: {}, parameters: {} };
 
-        Object.keys($current_model.optuna_grid).forEach(okey => {
-            const { type, low, high, step, options, log } = $current_model.optuna_grid[okey];
+        if (isEmpty($default_fine_tuned_values[model_name]?.hyperparameters || {})) {
+            Object.keys($current_model.optuna_grid).forEach(okey => {
+                const { type, low, high, step, options, log } = $current_model.optuna_grid[okey];
 
-            let value: string;
+                let value: string;
+                let scale: 'log' | 'linear' = 'linear';
+                console.warn('log', log);
+                if (log) scale = 'log';
 
-            let scale: 'log' | 'linear' = 'linear';
-            if (log) scale = 'log';
+                if (type === 'string' && options) value = options?.join(', ');
+                else if (type === 'bool') value = 'true, false';
+                else {
+                    value = `${low}, ${high}`;
+                    if (step) value += `, ${step}`;
+                }
 
-            if (type === 'string' && options) value = options?.join(', ');
-            else if (type === 'bool') value = 'true, false';
-            else {
-                value = `${low}, ${high}`;
-                if (step) value += `, ${step}`;
-            }
+                const hparams_keys = Object.keys($current_model.hyperparameters);
+                const params_keys = Object.keys($current_model.parameters);
+                if (hparams_keys.includes(okey)) {
+                    $default_fine_tuned_values[model_name].hyperparameters[okey] = {
+                        value,
+                        type,
+                        scale,
+                        active: false,
+                    };
+                } else if (params_keys.includes(okey)) {
+                    $default_fine_tuned_values[model_name].parameters[okey] = { value, type, scale, active: false };
+                }
+            });
+        }
 
-            const hparams_keys = Object.keys($current_model.hyperparameters);
-            const params_keys = Object.keys($current_model.parameters);
-            if (hparams_keys.includes(okey)) {
-                $default_fine_tuned_values[$model].hyperparameters[okey] = { value, type, scale, active: false };
-            } else if (params_keys.includes(okey)) {
-                $default_fine_tuned_values[$model].parameters[okey] = { value, type, scale, active: false };
-            }
-        });
-
-        // setting fine tuned hyperparameters
-        $fine_tuned_values[$model] ??= { hyperparameters: {}, parameters: {} };
-        if (isEmpty($fine_tuned_values[$model].hyperparameters)) {
+        $fine_tuned_values[model_name] ??= { hyperparameters: {}, parameters: {} };
+        if (isEmpty($fine_tuned_values[model_name].hyperparameters)) {
             set_fine_tuned_values('hyperparameters');
             set_default_fine_tuned_values('hyperparameters');
         }
-        if (isEmpty($fine_tuned_values[$model].parameters)) {
+        if (isEmpty($fine_tuned_values[model_name].parameters)) {
             set_fine_tuned_values('parameters');
             set_default_fine_tuned_values('parameters');
         }
-
-        // Set the pre-trained model filename
-        let name = `${model_name}_${embedding_name}_pretrained_model`;
-        if (default_mode) name += '_default';
-        else if (fine_tune) name += `_${grid_name}`;
-        else name += '_normal';
-        $pre_trained_filename = name;
+        model_params_updated[model_name] = true;
     };
 
-    $: set_model_params($model, $embedd_savefile, $default_parameter_mode, $fine_tune_model, $grid_search_method);
+    $: !model_params_updated?.[$model] && set_model_params($model);
 </script>

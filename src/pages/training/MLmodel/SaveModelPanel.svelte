@@ -23,7 +23,7 @@
         <div class="flex gap-1">
             <Checkbox bind:value={$save_pretrained_model} label="Save" check="checkbox" />
         </div>
-        <CustomInput bind:value={$pre_trained_filename} label="save filename" lock={true} />
+        <CustomInput value={$pre_trained_filename} label="save filename" disabled />
         <FileExists name={$current_pretrained_file} let:dirname={save_loc_name} show_if_not_exists>
             <Notification dismissable={false}>
                 <div class="grid gap-2">
