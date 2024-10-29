@@ -49,15 +49,21 @@ export function parse_fine_tuned_values() {
     return clonedFineTunedValues;
 }
 
-export function set_default_fine_tuned_values(mode: 'hyperparameters' | 'parameters' | 'all' = 'all') {
+export function set_default_fine_tuned_values(
+    mode: 'hyperparameters' | 'parameters' | 'all' = 'all',
+    model_name: MLModel,
+) {
     const $default_fine_tuned_values = get(default_fine_tuned_values);
-    const $model = get(model);
+    // console.warn('set_default_fine_tuned_values', mode, model_name, $default_fine_tuned_values);
+    // const $model = get(model);
+
     const v = ['hyperparameters', 'parameters'] as const;
     const for_key = (key: (typeof v)[number]) => {
-        const cloned_obj = structuredClone($default_fine_tuned_values[$model][key]);
+        if (!$default_fine_tuned_values[model_name]) return;
+        const cloned_obj = structuredClone($default_fine_tuned_values[model_name][key]);
         Object.entries(cloned_obj).forEach(([label, cloned]) => {
             fine_tuned_values.update(f => {
-                f[$model][key][label] = {
+                f[model_name][key][label] = {
                     value: cloned.value,
                     type: cloned.type,
                     scale: cloned.scale,

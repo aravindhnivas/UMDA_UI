@@ -82,6 +82,13 @@ export const default_param_values = derived(current_model, $current_model => {
     return { hyperparameters, parameters };
 });
 
+export const get_default_param_values = (model: MLModel) => {
+    const get_current_model = structuredClone(supervised_ml_models[model]);
+    const hyperparameters = get_params_from_current_model('hyperparameters', get_current_model);
+    const parameters = get_params_from_current_model('parameters', get_current_model);
+    return { hyperparameters, parameters };
+};
+
 export const default_fine_tuned_values = writable<FineTunedValues>({} as FineTunedValues);
 export const fine_tuned_values = writable<FineTunedValues>(structuredClone(default_values_for_models));
 

@@ -15,17 +15,18 @@
         tune_parameters,
         experiment_id,
         model_names,
+        get_default_param_values,
     } from './stores';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import ModelParameters from './ModelParameters.svelte';
     import Notification from '$lib/components/Notification.svelte';
-    import { Checkbox } from '$lib/components';
+    import { Checkbox, CustomSelect } from '$lib/components';
     import { RotateCcw, Save, Download } from 'lucide-svelte/icons';
     import { parse_fine_tuned_values, set_default_fine_tuned_values } from './utils';
     import supervised_ml_models from '$lib/config/ml_model/ml_models_parameters';
     import CustomTabs from '$lib/components/CustomTabs.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
-    import { embedding } from '../embedding/stores';
+    import { embedding, embeddings } from '../embedding/stores';
 
     let savedfile: string;
     let uploadedfile: { fullname: string; name: string; model: string } | null = null;
@@ -152,23 +153,22 @@
 
     const reset_parameters = (model_name: MLModel) => {
         uploadedfile = null;
-        $tune_parameters[model_name] = structuredClone($default_param_values);
+        $tune_parameters[model_name] = get_default_param_values(model_name);
         Object.keys($all_params_lock_status[model_name].hyperparameters).forEach(key => {
             $all_params_lock_status[model_name].hyperparameters[key] = true;
         });
         Object.keys($all_params_lock_status[model_name].parameters).forEach(key => {
             $all_params_lock_status[model_name].parameters[key] = true;
         });
-
-        set_default_fine_tuned_values('all');
+        set_default_fine_tuned_values('all', model_name);
         $experiment_id[model_name] = 'normal';
     };
 
-    // $: if ($training_file.filename || $embedding) {
-    //     model_names.forEach(model_name => {
-    //         reset_parameters(model_name);
-    //     });
-    // }
+    $: if ($training_file.filename || $embedding) {
+        model_names.forEach(model_name => {
+            reset_parameters(model_name);
+        });
+    }
 </script>
 
 <CustomPanel open={true}>
@@ -194,6 +194,7 @@
             <div class="flex justify-between">
                 <h3>Hyperparameters</h3>
                 <div class="flex gap-2">
+                    <CustomSelect bind:value={$embedding} items={embeddings} />
                     <Checkbox bind:value={$default_parameter_mode} label="defaults" />
                     <button class="btn btn-sm btn-outline" on:click={() => reset_parameters($model)}>
                         <RotateCcw />

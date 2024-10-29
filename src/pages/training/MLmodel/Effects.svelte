@@ -86,11 +86,11 @@
         $fine_tuned_values[model_name] ??= { hyperparameters: {}, parameters: {} };
         if (isEmpty($fine_tuned_values[model_name].hyperparameters)) {
             set_fine_tuned_values('hyperparameters');
-            set_default_fine_tuned_values('hyperparameters');
+            set_default_fine_tuned_values('hyperparameters', model_name);
         }
         if (isEmpty($fine_tuned_values[model_name].parameters)) {
             set_fine_tuned_values('parameters');
-            set_default_fine_tuned_values('parameters');
+            set_default_fine_tuned_values('parameters', model_name);
         }
         model_params_updated[model_name] = true;
     };
