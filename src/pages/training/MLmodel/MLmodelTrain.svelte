@@ -228,11 +228,20 @@
             }
         }
 
-        // const optuna_storage = await $optuna_storage_file;
-        // if ($fine_tune_model && $grid_search_method === 'Optuna' && !(await fs.exists(optuna_storage))) {
-        //     toast.error('Error: Optuna storage file not provided');
-        //     return;
-        // }
+        if ($estimator.load) {
+            if (!(await fs.exists($estimator.file))) {
+                toast.error('Error: Estimator file not found');
+                return;
+            }
+            if (!$seed.lock) {
+                toast.error('Error: Seed value must be locked when loading a pre-trained model');
+                return;
+            }
+            if (!$seed.value) {
+                toast.error('Error: Seed value must be provided when loading a pre-trained model');
+                return;
+            }
+        }
 
         const args = {
             model: $model,
