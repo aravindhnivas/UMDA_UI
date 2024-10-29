@@ -32,8 +32,8 @@
         ytransformation,
         estimator,
         current_pretrained_dir,
+        current_pretrained_file,
     } from './stores';
-    import BrowseFile from '$lib/components/BrowseFile.svelte';
 
     const grid_search_methods = [
         'Optuna',
@@ -41,21 +41,19 @@
         'RandomizedSearchCV',
         'HalvingGridSearchCV',
         'HalvingRandomSearchCV',
-        // 'DaskGridSearchCV',
-        // 'DaskRandomizedSearchCV',
     ];
     const elevation = 3;
     const paper_style = 'background-color: transparent;';
 
     const get_all_estimators = async (name: Promise<string>) => {
-        const dir = await name;
-        if (!(await fs.exists(dir))) return;
-        const files = await fs.readDir(dir);
-        const est = files.filter(file => !file.children && file?.name?.endsWith('.pkl'));
-        console.log(est);
-        return est;
+        const file = await name;
+        const pkl_file = file.endsWith('.pkl') ? file : file + '.pkl';
+        // console.log(pkl_file);
+        if (!(await fs.exists(pkl_file))) return;
+        $estimator.file = pkl_file;
+        return pkl_file;
     };
-    $: get_all_estimators($current_pretrained_dir);
+    $: get_all_estimators($current_pretrained_file);
 </script>
 
 <CustomPanel open={true}>
@@ -289,27 +287,8 @@
         <Paper transition {elevation} style={paper_style}>
             <Subtitle>Estimator</Subtitle>
             <Content>
-                <!-- <div class="grid gap-2">
-                    <Checkbox bind:value={$estimator.load} label="load_estimator" check="checkbox" />
-                    <BrowseFile label="Load estimator" bind:filename={$estimator.file} disabled={!$estimator.load} />
-                    </div> -->
                 <Checkbox bind:value={$estimator.load} label="load_estimator" check="checkbox" />
-                {#await get_all_estimators($current_pretrained_dir) then est}
-                    {#if est}
-                        <!-- {@const estimators = est.map(e => e.name) || []} -->
-                        {@const estimators = est.map(e => e.name) || []}
-                        <CustomSelect
-                            label="Choose estimator"
-                            items={estimators}
-                            disabled={!$estimator.load}
-                            on:change={e => {
-                                const val = e.target.value;
-                                if (val === '') return;
-                                $estimator.file = est.find(e => e.name === val).path;
-                            }}
-                        />
-                    {/if}
-                {/await}
+                <span class="text-xs text-wrap break-words">{$estimator.file}</span>
             </Content>
         </Paper>
     </div>
