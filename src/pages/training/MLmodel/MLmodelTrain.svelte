@@ -53,6 +53,7 @@
         ytransformation,
         optuna_storage_file,
         estimator,
+        seed,
     } from './stores';
     import TrainingFilePanel from './TrainingFilePanel.svelte';
     import { parse_fine_tuned_values } from './utils';
@@ -276,6 +277,7 @@
             optuna_resume_study: $optuna_resume_study,
             optuna_storage_file: await $optuna_storage_file,
             estimator_file: $estimator.load ? $estimator.file : null,
+            seed: $seed.lock ? null : $seed.value,
         };
 
         delete $results[$model];

@@ -2,8 +2,9 @@
     import { Checkbox, CustomInput, CustomSelect } from '$lib/components';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import Paper, { Content, Subtitle } from '@smui/paper';
-    import { Ban, TriangleAlert } from 'lucide-svelte/icons';
+    import { Ban, TriangleAlert, RefreshCcw } from 'lucide-svelte/icons';
     import {
+        seed,
         analyse_shapley_values,
         available_scalers,
         available_transformations,
@@ -278,9 +279,29 @@
         <Paper transition {elevation} style={paper_style}>
             <Subtitle>Misc</Subtitle>
             <Content>
-                <div class="flex gap-2">
-                    <Checkbox bind:value={$skip_invalid_y_values} label="skip_invalid_y_values" check="checkbox" />
-                    <Checkbox bind:value={$analyse_shapley_values} label="analyse_shapley_values" check="checkbox" />
+                <div class="grid gap-2">
+                    <div class="flex">
+                        <CustomInput bind:value={$seed.value} label="seed" bind:lock={$seed.lock}>
+                            <svelte:fragment slot="post-input-within">
+                                <button
+                                    disabled={$seed.lock}
+                                    on:click={() => {
+                                        $seed.value = Math.floor(Math.random() * 1000);
+                                    }}
+                                >
+                                    <RefreshCcw size="20" />
+                                </button>
+                            </svelte:fragment>
+                        </CustomInput>
+                    </div>
+                    <div class="flex gap-2">
+                        <Checkbox bind:value={$skip_invalid_y_values} label="skip_invalid_y_values" check="checkbox" />
+                        <Checkbox
+                            bind:value={$analyse_shapley_values}
+                            label="analyse_shapley_values"
+                            check="checkbox"
+                        />
+                    </div>
                 </div>
             </Content>
         </Paper>

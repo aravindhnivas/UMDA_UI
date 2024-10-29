@@ -133,6 +133,10 @@ export const experiment_id = writable({} as Record<MLModel, string>);
 export const default_parameter_mode = localWritable('default_parameter_mode', true);
 export const skip_invalid_y_values = localWritable('skip_invalid_y_values', false);
 export const analyse_shapley_values = localWritable('analyse_shapley_values', false);
+export const seed = localWritable('seed', {
+    lock: false,
+    value: 42,
+});
 
 // export const pre_trained_filename = localWritable('pre_trained_filename', '');
 export const pre_trained_filename = derived(
