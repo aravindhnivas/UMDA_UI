@@ -298,47 +298,55 @@
 
     const get_valid_dirs = async (name: Promise<string>) => {
         const dir = await path.dirname(await name);
-        // console.warn(dir);
         if (!(await fs.exists(dir))) return;
 
         const pretrained_models_dir = await fs.readDir(dir, { recursive: true });
-        console.warn(pretrained_models_dir);
-
         let valid_dirs: Record<string, string> = {};
-
         pretrained_models_dir.forEach(f => {
             if (!f.children || f.children?.length === 0) return;
             if (f.children.some(c => c && c?.name?.endsWith('.results.json'))) {
                 if (!f.name) return;
-                // valid_dirs.push(f.name);
                 const pkl_file = f.children.find(c => c?.name?.endsWith('.pkl'));
                 if (!pkl_file) return;
                 valid_dirs[f.name] = pkl_file.name ?? '';
             }
         });
 
-        console.warn(dir, valid_dirs);
         return { dir, valid_dirs };
     };
-
-    $: get_valid_dirs($current_pretrained_dir);
 </script>
 
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
     {#key plot_data_ready}
-        <!-- {#await get_valid_dirs($current_pretrained_dir) then [dir, valid_dirs]}
-            <CustomSelect value="default" items={valid_dirs} />
-        {/await} -->
-        {#await get_pretrained_file($current_pretrained_file) then { datfile }}
-            <FileExists name={datfile} let:basename={datfilename}>
-                <div class="grid grid-cols-[4fr_1fr] items-center gap-4">
-                    <div class="alert alert-success">
-                        <CheckCheck />
-                        <span>Locally saved computed results are available to plot ({datfilename})</span>
-                    </div>
-                    <button class="btn btn-outline" on:click={() => plot_from_datfile()}>Plot</button>
+        {#await get_valid_dirs($current_pretrained_dir) then value}
+            {#if value}
+                <div class="flex gap-1 my-2 items-center">
+                    <span class="badge">Available plots</span>
+                    {#each Object.keys(value.valid_dirs) as dir}
+                        <button
+                            class="btn btn-sm btn-outline"
+                            on:click={async () => {
+                                const pkl = await path.join(value.dir, dir, value.valid_dirs[dir]);
+                                plot_from_datfile(pkl);
+                            }}
+                        >
+                            {dir}
+                        </button>
+                    {/each}
                 </div>
-            </FileExists>
+            {/if}
+            <!-- <CustomSelect bind:value={selected_dir} items={valid_dirs} /> -->
+            {#await get_pretrained_file($current_pretrained_file) then { datfile }}
+                <FileExists name={datfile} let:basename={datfilename}>
+                    <div class="grid grid-cols-[4fr_1fr] items-center gap-4">
+                        <div class="alert alert-success">
+                            <CheckCheck />
+                            <span>Locally saved computed results are available to plot ({datfilename})</span>
+                        </div>
+                        <button class="btn btn-outline" on:click={() => plot_from_datfile()}>Plot</button>
+                    </div>
+                </FileExists>
+            {/await}
         {/await}
     {/key}
     <div class="flex my-2 gap-4 items-end">
