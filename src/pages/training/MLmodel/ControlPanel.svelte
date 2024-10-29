@@ -46,6 +46,7 @@
     const paper_style = 'background-color: transparent;';
 
     const get_all_estimators = async (name: Promise<string>) => {
+        // if (!load) return;
         $estimator.file = '';
         const file = await name;
         const pkl_file = file.endsWith('.pkl') ? file : file + '.pkl';
@@ -307,8 +308,10 @@
         <Paper transition {elevation} style={paper_style}>
             <Subtitle>Estimator</Subtitle>
             <Content>
-                <Checkbox bind:value={$estimator.load} label="load_estimator" check="checkbox" />
-                <span class="text-xs text-wrap break-words">{$estimator.file}</span>
+                <div style="height: 150px;">
+                    <Checkbox bind:value={$estimator.load} label="load_estimator" check="checkbox" />
+                    <span class="text-xs text-wrap break-words">{$estimator.file}</span>
+                </div>
             </Content>
         </Paper>
     </div>
