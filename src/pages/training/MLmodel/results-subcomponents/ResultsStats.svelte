@@ -1,7 +1,7 @@
 <script lang="ts">
     import Stats from './Stats.svelte';
     import ResultsPlots from './ResultsPlots.svelte';
-    import { model, results, test_size } from '../stores';
+    import { model, results } from '../stores';
     import OptunaGridPlots from './OptunaGridPlots.svelte';
 
     export let significant_digits: number;
