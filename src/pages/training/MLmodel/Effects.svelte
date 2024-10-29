@@ -58,7 +58,7 @@
 
                 let value: string;
                 let scale: 'log' | 'linear' = 'linear';
-                console.warn('log', log);
+                // console.warn('log', log);
                 if (log) scale = 'log';
 
                 if (type === 'string' && options) value = options?.join(', ');
