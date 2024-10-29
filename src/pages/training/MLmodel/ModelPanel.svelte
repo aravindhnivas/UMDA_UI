@@ -159,9 +159,16 @@
         Object.keys($all_params_lock_status[model_name].parameters).forEach(key => {
             $all_params_lock_status[model_name].parameters[key] = true;
         });
+
         set_default_fine_tuned_values('all');
         $experiment_id[model_name] = 'normal';
     };
+
+    // $: if ($training_file.filename || $embedding) {
+    //     model_names.forEach(model_name => {
+    //         reset_parameters(model_name);
+    //     });
+    // }
 </script>
 
 <CustomPanel open={true}>
