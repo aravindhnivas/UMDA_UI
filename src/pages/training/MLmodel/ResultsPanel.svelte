@@ -306,12 +306,12 @@
             if (!f.children || f.children?.length === 0) return;
             if (f.children.some(c => c && c?.name?.endsWith('.results.json'))) {
                 if (!f.name) return;
-                const pkl_file = f.children.find(c => c?.name?.endsWith('.pkl'));
-                if (!pkl_file) return;
-                valid_dirs[f.name] = pkl_file.name ?? '';
+                const dat_files = f.children.find(c => c?.name?.endsWith('.dat.json'));
+                if (!dat_files) return;
+                valid_dirs[f.name] = dat_files.name?.replace('.dat.json', '.pkl') ?? '';
             }
         });
-
+        console.log({ valid_dirs });
         return { dir, valid_dirs };
     };
 </script>
@@ -327,7 +327,8 @@
                             class="btn btn-sm btn-outline"
                             on:click={async () => {
                                 const pkl = await path.join(value.dir, dir, value.valid_dirs[dir]);
-                                plot_from_datfile(pkl);
+                                console.log(pkl);
+                                await plot_from_datfile(pkl);
                             }}
                         >
                             {dir}
