@@ -211,7 +211,7 @@
             return;
         }
 
-        console.log('Estimator', $estimator);
+        // console.log('Estimator', $estimator);
         if ($estimator.load && !(await fs.exists($estimator.file))) {
             toast.error('Cannot find estimator file. Please uncheck the load estimator option');
             return;
