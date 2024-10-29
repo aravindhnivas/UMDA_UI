@@ -300,18 +300,21 @@
         const dir = await path.dirname(await name);
         if (!(await fs.exists(dir))) return;
 
-        const pretrained_models_dir = await fs.readDir(dir, { recursive: true });
+        const pretrained_models_dir = await fs.readDir(dir);
+        console.log(pretrained_models_dir);
+
+        const childrens = pretrained_models_dir.filter(f => f.children);
         let valid_dirs: Record<string, string> = {};
-        pretrained_models_dir.forEach(f => {
-            if (!f.children || f.children?.length === 0) return;
-            if (f.children.some(c => c && c?.name?.endsWith('.results.json'))) {
-                if (!f.name) return;
-                const dat_files = f.children.find(c => c?.name?.endsWith('.dat.json'));
-                if (!dat_files) return;
-                valid_dirs[f.name] = dat_files.name?.replace('.dat.json', '.pkl') ?? '';
+        for (const child of childrens) {
+            const child_dirs = await fs.readDir(child.path);
+            if (child_dirs.some(c => c?.name.endsWith('.results.json'))) {
+                const dat_file = child_dirs.find(c => c?.name.endsWith('.dat.json'))?.name;
+                if (child.name && dat_file) {
+                    valid_dirs[child.name] = dat_file.replace('.dat.json', '.pkl');
+                }
             }
-        });
-        console.log({ valid_dirs });
+        }
+        // console.log({ valid_dirs });
         return { dir, valid_dirs };
     };
 </script>
