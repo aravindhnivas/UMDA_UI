@@ -12,7 +12,7 @@
     };
 </script>
 
-<CustomPanel open={true}>
+<CustomPanel open={false}>
     <svelte:fragment slot="title" let:open>
         <div class="flex-center">
             <span>Loaded training file</span>
