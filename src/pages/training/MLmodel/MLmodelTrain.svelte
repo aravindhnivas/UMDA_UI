@@ -58,6 +58,7 @@
     } from './stores';
     import TrainingFilePanel from './TrainingFilePanel.svelte';
     import { parse_fine_tuned_values } from './utils';
+    import { CheckCheck, TriangleAlert } from 'lucide-svelte/icons';
 
     export let id: string = 'ml_model-train-container';
     export let display: string = 'none';
@@ -342,7 +343,7 @@
         </Accordion>
     </div>
     <div class="flex m-auto gap-4">
-        <Loadingbtn class="" name="Begin training" callback={fit_function} subprocess={true} on:result={onResult} />
+        <Loadingbtn name="Begin training" callback={fit_function} subprocess={true} on:result={onResult} />
         <button
             class="flex btn btn-sm btn-outline"
             on:click={async () => {
@@ -357,4 +358,20 @@
         </button>
         <Dashboard url="http://localhost:8080" name="Optuna-dashboard" />
     </div>
+    {#await $current_pretrained_file then value}
+        {@const filename = value + '.pkl'}
+        {#await fs.exists(filename) then file_exists}
+            {#await path.basename(filename) then basename}
+                <span class="flex gap-2 items-center badge badge-success" class:badge-error={!file_exists}>
+                    {#if file_exists}
+                        <CheckCheck size="15" />
+                        <span>{basename}</span>
+                    {:else}
+                        <TriangleAlert size="15" />
+                        <span>{basename}</span>
+                    {/if}
+                </span>
+            {/await}
+        {/await}
+    {/await}
 </div>
