@@ -175,6 +175,7 @@
             {/if}
         </div>
     </svelte:fragment>
+
     <div class="grid gap-2">
         <CustomTabs
             class="bordered"
@@ -242,6 +243,7 @@
             disabled={$default_parameter_mode || $fine_tune_model}
         />
     </div>
+
     {#if $tune_parameters[$model].hyperparameters}
         <ModelParameters key="hyperparameters" />
     {:else}
