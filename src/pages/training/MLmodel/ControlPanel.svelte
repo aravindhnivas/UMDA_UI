@@ -30,7 +30,10 @@
         test_size,
         yscaling,
         ytransformation,
+        estimator,
+        current_pretrained_dir,
     } from './stores';
+    import BrowseFile from '$lib/components/BrowseFile.svelte';
 
     const grid_search_methods = [
         'Optuna',
@@ -43,6 +46,16 @@
     ];
     const elevation = 3;
     const paper_style = 'background-color: transparent;';
+
+    const get_all_estimators = async (name: Promise<string>) => {
+        const dir = await name;
+        if (!(await fs.exists(dir))) return;
+        const files = await fs.readDir(dir);
+        const est = files.filter(file => !file.children && file?.name?.endsWith('.pkl'));
+        console.log(est);
+        return est;
+    };
+    $: get_all_estimators($current_pretrained_dir);
 </script>
 
 <CustomPanel open={true}>
@@ -271,6 +284,32 @@
                     <Checkbox bind:value={$skip_invalid_y_values} label="skip_invalid_y_values" check="checkbox" />
                     <Checkbox bind:value={$analyse_shapley_values} label="analyse_shapley_values" check="checkbox" />
                 </div>
+            </Content>
+        </Paper>
+        <Paper transition {elevation} style={paper_style}>
+            <Subtitle>Estimator</Subtitle>
+            <Content>
+                <!-- <div class="grid gap-2">
+                    <Checkbox bind:value={$estimator.load} label="load_estimator" check="checkbox" />
+                    <BrowseFile label="Load estimator" bind:filename={$estimator.file} disabled={!$estimator.load} />
+                    </div> -->
+                <Checkbox bind:value={$estimator.load} label="load_estimator" check="checkbox" />
+                {#await get_all_estimators($current_pretrained_dir) then est}
+                    {#if est}
+                        <!-- {@const estimators = est.map(e => e.name) || []} -->
+                        {@const estimators = est.map(e => e.name) || []}
+                        <CustomSelect
+                            label="Choose estimator"
+                            items={estimators}
+                            disabled={!$estimator.load}
+                            on:change={e => {
+                                const val = e.target.value;
+                                if (val === '') return;
+                                $estimator.file = est.find(e => e.name === val).path;
+                            }}
+                        />
+                    {/if}
+                {/await}
             </Content>
         </Paper>
     </div>

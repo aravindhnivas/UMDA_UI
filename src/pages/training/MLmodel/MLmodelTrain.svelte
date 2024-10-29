@@ -52,6 +52,7 @@
         yscaling,
         ytransformation,
         optuna_storage_file,
+        estimator,
     } from './stores';
     import TrainingFilePanel from './TrainingFilePanel.svelte';
     import { parse_fine_tuned_values } from './utils';
@@ -274,6 +275,7 @@
             analyse_shapley_values: $analyse_shapley_values,
             optuna_resume_study: $optuna_resume_study,
             optuna_storage_file: await $optuna_storage_file,
+            estimator_file: $estimator.load ? $estimator.file : null,
         };
 
         delete $results[$model];

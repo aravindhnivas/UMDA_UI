@@ -13,6 +13,11 @@ export const optuna_storage_file = derived(
     },
 );
 
+export const estimator = writable({
+    load: false,
+    file: '',
+});
+
 export const model_names = Object.keys(supervised_ml_models) as MLModel[];
 export const model = localWritable<MLModel>('ml_model', 'ridge');
 

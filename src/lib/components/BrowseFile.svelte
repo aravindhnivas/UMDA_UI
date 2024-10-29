@@ -72,7 +72,7 @@
         {/if}
     </div>
     <div class="join">
-        <button class="btn btn-sm btn-outline join-item" on:click={browse_file} disabled={lock}>
+        <button class="btn btn-sm btn-outline join-item" on:click={browse_file} disabled={disabled || lock}>
             {btn_name}
         </button>
         <input
