@@ -71,6 +71,7 @@ interface LearningCurveData {
 type CVScoresData = Record<'test' | 'train', Record<CV_scoring_methods, CVScores>>;
 
 interface MLResults {
+    seed: number;
     learning_curve_plotly_data?: {
         data: Partial<Partial<PlotData>>[];
         layout: Partial<Partial<Layout>>;

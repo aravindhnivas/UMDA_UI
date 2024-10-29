@@ -19,6 +19,7 @@
     import ResultsPanel from './ResultsPanel.svelte';
     import SaveModelPanel from './SaveModelPanel.svelte';
     import {
+        overwrite_model,
         all_params_lock_status,
         analyse_shapley_values,
         bootstrap,
@@ -62,102 +63,85 @@
     export let display: string = 'none';
 
     const unique_id = getID();
+
     setContext('unique_id', unique_id);
 
-    const fit_function = async () => {
-        if (!$loaded_df_columns.includes($training_column_name_X)) {
-            toast.error('Column X not found in the loaded file. Please select a valid column name.');
-            return;
-        }
-
-        if (!$loaded_df_columns.includes($training_column_name_y)) {
-            toast.error('Column y not found in the loaded file. Please select a valid column name.');
-            return;
-        }
-
-        const final_training_file = await $current_training_data_file;
-        const vectors_file = await $embedd_savefile_path;
-
-        console.log({ vectors_file, final_training_file });
-        if (!(await fs.exists(final_training_file))) {
-            toast.error('Error: Training file not found');
-            return;
-        }
-
-        if (!(await fs.exists(vectors_file))) {
-            toast.error('Error: Embeddings vector file not found');
-            return;
-        }
-
-        if (!$training_column_name_y) {
-            toast.error('Error: Column Y not provided. Set it in the training file');
-            return;
-        }
-
+    const gather_fine_tuned_values = () => {
         let clonedFineTunedValues: Record<string, any> = {};
+        if (!$fine_tune_model) return clonedFineTunedValues;
 
-        if ($fine_tune_model) {
-            // if($grid_search_method === 'Optuna') return toast.error('Optuna fine tuning not supported yet');
-            if ($default_parameter_mode) {
-                toast.error('Cannot fine tune model with default parameters');
-                return;
-            }
-
-            if (!$fine_tuned_values[$model]) {
-                toast.error('Error: Fine tuned hyperparameters not found');
-                return;
-            }
-            clonedFineTunedValues = parse_fine_tuned_values();
-            console.log('fine tuned values', clonedFineTunedValues);
-            if (isEmpty(clonedFineTunedValues)) {
-                toast.error('Error: Fine tuned hyperparameters not found');
-                return;
-            }
+        if ($default_parameter_mode) {
+            toast.error('Cannot fine tune model with default parameters');
+            return;
         }
 
-        const pre_trained_file = await $current_pretrained_file;
-        console.log({ pre_trained_file });
-        if (await fs.exists(pre_trained_file)) {
-            const overwrite = await dialog.confirm(
-                pre_trained_file + ': Pre trained model file already exists. Do you want to overwrite it?',
-                'Overwrite file',
-            );
-            if (!overwrite) return;
+        if (!$fine_tuned_values[$model]) {
+            toast.error('Error: Fine tuned hyperparameters not found');
+            return;
         }
+        clonedFineTunedValues = parse_fine_tuned_values();
+        console.log('fine tuned values', clonedFineTunedValues);
+        if (isEmpty(clonedFineTunedValues)) {
+            toast.error('Error: Fine tuned hyperparameters not found');
+            return;
+        }
+        return clonedFineTunedValues;
+    };
 
+    const gather_params = (clonedFineTunedValues: Record<string, any>) => {
         const values = structuredClone({
             ...$tune_parameters[$model].hyperparameters,
             ...$tune_parameters[$model].parameters,
         });
 
-        Object.keys($all_params_lock_status[$model].parameters).forEach(params => {
-            console.log({ params, val: values[params], fine: clonedFineTunedValues[params] });
-            if (params in clonedFineTunedValues && clonedFineTunedValues[params] !== null) {
+        const v = ['hyperparameters', 'parameters'] as const;
+        v.forEach(val => {
+            Object.keys($all_params_lock_status[$model][val]).forEach(params => {
+                // delete values if it is already fine tuned
+                if (params in clonedFineTunedValues && clonedFineTunedValues[params] !== null) {
+                    delete values[params];
+                    return;
+                }
+                const locked = $all_params_lock_status[$model][val][params];
+                if (!locked) return;
+                if ($model === 'gpr' && params === 'kernel' && values[params]) return;
+                // delete values if it is locked
                 delete values[params];
-                return;
-            }
-
-            const locked = $all_params_lock_status[$model].parameters[params];
-            if (!locked) return;
-            if ($model === 'gpr' && params === 'kernel' && values[params]) return;
-            console.warn('deleting', params);
-            delete values[params];
+            });
         });
+        return values;
+    };
 
-        Object.keys($all_params_lock_status[$model].hyperparameters).forEach(hparams => {
-            if (hparams in clonedFineTunedValues && clonedFineTunedValues[hparams] !== null) {
-                delete values[hparams];
-                return;
-            }
+    const gather_learning_curve_data = () => {
+        if (!$learning_curve.active) return null;
+        let learning_curve_train_sizes = null;
 
-            const locked = $all_params_lock_status[$model].hyperparameters[hparams];
-            if (!locked) return;
-            delete values[hparams];
-        });
+        if ($learning_curve.train_sizes === '') {
+            toast.error('Error: Learning curve train sizes not provided');
+            return;
+        }
 
-        // throw new Error('stop');
-        // return;
-        // console.log({ values });
+        learning_curve_train_sizes = $learning_curve.train_sizes.split(',').map(f => Number(f));
+        console.log({ learning_curve_train_sizes });
+
+        if (learning_curve_train_sizes.length !== 3) {
+            toast.error('Error: Learning curve train sizes must be 3 values');
+            return;
+        }
+
+        if (learning_curve_train_sizes.some(f => isNaN(f))) {
+            toast.error('Error: Learning curve train sizes must be numbers');
+            return;
+        }
+
+        if (learning_curve_train_sizes.slice(0, -1).some(f => f <= 0 || f > 1)) {
+            toast.error('Error: Learning curve train sizes must be between 0 and 1');
+            return;
+        }
+        return learning_curve_train_sizes;
+    };
+
+    const gather_final_params_values = (values: Record<string, string | number | boolean | null>) => {
         let clonedValues: Record<string, string | boolean | number | null> = {};
 
         Object.entries(values).forEach(([key, value], ind) => {
@@ -195,54 +179,70 @@
             }
         });
 
-        const grid_search_parameters = {
-            n_iter: Number($randomzied_gridsearch_niter),
-            factor: Number($halving_factor),
-        };
+        return clonedValues;
+    };
+    const fit_function = async () => {
+        if (!$loaded_df_columns.includes($training_column_name_X)) {
+            toast.error('Column X not found in the loaded file. Please select a valid column name.');
+            return;
+        }
 
-        console.warn({ values, clonedValues, fine_tuned_values: $fine_tuned_values[$model], clonedFineTunedValues });
+        if (!$loaded_df_columns.includes($training_column_name_y)) {
+            toast.error('Column y not found in the loaded file. Please select a valid column name.');
+            return;
+        }
 
-        let learning_curve_train_sizes = null;
-        if ($learning_curve.active) {
-            if ($learning_curve.train_sizes === '') {
-                toast.error('Error: Learning curve train sizes not provided');
-                return;
+        const final_training_file = await $current_training_data_file;
+        const vectors_file = await $embedd_savefile_path;
+
+        console.log({ vectors_file, final_training_file });
+        if (!(await fs.exists(final_training_file))) {
+            toast.error('Error: Training file not found');
+            return;
+        }
+
+        if (!(await fs.exists(vectors_file))) {
+            toast.error('Error: Embeddings vector file not found');
+            return;
+        }
+
+        if (!$training_column_name_y) {
+            toast.error('Error: Column Y not provided. Set it in the training file');
+            return;
+        }
+
+        console.log('Estimator', $estimator);
+        if ($estimator.load && !(await fs.exists($estimator.file))) {
+            toast.error('Cannot find estimator file. Please uncheck the load estimator option');
+            return;
+        }
+
+        const pre_trained_file = await $current_pretrained_file;
+        if (!$overwrite_model && (await fs.exists(pre_trained_file + '.pkl'))) {
+            const overwrite = await dialog.confirm(
+                pre_trained_file + ': Pre trained model file already exists. Do you want to overwrite it?',
+                'Overwrite file',
+            );
+            if (!overwrite) return;
+        }
+
+        let clonedFineTunedValues: Record<string, any> = {};
+        let clonedValues: Record<string, string | boolean | number | null> = {};
+
+        if (!$estimator.load) {
+            if ($fine_tune_model) {
+                clonedFineTunedValues = (await gather_fine_tuned_values()) || {};
+                if (isEmpty(clonedFineTunedValues)) return;
             }
-
-            learning_curve_train_sizes = $learning_curve.train_sizes.split(',').map(f => Number(f));
-            console.log({ learning_curve_train_sizes });
-
-            if (learning_curve_train_sizes.length !== 3) {
-                toast.error('Error: Learning curve train sizes must be 3 values');
-                return;
-            }
-
-            if (learning_curve_train_sizes.some(f => isNaN(f))) {
-                toast.error('Error: Learning curve train sizes must be numbers');
-                return;
-            }
-
-            if (learning_curve_train_sizes.slice(0, -1).some(f => f <= 0 || f > 1)) {
-                toast.error('Error: Learning curve train sizes must be between 0 and 1');
+            const values = gather_params(clonedFineTunedValues);
+            clonedValues = gather_final_params_values(values);
+            if (!$default_parameter_mode && isEmpty(clonedValues)) {
+                toast.error('Please provide hyperparameters or set to default');
                 return;
             }
         }
 
-        if ($estimator.load) {
-            if (!(await fs.exists($estimator.file))) {
-                toast.error('Error: Estimator file not found');
-                return;
-            }
-            if (!$seed.lock) {
-                toast.error('Error: Seed value must be locked when loading a pre-trained model');
-                return;
-            }
-            if (!$seed.value) {
-                toast.error('Error: Seed value must be provided when loading a pre-trained model');
-                return;
-            }
-        }
-
+        const learning_curve_train_sizes = gather_learning_curve_data();
         const args = {
             model: $model,
             vectors_file,
@@ -266,7 +266,10 @@
             cv_fold: Number($cv_fold),
             test_size: Number($test_size) / 100,
             grid_search_method: $grid_search_method,
-            grid_search_parameters,
+            grid_search_parameters: {
+                n_iter: Number($randomzied_gridsearch_niter),
+                factor: Number($halving_factor),
+            },
             pre_trained_file,
             npartitions: Number($NPARTITIONS),
             ytransformation: $ytransformation === 'None' || $fine_tune_model ? null : $ytransformation,

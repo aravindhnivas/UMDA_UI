@@ -137,7 +137,7 @@ export const seed = localWritable('seed', {
     lock: false,
     value: 42,
 });
-
+export const overwrite_model = localWritable('overwrite_model', false);
 // export const pre_trained_filename = localWritable('pre_trained_filename', '');
 export const pre_trained_filename = derived(
     [model, embedd_savefile, default_parameter_mode, fine_tune_model, grid_search_method, experiment_id],

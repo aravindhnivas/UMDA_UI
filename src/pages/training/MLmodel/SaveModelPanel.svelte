@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { pre_trained_filename, save_pretrained_model, current_pretrained_file } from './stores';
+    import { pre_trained_filename, save_pretrained_model, current_pretrained_file, overwrite_model } from './stores';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import { Checkbox, CustomInput } from '$lib/components';
     import Notification from '$lib/components/Notification.svelte';
@@ -22,8 +22,10 @@
     <div class="grid gap-2">
         <div class="flex gap-1">
             <Checkbox bind:value={$save_pretrained_model} label="Save" check="checkbox" />
+            <Checkbox bind:value={$overwrite_model} label="overwrite" check="checkbox" />
         </div>
         <CustomInput value={$pre_trained_filename} label="save filename" disabled />
+
         <FileExists name={$current_pretrained_file} let:dirname={save_loc_name} show_if_not_exists>
             <Notification dismissable={false}>
                 <div class="grid gap-2">

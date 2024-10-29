@@ -32,7 +32,6 @@
         yscaling,
         ytransformation,
         estimator,
-        current_pretrained_dir,
         current_pretrained_file,
     } from './stores';
 
@@ -47,9 +46,9 @@
     const paper_style = 'background-color: transparent;';
 
     const get_all_estimators = async (name: Promise<string>) => {
+        $estimator.file = '';
         const file = await name;
         const pkl_file = file.endsWith('.pkl') ? file : file + '.pkl';
-        // console.log(pkl_file);
         if (!(await fs.exists(pkl_file))) return;
         $estimator.file = pkl_file;
         return pkl_file;
