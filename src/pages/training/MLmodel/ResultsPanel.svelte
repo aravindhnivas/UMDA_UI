@@ -174,6 +174,7 @@
         on_plot_data_ready(data_file);
     }
 
+    let current_dat_file: string = '';
     const plot_from_datfile = async (name: string | null = null) => {
         let datfile, resultsfile, learning_curve_file, cv_scores_file;
         // const { datfile, resultsfile, learning_curve_file, cv_scores_file } =
@@ -191,7 +192,7 @@
             learning_curve_file = files.learning_curve_file;
             cv_scores_file = files.cv_scores_file;
         }
-
+        current_dat_file = await path.basename(datfile);
         await on_plot_data_ready(datfile);
         console.log('Reading results file', resultsfile);
 
@@ -325,23 +326,27 @@
         {#key reload_available_plots}
             {#await get_valid_dirs($current_pretrained_dir) then value}
                 {#if value}
-                    <div class="flex gap-2 my-2 items-center">
-                        <button on:click={() => (reload_available_plots = !reload_available_plots)}
-                            ><RefreshCcw /></button
-                        >
-                        <span class="badge">Available plots</span>
-                        {#each Object.keys(value.valid_dirs) as dir}
-                            <button
-                                class="btn btn-sm btn-outline"
-                                on:click={async () => {
-                                    const pkl = await path.join(value.dir, dir, value.valid_dirs[dir]);
-                                    console.log(pkl);
-                                    await plot_from_datfile(pkl);
-                                }}
+                    <div class="flex-gap my-2">
+                        <div class="flex-gap">
+                            <button on:click={() => (reload_available_plots = !reload_available_plots)}
+                                ><RefreshCcw /></button
                             >
-                                {dir}
-                            </button>
-                        {/each}
+                            <span class="badge">Available plots</span>
+                        </div>
+                        <div class="join">
+                            {#each Object.keys(value.valid_dirs) as dir}
+                                <button
+                                    class="btn btn-sm btn-outline join-item"
+                                    on:click={async () => {
+                                        const pkl = await path.join(value.dir, dir, value.valid_dirs[dir]);
+                                        console.log(pkl);
+                                        await plot_from_datfile(pkl);
+                                    }}
+                                >
+                                    {dir}
+                                </button>
+                            {/each}
+                        </div>
                     </div>
                 {/if}
             {/await}
@@ -351,7 +356,9 @@
                 <div class="grid grid-cols-[4fr_1fr] items-center gap-4">
                     <div class="alert alert-success">
                         <CheckCheck />
-                        <span>Locally saved computed results are available to plot ({datfilename})</span>
+                        <span>
+                            Locally saved computed results are available to plot ({current_dat_file || datfilename})
+                        </span>
                     </div>
                     <button class="btn btn-outline" on:click={() => plot_from_datfile()}>Plot</button>
                 </div>
