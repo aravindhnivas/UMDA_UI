@@ -2,7 +2,7 @@
     import { current_training_data_file } from '../training_file/plot-analysis/stores';
     import { embedd_savefile_path } from './stores';
     import { training_column_name_X, training_column_name_y } from '../training_file/stores';
-    import { RefreshCcw } from 'lucide-svelte/icons';
+    import { RefreshCcw, ExternalLink } from 'lucide-svelte/icons';
 
     let refresh = false;
 
@@ -17,9 +17,10 @@
 
     let metadata: { data_shape: number[]; invalid_smiles: number } | null = null;
 
+    let loaded_files: LoadedInfosFile;
     const refresh_data = async (tfile: Promise<string>, vfile: Promise<string>, columnX: string, columnY: string) => {
         metadata = null;
-        let loaded_files: LoadedInfosFile = {
+        loaded_files = {
             training_file: { value: '', valid: false, basename: '' },
             embedded_file: { value: '', valid: false, basename: '' },
             columnX: { value: '', valid: false, basename: '' },
@@ -52,10 +53,23 @@
     });
 </script>
 
-<button class="w-max btn btn-sm btn-outline" on:click={() => (refresh = !refresh)}>
-    <span>Refresh</span>
-    <RefreshCcw size="20" />
-</button>
+<div class="flex-gap">
+    <button class="w-max btn btn-sm btn-outline" on:click={() => (refresh = !refresh)}>
+        <span>Refresh</span>
+        <RefreshCcw size="20" />
+    </button>
+    <button
+        class="btn btn-sm btn-outline"
+        on:click={async () => {
+            if (!loaded_files) return;
+            const dir = await path.dirname(loaded_files['embedded_file'].value);
+            await shell.open(await path.dirname(dir));
+        }}
+    >
+        <span>Open folder</span>
+        <ExternalLink size="20" />
+    </button>
+</div>
 
 {#key refresh}
     {#await refresh_data($current_training_data_file, $embedd_savefile_path, $training_column_name_X, $training_column_name_y) then loaded_files}
