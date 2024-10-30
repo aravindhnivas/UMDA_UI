@@ -354,13 +354,13 @@
         {#await get_pretrained_file($current_pretrained_file) then { datfile }}
             <FileExists name={datfile} let:basename={datfilename}>
                 <div class="grid grid-cols-[4fr_1fr] items-center gap-4">
-                    <div class="alert alert-success">
+                    <div class="alert text-sm alert-success p-1">
                         <CheckCheck />
                         <span>
                             Locally saved computed results are available to plot ({current_dat_file || datfilename})
                         </span>
                     </div>
-                    <button class="btn btn-outline" on:click={() => plot_from_datfile()}>Plot</button>
+                    <button class="btn btn-sm btn-outline" on:click={() => plot_from_datfile()}>Plot</button>
                 </div>
             </FileExists>
         {/await}
