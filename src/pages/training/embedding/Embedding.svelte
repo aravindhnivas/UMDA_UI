@@ -134,17 +134,24 @@
                 if (!parsed_result?.file_mode) return;
 
                 dataFromPython[args.embedding] = parsed_result;
-                const invalid_smiles = await fs.readTextFile(invalid_smiles_file);
+                const invalid_smiles_contents = await fs.readTextFile(invalid_smiles_file);
+                let invalid_smiles: string[] = [];
+
+                invalid_smiles =
+                    invalid_smiles_contents
+                        ?.split('\n')
+                        .slice(1)
+                        .filter(Boolean)
+                        .map(f => f.split(',')[1]) || [];
                 if (!dataFromPython[args.embedding]?.file_mode) return toast.error('No data returned from python');
-                dataFromPython[args.embedding].file_mode.invalid_smiles =
-                    invalid_smiles?.split('\n').filter(Boolean) || [];
+                dataFromPython[args.embedding].file_mode.invalid_smiles = invalid_smiles;
+
                 $embeddings_computed = true;
             } catch (error) {
                 if (error instanceof Error) toast.error(error.message);
             }
         }
     };
-
     let dataFromPython = {} as Record<Embedding, EmbeddingState>;
 </script>
 
