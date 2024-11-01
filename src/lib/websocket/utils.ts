@@ -1,6 +1,7 @@
 import { io } from 'socket.io-client';
 import { socket_connection_status, socket, jobStatus } from './stores';
 import { pyServerPORT, pyServerReady, redis_server_mode } from '$lib/pyserver/stores';
+import { Alert } from '$utils/stores';
 
 function remove_job_from_status(job_id: string, timeout: number = 600000) {
     setTimeout(() => {
@@ -77,6 +78,7 @@ export function initializeSocket() {
 
     $socket.on('job_error', (data: any) => {
         console.error('Job error:', data);
+        Alert.error(data.error);
         jobStatus.update(status => ({
             ...status,
             [data.job_id]: { status: 'error', error: data.error, done: true },
