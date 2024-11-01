@@ -3,7 +3,10 @@ type AnalysisItemsType =
     | 'size_distribution'
     | 'structural_distribution'
     | 'elemental_distribution';
-type MolecularAnalysisFunction = (mode: string) => Promise<{ pyfile: string; args: Record<string, any> }>;
+type MolecularAnalysisFunction = (
+    mode: string,
+    force?: boolean,
+) => Promise<{ pyfile: string; args: Record<string, any> }>;
 type ApplyFilterForMolecularAnalysisFunction = (
     filtered_filename: string,
 ) => Promise<{ pyfile: string; args: Record<string, any> }>;

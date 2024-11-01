@@ -12,12 +12,12 @@
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import { use_dask } from '$lib/stores/system';
     import PlotAnalysis from './plot-analysis/PlotAnalysis.svelte';
-    import CustomInput from '$lib/components/CustomInput.svelte';
     import Notification from '$lib/components/Notification.svelte';
     import FetchAnalysisDir from './FetchAnalysisDir.svelte';
 
     const MolecularAnalysis = async (
         mode: 'all' | 'size_distribution' | 'structural_distribution' | 'elemental_distribution' = 'all',
+        force: boolean = false,
     ) => {
         console.log('MolecularAnalysis', { $filtered_dir });
         const analysis_file = await $current_analysis_file;
@@ -33,6 +33,7 @@
                 atoms_bin_size: Number($atoms_bin_size),
                 mode,
                 index_column_name: $training_column_name_index,
+                force,
             },
         };
     };

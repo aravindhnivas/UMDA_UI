@@ -9,6 +9,7 @@
     import { Atom, Filter, ChartCandlestick, Pyramid, Ruler, Scale3D } from 'lucide-svelte/icons';
     import YDistributionPlot from './YDistributionPlot.svelte';
     import { CustomInput, Loadingbtn } from '$lib/components';
+    import Checkbox from '$lib/components/Checkbox.svelte';
 
     const tab_items = [
         { tab: 'y-data_distribution', component: Ruler },
@@ -44,6 +45,7 @@
         'ApplyFilterForMolecularAnalysis',
     );
     let filtered_filename = 'topelements';
+    let force_analysis = false;
 </script>
 
 <CustomTabs
@@ -58,10 +60,11 @@
     <CustomTabs class="bordered" tabs={tab_items} bind:active={$active_tab} />
     {#if $active_tab !== 'y-data_distribution'}
         <div class="flex gap-1 items-end justify-center">
+            <Checkbox bind:value={force_analysis} label="Redo analysis" />
             <Loadingbtn
                 name="Run full distribution analysis"
                 subprocess={true}
-                callback={async () => await MolecularAnalysis('all')}
+                callback={async () => await MolecularAnalysis('all', force_analysis)}
             />
             <Loadingbtn
                 name="Apply Xdata filters"
