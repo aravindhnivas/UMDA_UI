@@ -7,7 +7,13 @@
     import Molecule from '$lib/components/Molecule.svelte';
     import { NPARTITIONS, use_dask } from '$lib/stores/system';
     import { current_training_data_file } from '../training_file/plot-analysis/stores';
-    import { training_column_name_X, training_file, loaded_df_columns } from '../training_file/stores';
+    import {
+        training_column_name_X,
+        training_file,
+        loaded_df_columns,
+        training_column_name_y,
+        training_column_name_index,
+    } from '../training_file/stores';
     import Results from './Results.svelte';
     import {
         embedd_savefile,
@@ -90,7 +96,10 @@
                 key: $training_file.key,
                 filetype: $training_file.filetype,
                 filename: final_training_file,
-                df_column: $training_column_name_X,
+                // df_column: $training_column_name_X,
+                columnX: $training_column_name_X,
+                columnY: $training_column_name_y,
+                index_col: $training_column_name_index,
                 embedding: $embedding,
                 npartitions: $NPARTITIONS,
                 test_smiles: $test_smiles,
