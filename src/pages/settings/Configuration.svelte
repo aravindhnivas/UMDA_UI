@@ -49,66 +49,19 @@
 
     onMount(async () => {
         if (import.meta.env.DEV) {
+            if (!$umdapy.includes('dev')) {
+                $umdapy += '-dev';
+            }
             if (!$pyServerReady) {
                 await oO(fetchServerROOT());
             }
         }
 
         if (import.meta.env.PROD) {
+            $umdapy = import.meta.env.VITE_pypackage;
             if (!$pyServerReady) await start_and_check_umdapy_with_toast();
         }
     });
-
-    // function getLocalStorageSize() {
-    //     let totalSize = 0;
-    //     for (let key in localStorage) {
-    //         if (localStorage.hasOwnProperty(key)) {
-    //             totalSize += (localStorage[key].length + key.length) * 2; // 2 bytes per character
-    //         }
-    //     }
-    //     // Convert to human readable format
-    //     const sizeMB = (totalSize / 1024 / 1024).toFixed(2);
-    //     console.log(`LocalStorage size: ${sizeMB} MB`);
-    //     return totalSize;
-    // }
-
-    // function analyzeLocalStorage() {
-    //     const analysis = [];
-
-    //     for (let key in localStorage) {
-    //         if (localStorage.hasOwnProperty(key)) {
-    //             const value = localStorage[key];
-    //             const size = (key.length + value.length) * 2; // 2 bytes per character
-    //             const sizeMB = (size / 1024 / 1024).toFixed(4);
-
-    //             analysis.push({
-    //                 key,
-    //                 size: size,
-    //                 sizeInMB: sizeMB,
-    //                 valueLength: value.length,
-    //                 preview: value.slice(0, 50) + (value.length > 50 ? '...' : ''),
-    //             });
-    //         }
-    //     }
-
-    //     // Sort by size (largest first)
-    //     analysis.sort((a, b) => b.size - a.size);
-
-    //     // Calculate total
-    //     const totalSize = analysis.reduce((sum, item) => sum + item.size, 0);
-    //     const totalMB = (totalSize / 1024 / 1024).toFixed(2);
-
-    //     console.table(analysis);
-    //     console.log(`Total localStorage size: ${totalMB} MB`);
-
-    //     return {
-    //         items: analysis,
-    //         totalSize: totalSize,
-    //         totalMB: totalMB,
-    //     };
-    // }
-    // analyzeLocalStorage();
-    // getLocalStorageSize();
 </script>
 
 <Layout id="Configuration">
