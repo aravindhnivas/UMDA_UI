@@ -1,4 +1,7 @@
-import { dialog } from '@tauri-apps/api';
+import { fs, path, dialog, shell, invoke } from '@tauri-apps/api';
+import { platform, tempdir } from '@tauri-apps/api/os';
+
+export { fs, path, dialog, shell, invoke, platform, tempdir };
 
 const username: string = import.meta.env.VITE_username;
 const pyrepo: string = import.meta.env.VITE_pyrepo;
