@@ -1,12 +1,5 @@
-import {
-    downloadoverrideURL,
-    python_asset_ready,
-    outputbox,
-    python_asset_ready_to_install,
-    serverInfo,
-} from './stores';
-import { asset_name_prefix, download_assets, unZIP, install_umdapy_from_zipfile } from './download-assets';
-// import { pyServerReady } from '$src/lib/pyserver/stores'
+import { python_asset_ready, outputbox, python_asset_ready_to_install, serverInfo } from './stores';
+import { asset_name_prefix, download_assets } from './download-assets';
 
 export const check_umdapy_assets_status = async ({ installation_request = false } = {}) => {
     try {
@@ -40,9 +33,7 @@ export const auto_download_and_install_assets = async ({
     installation_request = false,
     download_request = false,
 } = {}) => {
-    downloadoverrideURL.set(false);
     outputbox.warn('Starting auto download python assets');
-
     if (!(await fs.exists(`${asset_name_prefix}-${await platform()}.zip`, { dir: fs.BaseDirectory.AppLocalData }))) {
         if (download_request) {
             if (!(await dialog.confirm('Download python assets now ?', { title: 'update available' }))) return;

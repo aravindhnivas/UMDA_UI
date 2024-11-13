@@ -1,9 +1,7 @@
 import { umdapyVersion, pyServerReady } from '$lib/pyserver/stores';
 import {
     outputbox,
-    downloadURL,
     python_asset_ready,
-    downloadoverrideURL,
     asset_download_required,
     installing_python_assets,
     assets_version_available,
@@ -55,38 +53,20 @@ export async function downloadZIP() {
 
         assets_downloading = true;
 
-        if (!get(downloadoverrideURL)) {
-            if (isEmpty(current_release_data)) {
-                outputbox.error('To download assets, first check assets update to obtain release data...');
-                return;
-            }
-
-            const { assets } = current_release_data as { assets: [{ name: string; browser_download_url: string }] };
-            const asset_ind = assets.findIndex(e => e.name === asset_name);
-
-            browser_download_url = assets[asset_ind].browser_download_url;
-            outputbox.warn('downloading assets...');
+        if (isEmpty(current_release_data)) {
+            outputbox.error('To download assets, first check assets update to obtain release data...');
+            return;
         }
-        const URL_to_download: string = get(downloadoverrideURL) ? get(downloadURL) : browser_download_url;
 
-        outputbox.warn(URL_to_download);
-        // const startTime = performance.now();
+        const { assets } = current_release_data as { assets: [{ name: string; browser_download_url: string }] };
+        const asset_ind = assets.findIndex(e => e.name === asset_name);
 
+        browser_download_url = assets[asset_ind].browser_download_url;
+
+        outputbox.warn('downloading assets...');
+        outputbox.warn(browser_download_url);
         const localdir = await path.appLocalDataDir();
-        // const fileName = await path.join(localdir, asset_name);
-        await download_url(URL_to_download, localdir);
-        // const [download_err, download_output] = await oO(invoke('download_url', { url: URL_to_download, fileName }));
-        // if (download_err) {
-        //     return outputbox.error(download_err as string);
-        // }
-
-        // outputbox.success(download_output as string);
-        // outputbox.warn(`Downloaded to: ${fileName}`);
-        // const duration = performance.now() - startTime;
-        // outputbox.warn(`Time taken to download: ${round(duration, 0)} ms`);
-        // outputbox.success(`assets downloaded`);
-
-        // python_asset_ready_to_install.set(true);
+        await download_url(browser_download_url, localdir);
     } catch (err) {
         outputbox.error(`error occured while downloading assets`);
         outputbox.error(err as string);
@@ -245,10 +225,6 @@ export const download_assets = async () => {
         return;
     }
 
-    if (get(downloadoverrideURL)) {
-        await downloadZIP();
-        return;
-    }
     if (!get(python_asset_ready)) {
         if (!(await get_assets_url())) return;
         await downloadZIP();

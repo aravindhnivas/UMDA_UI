@@ -45,13 +45,11 @@ export const outputbox = logger_store('Update console initialized', 500);
 
 export const asset_download_required = writable(false);
 export const assets_version_available = writable('');
-export const downloadoverrideURL = writable(import.meta.env.DEV);
 export const installing_python_assets = writable(false);
 export const install_update_without_promt = writable(false);
 export const python_asset_ready_to_install = localWritable('python_asset_ready_to_install', false);
 export const assets_installation_required = localWritable('assets_installation_required', false);
 export const python_asset_ready = writable(false);
-export const downloadURL = localWritable<string>('downloadURL', '');
 
 interface RunningProcess {
     pyfile: string;
