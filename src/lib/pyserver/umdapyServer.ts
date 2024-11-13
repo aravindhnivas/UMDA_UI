@@ -101,7 +101,7 @@ export async function startServer() {
             await updateServerInfo();
             if (get(pyServerReady)) {
                 const [err] = await oO(getPyVersion());
-                if (get(redis_server_mode)) initializeSocket();
+                // if (get(redis_server_mode)) initializeSocket();
             }
         }
         if (stderr.includes(server_stopped_keyword)) {
