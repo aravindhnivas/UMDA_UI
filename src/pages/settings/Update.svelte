@@ -233,14 +233,15 @@
             </div>
         </div>
 
-        <div class="grid w-full grid-cols-[1fr_auto_auto] gap-2 items-end">
-            <CustomInput bind:value={url} label="URL" />
-            <button class="btn btn-sm btn-outline" on:click={() => download_url(url)}> Download test </button>
-
-            <button class="btn btn-sm btn-error" on:click={async () => await killPID([`${$assets_download_pid}`])}
-                ><X /></button
-            >
-        </div>
+        {#if import.meta.env.DEV}
+            <div class="grid w-full grid-cols-[1fr_auto_auto] gap-2 items-end">
+                <CustomInput bind:value={url} label="URL" />
+                <button class="btn btn-sm btn-outline" on:click={() => download_url(url)}> Download test </button>
+                <button class="btn btn-sm btn-error" on:click={async () => await killPID([`${$assets_download_pid}`])}
+                    ><X /></button
+                >
+            </div>
+        {/if}
 
         {#if download_progress}
             <div class="progress__div">
