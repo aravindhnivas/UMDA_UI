@@ -21,6 +21,7 @@ import { auto_download_and_install_assets } from './assets-status';
 import { sleep } from '$lib/utils/initialise';
 import { Alert } from '$utils/stores';
 import { git_url } from '$lib/utils';
+import { download_url } from '$lib/utils/download';
 
 let assets_downloading = false;
 let assets_installing = false;
@@ -69,24 +70,23 @@ export async function downloadZIP() {
         const URL_to_download: string = get(downloadoverrideURL) ? get(downloadURL) : browser_download_url;
 
         outputbox.warn(URL_to_download);
-        const startTime = performance.now();
+        // const startTime = performance.now();
 
         const localdir = await path.appLocalDataDir();
-        const fileName = await path.join(localdir, asset_name);
-        const [download_err, download_output] = await oO(invoke('download_url', { url: URL_to_download, fileName }));
+        // const fileName = await path.join(localdir, asset_name);
+        await download_url(URL_to_download, localdir);
+        // const [download_err, download_output] = await oO(invoke('download_url', { url: URL_to_download, fileName }));
+        // if (download_err) {
+        //     return outputbox.error(download_err as string);
+        // }
 
-        if (download_err) {
-            return outputbox.error(download_err as string);
-        }
+        // outputbox.success(download_output as string);
+        // outputbox.warn(`Downloaded to: ${fileName}`);
+        // const duration = performance.now() - startTime;
+        // outputbox.warn(`Time taken to download: ${round(duration, 0)} ms`);
+        // outputbox.success(`assets downloaded`);
 
-        outputbox.success(download_output as string);
-        outputbox.warn(`Downloaded to: ${fileName}`);
-
-        const duration = performance.now() - startTime;
-        outputbox.warn(`Time taken to download: ${round(duration, 0)} ms`);
-        outputbox.success(`assets downloaded`);
-
-        python_asset_ready_to_install.set(true);
+        // python_asset_ready_to_install.set(true);
     } catch (err) {
         outputbox.error(`error occured while downloading assets`);
         outputbox.error(err as string);

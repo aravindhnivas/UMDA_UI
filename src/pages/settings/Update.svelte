@@ -9,21 +9,22 @@
     import { outputbox } from '$settings/utils/stores';
     import { footerMsg } from '$lib/utils/initialise';
     import {
-        download_assets,
         check_assets_update,
         unZIP,
         asset_name_prefix,
+        download_assets,
     } from '$pages/settings/utils/download-assets';
     import { updateInterval } from '$utils/stores';
     import Layout from './comp/Layout.svelte';
     import { getVersion } from '@tauri-apps/api/app';
     import { git_url } from '$lib/utils';
     import TerminalBox from '$lib/components/TerminalBox.svelte';
-    import { Checkbox } from '$lib/components';
     import { toggle_loading } from '$utils/index';
     import CustomInput from '$lib/components/CustomInput.svelte';
     import { umdapyVersion } from '$lib/pyserver/stores';
-    import { ExternalLink, WifiOff } from 'lucide-svelte/icons';
+    import { ExternalLink, WifiOff, X } from 'lucide-svelte/icons';
+    import { killPID } from './utils/network';
+    import { download_url, assets_download_progress, assets_download_pid } from '$lib/utils/download';
 
     let install_dialog_active = false;
     export const check_for_update = async (log = false) => {
@@ -31,10 +32,10 @@
         if (install_dialog_active) return;
 
         $install_update_without_promt = false;
-        await check_assets_update();
+        // await check_assets_update();
 
         outputbox.warn('checking for app update');
-        if (assets_download_progress > 0 && assets_download_progress < 1) {
+        if ($assets_download_progress > 0 && $assets_download_progress < 1) {
             return outputbox.warn('waiting for assets to complete downloading');
         }
 
@@ -89,7 +90,6 @@
     };
 
     let download_progress = 0;
-    let assets_download_progress = 0;
     let version_info = '';
 
     const update_footer_download_label = (percent: number) => {
@@ -117,12 +117,12 @@
     let updateReadyToInstall = false;
     let lastUpdateCheck: string = 'Not checked yet';
 
-    const unlisten_download_asset_event = listen<string>('assets-download-progress', event => {
-        const percent = event.payload;
-        assets_download_progress = Number(percent) / 100;
+    $: if ($assets_download_progress) {
+        const percent = Number($assets_download_progress * 100).toFixed(2);
+        // console.log('assets_download_progress', $assets_download_progress);
         $footerMsg.msg = `Downloading python assets (${percent} %)`;
         update_footer_download_label(Number(percent));
-    });
+    }
 
     let currentVersion = '';
 
@@ -142,10 +142,12 @@
         unlisten_check_for_update = setInterval(
             async () => {
                 await check_for_update(true);
+                await check_assets_update();
             },
             time_in_min * 60 * 1000,
         );
     };
+
     onMount(async () => {
         console.log('Update page mounted');
 
@@ -168,11 +170,10 @@
 
     onDestroy(async () => {
         if (unlisten_check_for_update) clearInterval(unlisten_check_for_update);
-        const unlisten1 = await unlisten_download_asset_event;
-        unlisten1();
         const unlisten2 = await listen_download_progress;
         unlisten2();
     });
+    let url = 'https://github.com/aravindhnivas/UMDA_UI/releases/download/v2.5.0/umda_ui_2.5.0_aarch64.dmg';
 </script>
 
 <Layout id="Update" class="pl-5">
@@ -232,6 +233,15 @@
             </div>
         </div>
 
+        <div class="grid w-full grid-cols-[1fr_auto_auto] gap-2 items-end">
+            <CustomInput bind:value={url} label="URL" />
+            <button class="btn btn-sm btn-outline" on:click={() => download_url(url)}> Download test </button>
+
+            <button class="btn btn-sm btn-error" on:click={async () => await killPID([`${$assets_download_pid}`])}
+                ><X /></button
+            >
+        </div>
+
         {#if download_progress}
             <div class="progress__div">
                 <span class="badge badge-info">updating...</span>
@@ -255,20 +265,30 @@
                 Check assets update
                 <div class="ld ld-ring ld-spin"></div>
             </button>
+
             <button
                 id="btn-download-asset"
                 class="btn btn-sm btn-outline ld-ext-right"
-                on:click={async ({ currentTarget }) => {
-                    console.warn('download assets');
-                    if (!window.navigator.onLine) return outputbox.warn('No internet connection');
-                    assets_download_progress = 0;
-                    toggle_loading(currentTarget);
+                class:running={$assets_download_progress > 0 && $assets_download_progress < 1}
+                disabled={$assets_download_progress > 0 && $assets_download_progress < 1}
+                on:click={async () => {
                     const [_err] = await oO(download_assets());
-                    toggle_loading(currentTarget);
                 }}
                 >Download assets {$python_asset_ready_to_install ? 'again' : ''}
                 <div class="ld ld-ring ld-spin"></div></button
             >
+
+            {#if $assets_download_progress > 0 && $assets_download_progress < 1}
+                <button
+                    class="btn btn-sm btn-error"
+                    on:click={async () => {
+                        await killPID([`${$assets_download_pid}`]);
+                        $assets_download_progress = 0;
+                        $assets_download_pid = 0;
+                    }}
+                    >Cancel <X />
+                </button>
+            {/if}
 
             {#if $python_asset_ready_to_install}
                 <button
@@ -285,10 +305,10 @@
             {/if}
         </div>
 
-        {#if assets_download_progress > 0 && assets_download_progress < 1}
+        {#if $assets_download_progress > 0 && $assets_download_progress < 1}
             <div class="progress__div">
                 <span class="badge badge-info">update-progress</span>
-                <progress class="progress w-full" value={assets_download_progress} max="1"></progress>
+                <progress class="progress w-full" value={$assets_download_progress} max="1"></progress>
             </div>
         {/if}
     </div>

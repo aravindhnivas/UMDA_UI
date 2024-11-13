@@ -28,6 +28,21 @@
                 "sidecar": true,
                 "scope": [
                     {
+                        "name": "curl",
+                        "cmd": "curl",
+                        "args": [
+                            "-LO",
+                            {
+                                "validator": "\\S+"
+                            },
+                            "--output-dir",
+                            {
+                                "validator": "\\S+"
+                            },
+                            "--progress-bar"
+                        ]
+                    },
+                    {
                         "name": "umdapy",
                         "cmd": "$APPLOCALDATA/umdapy/umdapy",
                         "args": true

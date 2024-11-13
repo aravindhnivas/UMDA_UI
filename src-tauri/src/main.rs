@@ -12,16 +12,6 @@ fn get_tcp_port() -> u16 {
     return port;
 }
 
-mod download;
-
-#[tauri::command]
-async fn download_url(window: tauri::Window, url: &str, file_name: &str) -> Result<String, String> {
-    match download::download_url_main(url, file_name, window).await {
-        Ok(_) => Ok("Download completed successfully".into()),
-        Err(e) => Err(format!("{:?}", e).into()),
-    }
-}
-
 use sysinfo::System;
 
 #[tauri::command]
@@ -45,7 +35,7 @@ fn main() {
     // let devtools = devtools::init();
 
     tauri::Builder::default()
-    .invoke_handler(tauri::generate_handler![get_tcp_port, download_url, get_sysinfo])
+    .invoke_handler(tauri::generate_handler![get_tcp_port, get_sysinfo])
         .plugin(tauri_plugin_window_state::Builder::default().build())
         .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
             println!("{}, {argv:?}, {cwd}", app.package_info().name);

@@ -53,7 +53,7 @@ export const auto_download_and_install_assets = async ({
         python_asset_ready_to_install.set(true);
     }
 
-    const [_err] = await oO(unZIP(installation_request));
-    if (_err) return;
+    // const [_err] = await oO(unZIP(installation_request));
+    // if (_err) return;
     python_asset_ready.set(true);
 };
