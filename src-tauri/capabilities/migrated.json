@@ -75,17 +75,7 @@
       "identifier": "shell:allow-spawn",
       "allow": [
         {
-          "args": [
-            "-LO",
-            {
-              "validator": "\\S+"
-            },
-            "--output-dir",
-            {
-              "validator": "\\S+"
-            },
-            "--progress-bar"
-          ],
+          "args": true,
           "cmd": "curl",
           "name": "curl",
           "sidecar": false
@@ -109,16 +99,7 @@
           "sidecar": false
         },
         {
-          "args": [
-            "-xf",
-            {
-              "validator": "\\S+"
-            },
-            "-C",
-            {
-              "validator": "\\S+"
-            }
-          ],
+          "args": true,
           "cmd": "tar",
           "name": "tar",
           "sidecar": false
