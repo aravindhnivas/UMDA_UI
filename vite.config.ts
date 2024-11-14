@@ -47,7 +47,6 @@ export default defineConfig(async () => ({
                         'os',
                         'invoke',
                         'platform',
-                        'tempdir',
                         'arch',
                         'getVersion',
                         'getTauriVersion',

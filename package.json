@@ -12,12 +12,18 @@
     "format": "prettier --write  --plugin prettier-plugin-svelte ."
   },
   "dependencies": {
-    "@tauri-apps/api": "^1.6.0",
-    "@tauri-apps/cli": "^1.6.3",
+    "@tauri-apps/api": "^2.1.1",
+    "@tauri-apps/cli": "^2.1.0",
+    "@tauri-apps/plugin-dialog": "~2",
+    "@tauri-apps/plugin-fs": "~2",
+    "@tauri-apps/plugin-os": "~2",
+    "@tauri-apps/plugin-process": "~2",
+    "@tauri-apps/plugin-shell": "~2",
+    "@tauri-apps/plugin-updater": "~2",
+    "@tauri-apps/plugin-websocket": "~2",
     "lucide-svelte": "0.453.0",
     "plotly.js-dist-min": "^2.35.2",
-    "smiles-drawer": "^2.1.7",
-    "tauri-plugin-websocket-api": "github:tauri-apps/tauri-plugin-websocket#v1"
+    "smiles-drawer": "^2.1.7"
   },
   "devDependencies": {
     "@loadingio/loading.css": "^3.2.1",

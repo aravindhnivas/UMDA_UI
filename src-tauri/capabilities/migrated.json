@@ -1,0 +1,150 @@
+{
+  "identifier": "migrated",
+  "description": "permissions that were migrated from v1",
+  "local": true,
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "core:default",
+    "fs:allow-read-file",
+    "fs:allow-write-file",
+    "fs:allow-read-dir",
+    "fs:allow-copy-file",
+    "fs:allow-mkdir",
+    "fs:allow-remove",
+    "fs:allow-remove",
+    "fs:allow-rename",
+    "fs:allow-exists",
+    {
+      "identifier": "fs:scope",
+      "allow": [
+        "**",
+        "$APPLOCALDATA/**",
+        "$RESOURCE/**"
+      ]
+    },
+    "core:window:allow-create",
+    "core:window:allow-close",
+    {
+      "identifier": "shell:allow-execute",
+      "allow": [
+        {
+          "args": true,
+          "cmd": "netstat",
+          "name": "netstat-windows",
+          "sidecar": false
+        },
+        {
+          "args": [
+            "-i",
+            {
+              "validator": "\\S+"
+            }
+          ],
+          "cmd": "lsof",
+          "name": "netstat-macos",
+          "sidecar": false
+        },
+        {
+          "args": [
+            "/PID",
+            {
+              "validator": "\\S+"
+            },
+            "/F"
+          ],
+          "cmd": "taskkill",
+          "name": "taskkill-windows",
+          "sidecar": false
+        },
+        {
+          "args": [
+            "-9",
+            {
+              "validator": "\\S+"
+            }
+          ],
+          "cmd": "kill",
+          "name": "taskkill-macos",
+          "sidecar": false
+        }
+      ]
+    },
+    {
+      "identifier": "shell:allow-spawn",
+      "allow": [
+        {
+          "args": [
+            "-LO",
+            {
+              "validator": "\\S+"
+            },
+            "--output-dir",
+            {
+              "validator": "\\S+"
+            },
+            "--progress-bar"
+          ],
+          "cmd": "curl",
+          "name": "curl",
+          "sidecar": false
+        },
+        {
+          "args": true,
+          "cmd": "$APPLOCALDATA/umdapy/umdapy",
+          "name": "umdapy",
+          "sidecar": false
+        },
+        {
+          "args": true,
+          "cmd": "/Users/aravindhnivas/Documents/GitHub/umdapy/scripts/dist/umdapy/umdapy",
+          "name": "umdapy-dev",
+          "sidecar": false
+        },
+        {
+          "args": true,
+          "cmd": "python",
+          "name": "python",
+          "sidecar": false
+        },
+        {
+          "args": [
+            "-xf",
+            {
+              "validator": "\\S+"
+            },
+            "-C",
+            {
+              "validator": "\\S+"
+            }
+          ],
+          "cmd": "tar",
+          "name": "tar",
+          "sidecar": false
+        }
+      ]
+    },
+    "shell:allow-open",
+    "dialog:allow-open",
+    "dialog:allow-save",
+    "dialog:allow-message",
+    "dialog:allow-ask",
+    "dialog:allow-confirm",
+    "os:allow-platform",
+    "os:allow-version",
+    "os:allow-os-type",
+    "os:allow-family",
+    "os:allow-arch",
+    "os:allow-exe-extension",
+    "os:allow-locale",
+    "os:allow-hostname",
+    "process:allow-restart",
+    "fs:default",
+    "dialog:default",
+    "os:default",
+    "process:default",
+    "websocket:default",
+    "shell:default"
+  ]
+}

@@ -50,9 +50,16 @@ export async function startServer() {
     const mainPyFile = await path.join(get(pythonscript), 'main.py');
 
     const pyArgs = get(developerMode) ? [mainPyFile, ...sendArgs] : sendArgs;
-    console.log(get(pyProgram), pyArgs);
-    const py = new shell.Command(get(pyProgram), pyArgs);
+    console.log('pyProgram: ', get(pyProgram), 'pyArgs: ', pyArgs);
+    let py;
 
+    try {
+        py = shell.Command.create(get(pyProgram), pyArgs);
+    } catch (error) {
+        console.error(error);
+        Alert.error(error);
+        return Promise.reject;
+    }
     const [err, pyChild] = await oO<Child, string>(py.spawn());
     if (err) {
         toast.error(err);

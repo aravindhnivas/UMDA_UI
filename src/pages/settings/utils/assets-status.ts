@@ -5,7 +5,7 @@ export const check_umdapy_assets_status = async ({ installation_request = false 
     try {
         python_asset_ready.set(false);
 
-        if (await fs.exists(asset_name_prefix, { dir: fs.BaseDirectory.AppLocalData })) {
+        if (await fs.exists(asset_name_prefix, { baseDir: fs.BaseDirectory.AppLocalData })) {
             python_asset_ready.set(true);
             python_asset_ready_to_install.set(false);
             serverInfo.warn('umdapy is installed');
@@ -34,7 +34,18 @@ export const auto_download_and_install_assets = async ({
     download_request = false,
 } = {}) => {
     outputbox.warn('Starting auto download python assets');
-    if (!(await fs.exists(`${asset_name_prefix}-${await platform()}.zip`, { dir: fs.BaseDirectory.AppLocalData }))) {
+    const platformName = (await platform()) as 'windows' | 'macos' | 'linux';
+    const old_names = {
+        macos: 'darwin',
+        linux: 'linux',
+        windows: 'win32',
+    };
+    const currentplatform = old_names[platformName];
+    if (
+        !(await fs.exists(`${asset_name_prefix}-${currentplatform}.zip`, {
+            baseDir: fs.BaseDirectory.AppLocalData,
+        }))
+    ) {
         if (download_request) {
             if (!(await dialog.confirm('Download python assets now ?', { title: 'update available' }))) return;
         }

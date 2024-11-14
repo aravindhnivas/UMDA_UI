@@ -28,7 +28,7 @@
 
         const save_loc = await $save_loc_for_ydistribution_data;
         if (!(await fs.exists(save_loc))) {
-            await fs.createDir(save_loc, { recursive: true });
+            await fs.create(save_loc, { recursive: true });
         }
 
         if (auto_transform_data) {
@@ -39,7 +39,7 @@
                     'All skew values computed file already exists. Do you want to overwrite?',
                     {
                         title: 'Overwrite file?',
-                        type: 'warning',
+                        kind: 'warning',
                     },
                 );
                 if (!overwrite) {

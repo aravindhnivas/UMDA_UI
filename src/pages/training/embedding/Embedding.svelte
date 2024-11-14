@@ -132,7 +132,7 @@
         } else {
             try {
                 const results = await fs.readTextFile(pyfile + '.json', {
-                    dir: fs.BaseDirectory.AppLog,
+                    baseDir: fs.BaseDirectory.AppLog,
                 });
                 const parsed_result = results ? JSON.parse(results) : null;
                 if (!parsed_result) {

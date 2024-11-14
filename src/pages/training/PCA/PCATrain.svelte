@@ -140,7 +140,7 @@
             {/if}
         </div>
         <BrowseFile directory={true} bind:filename={$embeddings_save_loc} btn_name={'Browse Save location'} />
-        <Loadingbtn class="m-auto" callback={generate_pca} subprocess={true} />
+        <Loadingbtn class="m-auto" callback={generate_pca} subprocess={true} name="generate_pca" />
     {:else if $active === 'Analysis'}
         <BrowseFile
             bind:filename={$explained_variance_file}

@@ -63,9 +63,11 @@
     const fetch_all_files = async (loc: string) => {
         filelocation = loc;
         const read_dir = await fs.readDir(filelocation);
+        console.log({ read_dir });
 
-        fname_lists = read_dir.filter(f => !f.children && f.name?.endsWith(filetype)).map(f => f.name) as string[];
+        fname_lists = read_dir.filter(f => f.isFile && f.name.endsWith(filetype)).map(f => f.name) as string[];
         fname = fname_lists[0];
+
         if (!fname) {
             filename = '';
             toast.error('No files found');
@@ -79,7 +81,7 @@
         filelocation = await path.dirname(filename);
         fname = await path.basename(filename);
         const read_dir = await fs.readDir(filelocation);
-        fname_lists = read_dir.filter(f => !f.children && f.name?.endsWith(filetype)).map(f => f.name) as string[];
+        fname_lists = read_dir.filter(f => f.isFile && f.name.endsWith(filetype)).map(f => f.name) as string[];
     });
 
     let loading = false;

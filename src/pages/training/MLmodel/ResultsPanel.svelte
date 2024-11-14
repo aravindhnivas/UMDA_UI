@@ -304,10 +304,12 @@
         const pretrained_models_dir = await fs.readDir(dir);
         // console.log(pretrained_models_dir);
 
-        const childrens = pretrained_models_dir.filter(f => f.children);
+        const childrens = pretrained_models_dir.filter(f => f.isDirectory);
+        console.log(childrens);
         let valid_dirs: Record<string, string> = {};
         for (const child of childrens) {
-            const child_dirs = await fs.readDir(child.path);
+            // const child_dirs = await fs.readDir(child.path);
+            const child_dirs = await fs.readDir(await path.join(dir, child.name));
             if (child_dirs.some(c => c?.name.endsWith('.results.json'))) {
                 const dat_file = child_dirs.find(c => c?.name.endsWith('.dat.json'))?.name;
                 if (child.name && dat_file) {

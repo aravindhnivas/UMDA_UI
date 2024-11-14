@@ -1,4 +1,4 @@
-import WebSocket from 'tauri-plugin-websocket-api';
+import WebSocket from '@tauri-apps/plugin-websocket';
 import { pyProgram, developerMode, pythonscript, pyServerPORT } from '$lib/pyserver/stores';
 import { serverInfo } from '$settings/utils/stores';
 import type { Child } from '$lib/utils';
@@ -72,7 +72,7 @@ export async function startServerWS(e: Event) {
 
     const pyArgs = get(developerMode) ? [mainPyFile, ...sendArgs] : sendArgs;
     console.log(get(pyProgram), pyArgs);
-    const py = new shell.Command(get(pyProgram), pyArgs);
+    const py = shell.Command.create(get(pyProgram), pyArgs);
 
     const [err, pyChild] = await oO<Child, string>(py.spawn());
     if (err) {

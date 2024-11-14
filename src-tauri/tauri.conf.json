@@ -1,171 +1,55 @@
 {
-    "build": {
-        "beforeDevCommand": "pnpm dev",
-        "beforeBuildCommand": "pnpm build",
-        "devPath": "http://localhost:1420",
-        "distDir": "../dist"
-    },
-    "package": {
-        "productName": "umda_ui",
-        "version": "2.5.0"
-    },
-    "tauri": {
-        "allowlist": {
-            "all": false,
-            "fs": {
-                "all": true,
-                "scope": [
-                    "**",
-                    "$APPLOCALDATA/**",
-                    "$RESOURCE/**"
-                ]
-            },
-            "path": {
-                "all": true
-            },
-            "shell": {
-                "all": true,
-                "sidecar": true,
-                "scope": [
-                    {
-                        "name": "curl",
-                        "cmd": "curl",
-                        "args": [
-                            "-LO",
-                            {
-                                "validator": "\\S+"
-                            },
-                            "--output-dir",
-                            {
-                                "validator": "\\S+"
-                            },
-                            "--progress-bar"
-                        ]
-                    },
-                    {
-                        "name": "umdapy",
-                        "cmd": "$APPLOCALDATA/umdapy/umdapy",
-                        "args": true
-                    },
-                    {
-                        "name": "umdapy-dev",
-                        "cmd": "/Users/aravindhnivas/Documents/GitHub/umdapy/scripts/dist/umdapy/umdapy",
-                        "args": true
-                    },
-                    {
-                        "name": "python",
-                        "cmd": "python",
-                        "args": true
-                    },
-                    {
-                        "name": "netstat-win32",
-                        "cmd": "netstat",
-                        "args": true
-                    },
-                    {
-                        "name": "netstat-darwin",
-                        "cmd": "lsof",
-                        "args": [
-                            "-i",
-                            {
-                                "validator": "\\S+"
-                            }
-                        ]
-                    },
-                    {
-                        "name": "taskkill-win32",
-                        "cmd": "taskkill",
-                        "args": [
-                            "/PID",
-                            {
-                                "validator": "\\S+"
-                            },
-                            "/F"
-                        ]
-                    },
-                    {
-                        "name": "taskkill-darwin",
-                        "cmd": "kill",
-                        "args": [
-                            "-9",
-                            {
-                                "validator": "\\S+"
-                            }
-                        ]
-                    },
-                    {
-                        "name": "tar",
-                        "cmd": "tar",
-                        "args": [
-                            "-xf",
-                            {
-                                "validator": "\\S+"
-                            },
-                            "-C",
-                            {
-                                "validator": "\\S+"
-                            }
-                        ]
-                    }
-                ]
-            },
-            "dialog": {
-                "all": true
-            },
-            "process": {
-                "all": false,
-                "exit": false,
-                "relaunch": true,
-                "relaunchDangerousAllowSymlinkMacos": false
-            },
-            "os": {
-                "all": true
-            },
-            "window": {
-                "all": false,
-                "close": true,
-                "create": true
-            }
-        },
-        "bundle": {
-            "active": true,
-            "targets": "all",
-            "identifier": "com.umdaui.dev",
-            "icon": [
-                "icons/32x32.png",
-                "icons/128x128.png",
-                "icons/128x128@2x.png",
-                "icons/icon.icns",
-                "icons/icon.ico"
-            ]
-        },
-        "security": {
-            "csp": null
-        },
-        "updater": {
-            "active": true,
-            "endpoints": [
-                "https://umdaui-update-server.aravindhnivas.workers.dev/v1/{{target}}/{{arch}}/{{current_version}}"
-            ],
-            "dialog": false,
-            "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IENGMjlGOUNENzEwMTI5ODcKUldTSEtRRnh6Zmtwei9pallycXRudUlaalBDVzVxSlVwL2Y1T3ByaUptOFlsajNpSUVpdmxYb0oK",
-            "windows": {
-                "installMode": "passive",
-                "installerArgs": [
-                    "/S"
-                ]
-            }
-        },
-        "windows": [
-            {
-                "fullscreen": false,
-                "resizable": true,
-                "title": "UMDA UI",
-                "width": 1200,
-                "height": 800,
-                "minWidth": 800,
-                "minHeight": 600
-            }
+  "build": {
+    "beforeDevCommand": "pnpm dev",
+    "beforeBuildCommand": "pnpm build",
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:1420"
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "createUpdaterArtifacts": "v1Compatible"
+  },
+  "productName": "umda_ui",
+  "mainBinaryName": "umda_ui",
+  "version": "2.5.0",
+  "identifier": "com.umdaui.dev",
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IENGMjlGOUNENzEwMTI5ODcKUldTSEtRRnh6Zmtwei9pallycXRudUlaalBDVzVxSlVwL2Y1T3ByaUptOFlsajNpSUVpdmxYb0oK",
+      "endpoints": [
+        "https://github.com/aravindhnivas/UMDA_UI/releases/latest/download/latest.json"
+      ],
+      "windows": {
+        "installMode": "passive",
+        "installerArgs": [
+          "/S"
         ]
+      }
     }
+  },
+  "app": {
+    "windows": [
+      {
+        "fullscreen": false,
+        "resizable": true,
+        "title": "UMDA UI",
+        "width": 1200,
+        "height": 800,
+        "minWidth": 800,
+        "minHeight": 600,
+        "useHttpsScheme": true
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  }
 }

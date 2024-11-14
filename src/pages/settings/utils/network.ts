@@ -10,15 +10,16 @@ const fail = (err: string | Object) => {
 
 export const checkNetstat_execution = async (port: number) => {
     serverInfo.warn(`Checking network status for port: ${port}`);
+
+    const platformName = (await platform()) as 'windows' | 'macos' | 'linux';
     const args = {
-        win32: ['-ano', '-p', 'tcp'],
-        darwin: ['-i', `:${port}`],
+        windows: ['-ano', '-p', 'tcp'],
+        macos: ['-i', `:${port}`],
         linux: ['-i', `:${port}`],
     };
-    const currentplatform = (await platform()) as 'win32' | 'darwin' | 'linux';
-    console.log({ args, currentplatform });
-    serverInfo.prompt(`netstat-${currentplatform}: ${args[currentplatform].join(' ')}`);
-    return new shell.Command(`netstat-${currentplatform}`, args[currentplatform]).execute();
+    console.log({ args, platformName });
+    serverInfo.prompt(`netstat-${platformName}: ${args[platformName].join(' ')}`);
+    return shell.Command.create(`netstat-${platformName}`, args[platformName]).execute();
 };
 
 export const checkNetstat = async (port: number) => {
@@ -36,8 +37,8 @@ export const checkNetstat = async (port: number) => {
 
     if (err || output.stderr) return fail(err || output.stderr);
 
-    const currentplatform = (await platform()) as 'win32' | 'darwin' | 'linux';
-    if (currentplatform !== 'win32') return true;
+    const platformName = (await platform()) as 'windows' | 'macos' | 'linux';
+    if (platformName !== 'windows') return true;
 
     const cond = (ln: string) => {
         if (ln.includes('TCP') && ln.includes(`:${port}`)) {
@@ -53,19 +54,20 @@ export const checkNetstat = async (port: number) => {
 
 export const killPID = async (fullports: string[]) => {
     if (fullports.length < 1) return toast.error('No PIDs to kill!');
-
+    const platformName = await platform();
+    console.log({ platformName });
     serverInfo.warn('Closing unused PIDs: ' + fullports.join(', '));
     const kill = async (port: string) => {
         const args = {
-            win32: ['/PID', port, '/F'],
-            darwin: ['-9', port],
+            windows: ['/PID', port, '/F'],
+            macos: ['-9', port],
             linux: ['-9', port],
         };
 
-        const currentplatform = (await platform()) as 'win32' | 'darwin' | 'linux';
-        const command = currentplatform === 'win32' ? `taskkill-${await platform()}` : 'taskkill-darwin';
-        const [_err, output] = await oO(new shell.Command(command, args[currentplatform]).execute());
+        const currentplatform = platformName as 'windows' | 'macos' | 'linux';
 
+        const command = currentplatform === 'windows' ? `taskkill-${platformName}` : 'taskkill-macos';
+        const [_err, output] = await oO(shell.Command.create(command, args[currentplatform]).execute());
         if (_err) {
             serverInfo.error(JSON.stringify(_err, null, 2));
             return;

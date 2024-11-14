@@ -39,7 +39,8 @@
     }
 
     async function handleKeydown(event: KeyboardEvent) {
-        const cond = (await platform()) === 'darwin' ? event.metaKey : event.ctrlKey;
+        const platformName = await platform();
+        const cond = platformName === 'macos' ? event.metaKey : event.ctrlKey;
         if (cond && event.key === '=') {
             $fontSize += 1;
         } else if (cond && event.key === '-') {

@@ -17,6 +17,9 @@
     export let btn: HTMLButtonElement | undefined = undefined;
     export let id = getID();
 
+    let klass: string = '';
+    export { klass as class };
+
     const dispatch = createEventDispatcher();
 
     let job_id: string[] = [];
@@ -122,7 +125,7 @@
     $: loading = server_loading || subprocess_loading || redis_loading;
 </script>
 
-<div class="join">
+<div class="join {klass}">
     <button
         class="btn btn-sm btn-outline join-item"
         on:click={() => {

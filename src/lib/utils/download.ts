@@ -17,7 +17,7 @@ export const download_url = async (url: string, output_dir: string | null = null
     // const output_dir = await path.join(await path.homeDir(), 'Downloads');
     console.warn('output_dir', output_dir);
 
-    const cmd = new shell.Command('curl', ['-LO', url, '--output-dir', output_dir, '--progress-bar']);
+    const cmd = shell.Command.create('curl', ['-LO', url, '--output-dir', output_dir, '--progress-bar']);
     const child = await cmd.spawn();
     assets_download_pid.set(child.pid);
 

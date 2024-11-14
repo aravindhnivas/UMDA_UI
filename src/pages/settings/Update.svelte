@@ -50,6 +50,8 @@
             if (log) outputbox.info('Checking for updates...');
             download_progress = 0;
             const update = await checkUpdate();
+            outputbox.info('Checking for updates...done' + JSON.stringify(update, null, 2));
+            if (!update) return outputbox.error('No update found');
             if (log) outputbox.info(JSON.stringify(update));
 
             if (import.meta.env.DEV) {
@@ -57,28 +59,53 @@
                 return;
             }
 
-            if (import.meta.env.PROD && update.shouldUpdate) {
-                const newVersion = update.manifest?.version;
-                let install_promted = $install_update_without_promt;
+            console.log(`found update ${update.version} from ${update.date} with notes ${update.body}`);
+            let downloaded = 0;
+            let contentLength = 0;
 
-                if (!install_promted) {
-                    install_dialog_active = true;
-                    install_promted = await dialog.confirm(`Do you want to install the latest update and restart.`, {
-                        title: `Update available ${newVersion}`,
-                    });
-                    install_dialog_active = false;
+            // downloadAndInstall: alternatively we could also call update.download() and update.install() separately
+
+            await update.download(event => {
+                switch (event.event) {
+                    case 'Started':
+                        contentLength = event.data.contentLength || 0;
+                        outputbox.info(`started downloading ${event.data.contentLength} bytes`);
+                        break;
+                    case 'Progress':
+                        downloaded += event.data.chunkLength;
+                        outputbox.info(`downloaded ${downloaded} from ${contentLength}`);
+                        // const { chunkLength, contentLength } = res.payload as { chunkLength: string; contentLength: string };
+
+                        // download_progress += +chunkLength / +contentLength;
+                        download_progress = downloaded / contentLength;
+                        const percent = Number(download_progress * 100).toFixed(2);
+                        $footerMsg.msg = `Downloading Update (${percent} %)`;
+                        update_footer_download_label(Number(percent));
+                        break;
+                    case 'Finished':
+                        outputbox.info('download finished');
+                        break;
                 }
+            });
+            const newVersion = update.version;
+            let install_promted = $install_update_without_promt;
 
-                if (install_promted) {
-                    await stopServer();
-                    if (!update.manifest?.body) return outputbox.error('Update manifest is empty');
-                    outputbox.success(
-                        `Installing update ${newVersion}, ${update.manifest.date}, ${update.manifest.body}`,
-                    );
+            if (!install_promted) {
+                install_dialog_active = true;
+                install_promted = await dialog.confirm(`Do you want to install the latest update and restart.`, {
+                    title: `Update available ${newVersion}`,
+                });
+                install_dialog_active = false;
+            }
 
-                    await installUpdate();
-                    await relaunch();
-                }
+            if (install_promted) {
+                await stopServer();
+                if (!update.body) return outputbox.error('Update manifest is empty');
+                outputbox.success(`Installing update ${newVersion}, ${update.date}, ${update.body}`);
+
+                // await installUpdate();
+                await update.install();
+                await relaunch();
             }
         } catch (error) {
             $updateError = error instanceof Error ? error.message : String(error);
@@ -98,17 +125,17 @@
         }
     };
 
-    const listen_download_progress = listen('tauri://update-download-progress', async function (res) {
-        if (res.payload) {
-            const { chunkLength, contentLength } = res.payload as { chunkLength: string; contentLength: string };
+    // const listen_download_progress = listen('tauri://update-download-progress', async function (res) {
+    //     if (res.payload) {
+    //         const { chunkLength, contentLength } = res.payload as { chunkLength: string; contentLength: string };
 
-            download_progress += +chunkLength / +contentLength;
-            const percent = Number(download_progress * 100).toFixed(2);
-            $footerMsg.msg = `Downloading Update (${percent} %)`;
+    //         download_progress += +chunkLength / +contentLength;
+    //         const percent = Number(download_progress * 100).toFixed(2);
+    //         $footerMsg.msg = `Downloading Update (${percent} %)`;
 
-            update_footer_download_label(Number(percent));
-        }
-    });
+    //         update_footer_download_label(Number(percent));
+    //     }
+    // });
 
     let updateReadyToInstall = false;
     let lastUpdateCheck: string = 'Not checked yet';
@@ -166,8 +193,8 @@
 
     onDestroy(async () => {
         if (unlisten_check_for_update) clearInterval(unlisten_check_for_update);
-        const unlisten2 = await listen_download_progress;
-        unlisten2();
+        // const unlisten2 = await listen_download_progress;
+        // unlisten2();
     });
     let url = 'https://github.com/aravindhnivas/UMDA_UI/releases/download/v2.5.0/umda_ui_2.5.0_aarch64.dmg';
 </script>

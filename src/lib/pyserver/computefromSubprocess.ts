@@ -35,7 +35,7 @@ export default async function <T>({ target, pyfile, args }: ComputeFromSubproces
         const outputFile = await path.join(await path.appLogDir(), pyfile + '.json');
         console.info({ outputFile });
 
-        const py = new shell.Command(get(pyProgram), pyArgs);
+        const py = shell.Command.create(get(pyProgram), pyArgs);
         const pyChild = await py.spawn();
 
         const current_process = {

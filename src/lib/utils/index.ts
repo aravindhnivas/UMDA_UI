@@ -1,14 +1,20 @@
-import { fs, path, dialog, shell, invoke, os } from '@tauri-apps/api';
-import { platform, tempdir, arch } from '@tauri-apps/api/os';
+import { path } from '@tauri-apps/api';
+import { invoke } from '@tauri-apps/api/core';
 import { getVersion, getTauriVersion } from '@tauri-apps/api/app';
-import { checkUpdate, installUpdate } from '@tauri-apps/api/updater';
-import { relaunch } from '@tauri-apps/api/process';
+import { platform, arch } from '@tauri-apps/plugin-os';
+import { check } from '@tauri-apps/plugin-updater';
+import { relaunch } from '@tauri-apps/plugin-process';
 import { listen } from '@tauri-apps/api/event';
-import type { DialogFilter } from '@tauri-apps/api/dialog';
-import type { Child } from '@tauri-apps/api/shell';
+import type { DialogFilter } from '@tauri-apps/plugin-dialog';
+import type { Child } from '@tauri-apps/plugin-shell';
+import * as fs from '@tauri-apps/plugin-fs';
+import * as dialog from '@tauri-apps/plugin-dialog';
+import * as shell from '@tauri-apps/plugin-shell';
+import * as os from '@tauri-apps/plugin-os';
 
-export { fs, path, dialog, shell, os, invoke, platform, tempdir, arch, getVersion, getTauriVersion };
-export { checkUpdate, installUpdate, relaunch, listen };
+export { fs, path, dialog, shell, os, invoke, platform, arch, getVersion, getTauriVersion };
+// export { checkUpdate, installUpdate, relaunch, listen };
+export { check as checkUpdate, relaunch, listen };
 export type { DialogFilter, Child };
 
 const username: string = import.meta.env.VITE_username;

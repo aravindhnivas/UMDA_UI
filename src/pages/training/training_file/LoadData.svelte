@@ -56,7 +56,7 @@
 
         auto_fetch_columns = true;
         if (!(await fs.exists($training_save_directory))) {
-            await fs.createDir($training_save_directory);
+            await fs.create($training_save_directory);
             console.log(`Directory created: ${$training_save_directory}`);
         }
     };

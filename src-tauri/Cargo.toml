@@ -10,18 +10,10 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-tauri-build = { version = "1.5.5", features = [] }
+tauri-build = { version = "2", features = [] }
 
 [dependencies]
-tauri = { version = "1.8.0", features = [ "window-create",
-    "updater",
-    "shell-all",
-    "process-relaunch",
-    "path-all",
-    "dialog-all",
-    "window-close",
-    "os-all",
-    "fs-all",
+tauri = { version = "2", features = [
 ] }
 # devtools = "0.3.0"
 serde = { version = "1.0.209", features = ["derive"] }
@@ -31,10 +23,15 @@ reqwest = { version = "0.12.7", features = ["json", "stream"] }
 error-chain = "0.12.4"
 tokio = { version = "1.39.3", features = ["full"] }
 futures-util = "0.3.30"
-tauri-plugin-window-state = "0.1.1"
-tauri-plugin-single-instance = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
+tauri-plugin-window-state = "2"
+tauri-plugin-single-instance = { version = "2" }
 sysinfo = "0.31.3"
-tauri-plugin-websocket = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
+tauri-plugin-websocket = "2"
+tauri-plugin-fs = "2"
+tauri-plugin-dialog = "2"
+tauri-plugin-os = "2"
+tauri-plugin-process = "2"
+tauri-plugin-shell = "2"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem
@@ -47,3 +44,6 @@ codegen-units = 1 # Compile crates one after another so the compiler can optimiz
 lto = true        # Enables link to optimizations
 opt-level = "z"   # Optimize for binary size
 strip = true      # Remove debug symbols
+
+[target."cfg(not(any(target_os = \"android\", target_os = \"ios\")))".dependencies]
+tauri-plugin-updater = "2"

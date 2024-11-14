@@ -80,5 +80,5 @@
         btn_name={'Browse corpus_file'}
         label="Optional. Choose corpus file if you have one!"
     />
-    <Loadingbtn class="m-auto" callback={generate_mol2vec} subprocess={true} />
+    <Loadingbtn class="m-auto" callback={generate_mol2vec} subprocess={true} name="generate_mol2vec" />
 </div>
