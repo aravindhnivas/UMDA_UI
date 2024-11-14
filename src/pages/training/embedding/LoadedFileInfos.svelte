@@ -29,6 +29,7 @@
         const [_training_file, _embedded_file] = await Promise.all([tfile, vfile]);
 
         const vector_metadata_file = _embedded_file.replace('.npy', '.metadata.json');
+        if (!(await fs.exists(vector_metadata_file))) return loaded_files;
         const _metadata = await readJSON<{ data_shape: number[]; invalid_smiles: number }>(vector_metadata_file);
         if (_metadata) metadata = _metadata;
 
