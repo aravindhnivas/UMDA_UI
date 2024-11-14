@@ -31,7 +31,7 @@
             toast.error(`File ${csv_file} is empty`);
             return;
         }
-        const x = data.map(row => row[0]).filter(Boolean) as T[];
+        const x = data.map(row => row[0]).filter(Boolean);
         const y = data
             .map(row => row[1])
             .filter(Boolean)
