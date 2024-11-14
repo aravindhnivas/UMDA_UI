@@ -1,7 +1,7 @@
 import WebSocket from 'tauri-plugin-websocket-api';
 import { pyProgram, developerMode, pythonscript, pyServerPORT } from '$lib/pyserver/stores';
 import { serverInfo } from '$settings/utils/stores';
-import type { Child } from '@tauri-apps/api/shell';
+import type { Child } from '$lib/utils';
 import { Alert } from '$utils/stores';
 
 export const ws = writable<WebSocket | null>(null);

@@ -1,5 +1,4 @@
 import { serverInfo } from './stores';
-import { platform } from '@tauri-apps/api/os';
 import { toast } from 'svelte-sonner';
 
 const fail = (err: string | Object) => {

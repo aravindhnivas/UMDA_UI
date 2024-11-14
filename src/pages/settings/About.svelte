@@ -1,9 +1,7 @@
 <script lang="ts">
     import { RAM_SIZE, CPU_COUNT } from '$lib/stores/system';
     import { pyVersion, umdapyVersion } from '$lib/pyserver/stores';
-    import { getVersion, getTauriVersion } from '@tauri-apps/api/app';
     import Layout from './comp/Layout.svelte';
-    import { arch, platform } from '@tauri-apps/api/os';
 
     onMount(async () => {
         console.log('About page mounted');

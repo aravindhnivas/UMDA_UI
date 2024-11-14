@@ -1,7 +1,5 @@
 import { unZIP } from '$pages/settings/utils/download-assets';
 import { python_asset_ready_to_install } from '$pages/settings/utils/stores';
-import { shell } from '@tauri-apps/api';
-import { path } from '@tauri-apps/api';
 import { writable } from 'svelte/store';
 
 export const assets_download_progress = writable<number>(0);

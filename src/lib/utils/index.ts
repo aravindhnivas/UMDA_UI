@@ -1,7 +1,15 @@
-import { fs, path, dialog, shell, invoke } from '@tauri-apps/api';
-import { platform, tempdir } from '@tauri-apps/api/os';
+import { fs, path, dialog, shell, invoke, os } from '@tauri-apps/api';
+import { platform, tempdir, arch } from '@tauri-apps/api/os';
+import { getVersion, getTauriVersion } from '@tauri-apps/api/app';
+import { checkUpdate, installUpdate } from '@tauri-apps/api/updater';
+import { relaunch } from '@tauri-apps/api/process';
+import { listen } from '@tauri-apps/api/event';
+import type { DialogFilter } from '@tauri-apps/api/dialog';
+import type { Child } from '@tauri-apps/api/shell';
 
-export { fs, path, dialog, shell, invoke, platform, tempdir };
+export { fs, path, dialog, shell, os, invoke, platform, tempdir, arch, getVersion, getTauriVersion };
+export { checkUpdate, installUpdate, relaunch, listen };
+export type { DialogFilter, Child };
 
 const username: string = import.meta.env.VITE_username;
 const pyrepo: string = import.meta.env.VITE_pyrepo;

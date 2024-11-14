@@ -2,10 +2,7 @@
     import { python_asset_ready_to_install, install_update_without_promt } from '$pages/settings/utils/stores';
     import { updateError } from '$utils/stores';
     import { activateChangelog } from '$utils/stores';
-    import { checkUpdate, installUpdate } from '@tauri-apps/api/updater';
-    import { relaunch } from '@tauri-apps/api/process';
     import { stopServer } from '$lib/pyserver/umdapyServer';
-    import { listen } from '@tauri-apps/api/event';
     import { outputbox } from '$settings/utils/stores';
     import { footerMsg } from '$lib/utils/initialise';
     import {
@@ -16,7 +13,6 @@
     } from '$pages/settings/utils/download-assets';
     import { updateInterval } from '$utils/stores';
     import Layout from './comp/Layout.svelte';
-    import { getVersion } from '@tauri-apps/api/app';
     import { git_url } from '$lib/utils';
     import TerminalBox from '$lib/components/TerminalBox.svelte';
     import { toggle_loading } from '$utils/index';

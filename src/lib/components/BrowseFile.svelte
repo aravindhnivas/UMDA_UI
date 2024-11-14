@@ -1,7 +1,7 @@
 <script lang="ts">
     import { isError } from 'ts-try';
     import { HelpCircle, ExternalLink } from 'lucide-svelte/icons';
-    import type { DialogFilter } from '@tauri-apps/api/dialog';
+    import type { DialogFilter } from '$lib/utils';
 
     export let disabled = false;
     export let filename = '';

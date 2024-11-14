@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { dialog } from '@tauri-apps/api';
     import { Loadingbtn } from '$lib/components';
     import CustomInput from '$lib/components/CustomInput.svelte';
     import CustomSelect from '$lib/components/CustomSelect.svelte';

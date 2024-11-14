@@ -8,7 +8,6 @@
     import { typeSafeObjectKeys } from '$lib/utils';
     import { Home, Settings, Binary } from 'lucide-svelte/icons';
     import type { SvelteComponent } from 'svelte';
-    import { os } from '@tauri-apps/api';
     import CustomTabs from '$lib/components/CustomTabs.svelte';
 
     const nav_tabs = [
@@ -40,8 +39,7 @@
     }
 
     async function handleKeydown(event: KeyboardEvent) {
-        const platform = await os.platform();
-        const cond = platform === 'darwin' ? event.metaKey : event.ctrlKey;
+        const cond = (await platform()) === 'darwin' ? event.metaKey : event.ctrlKey;
         if (cond && event.key === '=') {
             $fontSize += 1;
         } else if (cond && event.key === '-') {

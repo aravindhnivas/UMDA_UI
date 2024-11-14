@@ -1,10 +1,8 @@
 import { pyProgram, pythonscript, get, pyVersion, pyServerReady, developerMode } from './stores';
 import { running_processes } from '$settings/utils/stores';
-import { path, shell } from '@tauri-apps/api';
 import { terminal_log } from '$settings/utils/stores';
 import { Alert } from '$utils/stores';
 import { tryF } from 'ts-try';
-import { appLogDir } from '@tauri-apps/api/path';
 
 export const dispatchEvent = (target: HTMLButtonElement, detail: Object, eventName: string) => {
     if (!target) return console.warn('No target to dispatch event');
@@ -34,7 +32,7 @@ export default async function <T>({ target, pyfile, args }: ComputeFromSubproces
         const pyArgs = get(developerMode) ? [mainPyFile, ...sendArgs] : sendArgs;
         console.log(get(pyProgram), pyArgs);
 
-        const outputFile = await path.join(await appLogDir(), pyfile + '.json');
+        const outputFile = await path.join(await path.appLogDir(), pyfile + '.json');
         console.info({ outputFile });
 
         const py = new shell.Command(get(pyProgram), pyArgs);

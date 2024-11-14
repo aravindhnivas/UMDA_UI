@@ -10,9 +10,7 @@ import {
     install_update_without_promt,
     serverInfo,
 } from './stores';
-import { platform } from '@tauri-apps/api/os';
-import { invoke } from '@tauri-apps/api';
-import { isEmpty, round } from 'lodash-es';
+import { isEmpty } from 'lodash-es';
 import { start_and_check_umdapy_with_toast, stopServer } from '$lib/pyserver/umdapyServer';
 import { footerMsg } from '$lib/utils/initialise';
 import { auto_download_and_install_assets } from './assets-status';

@@ -10,17 +10,16 @@ import {
     pyServerURL,
     pyVersion,
     pyServerFailed,
-    redis_server_mode,
 } from '$lib/pyserver/stores';
 import { serverInfo } from '$settings/utils/stores';
 import { python_asset_ready } from '$settings/utils/stores';
 import { checkNetstat, checkNetstat_execution, killPID } from '$settings/utils/network';
-import type { Child } from '@tauri-apps/api/shell';
 import { getPyVersion } from '$settings/utils/checkPython';
 import { sleep } from '$lib/utils/initialise';
 import { Alert } from '$utils/stores';
 import { check_umdapy_assets_status } from '$pages/settings/utils/assets-status';
-import { initializeSocket } from '$lib/websocket/utils';
+
+import type { Child } from '$lib/utils';
 
 // const server_started_keyword = 'Warm-up phase completed';
 const server_started_keyword = 'Server running';

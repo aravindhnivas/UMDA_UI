@@ -1,5 +1,3 @@
-// import { tempdir } from '@tauri-apps/api/os';
-
 export const toggle_loading = (node: HTMLButtonElement, className = 'running') => {
     if (!node) return;
 
