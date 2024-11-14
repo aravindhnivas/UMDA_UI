@@ -18,7 +18,7 @@
         { tab: 'elemental_distribution', component: Atom },
     ];
 
-    const GetData = async <T = string | number,>(name: string) => {
+    const GetData = async (name: string) => {
         const analysis_dir = await $current_post_analysis_files_directory;
         const csv_file = await path.join(analysis_dir, name);
         console.log(csv_file);
