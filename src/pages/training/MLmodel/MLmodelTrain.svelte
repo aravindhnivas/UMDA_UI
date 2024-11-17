@@ -54,6 +54,7 @@
         ytransformation,
         optuna_storage_file,
         estimator,
+        cleanlab,
         seed,
     } from './stores';
     import TrainingFilePanel from './TrainingFilePanel.svelte';
@@ -291,6 +292,7 @@
             optuna_storage_file: await $optuna_storage_file,
             estimator_file: $estimator.load ? $estimator.file : null,
             seed: $seed.lock ? null : $seed.value,
+            cleanlab: $cleanlab.active ? $cleanlab.model : null,
         };
 
         delete $results[$model];

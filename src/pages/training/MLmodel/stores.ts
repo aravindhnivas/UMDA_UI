@@ -18,6 +18,11 @@ export const estimator = writable({
     file: '',
 });
 
+export const cleanlab = writable<{ active: boolean; model: MLModel }>({
+    active: false,
+    model: 'xgboost',
+});
+
 export const model_names = Object.keys(supervised_ml_models) as MLModel[];
 export const model = localWritable<MLModel>('ml_model', 'ridge');
 

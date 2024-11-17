@@ -32,7 +32,9 @@
         yscaling,
         ytransformation,
         estimator,
+        cleanlab,
         current_pretrained_file,
+        model_names,
     } from './stores';
 
     const grid_search_methods = [
@@ -311,6 +313,21 @@
                 <div style="height: 150px;">
                     <Checkbox bind:value={$estimator.load} label="load_estimator" check="checkbox" />
                     <span class="text-xs text-wrap break-words">{$estimator.file}</span>
+                </div>
+            </Content>
+        </Paper>
+
+        <Paper transition {elevation} style={paper_style}>
+            <Subtitle>Clean dataset</Subtitle>
+            <Content>
+                <div class="flex-gap items-end">
+                    <Checkbox bind:value={$cleanlab.active} label="clean" check="checkbox" />
+                    <CustomSelect
+                        items={model_names}
+                        label="Clean Model"
+                        bind:value={$cleanlab.model}
+                        disabled={!$cleanlab.active}
+                    />
                 </div>
             </Content>
         </Paper>
