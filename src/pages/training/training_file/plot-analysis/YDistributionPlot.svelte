@@ -27,9 +27,9 @@
         $YDistributionFilter.max_yvalue.lock = true;
 
         const save_loc = await $save_loc_for_ydistribution_data;
-        if (!(await fs.exists(save_loc))) {
-            await fs.create(save_loc, { recursive: true });
-        }
+        // if (!(await fs.exists(save_loc))) {
+        //     await fs.create(save_loc, { recursive: true });
+        // }
 
         if (auto_transform_data) {
             $ytransformation = 'None';
