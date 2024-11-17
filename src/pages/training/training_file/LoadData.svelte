@@ -56,7 +56,7 @@
 
         auto_fetch_columns = true;
         if (!(await fs.exists($training_save_directory))) {
-            await fs.create($training_save_directory);
+            await fs.mkdir($training_save_directory);
             console.log(`Directory created: ${$training_save_directory}`);
         }
     };
@@ -79,9 +79,14 @@
                 filtered_dir: $filtered_dir,
             };
             console.log(file_state);
+            if (!(await fs.exists($training_save_directory))) {
+                await fs.mkdir($training_save_directory);
+                console.log(`Directory created: ${$training_save_directory}`);
+            }
 
             await fs.writeTextFile(
-                `${$training_save_directory}/training_file_state.json`,
+                // `${$training_save_directory}/training_file_state.json`,
+                await path.join($training_save_directory, 'training_file_state.json'),
                 JSON.stringify(file_state, null, 4),
             );
             toast.info('State saved');
