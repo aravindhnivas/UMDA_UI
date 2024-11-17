@@ -63,7 +63,7 @@
 
     const save_state = async () => {
         if (!(await fs.exists($training_file.filename))) return toast.error('Training file not found');
-        if (!(await fs.exists($training_save_directory))) return toast.error('Save directory not found');
+        // if (!(await fs.exists($training_save_directory))) return toast.error('Save directory not found');
 
         try {
             const file_state = {
@@ -78,14 +78,13 @@
                 use_filtered_data_for_training: $use_filtered_data_for_training,
                 filtered_dir: $filtered_dir,
             };
-            console.log(file_state);
+            console.log(file_state, $training_save_directory);
             if (!(await fs.exists($training_save_directory))) {
                 await fs.mkdir($training_save_directory);
                 console.log(`Directory created: ${$training_save_directory}`);
             }
 
             await fs.writeTextFile(
-                // `${$training_save_directory}/training_file_state.json`,
                 await path.join($training_save_directory, 'training_file_state.json'),
                 JSON.stringify(file_state, null, 4),
             );
