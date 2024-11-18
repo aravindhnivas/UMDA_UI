@@ -5,6 +5,7 @@
         include_training_file_in_plot,
         learning_curve,
         model,
+        model_names,
         plot_data,
         results,
     } from './stores';
@@ -17,6 +18,7 @@
     import CustomSelect from '$lib/components/CustomSelect.svelte';
     import FileExists from '$lib/components/FileExists.svelte';
     import { RefreshCcw } from 'lucide-svelte/icons';
+    import CustomTabs from '$lib/components/CustomTabs.svelte';
 
     export let data_file: string;
     export let plot_data_ready = false;
@@ -324,6 +326,7 @@
 </script>
 
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
+    <CustomTabs class="bordered" tabs={model_names.map(model => ({ tab: model }))} bind:active={$model} />
     {#key plot_data_ready}
         {#key reload_available_plots}
             {#await get_valid_dirs($current_pretrained_dir) then value}

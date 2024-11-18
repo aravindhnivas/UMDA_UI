@@ -205,14 +205,12 @@
                         on:click={async () => {
                             const loc = await path.join(await $current_pretrained_dir, '../', $grid_search_method);
                             let filename = $pre_trained_filename;
+                            const replace_val = $cleanlab.active ? `_cleaned_${$cleanlab.model}` : '';
                             if ($default_parameter_mode) {
-                                filename = filename.replace(
-                                    `_default${$cleanlab.active ? '_cleaned' : ''}`,
-                                    `_${$grid_search_method}`,
-                                );
+                                filename = filename.replace(`_default${replace_val}`, `_${$grid_search_method}`);
                             } else {
                                 filename = $pre_trained_filename.replace(
-                                    `_${$experiment_id[$model]}${$cleanlab.active ? '_cleaned' : ''}`,
+                                    `_${$experiment_id[$model]}${replace_val}`,
                                     `_${$grid_search_method}`,
                                 );
                             }

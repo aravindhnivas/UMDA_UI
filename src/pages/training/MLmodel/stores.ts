@@ -168,7 +168,7 @@ export const pre_trained_filename = derived(
         else name += `_${$experiment_id[$model]}`;
         // const $cleanlab = get(cleanlab);
         if ($cleanlab.active) {
-            name += '_cleaned';
+            name += `_cleaned_${$cleanlab.model}`;
         }
         return name;
     },
@@ -211,7 +211,7 @@ export const current_pretrained_dir = derived(
         }
         // const $cleanlab = get(cleanlab);
         if ($cleanlab.active) {
-            dir += '_cleaned';
+            dir += `_cleaned_${$cleanlab.model}`;
         }
         return dir;
     },
