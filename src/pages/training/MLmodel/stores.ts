@@ -152,14 +152,24 @@ export const seed = localWritable('seed', {
 export const overwrite_model = localWritable('overwrite_model', false);
 // export const pre_trained_filename = localWritable('pre_trained_filename', '');
 export const pre_trained_filename = derived(
-    [model, embedd_savefile, default_parameter_mode, fine_tune_model, grid_search_method, experiment_id],
-    ([$model, $embedd_savefile, $default_parameter_mode, $fine_tune_model, $grid_search_method, $experiment_id]) => {
+    [model, embedd_savefile, default_parameter_mode, fine_tune_model, grid_search_method, experiment_id, cleanlab],
+    ([
+        $model,
+        $embedd_savefile,
+        $default_parameter_mode,
+        $fine_tune_model,
+        $grid_search_method,
+        $experiment_id,
+        $cleanlab,
+    ]) => {
         let name = `${$model}_${$embedd_savefile}_pretrained_model`;
         if ($default_parameter_mode) name += '_default';
         else if ($fine_tune_model) name += `_${$grid_search_method}`;
-        // else name += '_normal';
         else name += `_${$experiment_id[$model]}`;
-
+        // const $cleanlab = get(cleanlab);
+        if ($cleanlab.active) {
+            name += '_cleaned';
+        }
         return name;
     },
 );
@@ -173,6 +183,7 @@ export const current_pretrained_dir = derived(
         fine_tune_model,
         grid_search_method,
         experiment_id,
+        cleanlab,
     ],
     async ([
         $current_training_processed_data_directory,
@@ -182,6 +193,7 @@ export const current_pretrained_dir = derived(
         $fine_tune_model,
         $grid_search_method,
         $experiment_id,
+        $cleanlab,
     ]) => {
         let dir = await path.join(
             await $current_training_processed_data_directory,
@@ -196,6 +208,10 @@ export const current_pretrained_dir = derived(
             dir = await path.join(dir, $grid_search_method);
         } else {
             dir = await path.join(dir, $experiment_id[$model]);
+        }
+        // const $cleanlab = get(cleanlab);
+        if ($cleanlab.active) {
+            dir += '_cleaned';
         }
         return dir;
     },
