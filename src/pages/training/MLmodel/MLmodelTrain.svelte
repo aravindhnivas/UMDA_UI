@@ -293,6 +293,7 @@
             estimator_file: $estimator.load ? $estimator.file : null,
             seed: $seed.lock ? null : $seed.value,
             cleanlab: $cleanlab.active ? $cleanlab.model : null,
+            clean_only_train_data: $cleanlab.only_train_data,
         };
 
         delete $results[$model];

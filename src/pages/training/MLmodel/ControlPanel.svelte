@@ -322,6 +322,12 @@
             <Content>
                 <div class="flex-gap items-end">
                     <Checkbox bind:value={$cleanlab.active} label="clean" check="checkbox" />
+                    <Checkbox
+                        bind:value={$cleanlab.only_train_data}
+                        label="only_train_data"
+                        check="checkbox"
+                        disabled={!$cleanlab.active}
+                    />
                     <CustomSelect
                         items={model_names}
                         label="Clean Model"
