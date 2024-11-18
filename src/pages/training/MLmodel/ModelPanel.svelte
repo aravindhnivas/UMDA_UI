@@ -2,7 +2,6 @@
     import { training_file } from './../training_file/stores';
     import {
         model,
-        default_param_values,
         current_model,
         default_parameter_mode,
         all_params_lock_status,
@@ -16,6 +15,7 @@
         experiment_id,
         model_names,
         get_default_param_values,
+        cleanlab,
     } from './stores';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import ModelParameters from './ModelParameters.svelte';
@@ -206,10 +206,13 @@
                             const loc = await path.join(await $current_pretrained_dir, '../', $grid_search_method);
                             let filename = $pre_trained_filename;
                             if ($default_parameter_mode) {
-                                filename = filename.replace(`_default`, `_${$grid_search_method}`);
+                                filename = filename.replace(
+                                    `_default${$cleanlab.active ? '_cleaned' : ''}`,
+                                    `_${$grid_search_method}`,
+                                );
                             } else {
                                 filename = $pre_trained_filename.replace(
-                                    `_${$experiment_id[$model]}`,
+                                    `_${$experiment_id[$model]}${$cleanlab.active ? '_cleaned' : ''}`,
                                     `_${$grid_search_method}`,
                                 );
                             }
@@ -218,7 +221,7 @@
                             const best_params_filename = await path.join(loc, `${filename}.${name}.json`);
                             if (!(await fs.exists(best_params_filename))) {
                                 console.warn(best_params_filename);
-                                toast.error('Best params file not found');
+                                toast.error('Best params file not found' + best_params_filename);
                                 return;
                             }
                             await load_parameters(best_params_filename);
