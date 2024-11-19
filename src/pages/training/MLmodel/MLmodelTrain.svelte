@@ -7,6 +7,7 @@
     import { current_training_data_file } from '../training_file/plot-analysis/stores';
     import {
         loaded_df_columns,
+        training_column_name_index,
         training_column_name_X,
         training_column_name_y,
         training_file,
@@ -294,6 +295,7 @@
             seed: $seed.lock ? null : $seed.value,
             cleanlab: $cleanlab.active ? $cleanlab.model : null,
             clean_only_train_data: $cleanlab.only_train_data,
+            index_col: $training_column_name_index,
         };
 
         delete $results[$model];
