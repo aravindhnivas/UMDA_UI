@@ -81,9 +81,13 @@
                 if (!contents) return;
                 const stats = contents[`${cv_fold}`];
 
+                const results_contents = await readJSON<Record<string, any>>(results_file);
+                const data_shapes = results_contents?.data_shapes;
+                let X_data_shape = data_shapes.X || 'N/A';
+
                 // use sigfig_value from computed file
                 if (!('sigfig_value' in stats.test.r2)) {
-                    metric_rows = [...metric_rows, [name, embedder, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A']];
+                    metric_rows = [...metric_rows, [name, embedder, X_data_shape, 'N/A', 'N/A', 'N/A', 'N/A']];
                     continue;
                 }
 
@@ -97,10 +101,6 @@
                 // const mse = roundToUncertainty(stats.test.mse.mean, stats.test.mse.std);
                 // const rmse = roundToUncertainty(stats.test.rmse.mean, stats.test.rmse.std);
                 // const mae = roundToUncertainty(stats.test.mae.mean, stats.test.mae.std);
-
-                const results_contents = await readJSON<Record<string, any>>(results_file);
-                const data_shapes = results_contents?.data_shapes;
-                let X_data_shape = data_shapes.X || 'N/A';
 
                 if (!best_metric_mae) {
                     best_metric_mae = stats.test.mae.mean;
