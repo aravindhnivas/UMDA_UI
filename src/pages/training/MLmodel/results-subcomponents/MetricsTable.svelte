@@ -1,6 +1,7 @@
 <script lang="ts">
+    import { ROOT_DIR } from '$pages/training/training_file/plot-analysis/stores';
     import { current_model_pkl_files, cv_fold, model } from '../stores';
-    const columns = ['Mode', 'Embedder', 'Data shape', 'R<sup>2</sup>', 'MSE', 'RMSE', 'MAE'];
+    const columns = ['Mode', 'Embedder', 'Data shape', 'R2', 'MSE', 'RMSE', 'MAE'];
     function roundToUncertainty(value: number, uncertainty: number): string {
         // Handle invalid inputs
         if (uncertainty <= 0) {
@@ -83,7 +84,8 @@
 
                 const results_contents = await readJSON<Record<string, any>>(results_file);
                 const data_shapes = results_contents?.data_shapes;
-                let X_data_shape = data_shapes.X || 'N/A';
+                let X_data_shape = data_shapes.X ? `${data_shapes.X[0]} x ${data_shapes.X[1]}` : 'N/A';
+                console.log('X_data_shape', X_data_shape);
 
                 // use sigfig_value from computed file
                 if (!('sigfig_value' in stats.test.r2)) {
@@ -120,7 +122,23 @@
     let metric_rows: string[][] = [];
 
     $: read_all_pkl_files($current_model_pkl_files, $cv_fold);
+
+    const export_to_csv = async () => {
+        const header = columns.join(',');
+        const csv = metric_rows.map(row => row.join(',')).join('\n');
+        const content = `${header}\n${csv}`;
+        const loc = await path.join($ROOT_DIR, 'metrics');
+        if (!(await fs.exists(loc))) {
+            await fs.mkdir(loc, { recursive: true });
+        }
+        await fs.writeTextFile(await path.join(loc, 'metrics.csv'), content);
+        toast.success('Metrics exported successfully');
+    };
 </script>
+
+<div class="flex">
+    <button class="btn btn-sm btn-outline" on:click={async () => await export_to_csv()}>Export (.csv)</button>
+</div>
 
 <div class="overflow-x-auto w-full" style="height: 500px;">
     <table class="table bg-base-100">
