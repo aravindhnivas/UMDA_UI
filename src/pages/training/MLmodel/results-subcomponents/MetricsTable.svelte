@@ -35,7 +35,7 @@
     ) => {
         if (isEmpty(filelist)) return;
         console.log('Reading all pkl files', filelist);
-
+        metric_rows = [];
         for (const embedder in filelist) {
             const modes = filelist[embedder];
             console.log(embedder, modes);
@@ -81,7 +81,7 @@
     $: read_all_pkl_files($current_model_pkl_files, $cv_fold);
 </script>
 
-<div class="overflow-x-auto" style="height: 500px;">
+<div class="overflow-x-auto w-full" style="height: 500px;">
     <table class="table bg-base-100">
         <thead>
             <tr>
