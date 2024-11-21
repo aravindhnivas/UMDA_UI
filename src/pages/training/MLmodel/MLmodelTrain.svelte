@@ -57,6 +57,7 @@
         estimator,
         cleanlab,
         seed,
+        enable_y_transformation_and_scaling,
     } from './stores';
     import TrainingFilePanel from './TrainingFilePanel.svelte';
     import { parse_fine_tuned_values } from './utils';
@@ -246,6 +247,23 @@
         }
 
         const learning_curve_train_sizes = gather_learning_curve_data();
+        let y_transform: {
+            transformation: string | null;
+            scaling: string | null;
+        } = {
+            transformation: null,
+            scaling: null,
+        };
+
+        if ($enable_y_transformation_and_scaling) {
+            if ($ytransformation === 'None' && $yscaling === 'None') {
+                toast.error('Error: Please select a transformation or scaling method');
+                return;
+            }
+            if ($ytransformation !== 'None') y_transform.transformation = $ytransformation;
+            if ($yscaling !== 'None') y_transform.scaling = $yscaling;
+        }
+
         const args = {
             model: $model,
             vectors_file,
@@ -275,8 +293,8 @@
             },
             pre_trained_file,
             npartitions: Number($NPARTITIONS),
-            ytransformation: $ytransformation === 'None' || $fine_tune_model ? null : $ytransformation,
-            yscaling: $yscaling === 'None' || $fine_tune_model ? null : $yscaling,
+            ytransformation: y_transform.transformation,
+            yscaling: y_transform.scaling,
             embedding: $embedding,
             pca: $use_PCA,
             save_pretrained_model: $save_pretrained_model,

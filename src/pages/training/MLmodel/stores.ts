@@ -101,6 +101,7 @@ export const fine_tuned_values = writable<FineTunedValues>(structuredClone(defau
 export const tune_parameters = writable({} as ModelTuneParameters);
 
 export const fine_tune_model = writable(false);
+export const enable_y_transformation_and_scaling = writable(false);
 export const ncols_ml_model_panel = localWritable('ncols_ml_model_panel', 3);
 
 export const optuna_resume_study = writable({

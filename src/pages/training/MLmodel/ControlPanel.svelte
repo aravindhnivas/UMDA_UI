@@ -35,6 +35,7 @@
         cleanlab,
         current_pretrained_file,
         model_names,
+        enable_y_transformation_and_scaling,
     } from './stores';
 
     const grid_search_methods = [
@@ -106,20 +107,21 @@
                 {#if $test_size > 50}
                     <div class="badge badge-sm badge-warning">Warning: Test split ratio is greater than 50%</div>
                 {/if}
+                <Checkbox bind:value={$enable_y_transformation_and_scaling} label="Enable transformation/scaling" />
                 <div class="grid grid-cols-2 gap-1">
                     <div class="grid">
                         <CustomSelect
                             items={available_transformations}
                             label="y-transformation"
                             bind:value={$ytransformation}
-                            disabled={$fine_tune_model}
+                            disabled={!$enable_y_transformation_and_scaling}
                         />
                         {#if $ytransformation !== 'None'}
                             <Checkbox
                                 bind:value={$inverse_transform}
                                 label="apply inverse_transform"
                                 check="checkbox"
-                                disabled={$fine_tune_model}
+                                disabled={!$enable_y_transformation_and_scaling}
                             />
                         {/if}
                     </div>
@@ -128,18 +130,17 @@
                             items={available_scalers}
                             label="y-scaling"
                             bind:value={$yscaling}
-                            disabled={$fine_tune_model}
+                            disabled={!$enable_y_transformation_and_scaling}
                         />
                         {#if $yscaling !== 'None'}
                             <Checkbox
                                 bind:value={$inverse_scaling}
                                 label="apply inverse_scaling"
                                 check="checkbox"
-                                disabled={$fine_tune_model}
+                                disabled={!$enable_y_transformation_and_scaling}
                             />
                         {/if}
                     </div>
-
                     <span class="col-span-2 flex gap-1 badge-sm badge-warning rounded-sm">
                         <TriangleAlert size="15" />
                         Always inverse the transformations and scaling applied to your target variable before calculating
