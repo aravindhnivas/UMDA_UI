@@ -20,9 +20,9 @@
 </script>
 
 {#if $grid_search_method?.toLocaleLowerCase() === 'optuna'}
-    <h3>Optuna - Grid search plots</h3>
-    <div class="join">
-        <FileExists name={get_optuna_fig_dir($current_pretrained_file)} let:resolved={optuna_figures_dir} let:dirname>
+    <FileExists name={get_optuna_fig_dir($current_pretrained_file)} let:resolved={optuna_figures_dir} let:dirname>
+        <h3>Optuna - Grid search plots</h3>
+        <div class="join">
             {#each optuna_plots as plot_name}
                 <FileExists name={path.join(optuna_figures_dir, `${plot_name}.html`)} let:resolved={html_file}>
                     <button
@@ -34,6 +34,6 @@
                     >
                 </FileExists>
             {/each}
-        </FileExists>
-    </div>
+        </div>
+    </FileExists>
 {/if}

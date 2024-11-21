@@ -1,8 +1,9 @@
 <script lang="ts">
+    import { model, results } from '../stores';
     import Stats from './Stats.svelte';
     import ResultsPlots from './ResultsPlots.svelte';
-    import { model, results } from '../stores';
     import OptunaGridPlots from './OptunaGridPlots.svelte';
+    import Checkbox from '$lib/components/Checkbox.svelte';
 
     export let significant_digits: number;
 </script>
@@ -56,7 +57,4 @@
             <div class="divider"></div>
         {/if}
     {/if}
-
-    <ResultsPlots />
-    <OptunaGridPlots />
 </div>

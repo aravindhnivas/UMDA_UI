@@ -1,8 +1,6 @@
 <script lang="ts">
     import {
-        current_pretrained_dir,
         current_pretrained_file,
-        grid_search_method,
         include_training_file_in_plot,
         learning_curve,
         model,
@@ -20,8 +18,9 @@
     import FileExists from '$lib/components/FileExists.svelte';
     import { RefreshCcw } from 'lucide-svelte/icons';
     import CustomTabs from '$lib/components/CustomTabs.svelte';
-    import { embedd_savefile, embedding, embeddings } from '../embedding/stores';
     import { current_training_processed_data_directory } from '../training_file/plot-analysis/stores';
+    import ResultsPlots from './results-subcomponents/ResultsPlots.svelte';
+    import OptunaGridPlots from './results-subcomponents/OptunaGridPlots.svelte';
 
     export let data_file: string;
     export let plot_data_ready = false;
@@ -163,6 +162,8 @@
 
     const get_pretrained_file = async (name: Promise<string> | string) => {
         let pretrained_file = await name;
+
+        console.log(pretrained_file);
         if (pretrained_file.endsWith('.pkl')) {
             pretrained_file = pretrained_file.replace('.pkl', '');
         }
@@ -355,85 +356,97 @@
         // console.log({ dir, childrens });
         return all_pkl_files;
     };
+
     const get_valid_dirs = async () => {
         const root_dir = await $current_training_processed_data_directory;
         const model_dir = await path.join(root_dir, 'pretrained_models', $model);
-        // const dir = await path.join(model_dir, $embedd_savefile);
-        // if (!(await fs.exists(dir))) return [];
-        // let all_pkl_files = fetch_all_pkl_files(dir);
-
-        // let all_pkl_files: { name: string; pkl_file: string }[] = [];
         let all_pkl_files = {} as Record<string, { name: string; pkl_file: string }[]>;
         for (const child of (await fs.readDir(model_dir)).filter(f => f.isDirectory)) {
-            // console.log('Checking', child.name);
             if (!child.name.endsWith('_embeddings')) continue;
-            // console.log('Embedding found', child.name);
             const embeddings_dir = await path.join(model_dir, child.name);
             const pkl_files = await fetch_all_pkl_files(embeddings_dir);
-            // all_pkl_files = [...all_pkl_files, ...pkl_files];
             all_pkl_files[child.name.replace('_embeddings', '')] = pkl_files;
         }
         return all_pkl_files;
     };
+
     let reload_available_plots = false;
     let plotted_pkl_file = '';
-    let btn_modes = ['btn-outline', 'btn-primary', 'btn-success', 'btn-warning', 'btn-danger'];
+    let btn_modes = ['btn-outline', ''];
+    let show_plot = true;
 </script>
 
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
     <CustomTabs class="bordered" tabs={model_names.map(model => ({ tab: model }))} bind:active={$model} />
 
-    <div class="flex-gap">
+    <div class="flex-gap my-2">
         <button class="btn btn-sm" on:click={() => (reload_available_plots = !reload_available_plots)}>
             <span>Reload</span>
             <RefreshCcw size="20" />
         </button>
-        <span class="badge">Available plots</span>
+        <span>
+            All available plots for {$model.toLocaleUpperCase()} model. Click on the respective buttons to plot.
+        </span>
     </div>
 
-    {#key plot_data_ready}
-        {#key reload_available_plots}
-            {#await get_valid_dirs() then all_pkl_files}
-                {#each Object.keys(all_pkl_files) as embedder_name, ind}
-                    {@const pkl_files = all_pkl_files[embedder_name]}
-                    <div class="join flex-wrap items-center my-1">
-                        <span class="text-sm mx-1">{embedder_name}: </span>
-                        {#each pkl_files as { pkl_file, name } (pkl_file)}
-                            <button
-                                class="btn btn-sm {btn_modes[ind]} join-item"
-                                on:click={async () => {
-                                    const root_dir = await $current_training_processed_data_directory;
-                                    plotted_pkl_file = pkl_file.replace(root_dir + path.sep(), '');
-                                    await plot_from_datfile(pkl_file);
-                                }}
-                            >
-                                {name}
-                            </button>
+    {#await $current_pretrained_file then _}
+        {#key plot_data_ready}
+            {#key reload_available_plots}
+                {#await get_valid_dirs() then all_pkl_files}
+                    <div class="grid gap-1">
+                        {#each Object.keys(all_pkl_files) as embedder_name, ind}
+                            {@const pkl_files = all_pkl_files[embedder_name]}
+                            <div class="flex-gap flex-wrap my-1">
+                                <span class="text-sm mx-1">{embedder_name}: </span>
+                                {#each pkl_files as { pkl_file, name } (pkl_file)}
+                                    <button
+                                        class="btn btn-sm {btn_modes[ind]}"
+                                        on:click={async () => {
+                                            const root_dir = await $current_training_processed_data_directory;
+                                            plotted_pkl_file = pkl_file.replace(root_dir + path.sep(), '');
+                                            await plot_from_datfile(pkl_file);
+                                        }}
+                                    >
+                                        {#if plotted_pkl_file && pkl_file.includes(plotted_pkl_file)}
+                                            <span class="badge badge-sm badge-primary"></span>
+                                        {/if}
+                                        {name}
+                                    </button>
+                                {/each}
+                            </div>
                         {/each}
                     </div>
-                {/each}
+                {/await}
+            {/key}
+
+            {#if plotted_pkl_file}
+                <span class="alert alert-info p-1 text-sm text-wrap break-all my-1">...{plotted_pkl_file}</span>
+            {/if}
+
+            {#await get_pretrained_file($current_pretrained_file) then { datfile }}
+                <FileExists name={datfile} let:basename={datfilename}>
+                    <div class="grid grid-cols-[4fr_1fr] items-center gap-4">
+                        <div class="alert text-sm alert-success p-1">
+                            <CheckCheck />
+                            <span>
+                                Locally saved computed results are available to plot ({current_dat_file || datfilename})
+                            </span>
+                        </div>
+                        <button class="btn btn-sm btn-outline" on:click={() => plot_from_datfile()}>Plot</button>
+                    </div>
+                    <svelte:fragment slot="else">
+                        <div class="alert text-sm alert-warning p-1">
+                            <span>Locally saved computed results are not available to plot</span>
+                        </div>
+                    </svelte:fragment>
+                </FileExists>
             {/await}
         {/key}
+    {/await}
 
-        {#if plotted_pkl_file}
-            <span class="alert alert-info p-1 text-sm text-wrap break-all my-1">...{plotted_pkl_file}</span>
-        {/if}
-
-        {#await get_pretrained_file($current_pretrained_file) then { datfile }}
-            <FileExists name={datfile} let:basename={datfilename}>
-                <div class="grid grid-cols-[4fr_1fr] items-center gap-4">
-                    <div class="alert text-sm alert-success p-1">
-                        <CheckCheck />
-                        <span>
-                            Locally saved computed results are available to plot ({current_dat_file || datfilename})
-                        </span>
-                    </div>
-                    <button class="btn btn-sm btn-outline" on:click={() => plot_from_datfile()}>Plot</button>
-                </div>
-            </FileExists>
-        {/await}
-    {/key}
     <div class="flex my-2 gap-4 items-end">
+        <Checkbox bind:value={show_plot} label="Show plots" />
+
         <Checkbox
             bind:value={$include_training_file_in_plot}
             label="Plot training data"
@@ -451,5 +464,14 @@
             }}
         />
     </div>
-    <ResultsStats {significant_digits} />
+
+    <div class="grid gap-2">
+        <ResultsStats {significant_digits} />
+
+        {#if show_plot}
+            <ResultsPlots />
+        {/if}
+
+        <OptunaGridPlots />
+    </div>
 </CustomPanel>
