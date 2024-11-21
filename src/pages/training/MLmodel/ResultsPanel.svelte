@@ -377,7 +377,7 @@
     };
     let reload_available_plots = false;
     let plotted_pkl_file = '';
-    let btn_modes = ['', 'btn-primary', 'btn-success', 'btn-warning', 'btn-danger'];
+    let btn_modes = ['btn-outline', 'btn-primary', 'btn-success', 'btn-warning', 'btn-danger'];
 </script>
 
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
