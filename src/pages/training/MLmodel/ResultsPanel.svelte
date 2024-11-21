@@ -362,14 +362,16 @@
         // if (!(await fs.exists(dir))) return [];
         // let all_pkl_files = fetch_all_pkl_files(dir);
 
-        let all_pkl_files: { name: string; pkl_file: string }[] = [];
+        // let all_pkl_files: { name: string; pkl_file: string }[] = [];
+        let all_pkl_files = {} as Record<string, { name: string; pkl_file: string }[]>;
         for (const child of (await fs.readDir(model_dir)).filter(f => f.isDirectory)) {
             // console.log('Checking', child.name);
             if (!child.name.endsWith('_embeddings')) continue;
             // console.log('Embedding found', child.name);
             const embeddings_dir = await path.join(model_dir, child.name);
             const pkl_files = await fetch_all_pkl_files(embeddings_dir);
-            all_pkl_files = [...all_pkl_files, ...pkl_files];
+            // all_pkl_files = [...all_pkl_files, ...pkl_files];
+            all_pkl_files[child.name.replace('_embeddings', '')] = pkl_files;
         }
         return all_pkl_files;
     };
@@ -379,26 +381,26 @@
 
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
     <CustomTabs class="bordered" tabs={model_names.map(model => ({ tab: model }))} bind:active={$model} />
+
+    <div class="flex-gap">
+        <button class="btn btn-sm" on:click={() => (reload_available_plots = !reload_available_plots)}>
+            <span>Reload</span>
+            <RefreshCcw size="20" />
+        </button>
+        <span class="badge">Available plots</span>
+    </div>
+
     {#key plot_data_ready}
         {#key reload_available_plots}
-            <!-- {#await get_valid_dirs($current_pretrained_dir) then value} -->
             {#await get_valid_dirs() then all_pkl_files}
-                <!-- {#if all_pkl_files && all_pkl_files.length > 0} -->
-                <div class="flex-gap my-2">
-                    <div class="flex-gap">
-                        <span class="badge">Available plots</span>
-                        <button class="btn btn-sm" on:click={() => (reload_available_plots = !reload_available_plots)}>
-                            <span>Reload</span>
-                            <RefreshCcw size="20" />
-                        </button>
-                    </div>
-                    <div class="join flex-wrap">
-                        {#each all_pkl_files as { pkl_file, name } (pkl_file)}
+                {#each Object.keys(all_pkl_files) as embedder_name}
+                    {@const pkl_files = all_pkl_files[embedder_name]}
+                    <div class="join flex-wrap items-center my-1">
+                        <span class="text-sm mx-1">{embedder_name}: </span>
+                        {#each pkl_files as { pkl_file, name } (pkl_file)}
                             <button
                                 class="btn btn-sm btn-outline join-item"
                                 on:click={async () => {
-                                    // const pkl = await path.join(value.dir, dir, value.valid_dirs[dir]);
-                                    // console.log(pkl_file);
                                     const root_dir = await $current_training_processed_data_directory;
                                     plotted_pkl_file = pkl_file.replace(root_dir + path.sep(), '');
                                     await plot_from_datfile(pkl_file);
@@ -408,13 +410,14 @@
                             </button>
                         {/each}
                     </div>
-                </div>
-                <!-- {/if} -->
+                {/each}
             {/await}
         {/key}
+
         {#if plotted_pkl_file}
             <span class="alert alert-info p-1 text-sm text-wrap break-all my-1">...{plotted_pkl_file}</span>
         {/if}
+
         {#await get_pretrained_file($current_pretrained_file) then { datfile }}
             <FileExists name={datfile} let:basename={datfilename}>
                 <div class="grid grid-cols-[4fr_1fr] items-center gap-4">
