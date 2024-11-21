@@ -22,6 +22,7 @@
     import { current_training_processed_data_directory } from '../training_file/plot-analysis/stores';
     import ResultsPlots from './results-subcomponents/ResultsPlots.svelte';
     import OptunaGridPlots from './results-subcomponents/OptunaGridPlots.svelte';
+    import MetricsTable from './results-subcomponents/MetricsTable.svelte';
 
     export let data_file: string;
     export let plot_data_ready = false;
@@ -484,5 +485,6 @@
         {/if}
 
         <OptunaGridPlots />
+        <MetricsTable />
     </div>
 </CustomPanel>
