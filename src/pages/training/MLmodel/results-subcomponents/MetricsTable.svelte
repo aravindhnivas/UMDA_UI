@@ -131,7 +131,7 @@
         if (!(await fs.exists(loc))) {
             await fs.mkdir(loc, { recursive: true });
         }
-        await fs.writeTextFile(await path.join(loc, 'metrics.csv'), content);
+        await fs.writeTextFile(await path.join(loc, `${$model}_metrics.csv`), content);
         toast.success('Metrics exported successfully');
     };
 </script>
