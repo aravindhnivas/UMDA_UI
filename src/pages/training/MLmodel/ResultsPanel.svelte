@@ -330,9 +330,8 @@
                             .filter(f => f.isDirectory)
                             .forEach(async subdir => {
                                 const subdir_child_dir = await path.join(child_dir, 'processed_subdirs', subdir.name);
-                                console.warn(subdir_child_dir);
-                                if (!(await fs.exists(subdir_child_dir))) return;
                                 const subdir_contents = await fs.readDir(subdir_child_dir);
+
                                 if (subdir_contents.some(c => c.name.endsWith('.results.json'))) {
                                     const subdir_dat_file = subdir_contents.find(c =>
                                         c.name.endsWith('.dat.json'),
