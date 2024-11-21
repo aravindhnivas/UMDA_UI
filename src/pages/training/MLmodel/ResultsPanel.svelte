@@ -389,7 +389,7 @@
         <CustomTabs class="bordered" tabs={model_names.map(model => ({ tab: model }))} bind:active={$model} />
         {#await $current_pretrained_file then _}
             {#key plot_data_ready}
-                <div class="common" transition:fade>
+                <div class="grid gap-2" transition:fade>
                     <div role="tablist" class="tabs tabs-boxed w-max">
                         {#each tab_names as item}
                             <button
@@ -439,45 +439,12 @@
                             </div>
                         {/await}
                     {/key}
+
                     {#if plotted_pkl_file}
                         <span class="alert alert-info p-1 text-sm text-wrap break-all my-1">...{plotted_pkl_file}</span>
                     {/if}
-                </div>
 
-                <div class:hidden={active_tab !== 'Plots'} transition:fade>
-                    {#await get_pretrained_file($current_pretrained_file) then { datfile }}
-                        <FileExists name={datfile} let:basename={datfilename}>
-                            <div class="grid grid-cols-[4fr_1fr] items-center gap-4">
-                                <div class="alert text-sm alert-success p-1">
-                                    <CheckCheck />
-                                    <span>
-                                        Locally saved computed results are available to plot ({current_dat_file ||
-                                            datfilename})
-                                    </span>
-                                </div>
-                                <button
-                                    class="btn btn-sm btn-outline"
-                                    on:click={async () => {
-                                        plotted_pkl_file = '';
-                                        await plot_from_datfile();
-                                    }}>Current plot</button
-                                >
-                            </div>
-                            <svelte:fragment slot="else">
-                                <div class="alert text-sm alert-warning p-1">
-                                    <span>Locally saved computed results are not available to plot</span>
-                                </div>
-                            </svelte:fragment>
-                        </FileExists>
-                    {/await}
                     <div class="flex my-2 gap-4 items-end">
-                        <Checkbox bind:value={show_plot} label="Show plots" />
-
-                        <Checkbox
-                            bind:value={$include_training_file_in_plot}
-                            label="Plot training data"
-                            on:change={include_training_plot_if_required}
-                        />
                         <CustomInput
                             bind:value={significant_digits}
                             label="significant_digits"
@@ -495,18 +462,57 @@
                                 $results[$model].cv_scores = cv_scores_data[current_cv_fold];
                             }}
                         />
+
+                        <div class="flex-gap" class:hidden={active_tab !== 'Plots'}>
+                            <Checkbox bind:value={show_plot} label="Show plots" />
+                            <Checkbox
+                                bind:value={$include_training_file_in_plot}
+                                label="Plot training data"
+                                on:change={include_training_plot_if_required}
+                            />
+                        </div>
                     </div>
+
+                    {#if active_tab === 'Plots'}
+                        {#await get_pretrained_file($current_pretrained_file) then { datfile }}
+                            <FileExists name={datfile} let:basename={datfilename}>
+                                <div class="grid grid-cols-[4fr_1fr] items-center gap-4">
+                                    <div class="alert text-sm alert-success p-1">
+                                        <CheckCheck />
+                                        <span>
+                                            Locally saved computed results are available to plot ({current_dat_file ||
+                                                datfilename})
+                                        </span>
+                                    </div>
+                                    <button
+                                        class="btn btn-sm btn-outline"
+                                        on:click={async () => {
+                                            plotted_pkl_file = '';
+                                            await plot_from_datfile();
+                                        }}>Current plot</button
+                                    >
+                                </div>
+                                <svelte:fragment slot="else">
+                                    <div class="alert text-sm alert-warning p-1">
+                                        <span>Locally saved computed results are not available to plot</span>
+                                    </div>
+                                </svelte:fragment>
+                            </FileExists>
+                        {/await}
+                    {/if}
 
                     <div class="grid gap-2">
                         <ResultsStats {significant_digits} />
-                        {#if show_plot}
-                            <ResultsPlots />
-                        {/if}
-                        <OptunaGridPlots />
                     </div>
                 </div>
+
+                <div class="grid gap-2" class:hidden={active_tab !== 'Plots'} transition:fade>
+                    {#if show_plot}
+                        <ResultsPlots />
+                    {/if}
+                    <OptunaGridPlots />
+                </div>
                 <div class="grid gap-2" class:hidden={active_tab !== 'Metrics Table'} transition:fade>
-                    <ResultsStats {significant_digits} />
                     <MetricsTable />
                 </div>
             {/key}
