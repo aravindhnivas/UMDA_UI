@@ -4,8 +4,15 @@
 
     function roundToUncertainty(value: number, uncertainty: number) {
         // Find the decimal place of the most significant digit in uncertainty
-        const decimalPlace = -Math.floor(Math.log10(uncertainty));
-
+        let decimalPlace = -Math.floor(Math.log10(uncertainty));
+        console.log({ value, uncertainty, decimalPlace });
+        // Adjust for negative decimal places (rounding to the nearest 10, 100, etc.)
+        if (decimalPlace < 0) {
+            const multiplier = 10 ** -decimalPlace;
+            value = Math.round(value / multiplier) * multiplier;
+            uncertainty = Math.round(uncertainty / multiplier) * multiplier;
+            decimalPlace = 0; // For consistent formatting
+        }
         // Round both value and uncertainty to the same decimal place
         const roundedValue = value.toFixed(decimalPlace);
         const roundedUncertainty = Number(uncertainty.toFixed(decimalPlace));
@@ -24,6 +31,7 @@
                 pkl_file: string;
             }[]
         >,
+        cv_fold = 5,
     ) => {
         if (isEmpty(filelist)) return;
         console.log('Reading all pkl files', filelist);
@@ -44,7 +52,8 @@
 
                 const contents = await readJSON<Record<string, CVScoresData>>(cv_scores_file);
                 if (!contents) return;
-                const stats = contents[`${$cv_fold}`];
+                const stats = contents[`${cv_fold}`];
+                // console.log(stats.test.r2.mean, stats.test.r2.std);
                 const r2 = roundToUncertainty(stats.test.r2.mean, stats.test.r2.std);
                 const mse = roundToUncertainty(stats.test.mse.mean, stats.test.mse.std);
                 const rmse = roundToUncertainty(stats.test.rmse.mean, stats.test.rmse.std);
@@ -69,7 +78,7 @@
     let best_metric_mae: number | undefined = undefined;
     let metric_rows: string[][] = [];
 
-    $: read_all_pkl_files($current_model_pkl_files);
+    $: read_all_pkl_files($current_model_pkl_files, $cv_fold);
 </script>
 
 <div class="overflow-x-auto" style="height: 500px;">
