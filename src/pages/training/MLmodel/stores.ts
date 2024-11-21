@@ -101,7 +101,7 @@ export const fine_tuned_values = writable<FineTunedValues>(structuredClone(defau
 export const tune_parameters = writable({} as ModelTuneParameters);
 
 export const fine_tune_model = writable(false);
-export const enable_y_transformation_and_scaling = writable(false);
+
 export const ncols_ml_model_panel = localWritable('ncols_ml_model_panel', 3);
 
 export const optuna_resume_study = writable({
@@ -214,6 +214,7 @@ export const current_pretrained_dir = derived(
         // const $cleanlab = get(cleanlab);
         if ($cleanlab.active) {
             dir += `_cleaned_${$cleanlab.model}`;
+            // dir = await path.join(dir, `cleaned_${$cleanlab.model}`);
         }
         return dir;
     },
@@ -247,7 +248,27 @@ export const available_scalers = [
     'QuantileTransformer',
     'PowerTransformer',
 ];
+
 export const ytransformation = localWritable('ytransformation', 'None');
 export const yscaling = localWritable('yscaling', 'StandardScaler');
 export const inverse_transform = localWritable('inverse_transform', true);
 export const inverse_scaling = localWritable('inverse_scaling', true);
+export const enable_y_transformation_and_scaling = writable(false);
+
+export const y_transform = derived(
+    [enable_y_transformation_and_scaling, ytransformation, yscaling],
+    ([$enable_y_transformation_and_scaling, $ytransformation, $yscaling]) => {
+        let values: {
+            transformation: string | null;
+            scaling: string | null;
+        } = {
+            transformation: null,
+            scaling: null,
+        };
+
+        if (!$enable_y_transformation_and_scaling) return values;
+        if ($ytransformation !== 'None') values.transformation = $ytransformation;
+        if ($yscaling !== 'None') values.scaling = $yscaling;
+        return values;
+    },
+);

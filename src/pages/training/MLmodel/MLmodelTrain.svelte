@@ -51,13 +51,12 @@
         test_size,
         tune_parameters,
         variable_type,
-        yscaling,
-        ytransformation,
         optuna_storage_file,
         estimator,
         cleanlab,
         seed,
         enable_y_transformation_and_scaling,
+        y_transform,
     } from './stores';
     import TrainingFilePanel from './TrainingFilePanel.svelte';
     import { parse_fine_tuned_values } from './utils';
@@ -247,21 +246,9 @@
         }
 
         const learning_curve_train_sizes = gather_learning_curve_data();
-        let y_transform: {
-            transformation: string | null;
-            scaling: string | null;
-        } = {
-            transformation: null,
-            scaling: null,
-        };
-
-        if ($enable_y_transformation_and_scaling) {
-            if ($ytransformation === 'None' && $yscaling === 'None') {
-                toast.error('Error: Please select a transformation or scaling method');
-                return;
-            }
-            if ($ytransformation !== 'None') y_transform.transformation = $ytransformation;
-            if ($yscaling !== 'None') y_transform.scaling = $yscaling;
+        if ($enable_y_transformation_and_scaling && !$y_transform.transformation && !$y_transform.scaling) {
+            toast.error('Please select a transformation or scaling method for the target variable');
+            return;
         }
 
         const args = {
@@ -293,8 +280,8 @@
             },
             pre_trained_file,
             npartitions: Number($NPARTITIONS),
-            ytransformation: y_transform.transformation,
-            yscaling: y_transform.scaling,
+            ytransformation: $y_transform.transformation,
+            yscaling: $y_transform.scaling,
             embedding: $embedding,
             pca: $use_PCA,
             save_pretrained_model: $save_pretrained_model,
