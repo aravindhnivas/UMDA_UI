@@ -20,7 +20,7 @@
     import FileExists from '$lib/components/FileExists.svelte';
     import { RefreshCcw } from 'lucide-svelte/icons';
     import CustomTabs from '$lib/components/CustomTabs.svelte';
-    import { embedd_savefile, embedding } from '../embedding/stores';
+    import { embedd_savefile, embedding, embeddings } from '../embedding/stores';
     import { current_training_processed_data_directory } from '../training_file/plot-analysis/stores';
 
     export let data_file: string;
@@ -301,12 +301,7 @@
     let available_cv_folds: string[] = [];
     let current_cv_fold = '';
 
-    const get_valid_dirs = async () => {
-        const main_dir = await $current_training_processed_data_directory;
-        const dir = await path.join(main_dir, 'pretrained_models', $model, $embedd_savefile);
-        // const dir = await path.dirname(await name);
-        if (!(await fs.exists(dir))) return [];
-
+    const fetch_all_pkl_files = async (dir: string) => {
         const pretrained_models_dir = await fs.readDir(dir);
         const childrens = pretrained_models_dir.filter(f => f.isDirectory);
 
@@ -357,7 +352,25 @@
                 }
             }
         }
-        console.log({ dir, childrens });
+        // console.log({ dir, childrens });
+        return all_pkl_files;
+    };
+    const get_valid_dirs = async () => {
+        const root_dir = await $current_training_processed_data_directory;
+        const model_dir = await path.join(root_dir, 'pretrained_models', $model);
+        // const dir = await path.join(model_dir, $embedd_savefile);
+        // if (!(await fs.exists(dir))) return [];
+        // let all_pkl_files = fetch_all_pkl_files(dir);
+
+        let all_pkl_files: { name: string; pkl_file: string }[] = [];
+        for (const child of (await fs.readDir(model_dir)).filter(f => f.isDirectory)) {
+            // console.log('Checking', child.name);
+            if (!child.name.endsWith('_embeddings')) continue;
+            // console.log('Embedding found', child.name);
+            const embeddings_dir = await path.join(model_dir, child.name);
+            const pkl_files = await fetch_all_pkl_files(embeddings_dir);
+            all_pkl_files = [...all_pkl_files, ...pkl_files];
+        }
         return all_pkl_files;
     };
     let reload_available_plots = false;
@@ -379,7 +392,7 @@
                             <RefreshCcw size="20" />
                         </button>
                     </div>
-                    <div class="join">
+                    <div class="join flex-wrap">
                         {#each all_pkl_files as { pkl_file, name } (pkl_file)}
                             <button
                                 class="btn btn-sm btn-outline join-item"
