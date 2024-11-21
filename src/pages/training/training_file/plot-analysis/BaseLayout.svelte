@@ -1,6 +1,6 @@
 <script lang="ts">
     import { current_post_analysis_files_directory, current_analysis_file } from './stores';
-    import { CustomInput, Loadingbtn } from '$lib/components';
+    import { Loadingbtn } from '$lib/components';
     import { ChartColumnBig } from 'lucide-svelte/icons';
     import CheckFileStatus from '../CheckFileStatus.svelte';
 

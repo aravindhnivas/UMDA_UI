@@ -9,13 +9,10 @@
         fine_tuned_values,
         grid_search_method,
         cv_fold,
-        current_pretrained_dir,
-        pre_trained_filename,
         tune_parameters,
         experiment_id,
         model_names,
         get_default_param_values,
-        cleanlab,
     } from './stores';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import ModelParameters from './ModelParameters.svelte';
@@ -27,7 +24,7 @@
     import CustomTabs from '$lib/components/CustomTabs.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
     import { embedd_savefile, embedding, embeddings } from '../embedding/stores';
-    import { current_training_processed_data_directory } from '../training_file/plot-analysis/stores';
+    import { current_training_processed_data_directory, ROOT_DIR } from '../training_file/plot-analysis/stores';
 
     let savedfile: string;
     let uploadedfile: { fullname: string; name: string; model: string } | null = null;
@@ -170,6 +167,14 @@
             reset_parameters(model_name);
         });
     }
+
+    const set_root_dir = async (name: Promise<string>) => {
+        const dir = await name;
+        ROOT_DIR.set(dir);
+        console.warn('ROOT_DIR');
+        console.warn($ROOT_DIR);
+    };
+    $: set_root_dir($current_training_processed_data_directory);
 </script>
 
 <CustomPanel open={true}>

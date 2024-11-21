@@ -154,26 +154,13 @@ export const seed = localWritable('seed', {
     value: 42,
 });
 export const overwrite_model = localWritable('overwrite_model', false);
-// export const pre_trained_filename = localWritable('pre_trained_filename', '');
 export const pre_trained_filename = derived(
-    [model, embedd_savefile, default_parameter_mode, fine_tune_model, grid_search_method, experiment_id, cleanlab],
-    ([
-        $model,
-        $embedd_savefile,
-        $default_parameter_mode,
-        $fine_tune_model,
-        $grid_search_method,
-        $experiment_id,
-        $cleanlab,
-    ]) => {
+    [model, embedd_savefile, default_parameter_mode, fine_tune_model, grid_search_method, experiment_id],
+    ([$model, $embedd_savefile, $default_parameter_mode, $fine_tune_model, $grid_search_method, $experiment_id]) => {
         let name = `${$model}_${$embedd_savefile}_pretrained_model`;
         if ($default_parameter_mode) name += '_default';
         else if ($fine_tune_model) name += `_${$grid_search_method}`;
         else name += `_${$experiment_id[$model]}`;
-        // const $cleanlab = get(cleanlab);
-        // if ($cleanlab.active) {
-        //     name += `_cleaned_${$cleanlab.model}`;
-        // }
         return name;
     },
 );
