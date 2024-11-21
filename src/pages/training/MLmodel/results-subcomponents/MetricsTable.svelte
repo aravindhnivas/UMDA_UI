@@ -1,28 +1,54 @@
 <script lang="ts">
     import { current_model_pkl_files, cv_fold, model } from '../stores';
-    const columns = ['Mode', 'Embedder', 'R<sup>2</sup>', 'MSE', 'RMSE', 'MAE'];
-
-    function roundToUncertainty(value: number, uncertainty: number) {
-        // Find the decimal place of the most significant digit in uncertainty
-        let decimalPlace = -Math.floor(Math.log10(uncertainty));
-        console.log({ value, uncertainty, decimalPlace });
-        // Adjust for negative decimal places (rounding to the nearest 10, 100, etc.)
-        if (decimalPlace < 0) {
-            const multiplier = 10 ** -decimalPlace;
-            value = Math.round(value / multiplier) * multiplier;
-            uncertainty = Math.round(uncertainty / multiplier) * multiplier;
-            decimalPlace = 0; // For consistent formatting
+    const columns = ['Mode', 'Embedder', 'Data shape', 'R<sup>2</sup>', 'MSE', 'RMSE', 'MAE'];
+    function roundToUncertainty(value: number, uncertainty: number): string {
+        // Handle invalid inputs
+        if (uncertainty <= 0) {
+            throw new Error('Uncertainty must be positive');
         }
-        // Round both value and uncertainty to the same decimal place
-        const roundedValue = value.toFixed(decimalPlace);
-        const roundedUncertainty = Number(uncertainty.toFixed(decimalPlace));
+        if (typeof value !== 'number' || typeof uncertainty !== 'number') {
+            throw new Error('Both value and uncertainty must be numbers');
+        }
 
-        // Format the result string
-        const formattedValue = `${roundedValue} (${roundedUncertainty})`;
+        // Find the position of the first significant digit in the uncertainty
+        const uncertaintyStr = uncertainty.toString();
+        let firstSigDigitPos: number;
 
-        return formattedValue;
+        if (uncertainty >= 1) {
+            // For uncertainties ≥ 1, count digits before decimal point
+            firstSigDigitPos = Math.floor(Math.log10(uncertainty));
+            // Round to nearest power of 10
+            const roundingFactor = Math.pow(10, firstSigDigitPos);
+            const roundedValue = Math.round(value / roundingFactor) * roundingFactor;
+            // Convert uncertainty to last digit representation
+            const uncertaintyInLastDigit = Math.round(uncertainty / roundingFactor);
+            return `${roundedValue} (${uncertaintyInLastDigit})`;
+        } else {
+            // For uncertainties < 1, find first non-zero digit
+            const match = uncertaintyStr.match(/[1-9]/);
+            if (!match) {
+                throw new Error('Invalid uncertainty value');
+            }
+
+            const decimalIndex = uncertaintyStr.indexOf('.');
+            // Initialize to position before decimal
+            firstSigDigitPos = -decimalIndex - 1;
+
+            // If we found a match and it's after the decimal point
+            if (match.index !== undefined && match.index > decimalIndex) {
+                firstSigDigitPos = -(match.index - decimalIndex);
+            }
+
+            // Round both value and uncertainty to appropriate decimal places
+            const decimalPlaces = -firstSigDigitPos;
+            const roundingFactor = Math.pow(10, decimalPlaces);
+            const roundedValue = Math.round(value * roundingFactor) / roundingFactor;
+            // Convert uncertainty to last digit representation
+            const uncertaintyInLastDigit = Math.round(uncertainty * roundingFactor);
+
+            return `${roundedValue.toFixed(decimalPlaces)} (${uncertaintyInLastDigit})`;
+        }
     }
-
     const read_all_pkl_files = async (
         filelist: Record<
             string,
@@ -34,32 +60,48 @@
         cv_fold = 5,
     ) => {
         if (isEmpty(filelist)) return;
-        console.log('Reading all pkl files', filelist);
+        // console.log('Reading all pkl files', filelist);
         metric_rows = [];
         for (const embedder in filelist) {
             const modes = filelist[embedder];
-            console.log(embedder, modes);
+            // console.log(embedder, modes);
             for (const { name, pkl_file } of modes) {
                 const cv_scores_file = pkl_file.replace('.pkl', '.cv_scores.json');
+                const results_file = pkl_file.replace('.pkl', '.results.json');
                 if (!(await fs.exists(cv_scores_file))) {
                     console.error(`File not found: ${cv_scores_file}`);
                     return;
                 }
-                const fname = await path.basename(pkl_file);
-                console.log(embedder, name, fname);
-                const cv_fname = await path.basename(cv_scores_file);
-                console.log('CV Scores file exists:', cv_fname);
+                // const fname = await path.basename(pkl_file);
+                // console.log(embedder, name, fname);
+                // const cv_fname = await path.basename(cv_scores_file);
+                // console.log('CV Scores file exists:', cv_fname);
 
                 const contents = await readJSON<Record<string, CVScoresData>>(cv_scores_file);
                 if (!contents) return;
                 const stats = contents[`${cv_fold}`];
-                // console.log(stats.test.r2.mean, stats.test.r2.std);
-                const r2 = roundToUncertainty(stats.test.r2.mean, stats.test.r2.std);
-                const mse = roundToUncertainty(stats.test.mse.mean, stats.test.mse.std);
-                const rmse = roundToUncertainty(stats.test.rmse.mean, stats.test.rmse.std);
-                const mae = roundToUncertainty(stats.test.mae.mean, stats.test.mae.std);
 
-                // let mode = name;
+                // use sigfig_value from computed file
+                if (!('sigfig_value' in stats.test.r2)) {
+                    metric_rows = [...metric_rows, [name, embedder, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A']];
+                    continue;
+                }
+
+                const r2 = stats.test.r2.sigfig_value ?? 'N/A';
+                const mse = stats.test.mse.sigfig_value ?? 'N/A';
+                const rmse = stats.test.rmse.sigfig_value ?? 'N/A';
+                const mae = stats.test.mae.sigfig_value ?? 'N/A';
+
+                // compute uncertainty from std
+                // const r2 = roundToUncertainty(stats.test.r2.mean, stats.test.r2.std);
+                // const mse = roundToUncertainty(stats.test.mse.mean, stats.test.mse.std);
+                // const rmse = roundToUncertainty(stats.test.rmse.mean, stats.test.rmse.std);
+                // const mae = roundToUncertainty(stats.test.mae.mean, stats.test.mae.std);
+
+                const results_contents = await readJSON<Record<string, any>>(results_file);
+                const data_shapes = results_contents?.data_shapes;
+                let X_data_shape = data_shapes.X || 'N/A';
+
                 if (!best_metric_mae) {
                     best_metric_mae = stats.test.mae.mean;
                     best_metric_row = metric_rows.length;
@@ -68,8 +110,7 @@
                     best_metric_row = metric_rows.length;
                 }
 
-                metric_rows = [...metric_rows, [name, embedder, r2, mse, rmse, mae]];
-                console.log(r2, stats.test.r2.mean, stats.test.r2.std);
+                metric_rows = [...metric_rows, [name, embedder, X_data_shape, r2, mse, rmse, mae]];
             }
         }
     };
@@ -93,7 +134,8 @@
         </thead>
         <tbody>
             {#each metric_rows as mrow, index (mrow)}
-                <tr class="hover:bg-base-200" class:bg-success={best_metric_row === index}>
+                {@const best_row = best_metric_row === index}
+                <tr class={best_row ? '' : 'hover:bg-base-200'} class:bg-success={best_row}>
                     <th>{index}</th>
                     {#each mrow as val, i ([...mrow, i, index])}
                         <td class="select-text">{val}</td>
