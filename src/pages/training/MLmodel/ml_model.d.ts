@@ -52,6 +52,7 @@ interface CVScores {
     scores: number[];
     ci_upper: number;
     ci_lower: number;
+    sigfig_value?: string;
 }
 
 interface MLStats {
