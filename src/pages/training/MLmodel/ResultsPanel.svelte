@@ -7,6 +7,7 @@
         model_names,
         plot_data,
         results,
+        current_model_pkl_files,
     } from './stores';
     import Checkbox from '$lib/components/Checkbox.svelte';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
@@ -303,6 +304,7 @@
     let current_cv_fold = '';
 
     const fetch_all_pkl_files = async (dir: string) => {
+        if (!(await fs.exists(dir))) return [];
         const pretrained_models_dir = await fs.readDir(dir);
         const childrens = pretrained_models_dir.filter(f => f.isDirectory);
 
@@ -357,9 +359,10 @@
         return all_pkl_files;
     };
 
-    const get_valid_dirs = async () => {
-        const root_dir = await $current_training_processed_data_directory;
+    const get_valid_dirs = async (name: Promise<string>) => {
+        const root_dir = await name;
         const model_dir = await path.join(root_dir, 'pretrained_models', $model);
+        if (!(await fs.exists(model_dir))) return {};
         let all_pkl_files = {} as Record<string, { name: string; pkl_file: string }[]>;
         for (const child of (await fs.readDir(model_dir)).filter(f => f.isDirectory)) {
             if (!child.name.endsWith('_embeddings')) continue;
@@ -367,9 +370,11 @@
             const pkl_files = await fetch_all_pkl_files(embeddings_dir);
             all_pkl_files[child.name.replace('_embeddings', '')] = pkl_files;
         }
+        current_model_pkl_files.set(all_pkl_files);
         return all_pkl_files;
     };
 
+    // $: console.log({ current_model_pkl_files: $current_model_pkl_files });
     let reload_available_plots = false;
     let plotted_pkl_file = '';
     let btn_modes = ['btn-outline', ''];
@@ -392,7 +397,7 @@
     {#await $current_pretrained_file then _}
         {#key plot_data_ready}
             {#key reload_available_plots}
-                {#await get_valid_dirs() then all_pkl_files}
+                {#await get_valid_dirs($current_training_processed_data_directory) then all_pkl_files}
                     <div class="grid gap-1">
                         {#each Object.keys(all_pkl_files) as embedder_name, ind}
                             {@const pkl_files = all_pkl_files[embedder_name]}
@@ -432,7 +437,13 @@
                                 Locally saved computed results are available to plot ({current_dat_file || datfilename})
                             </span>
                         </div>
-                        <button class="btn btn-sm btn-outline" on:click={() => plot_from_datfile()}>Plot</button>
+                        <button
+                            class="btn btn-sm btn-outline"
+                            on:click={async () => {
+                                plotted_pkl_file = '';
+                                await plot_from_datfile();
+                            }}>Current plot</button
+                        >
                     </div>
                     <svelte:fragment slot="else">
                         <div class="alert text-sm alert-warning p-1">

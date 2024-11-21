@@ -3,6 +3,8 @@ import { training_save_directory, training_file } from '../training_file/stores'
 import { current_training_processed_data_directory } from '../training_file/plot-analysis/stores';
 import { embedd_savefile } from '../embedding/stores';
 
+export const current_model_pkl_files = writable({} as Record<string, { name: string; pkl_file: string }[]>);
+
 export const optuna_storage_file = derived(
     [training_save_directory, training_file],
     async ([$training_save_directory, $training_file]) => {
