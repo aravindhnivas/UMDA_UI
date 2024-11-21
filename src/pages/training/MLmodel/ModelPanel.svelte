@@ -26,7 +26,7 @@
     import supervised_ml_models from '$lib/config/ml_model/ml_models_parameters';
     import CustomTabs from '$lib/components/CustomTabs.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
-    import { embedding, embeddings } from '../embedding/stores';
+    import { embedd_savefile, embedding, embeddings } from '../embedding/stores';
     import { current_training_processed_data_directory } from '../training_file/plot-analysis/stores';
 
     let savedfile: string;
@@ -209,7 +209,7 @@
                                 main_dir,
                                 'pretrained_models',
                                 $model,
-                                `${$embedding}_embeddings`,
+                                $embedd_savefile,
                                 $grid_search_method,
                             );
                             const name = $fine_tune_model ? 'fine_tuned_parameters' : 'best_params';

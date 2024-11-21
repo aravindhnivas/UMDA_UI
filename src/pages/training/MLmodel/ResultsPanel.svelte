@@ -2,6 +2,7 @@
     import {
         current_pretrained_dir,
         current_pretrained_file,
+        grid_search_method,
         include_training_file_in_plot,
         learning_curve,
         model,
@@ -19,6 +20,8 @@
     import FileExists from '$lib/components/FileExists.svelte';
     import { RefreshCcw } from 'lucide-svelte/icons';
     import CustomTabs from '$lib/components/CustomTabs.svelte';
+    import { embedd_savefile, embedding } from '../embedding/stores';
+    import { current_training_processed_data_directory } from '../training_file/plot-analysis/stores';
 
     export let data_file: string;
     export let plot_data_ready = false;
@@ -178,9 +181,8 @@
 
     let current_dat_file: string = '';
     const plot_from_datfile = async (name: string | null = null) => {
+        console.log('Plotting from datfile', name);
         let datfile, resultsfile, learning_curve_file, cv_scores_file;
-        // const { datfile, resultsfile, learning_curve_file, cv_scores_file } =
-        //     await get_pretrained_file(await $current_pretrained_file);
         if (name) {
             const files = await get_pretrained_file(name);
             datfile = files.datfile;
@@ -299,63 +301,106 @@
     let available_cv_folds: string[] = [];
     let current_cv_fold = '';
 
-    const get_valid_dirs = async (name: Promise<string>) => {
-        const dir = await path.dirname(await name);
-        if (!(await fs.exists(dir))) return;
+    const get_valid_dirs = async () => {
+        const main_dir = await $current_training_processed_data_directory;
+        const dir = await path.join(main_dir, 'pretrained_models', $model, $embedd_savefile);
+        // const dir = await path.dirname(await name);
+        if (!(await fs.exists(dir))) return [];
 
         const pretrained_models_dir = await fs.readDir(dir);
-        // console.log(pretrained_models_dir);
-
         const childrens = pretrained_models_dir.filter(f => f.isDirectory);
-        console.log(childrens);
-        let valid_dirs: Record<string, string> = {};
+
+        let all_pkl_files: { name: string; pkl_file: string }[] = [];
+        // let valid_dirs: Record<string, string> = {};
         for (const child of childrens) {
-            // const child_dirs = await fs.readDir(child.path);
             const child_dirs = await fs.readDir(await path.join(dir, child.name));
-            if (child_dirs.some(c => c?.name.endsWith('.results.json'))) {
-                const dat_file = child_dirs.find(c => c?.name.endsWith('.dat.json'))?.name;
+            if (child_dirs.some(c => c.name.endsWith('.results.json'))) {
+                const dat_file = child_dirs.find(c => c.name.endsWith('.dat.json'))?.name;
                 if (child.name && dat_file) {
-                    valid_dirs[child.name] = dat_file.replace('.dat.json', '.pkl');
+                    const pkl_file = dat_file.replace('.dat.json', '.pkl');
+                    const child_dir = await path.join(dir, child.name);
+
+                    // new code
+                    const child_dir_contents = await fs.readDir(child_dir);
+                    const check_processed_subdirs = child_dir_contents.filter(
+                        f => f.isDirectory && f.name === 'processed_subdirs',
+                    );
+                    if (check_processed_subdirs.length > 0) {
+                        const processed_subdirs = await fs.readDir(await path.join(child_dir, 'processed_subdirs'));
+                        processed_subdirs.forEach(async subdir => {
+                            const subdir_contents = await fs.readDir(
+                                await path.join(child_dir, 'processed_subdirs', subdir.name),
+                            );
+                            if (subdir_contents.some(c => c.name.endsWith('.results.json'))) {
+                                const subdir_dat_file = subdir_contents.find(c => c.name.endsWith('.dat.json'))?.name;
+                                if (subdir_dat_file) {
+                                    const subdir_pkl_file = dat_file.replace('.dat.json', '.pkl');
+                                    const current_subdir_pkl_file = await path.join(
+                                        child_dir,
+                                        'processed_subdirs',
+                                        subdir.name,
+                                        subdir_pkl_file,
+                                    );
+                                    console.log({ name: subdir.name, current_subdir_pkl_file });
+                                    all_pkl_files.push({
+                                        name: `${child.name}: ${subdir.name}`,
+                                        pkl_file: current_subdir_pkl_file,
+                                    });
+                                }
+                            }
+                        });
+                    }
+                    // new code
+
+                    const current_pkl_file = await path.join(child_dir, pkl_file);
+                    all_pkl_files.push({ name: child.name, pkl_file: current_pkl_file });
                 }
             }
         }
-        return { dir, valid_dirs };
+        console.log({ dir, childrens });
+        return all_pkl_files;
     };
-
     let reload_available_plots = false;
+    let plotted_pkl_file = '';
 </script>
 
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
     <CustomTabs class="bordered" tabs={model_names.map(model => ({ tab: model }))} bind:active={$model} />
     {#key plot_data_ready}
         {#key reload_available_plots}
-            {#await get_valid_dirs($current_pretrained_dir) then value}
-                {#if value}
-                    <div class="flex-gap my-2">
-                        <div class="flex-gap">
-                            <button on:click={() => (reload_available_plots = !reload_available_plots)}
-                                ><RefreshCcw /></button
-                            >
-                            <span class="badge">Available plots</span>
-                        </div>
-                        <div class="join">
-                            {#each Object.keys(value.valid_dirs) as dir}
-                                <button
-                                    class="btn btn-sm btn-outline join-item"
-                                    on:click={async () => {
-                                        const pkl = await path.join(value.dir, dir, value.valid_dirs[dir]);
-                                        console.log(pkl);
-                                        await plot_from_datfile(pkl);
-                                    }}
-                                >
-                                    {dir}
-                                </button>
-                            {/each}
-                        </div>
+            <!-- {#await get_valid_dirs($current_pretrained_dir) then value} -->
+            {#await get_valid_dirs() then all_pkl_files}
+                <!-- {#if all_pkl_files && all_pkl_files.length > 0} -->
+                <div class="flex-gap my-2">
+                    <div class="flex-gap">
+                        <button on:click={() => (reload_available_plots = !reload_available_plots)}
+                            ><RefreshCcw /></button
+                        >
+                        <span class="badge">Available plots</span>
                     </div>
-                {/if}
+                    <div class="join">
+                        {#each all_pkl_files as { pkl_file, name } (pkl_file)}
+                            <button
+                                class="btn btn-sm btn-outline join-item"
+                                on:click={async () => {
+                                    // const pkl = await path.join(value.dir, dir, value.valid_dirs[dir]);
+                                    // console.log(pkl_file);
+                                    const root_dir = await $current_training_processed_data_directory;
+                                    plotted_pkl_file = pkl_file.replace(root_dir + path.sep(), '');
+                                    await plot_from_datfile(pkl_file);
+                                }}
+                            >
+                                {name}
+                            </button>
+                        {/each}
+                    </div>
+                </div>
+                <!-- {/if} -->
             {/await}
         {/key}
+        {#if plotted_pkl_file}
+            <span class="alert alert-info p-1 text-sm text-wrap break-all my-1">...{plotted_pkl_file}</span>
+        {/if}
         {#await get_pretrained_file($current_pretrained_file) then { datfile }}
             <FileExists name={datfile} let:basename={datfilename}>
                 <div class="grid grid-cols-[4fr_1fr] items-center gap-4">

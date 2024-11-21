@@ -169,64 +169,13 @@ export const pre_trained_filename = derived(
         else if ($fine_tune_model) name += `_${$grid_search_method}`;
         else name += `_${$experiment_id[$model]}`;
         // const $cleanlab = get(cleanlab);
-        if ($cleanlab.active) {
-            name += `_cleaned_${$cleanlab.model}`;
-        }
+        // if ($cleanlab.active) {
+        //     name += `_cleaned_${$cleanlab.model}`;
+        // }
         return name;
     },
 );
 
-export const current_pretrained_dir = derived(
-    [
-        current_training_processed_data_directory,
-        model,
-        embedd_savefile,
-        default_parameter_mode,
-        fine_tune_model,
-        grid_search_method,
-        experiment_id,
-        cleanlab,
-    ],
-    async ([
-        $current_training_processed_data_directory,
-        $model,
-        $embedd_savefile,
-        $default_parameter_mode,
-        $fine_tune_model,
-        $grid_search_method,
-        $experiment_id,
-        $cleanlab,
-    ]) => {
-        let dir = await path.join(
-            await $current_training_processed_data_directory,
-            'pretrained_models',
-            $model,
-            $embedd_savefile,
-        );
-
-        if ($default_parameter_mode) {
-            dir = await path.join(dir, 'default');
-        } else if ($fine_tune_model) {
-            dir = await path.join(dir, $grid_search_method);
-        } else {
-            dir = await path.join(dir, $experiment_id[$model]);
-        }
-        // const $cleanlab = get(cleanlab);
-        if ($cleanlab.active) {
-            dir += `_cleaned_${$cleanlab.model}`;
-            // dir = await path.join(dir, `cleaned_${$cleanlab.model}`);
-        }
-        return dir;
-    },
-);
-
-export const current_pretrained_file = derived(
-    [current_pretrained_dir, pre_trained_filename],
-    async ([$current_pretrained_dir, $pre_trained_filename]) => {
-        const dir = await $current_pretrained_dir;
-        return await path.join(dir, $pre_trained_filename.trim());
-    },
-);
 export const include_training_file_in_plot = localWritable('include_training_file_in_plot', true);
 
 export const available_transformations = [
@@ -270,5 +219,74 @@ export const y_transform = derived(
         if ($ytransformation !== 'None') values.transformation = $ytransformation;
         if ($yscaling !== 'None') values.scaling = $yscaling;
         return values;
+    },
+);
+
+export const current_pretrained_dir = derived(
+    [
+        current_training_processed_data_directory,
+        model,
+        embedd_savefile,
+        default_parameter_mode,
+        fine_tune_model,
+        grid_search_method,
+        experiment_id,
+        cleanlab,
+        y_transform,
+    ],
+    async ([
+        $current_training_processed_data_directory,
+        $model,
+        $embedd_savefile,
+        $default_parameter_mode,
+        $fine_tune_model,
+        $grid_search_method,
+        $experiment_id,
+        $cleanlab,
+        $y_transform,
+    ]) => {
+        let dir = await path.join(
+            await $current_training_processed_data_directory,
+            'pretrained_models',
+            $model,
+            $embedd_savefile,
+        );
+
+        if ($default_parameter_mode) {
+            dir = await path.join(dir, 'default');
+        } else if ($fine_tune_model) {
+            dir = await path.join(dir, $grid_search_method);
+        } else {
+            dir = await path.join(dir, $experiment_id[$model]);
+        }
+
+        if ($cleanlab.active || $y_transform.transformation || $y_transform.scaling) {
+            dir = await path.join(dir, 'processed_subdirs');
+        }
+
+        if ($cleanlab.active) {
+            // dir += `_cleaned_${$cleanlab.model}`;
+            dir = await path.join(dir, `cleaned_${$cleanlab.model}`);
+        }
+
+        if ($y_transform.transformation && $y_transform.scaling) {
+            dir = await path.join(
+                dir,
+                `ytransformation_${$y_transform.transformation}_yscaling_${$y_transform.scaling}`,
+            );
+        } else if ($y_transform.transformation) {
+            dir = await path.join(dir, `ytransformation_${$y_transform.transformation}`);
+        } else if ($y_transform.scaling) {
+            dir = await path.join(dir, `yscaling_${$y_transform.scaling}`);
+        }
+        return dir;
+    },
+);
+
+export const current_pretrained_file = derived(
+    [current_pretrained_dir, pre_trained_filename],
+    async ([$current_pretrained_dir, $pre_trained_filename]) => {
+        const dir = await $current_pretrained_dir;
+        return await path.join(dir, $pre_trained_filename.trim());
     },
 );
