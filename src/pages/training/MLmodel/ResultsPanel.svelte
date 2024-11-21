@@ -377,6 +377,7 @@
     };
     let reload_available_plots = false;
     let plotted_pkl_file = '';
+    let btn_modes = ['', 'btn-primary', 'btn-success', 'btn-warning', 'btn-danger'];
 </script>
 
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
@@ -393,13 +394,13 @@
     {#key plot_data_ready}
         {#key reload_available_plots}
             {#await get_valid_dirs() then all_pkl_files}
-                {#each Object.keys(all_pkl_files) as embedder_name}
+                {#each Object.keys(all_pkl_files) as embedder_name, ind}
                     {@const pkl_files = all_pkl_files[embedder_name]}
                     <div class="join flex-wrap items-center my-1">
                         <span class="text-sm mx-1">{embedder_name}: </span>
                         {#each pkl_files as { pkl_file, name } (pkl_file)}
                             <button
-                                class="btn btn-sm btn-outline join-item"
+                                class="btn btn-sm {btn_modes[ind]} join-item"
                                 on:click={async () => {
                                     const root_dir = await $current_training_processed_data_directory;
                                     plotted_pkl_file = pkl_file.replace(root_dir + path.sep(), '');
