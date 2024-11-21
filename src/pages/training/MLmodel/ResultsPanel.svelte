@@ -387,21 +387,20 @@
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
     <div class="grid gap-2">
         <CustomTabs class="bordered" tabs={model_names.map(model => ({ tab: model }))} bind:active={$model} />
-
-        <div role="tablist" class="tabs tabs-boxed w-max">
-            {#each tab_names as item}
-                <button
-                    role="tab"
-                    class="tab"
-                    class:tab-active={item === active_tab}
-                    on:click={() => (active_tab = item)}>{item}</button
-                >
-            {/each}
-        </div>
-
         {#await $current_pretrained_file then _}
             {#key plot_data_ready}
-                <div class:hidden={active_tab !== 'Plots'}>
+                <div class="common" transition:fade>
+                    <div role="tablist" class="tabs tabs-boxed w-max">
+                        {#each tab_names as item}
+                            <button
+                                role="tab"
+                                class="tab"
+                                class:tab-active={item === active_tab}
+                                on:click={() => (active_tab = item)}>{item}</button
+                            >
+                        {/each}
+                    </div>
+
                     <div class="flex-gap my-2">
                         <button class="btn btn-sm" on:click={() => (reload_available_plots = !reload_available_plots)}>
                             <span>Reload</span>
@@ -412,9 +411,10 @@
                             plot.
                         </span>
                     </div>
+
                     {#key reload_available_plots}
                         {#await get_valid_dirs($current_training_processed_data_directory) then all_pkl_files}
-                            <div class="grid gap-1">
+                            <div class="grid gap-1" transition:fade>
                                 {#each Object.keys(all_pkl_files) as embedder_name, ind}
                                     {@const pkl_files = all_pkl_files[embedder_name]}
                                     <div class="flex-gap flex-wrap my-1">
@@ -442,7 +442,9 @@
                     {#if plotted_pkl_file}
                         <span class="alert alert-info p-1 text-sm text-wrap break-all my-1">...{plotted_pkl_file}</span>
                     {/if}
+                </div>
 
+                <div class:hidden={active_tab !== 'Plots'} transition:fade>
                     {#await get_pretrained_file($current_pretrained_file) then { datfile }}
                         <FileExists name={datfile} let:basename={datfilename}>
                             <div class="grid grid-cols-[4fr_1fr] items-center gap-4">
@@ -497,15 +499,14 @@
 
                     <div class="grid gap-2">
                         <ResultsStats {significant_digits} />
-
                         {#if show_plot}
                             <ResultsPlots />
                         {/if}
-
                         <OptunaGridPlots />
                     </div>
                 </div>
-                <div class:hidden={active_tab !== 'Metrics Table'}>
+                <div class="grid gap-2" class:hidden={active_tab !== 'Metrics Table'} transition:fade>
+                    <ResultsStats {significant_digits} />
                     <MetricsTable />
                 </div>
             {/key}
