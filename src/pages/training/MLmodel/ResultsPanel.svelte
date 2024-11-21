@@ -373,10 +373,11 @@
                 <!-- {#if all_pkl_files && all_pkl_files.length > 0} -->
                 <div class="flex-gap my-2">
                     <div class="flex-gap">
-                        <button on:click={() => (reload_available_plots = !reload_available_plots)}
-                            ><RefreshCcw /></button
-                        >
                         <span class="badge">Available plots</span>
+                        <button class="btn btn-sm" on:click={() => (reload_available_plots = !reload_available_plots)}>
+                            <span>Reload</span>
+                            <RefreshCcw size="20" />
+                        </button>
                     </div>
                     <div class="join">
                         {#each all_pkl_files as { pkl_file, name } (pkl_file)}
