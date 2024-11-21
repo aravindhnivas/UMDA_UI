@@ -1,7 +1,9 @@
 <script lang="ts">
     import { ROOT_DIR } from '$pages/training/training_file/plot-analysis/stores';
     import { current_model_pkl_files, cv_fold, model } from '../stores';
+
     const columns = ['Mode', 'Embedder', 'Data shape', 'R2', 'MSE', 'RMSE', 'MAE'];
+
     function roundToUncertainty(value: number, uncertainty: number): string {
         // Handle invalid inputs
         if (uncertainty <= 0) {
@@ -85,7 +87,7 @@
                 const results_contents = await readJSON<Record<string, any>>(results_file);
                 const data_shapes = results_contents?.data_shapes;
                 let X_data_shape = data_shapes.X ? `${data_shapes.X[0]} x ${data_shapes.X[1]}` : 'N/A';
-                console.log('X_data_shape', X_data_shape);
+                // console.log('X_data_shape', X_data_shape);
 
                 // use sigfig_value from computed file
                 if (!('sigfig_value' in stats.test.r2)) {
