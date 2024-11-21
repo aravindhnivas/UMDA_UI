@@ -27,6 +27,7 @@
     import CustomTabs from '$lib/components/CustomTabs.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
     import { embedding, embeddings } from '../embedding/stores';
+    import { current_training_processed_data_directory } from '../training_file/plot-analysis/stores';
 
     let savedfile: string;
     let uploadedfile: { fullname: string; name: string; model: string } | null = null;
@@ -203,26 +204,28 @@
                     <button
                         class="btn btn-sm btn-outline"
                         on:click={async () => {
-                            const loc = await path.join(await $current_pretrained_dir, '../', $grid_search_method);
-                            let filename = $pre_trained_filename;
-                            const replace_val = $cleanlab.active ? `_cleaned_${$cleanlab.model}` : '';
-                            if ($default_parameter_mode) {
-                                filename = filename.replace(`_default${replace_val}`, `_${$grid_search_method}`);
-                            } else {
-                                filename = $pre_trained_filename.replace(
-                                    `_${$experiment_id[$model]}${replace_val}`,
-                                    `_${$grid_search_method}`,
-                                );
-                            }
-                            console.warn(filename);
+                            const main_dir = await $current_training_processed_data_directory;
+                            const loc = await path.join(
+                                main_dir,
+                                'pretrained_models',
+                                $model,
+                                `${$embedding}_embeddings`,
+                                $grid_search_method,
+                            );
                             const name = $fine_tune_model ? 'fine_tuned_parameters' : 'best_params';
-                            const best_params_filename = await path.join(loc, `${filename}.${name}.json`);
-                            if (!(await fs.exists(best_params_filename))) {
-                                console.warn(best_params_filename);
-                                toast.error('Best params file not found' + best_params_filename);
+                            const files = await fs.readDir(loc);
+                            const best_params_filename = files.filter(
+                                f => f.isFile && f.name.endsWith(name + '.json'),
+                            )[0];
+                            console.warn(best_params_filename);
+                            const best_params_file = await path.join(loc, best_params_filename.name);
+                            console.warn(best_params_file);
+                            if (!(await fs.exists(best_params_file))) {
+                                console.warn(best_params_file);
+                                toast.error('Best params file not found' + best_params_file);
                                 return;
                             }
-                            await load_parameters(best_params_filename);
+                            await load_parameters(best_params_file);
                             $experiment_id[$model] = 'best_model';
                         }}
                     >
