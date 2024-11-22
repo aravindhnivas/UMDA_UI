@@ -1,9 +1,13 @@
 <script lang="ts">
+    import CustomSelect from '$lib/components/CustomSelect.svelte';
     import { ROOT_DIR } from '$pages/training/training_file/plot-analysis/stores';
     import { current_model_pkl_files, cv_fold, model } from '../stores';
-    import { roundToUncertainty } from '$lib/utils';
+    // import { roundToUncertainty } from '$lib/utils';
 
     const columns = ['Mode', 'Embedder', 'Data shape', 'R2', 'MSE', 'RMSE', 'MAE'];
+
+    let best_metric_choice: CV_scoring_methods = 'mae';
+    let file_read = false;
 
     const read_all_pkl_files = async (
         filelist: Record<
@@ -17,7 +21,9 @@
     ) => {
         if (isEmpty(filelist)) return;
 
+        file_read = false;
         metric_rows = [];
+
         for (const embedder in filelist) {
             const modes = filelist[embedder];
             for (const { name, pkl_file } of modes) {
@@ -35,7 +41,7 @@
                 const results_contents = await readJSON<Record<string, any>>(results_file);
                 const data_shapes = results_contents?.data_shapes;
                 let X_data_shape = data_shapes.X ? `${data_shapes.X[0]} x ${data_shapes.X[1]}` : 'N/A';
-                // console.log('X_data_shape', X_data_shape);
+                // console.log(file_read, 'X_data_shape', X_data_shape);
 
                 // use sigfig_value from computed file
                 if (!('sigfig_value' in stats.test.r2)) {
@@ -53,25 +59,88 @@
                 // const { formattedString: mse } = roundToUncertainty(stats.test.mse.mean, stats.test.mse.std);
                 // const { formattedString: rmse } = roundToUncertainty(stats.test.rmse.mean, stats.test.rmse.std);
                 // const { formattedString: mae } = roundToUncertainty(stats.test.mae.mean, stats.test.mae.std);
-
-                if (!best_metric_mae) {
-                    best_metric_mae = stats.test.mae.mean;
-                    best_metric_row = metric_rows.length;
-                } else if (stats.test.mae.mean < best_metric_mae) {
-                    best_metric_mae = stats.test.mae.mean;
-                    best_metric_row = metric_rows.length;
-                }
-
                 metric_rows = [...metric_rows, [name, embedder, X_data_shape, r2, mse, rmse, mae]];
             }
         }
+        file_read = true;
+    };
+
+    function extractValueAndStd(str: string): { value: number | null; std: number | null } {
+        const regex = /^(-?\d*\.?\d+)\s*\((-?\d*\.?\d+)\)$/;
+        const match = str.match(regex);
+
+        return {
+            value: match ? parseFloat(match[1]) : null,
+            std: match ? parseFloat(match[2]) : null,
+        };
+    }
+
+    const compute_metric = (file_read: boolean) => {
+        if (!(file_read && best_metric_choice && metric_rows.length > 0)) return;
+        console.warn('computing metric');
+        let best_metric_val: number | undefined = undefined;
+        let best_metric_std: number | undefined = undefined;
+
+        best_metric_row = -1;
+
+        metric_rows.forEach((row, ind) => {
+            const { value: r2, std: r2_std } = extractValueAndStd(row[3]);
+            const { value: mse, std: mse_std } = extractValueAndStd(row[4]);
+            const { value: rmse, std: rmse_std } = extractValueAndStd(row[5]);
+            const { value: mae, std: mae_std } = extractValueAndStd(row[6]);
+
+            const metrics = {
+                r2: { mean: r2, std: r2_std },
+                mse: { mean: mse, std: mse_std },
+                rmse: { mean: rmse, std: rmse_std },
+                mae: { mean: mae, std: mae_std },
+            } as const;
+
+            const metric_val = metrics[best_metric_choice].mean;
+            const metric_std = metrics[best_metric_choice].std;
+
+            if (!(metric_val && metric_std)) return;
+
+            if (!(best_metric_val && best_metric_std)) {
+                best_metric_val = metric_val;
+                best_metric_std = metric_std;
+                best_metric_row = ind;
+            }
+
+            if (best_metric_choice === 'r2') {
+                if (metric_val > best_metric_val) {
+                    best_metric_val = metric_val;
+                    best_metric_std = metric_std;
+                    best_metric_row = ind;
+                } else if (metric_val === best_metric_val) {
+                    if (metric_std < best_metric_std) {
+                        best_metric_val = metric_val;
+                        best_metric_std = metric_std;
+                        best_metric_row = ind;
+                    }
+                }
+            } else {
+                if (metric_val < best_metric_val) {
+                    best_metric_val = metric_val;
+                    best_metric_std = metric_std;
+                    best_metric_row = ind;
+                } else if (metric_val === best_metric_val) {
+                    if (metric_std < best_metric_std) {
+                        best_metric_val = metric_val;
+                        best_metric_std = metric_std;
+                        best_metric_row = ind;
+                    }
+                }
+            }
+        });
+        console.log('best_metric_row', best_metric_row);
     };
 
     let best_metric_row = -1;
-    let best_metric_mae: number | undefined = undefined;
     let metric_rows: string[][] = [];
 
     $: read_all_pkl_files($current_model_pkl_files, $cv_fold);
+    $: compute_metric(file_read);
 
     const export_to_csv = async () => {
         const header = columns.join(',');
@@ -86,7 +155,13 @@
     };
 </script>
 
-<div class="flex">
+<div class="flex-gap items-end">
+    <CustomSelect
+        label="Best metric"
+        bind:value={best_metric_choice}
+        items={['r2', 'mse', 'rmse', 'mae']}
+        on:change={() => compute_metric(file_read)}
+    />
     <button class="btn btn-sm btn-outline" on:click={async () => await export_to_csv()}>Export (.csv)</button>
 </div>
 
