@@ -179,3 +179,86 @@ export const writeJSON = async (file: string, data: any, append: boolean = false
         await fs.writeTextFile(file, jsonString);
     }
 };
+
+interface RoundToUncertaintyResult {
+    value: number;
+    uncertainty: number;
+    formattedString: string;
+}
+
+export function roundToUncertainty(value: number, uncertainty: number): RoundToUncertaintyResult {
+    if (uncertainty <= 0) {
+        throw new Error('Uncertainty must be positive');
+    }
+    if (typeof value !== 'number' || typeof uncertainty !== 'number') {
+        throw new Error('Both value and uncertainty must be numbers');
+    }
+
+    // Convert uncertainty to scientific notation to get magnitude
+    const expStr = uncertainty.toExponential(0); // Round to 1 sig fig
+    const expMatch = expStr.match(/e([+-]\d+)$/);
+    if (!expMatch) throw new Error('Failed to parse uncertainty');
+
+    const exponent = parseInt(expMatch[1]);
+    const decimalPlaces = exponent < 0 ? -exponent : 0;
+
+    // Round both values to appropriate decimal places
+    const roundingFactor = Math.pow(10, decimalPlaces);
+    const roundedValue = Math.round(value * roundingFactor) / roundingFactor;
+    const roundedUncertainty = 1 / roundingFactor; // Always 1 in the last decimal place
+
+    return {
+        value: roundedValue,
+        uncertainty: roundedUncertainty,
+        formattedString: `${roundedValue.toFixed(decimalPlaces)} (1)`,
+    };
+}
+
+// function roundToUncertainty(value: number, uncertainty: number): string {
+//     // Handle invalid inputs
+//     if (uncertainty <= 0) {
+//         throw new Error('Uncertainty must be positive');
+//     }
+//     if (typeof value !== 'number' || typeof uncertainty !== 'number') {
+//         throw new Error('Both value and uncertainty must be numbers');
+//     }
+
+//     // Find the position of the first significant digit in the uncertainty
+//     const uncertaintyStr = uncertainty.toString();
+//     let firstSigDigitPos: number;
+
+//     if (uncertainty >= 1) {
+//         // For uncertainties ≥ 1, count digits before decimal point
+//         firstSigDigitPos = Math.floor(Math.log10(uncertainty));
+//         // Round to nearest power of 10
+//         const roundingFactor = Math.pow(10, firstSigDigitPos);
+//         const roundedValue = Math.round(value / roundingFactor) * roundingFactor;
+//         // Convert uncertainty to last digit representation
+//         const uncertaintyInLastDigit = Math.round(uncertainty / roundingFactor);
+//         return `${roundedValue} (${uncertaintyInLastDigit})`;
+//     } else {
+//         // For uncertainties < 1, find first non-zero digit
+//         const match = uncertaintyStr.match(/[1-9]/);
+//         if (!match) {
+//             throw new Error('Invalid uncertainty value');
+//         }
+
+//         const decimalIndex = uncertaintyStr.indexOf('.');
+//         // Initialize to position before decimal
+//         firstSigDigitPos = -decimalIndex - 1;
+
+//         // If we found a match and it's after the decimal point
+//         if (match.index !== undefined && match.index > decimalIndex) {
+//             firstSigDigitPos = -(match.index - decimalIndex);
+//         }
+
+//         // Round both value and uncertainty to appropriate decimal places
+//         const decimalPlaces = -firstSigDigitPos;
+//         const roundingFactor = Math.pow(10, decimalPlaces);
+//         const roundedValue = Math.round(value * roundingFactor) / roundingFactor;
+//         // Convert uncertainty to last digit representation
+//         const uncertaintyInLastDigit = Math.round(uncertainty * roundingFactor);
+
+//         return `${roundedValue.toFixed(decimalPlaces)} (${uncertaintyInLastDigit})`;
+//     }
+// }
