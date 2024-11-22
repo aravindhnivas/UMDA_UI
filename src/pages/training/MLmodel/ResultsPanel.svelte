@@ -306,62 +306,77 @@
 
     const fetch_all_pkl_files = async (dir: string) => {
         if (!(await fs.exists(dir))) return [];
-        const pretrained_models_dir = await fs.readDir(dir);
-        const childrens = pretrained_models_dir.filter(f => f.isDirectory);
 
-        let all_pkl_files: { name: string; pkl_file: string }[] = [];
-        // let valid_dirs: Record<string, string> = {};
-        for (const child of childrens) {
-            const child_dirs = await fs.readDir(await path.join(dir, child.name));
-            if (child_dirs.some(c => c.name.endsWith('.results.json'))) {
-                const dat_file = child_dirs.find(c => c.name.endsWith('.dat.json'))?.name;
-                if (child.name && dat_file) {
-                    const pkl_file = dat_file.replace('.dat.json', '.pkl');
-                    const child_dir = await path.join(dir, child.name);
+        const getAllPklFiles = async (
+            directory: string,
+            parentName = '',
+        ): Promise<Array<{ name: string; pkl_file: string }>> => {
+            const files = await fs.readDir(directory);
+            const results: Array<{ name: string; pkl_file: string }> = [];
 
-                    // new code
-                    const child_dir_contents = await fs.readDir(child_dir);
-                    const check_processed_subdirs = child_dir_contents.filter(
-                        f => f.isDirectory && f.name === 'processed_subdirs',
-                    );
-                    if (check_processed_subdirs.length > 0) {
-                        const processed_subdirs = await fs.readDir(await path.join(child_dir, 'processed_subdirs'));
-                        processed_subdirs
-                            .filter(f => f.isDirectory)
-                            .forEach(async subdir => {
-                                const subdir_child_dir = await path.join(child_dir, 'processed_subdirs', subdir.name);
-                                const subdir_contents = await fs.readDir(subdir_child_dir);
+            // Helper function to process a directory and find pkl files
+            const processDirForPkl = async (dirPath: string, dirName: string) => {
+                const contents = await fs.readDir(dirPath);
 
-                                if (subdir_contents.some(c => c.name.endsWith('.results.json'))) {
-                                    const subdir_dat_file = subdir_contents.find(c =>
-                                        c.name.endsWith('.dat.json'),
-                                    )?.name;
-                                    if (subdir_dat_file) {
-                                        const subdir_pkl_file = dat_file.replace('.dat.json', '.pkl');
-                                        const current_subdir_pkl_file = await path.join(
-                                            child_dir,
-                                            'processed_subdirs',
-                                            subdir.name,
-                                            subdir_pkl_file,
-                                        );
-                                        console.log({ name: subdir.name, current_subdir_pkl_file });
-                                        all_pkl_files.push({
-                                            name: `${child.name}: ${subdir.name}`,
-                                            pkl_file: current_subdir_pkl_file,
-                                        });
-                                    }
-                                }
-                            });
+                if (!contents.some(f => f.name.endsWith('.results.json'))) return null;
+
+                const datFile = contents.find(f => f.name.endsWith('.dat.json'))?.name;
+                if (!datFile) return null;
+
+                const pklFile = datFile.replace('.dat.json', '.pkl');
+                return {
+                    name: parentName ? `${parentName}: ${dirName}` : dirName,
+                    pkl_file: await path.join(dirPath, pklFile),
+                };
+            };
+
+            const searchSubdir = async (dirPath: string, name: string) => {
+                let results = [] as Array<{ name: string; pkl_file: string }>;
+                if (!(await fs.exists(dirPath))) return results;
+                const subdirs = (await fs.readDir(dirPath)).filter(f => f.isDirectory);
+
+                for (const subdir of subdirs) {
+                    const subdirPath = await path.join(dirPath, subdir.name);
+                    const subdirResult = await processDirForPkl(subdirPath, subdir.name);
+                    if (subdirResult) {
+                        results.push({
+                            ...subdirResult,
+                            name: `${name}: ${subdir.name}`,
+                        });
                     }
-                    // new code
-
-                    const current_pkl_file = await path.join(child_dir, pkl_file);
-                    all_pkl_files.push({ name: child.name, pkl_file: current_pkl_file });
+                    const subsubdirs = (await fs.readDir(subdirPath)).filter(f => f.isDirectory);
+                    for (const subsubdir of subsubdirs) {
+                        const subsubdirPath = await path.join(subdirPath, subsubdir.name);
+                        const subsubdirResult = await processDirForPkl(subsubdirPath, subsubdir.name);
+                        if (subsubdirResult) {
+                            results.push({
+                                ...subsubdirResult,
+                                name: `${name}: ${subdir.name}: ${subsubdir.name}`,
+                            });
+                        }
+                    }
                 }
+                return results;
+            };
+
+            // Process each directory
+            for (const entry of files.filter(f => f.isDirectory)) {
+                const currentPath = await path.join(directory, entry.name);
+
+                // Check main directory
+                const mainDirResult = await processDirForPkl(currentPath, entry.name);
+                if (mainDirResult) {
+                    results.push(mainDirResult);
+                }
+
+                // Check processed_subdirs if they exist
+                const processedSubdirsPath = await path.join(currentPath, 'processed_subdirs');
+                const subdir_results = await searchSubdir(processedSubdirsPath, entry.name);
+                results.push(...subdir_results);
             }
-        }
-        // console.log({ dir, childrens });
-        return all_pkl_files;
+            return results;
+        };
+        return getAllPklFiles(dir);
     };
 
     const get_valid_dirs = async (name: Promise<string>) => {
@@ -376,6 +391,7 @@
             all_pkl_files[child.name.replace('_embeddings', '')] = pkl_files;
         }
         current_model_pkl_files.set(all_pkl_files);
+        // console.log({ all_pkl_files });
         return all_pkl_files;
     };
 
@@ -386,11 +402,32 @@
 
     const tab_names = ['Plots', 'Metrics Table'];
     let active_tab = 'Plots';
+
+    // $: if ($current_model_pkl_files) {
+    //     console.log('current_model_pkl_files', $current_model_pkl_files);
+    //     Object.keys($current_model_pkl_files).forEach(embedder_name => {
+    //         $current_model_pkl_files[embedder_name].forEach(({ name, pkl_file }) => {
+    //             const restName = name.split(':');
+    //             console.log(`${embedder_name} -> ${restName.map(f => f.trim()).join(' -> ')}`);
+    //         });
+    //     });
+    // }
 </script>
 
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
     <div class="grid gap-2">
         <CustomTabs class="bordered" tabs={model_names.map(model => ({ tab: model }))} bind:active={$model} />
+
+        <!-- <div class="breadcrumbs text-sm grid gap-2">
+            <ul>
+                <li><button class="btn btn-xs btn-outline"> Home </button></li>
+                <li><button class="btn btn-xs btn-outline"> Docs </button></li>
+            </ul>
+            <ul>
+                <li><button class="btn btn-xs btn-outline"> Home </button></li>
+                <li><button class="btn btn-xs btn-outline"> Docs </button></li>
+            </ul>
+        </div> -->
         {#await $current_pretrained_file then _}
             {#key plot_data_ready}
                 <div class="grid gap-2" transition:fade>
