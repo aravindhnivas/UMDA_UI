@@ -259,14 +259,11 @@ export const current_pretrained_dir = derived(
         }
 
         if ($y_transform.transformation && $y_transform.scaling) {
-            dir = await path.join(
-                dir,
-                `ytransformation_${$y_transform.transformation}_yscaling_${$y_transform.scaling}`,
-            );
+            dir = await path.join(dir, `${$y_transform.transformation}_${$y_transform.scaling}`);
         } else if ($y_transform.transformation) {
-            dir = await path.join(dir, `ytransformation_${$y_transform.transformation}`);
+            dir = await path.join(dir, $y_transform.transformation);
         } else if ($y_transform.scaling) {
-            dir = await path.join(dir, `yscaling_${$y_transform.scaling}`);
+            dir = await path.join(dir, $y_transform.scaling);
         }
         return dir;
     },
