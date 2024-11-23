@@ -435,17 +435,6 @@
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
     <div class="grid gap-2">
         <CustomTabs class="bordered" tabs={model_names.map(model => ({ tab: model }))} bind:active={$model} />
-
-        <!-- <div class="breadcrumbs text-sm grid gap-2">
-            <ul>
-                <li><button class="btn btn-xs btn-outline"> Home </button></li>
-                <li><button class="btn btn-xs btn-outline"> Docs </button></li>
-            </ul>
-            <ul>
-                <li><button class="btn btn-xs btn-outline"> Home </button></li>
-                <li><button class="btn btn-xs btn-outline"> Docs </button></li>
-            </ul>
-        </div> -->
         {#await $current_pretrained_file then _}
             {#key plot_data_ready}
                 <div class="grid gap-2" transition:fade>
@@ -480,7 +469,7 @@
                                         <span class="text-sm mx-1">{embedder_name}: </span>
                                         {#each pkl_files as { pkl_file, name } (pkl_file)}
                                             <button
-                                                class="btn btn-sm {btn_modes[ind]}"
+                                                class="btn btn-xs {btn_modes[ind]}"
                                                 on:click={async () => {
                                                     const root_dir = await $current_training_processed_data_directory;
                                                     plotted_pkl_file = pkl_file.replace(root_dir + path.sep(), '');
