@@ -304,8 +304,12 @@
     let available_cv_folds: string[] = [];
     let current_cv_fold = '';
 
+    let result_names = {} as Record<string, Record<string, { pkl: string; childrens: Record<string, any> }>>;
+
     const fetch_all_pkl_files = async (dir: string) => {
         if (!(await fs.exists(dir))) return [];
+        const fname = await path.basename(dir);
+        result_names[fname] = {};
 
         const getAllPklFiles = async (
             directory: string,
@@ -343,6 +347,14 @@
                             ...subdirResult,
                             name: `${name}: ${subdir.name}`,
                         });
+                        // result_names[name][subdir.name] = {};
+                        result_names[fname][name].childrens = {
+                            ...result_names[fname][name].childrens,
+                            [subdir.name]: {
+                                pkl: subdirResult.pkl_file,
+                                childrens: [],
+                            },
+                        };
                     }
                     const subsubdirs = (await fs.readDir(subdirPath)).filter(f => f.isDirectory);
                     for (const subsubdir of subsubdirs) {
@@ -353,6 +365,14 @@
                                 ...subsubdirResult,
                                 name: `${name}: ${subdir.name}: ${subsubdir.name}`,
                             });
+                            // result_names[name][subdir.name][subsubdir.name] = {};
+                            result_names[fname][name].childrens[subdir.name].childrens = {
+                                ...result_names[fname][name].childrens[subdir.name].childrens,
+                                [subsubdir.name]: {
+                                    pkl: subsubdirResult.pkl_file,
+                                    childrens: [],
+                                },
+                            };
                         }
                     }
                 }
@@ -367,6 +387,12 @@
                 const mainDirResult = await processDirForPkl(currentPath, entry.name);
                 if (mainDirResult) {
                     results.push(mainDirResult);
+
+                    result_names[fname][entry.name] = {
+                        ...result_names[fname][entry.name],
+                        pkl: mainDirResult.pkl_file,
+                        childrens: {},
+                    };
                 }
 
                 // Check processed_subdirs if they exist
@@ -403,15 +429,7 @@
     const tab_names = ['Plots', 'Metrics Table'];
     let active_tab = 'Plots';
 
-    // $: if ($current_model_pkl_files) {
-    //     console.log('current_model_pkl_files', $current_model_pkl_files);
-    //     Object.keys($current_model_pkl_files).forEach(embedder_name => {
-    //         $current_model_pkl_files[embedder_name].forEach(({ name, pkl_file }) => {
-    //             const restName = name.split(':');
-    //             console.log(`${embedder_name} -> ${restName.map(f => f.trim()).join(' -> ')}`);
-    //         });
-    //     });
-    // }
+    $: console.log(result_names);
 </script>
 
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
