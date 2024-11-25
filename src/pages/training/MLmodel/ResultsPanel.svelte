@@ -418,7 +418,8 @@
         }
         current_model_pkl_files.set(all_pkl_files);
         // console.log({ all_pkl_files });
-        return all_pkl_files;
+        // return all_pkl_files;
+        return result_names;
     };
 
     let reload_available_plots = false;
@@ -429,7 +430,14 @@
     const tab_names = ['Plots', 'Metrics Table'];
     let active_tab = 'Plots';
 
-    $: console.log(result_names);
+    // $: console.log(result_names);
+    let plotted_dirname = '';
+    const plot_from_pkl = async (pkl_file: string, name: string = '') => {
+        // console.log('Plotting from pkl file', name);
+        plotted_dirname = name;
+        plotted_pkl_file = pkl_file;
+        await plot_from_datfile(pkl_file);
+    };
 </script>
 
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
@@ -461,50 +469,73 @@
                     </div>
 
                     {#key reload_available_plots}
-                        {#await get_valid_dirs($current_training_processed_data_directory) then all_pkl_files}
-                            <div class="grid gap-1" transition:fade>
-                                {#each Object.keys(all_pkl_files) as embedder_name, ind}
-                                    {@const pkl_files = all_pkl_files[embedder_name]}
-                                    <div class="flex-gap flex-wrap my-1">
-                                        <span class="text-sm mx-1">{embedder_name}: </span>
-                                        {#each pkl_files as { pkl_file, name } (pkl_file)}
-                                            <button
-                                                class="btn btn-xs {btn_modes[ind]}"
-                                                on:click={async () => {
-                                                    const root_dir = await $current_training_processed_data_directory;
-                                                    // plotted_pkl_file = pkl_file.replace(root_dir + path.sep(), '');
-                                                    plotted_pkl_file = pkl_file;
-                                                    await plot_from_datfile(pkl_file);
-                                                }}
-                                            >
-                                                <!-- {#if plotted_pkl_file && pkl_file.includes(plotted_pkl_file)} -->
-                                                {#if plotted_pkl_file === pkl_file}
-                                                    <span class="badge badge-sm badge-primary"></span>
-                                                {/if}
-                                                {name}
-                                            </button>
+                        {#await get_valid_dirs($current_training_processed_data_directory) then result_names}
+                            <div>
+                                {#each Object.entries(result_names) as [category, parents] (category)}
+                                    {@const embedder = category.replace('_embeddings', '')}
+                                    <div>
+                                        <h2 class="text-xl font-semibold">
+                                            {embedder} Plots ({$current_model_pkl_files[embedder].length})
+                                        </h2>
+                                        {#each Object.entries(parents) as [parent, parentData] (parentData.pkl)}
+                                            {@const name = `${embedder}: ${parent}`}
+                                            <div class="breadcrumbs text-sm">
+                                                <ul>
+                                                    <li>
+                                                        ({$current_model_pkl_files[embedder].filter(f =>
+                                                            f.name.startsWith(parent),
+                                                        ).length})
+                                                    </li>
+                                                    <!-- Parent -->
+                                                    <li>
+                                                        <button
+                                                            class="btn btn-xs btn-outline"
+                                                            on:click={() => plot_from_pkl(parentData.pkl, name)}
+                                                        >
+                                                            {parent}
+                                                        </button>
+                                                    </li>
+
+                                                    <!-- Children -->
+                                                    {#if Object.keys(parentData.childrens).length > 0}
+                                                        <li class="join">
+                                                            {#each Object.entries(parentData.childrens) as [child, childData]}
+                                                                {@const name = `${embedder}: ${parent}: ${child}`}
+                                                                <button
+                                                                    class="btn btn-xs btn-outline join-item"
+                                                                    on:click={() => plot_from_pkl(childData.pkl, name)}
+                                                                >
+                                                                    {child}
+                                                                </button>
+                                                            {/each}
+                                                        </li>
+                                                    {/if}
+
+                                                    <!-- Grandchildren -->
+                                                    {#each Object.entries(parentData.childrens) as [child, childData]}
+                                                        {#if childData.childrens && Object.keys(childData.childrens).length > 0}
+                                                            <li class="join">
+                                                                {#each Object.entries(childData.childrens) as [grandchild, grandchildData]}
+                                                                    {@const name = `${embedder}: ${parent}: ${child}: ${grandchild}`}
+                                                                    <button
+                                                                        class="btn btn-xs btn-outline join-item"
+                                                                        on:click={() =>
+                                                                            plot_from_pkl(grandchildData.pkl, name)}
+                                                                    >
+                                                                        {child}: {grandchild}
+                                                                    </button>
+                                                                {/each}
+                                                            </li>
+                                                        {/if}
+                                                    {/each}
+                                                </ul>
+                                            </div>
                                         {/each}
                                     </div>
                                 {/each}
                             </div>
                         {/await}
                     {/key}
-                    {#if plotted_pkl_file}
-                        <div class="grid grid-cols-[1fr_auto] gap-1 items-center">
-                            <span class="alert alert-info p-1 text-sm text-wrap break-all my-1">
-                                ...{plotted_pkl_file.replace($ROOT_DIR + path.sep(), '')}
-                            </span>
-                            <button
-                                class="btn btn-sm btn-outline"
-                                on:click={async () => {
-                                    await shell.open(await path.dirname(plotted_pkl_file));
-                                }}
-                            >
-                                <span>Open folder</span>
-                                <ExternalLink size="20" />
-                            </button>
-                        </div>
-                    {/if}
 
                     <div class="flex my-2 gap-4 items-end">
                         <CustomInput
@@ -550,6 +581,7 @@
                                         class="btn btn-sm btn-outline"
                                         on:click={async () => {
                                             plotted_pkl_file = '';
+                                            plotted_dirname = '';
                                             await plot_from_datfile();
                                         }}>Current plot</button
                                     >
@@ -566,6 +598,24 @@
                     <div class="grid gap-2">
                         <ResultsStats {significant_digits} />
                     </div>
+
+                    {#if plotted_pkl_file}
+                        <span class="badge">{plotted_dirname}</span>
+                        <div class="grid grid-cols-[1fr_auto] gap-1 items-center">
+                            <span class="alert p-1 text-sm text-wrap break-all my-1">
+                                ...{plotted_pkl_file.replace($ROOT_DIR + path.sep(), '')}
+                            </span>
+                            <button
+                                class="btn btn-sm btn-outline"
+                                on:click={async () => {
+                                    await shell.open(await path.dirname(plotted_pkl_file));
+                                }}
+                            >
+                                <span>Open folder</span>
+                                <ExternalLink size="20" />
+                            </button>
+                        </div>
+                    {/if}
                 </div>
 
                 <div class="grid gap-2" class:hidden={active_tab !== 'Plots'} transition:fade>
