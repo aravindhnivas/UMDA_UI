@@ -33,10 +33,17 @@
         <span class="badge">MAE</span>
     </div>
 
-    <Stats stats={r.train_stats} rcv={r.cv_scores?.train} cv_fold={r.cv_fold} {significant_digits}>
+    <Stats stats={r.train_stats} rcv={r.cv_scores?.train} cv_fold={r.cv_fold} {significant_digits} data_type="Train">
         Train stats ({train_ratio.toFixed(0)}% data = {r.data_shapes.y_train})
     </Stats>
-    <Stats bg_color="info" stats={r.test_stats} rcv={r.cv_scores?.test} cv_fold={r.cv_fold} {significant_digits}>
+    <Stats
+        bg_color="info"
+        stats={r.test_stats}
+        rcv={r.cv_scores?.test}
+        cv_fold={r.cv_fold}
+        {significant_digits}
+        data_type="Test"
+    >
         Test stats ({test_ratio.toFixed(0)}% data = {r.data_shapes.y_test})
     </Stats>
 

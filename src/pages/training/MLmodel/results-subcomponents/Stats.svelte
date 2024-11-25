@@ -4,6 +4,7 @@
     export let cv_fold: number | undefined;
     export let significant_digits: number = 2;
     export let bg_color: 'warning' | 'info' = 'warning';
+    export let data_type: 'Train' | 'Test';
 
     const metrics = ['r2', 'mse', 'rmse', 'mae'] as const;
 
@@ -38,7 +39,7 @@
 </div>
 {#if rcv}
     <div class="grid grid-cols-6 gap-2 items-center w-3xl">
-        <span class="badge col-span-2">{cv_fold}-fold CV:</span>
+        <span class="badge col-span-2">{data_type} {cv_fold}-fold CV:</span>
         {#each metrics as metric}
             {#if rcv[metric]}
                 {@const mean = validate_stat(rcv[metric].mean, significant_digits)}
