@@ -417,23 +417,17 @@
             all_pkl_files[child.name.replace('_embeddings', '')] = pkl_files;
         }
         current_model_pkl_files.set(all_pkl_files);
-        // console.log({ all_pkl_files });
-        // return all_pkl_files;
         return result_names;
     };
 
     let reload_available_plots = false;
     let plotted_pkl_file = '';
-    let btn_modes = ['btn-outline', ''];
     let show_plot = true;
 
     const tab_names = ['Plots', 'Metrics Table'];
     let active_tab = 'Plots';
-
-    // $: console.log(result_names);
     let plotted_dirname = '';
     const plot_from_pkl = async (pkl_file: string, name: string = '') => {
-        // console.log('Plotting from pkl file', name);
         plotted_dirname = name;
         plotted_pkl_file = pkl_file;
         await plot_from_datfile(pkl_file);
