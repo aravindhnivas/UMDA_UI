@@ -490,6 +490,7 @@
                                                     <li>
                                                         <button
                                                             class="btn btn-xs btn-outline"
+                                                            class:btn-active={plotted_pkl_file === parentData.pkl}
                                                             on:click={() => plot_from_pkl(parentData.pkl, name)}
                                                         >
                                                             {parent}
@@ -503,6 +504,8 @@
                                                                 {@const name = `${embedder}: ${parent}: ${child}`}
                                                                 <button
                                                                     class="btn btn-xs btn-outline join-item"
+                                                                    class:btn-active={plotted_pkl_file ===
+                                                                        childData.pkl}
                                                                     on:click={() => plot_from_pkl(childData.pkl, name)}
                                                                 >
                                                                     {child}
@@ -519,6 +522,8 @@
                                                                     {@const name = `${embedder}: ${parent}: ${child}: ${grandchild}`}
                                                                     <button
                                                                         class="btn btn-xs btn-outline join-item"
+                                                                        class:btn-active={plotted_pkl_file ===
+                                                                            grandchildData.pkl}
                                                                         on:click={() =>
                                                                             plot_from_pkl(grandchildData.pkl, name)}
                                                                     >
