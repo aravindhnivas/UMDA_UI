@@ -12,14 +12,14 @@
     import Checkbox from '$lib/components/Checkbox.svelte';
     import CustomPanel from '$lib/components/CustomPanel.svelte';
     import { PlotlyColors } from '$lib/utils';
-    import { CheckCheck } from 'lucide-svelte/icons';
+    import { CheckCheck, ExternalLink } from 'lucide-svelte/icons';
     import { CustomInput } from '$lib/components';
     import ResultsStats from './results-subcomponents/ResultsStats.svelte';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
     import FileExists from '$lib/components/FileExists.svelte';
     import { RefreshCcw } from 'lucide-svelte/icons';
     import CustomTabs from '$lib/components/CustomTabs.svelte';
-    import { current_training_processed_data_directory } from '../training_file/plot-analysis/stores';
+    import { current_training_processed_data_directory, ROOT_DIR } from '../training_file/plot-analysis/stores';
     import ResultsPlots from './results-subcomponents/ResultsPlots.svelte';
     import OptunaGridPlots from './results-subcomponents/OptunaGridPlots.svelte';
     import MetricsTable from './results-subcomponents/MetricsTable.svelte';
@@ -472,11 +472,13 @@
                                                 class="btn btn-xs {btn_modes[ind]}"
                                                 on:click={async () => {
                                                     const root_dir = await $current_training_processed_data_directory;
-                                                    plotted_pkl_file = pkl_file.replace(root_dir + path.sep(), '');
+                                                    // plotted_pkl_file = pkl_file.replace(root_dir + path.sep(), '');
+                                                    plotted_pkl_file = pkl_file;
                                                     await plot_from_datfile(pkl_file);
                                                 }}
                                             >
-                                                {#if plotted_pkl_file && pkl_file.includes(plotted_pkl_file)}
+                                                <!-- {#if plotted_pkl_file && pkl_file.includes(plotted_pkl_file)} -->
+                                                {#if plotted_pkl_file === pkl_file}
                                                     <span class="badge badge-sm badge-primary"></span>
                                                 {/if}
                                                 {name}
@@ -487,9 +489,21 @@
                             </div>
                         {/await}
                     {/key}
-
                     {#if plotted_pkl_file}
-                        <span class="alert alert-info p-1 text-sm text-wrap break-all my-1">...{plotted_pkl_file}</span>
+                        <div class="grid grid-cols-[1fr_auto] gap-1 items-center">
+                            <span class="alert alert-info p-1 text-sm text-wrap break-all my-1">
+                                ...{plotted_pkl_file.replace($ROOT_DIR + path.sep(), '')}
+                            </span>
+                            <button
+                                class="btn btn-sm btn-outline"
+                                on:click={async () => {
+                                    await shell.open(await path.dirname(plotted_pkl_file));
+                                }}
+                            >
+                                <span>Open folder</span>
+                                <ExternalLink size="20" />
+                            </button>
+                        </div>
                     {/if}
 
                     <div class="flex my-2 gap-4 items-end">
