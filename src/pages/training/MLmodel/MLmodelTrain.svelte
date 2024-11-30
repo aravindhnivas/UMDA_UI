@@ -52,7 +52,6 @@
         tune_parameters,
         variable_type,
         optuna_storage_file,
-        estimator,
         cleanlab,
         seed,
         enable_y_transformation_and_scaling,
@@ -214,12 +213,6 @@
             return;
         }
 
-        // console.log('Estimator', $estimator);
-        if ($estimator.load && !(await fs.exists($estimator.file))) {
-            toast.error('Cannot find estimator file. Please uncheck the load estimator option');
-            return;
-        }
-
         const pre_trained_file = await $current_pretrained_file;
         if (!$overwrite_model && (await fs.exists(pre_trained_file + '.pkl'))) {
             const overwrite = await dialog.confirm(
@@ -232,17 +225,15 @@
         let clonedFineTunedValues: Record<string, any> = {};
         let clonedValues: Record<string, string | boolean | number | null> = {};
 
-        if (!$estimator.load) {
-            if ($fine_tune_model) {
-                clonedFineTunedValues = (await gather_fine_tuned_values()) || {};
-                if (isEmpty(clonedFineTunedValues)) return;
-            }
-            const values = gather_params(clonedFineTunedValues);
-            clonedValues = gather_final_params_values(values);
-            if (!$default_parameter_mode && isEmpty(clonedValues)) {
-                toast.error('Please provide hyperparameters or set to default');
-                return;
-            }
+        if ($fine_tune_model) {
+            clonedFineTunedValues = (await gather_fine_tuned_values()) || {};
+            if (isEmpty(clonedFineTunedValues)) return;
+        }
+        const values = gather_params(clonedFineTunedValues);
+        clonedValues = gather_final_params_values(values);
+        if (!$default_parameter_mode && isEmpty(clonedValues)) {
+            toast.error('Please provide hyperparameters or set to default');
+            return;
         }
 
         const learning_curve_train_sizes = gather_learning_curve_data();
@@ -296,7 +287,6 @@
             analyse_shapley_values: $analyse_shapley_values,
             optuna_resume_study: $optuna_resume_study,
             optuna_storage_file: await $optuna_storage_file,
-            estimator_file: $estimator.load ? $estimator.file : null,
             seed: $seed.lock ? null : $seed.value,
             cleanlab: $cleanlab.active ? $cleanlab.model : null,
             clean_only_train_data: $cleanlab.only_train_data,

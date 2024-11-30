@@ -15,11 +15,6 @@ export const optuna_storage_file = derived(
     },
 );
 
-export const estimator = writable({
-    load: false,
-    file: '',
-});
-
 export const cleanlab = writable<{ active: boolean; model: MLModel; only_train_data: boolean }>({
     active: false,
     model: 'xgboost',

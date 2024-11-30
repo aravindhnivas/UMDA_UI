@@ -31,9 +31,7 @@
         test_size,
         yscaling,
         ytransformation,
-        estimator,
         cleanlab,
-        current_pretrained_file,
         model_names,
         enable_y_transformation_and_scaling,
     } from './stores';
@@ -47,17 +45,6 @@
     ];
     const elevation = 3;
     const paper_style = 'background-color: transparent;';
-
-    const get_all_estimators = async (name: Promise<string>) => {
-        // if (!load) return;
-        $estimator.file = '';
-        const file = await name;
-        const pkl_file = file.endsWith('.pkl') ? file : file + '.pkl';
-        if (!(await fs.exists(pkl_file))) return;
-        $estimator.file = pkl_file;
-        return pkl_file;
-    };
-    $: get_all_estimators($current_pretrained_file);
 </script>
 
 <CustomPanel open={true}>
@@ -305,15 +292,6 @@
                             check="checkbox"
                         />
                     </div>
-                </div>
-            </Content>
-        </Paper>
-        <Paper transition {elevation} style={paper_style}>
-            <Subtitle>Estimator</Subtitle>
-            <Content>
-                <div style="height: 150px;">
-                    <Checkbox bind:value={$estimator.load} label="load_estimator" check="checkbox" />
-                    <span class="text-xs text-wrap break-words">{$estimator.file}</span>
                 </div>
             </Content>
         </Paper>
