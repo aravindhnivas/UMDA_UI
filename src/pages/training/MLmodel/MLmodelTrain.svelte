@@ -263,7 +263,7 @@
             optuna_n_warmup_steps: isString($optuna_n_warmup_steps)
                 ? parseInt($optuna_n_warmup_steps)
                 : $optuna_n_warmup_steps,
-            training_column_name_y: $training_column_name_y,
+
             parameters: $default_parameter_mode ? {} : clonedValues,
             fine_tuned_values: $default_parameter_mode ? {} : clonedFineTunedValues,
             fine_tune_model: $fine_tune_model,
@@ -301,6 +301,8 @@
             cleanlab: $cleanlab.active ? $cleanlab.model : null,
             clean_only_train_data: $cleanlab.only_train_data,
             index_col: $training_column_name_index,
+            training_column_name_y: $training_column_name_y,
+            training_column_name_X: $training_column_name_X,
         };
 
         delete $results[$model];
