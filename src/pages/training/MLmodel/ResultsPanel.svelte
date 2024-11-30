@@ -179,6 +179,7 @@
 
     $: get_pretrained_file($current_pretrained_file);
     $: if (plot_data_ready && data_file) {
+        console.log('Plotting from datfile', data_file);
         on_plot_data_ready(data_file);
     }
 
@@ -616,17 +617,16 @@
                         </div>
                     {/if}
                 </div>
-
-                <div class="grid gap-2" class:hidden={active_tab !== 'Plots'} transition:fade>
-                    {#if show_plot}
-                        <ResultsPlots />
-                    {/if}
-                    <OptunaGridPlots />
-                </div>
                 <div class="grid gap-2" class:hidden={active_tab !== 'Metrics Table'} transition:fade>
                     <MetricsTable />
                 </div>
             {/key}
         {/await}
+        <div class="grid gap-2" class:hidden={active_tab !== 'Plots'} transition:fade>
+            {#if show_plot}
+                <ResultsPlots />
+            {/if}
+            <OptunaGridPlots />
+        </div>
     </div>
 </CustomPanel>
