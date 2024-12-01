@@ -4,6 +4,7 @@
         available_scalers,
         available_transformations,
         cleanlab,
+        current_pretrained_file,
         default_parameter_mode,
         enable_y_transformation_and_scaling,
         model,
@@ -12,6 +13,7 @@
         ytransformation,
     } from './stores';
     import { embedding, embeddings } from '../embedding/stores';
+    import Checkbox from '$lib/components/Checkbox.svelte';
     export let compute_btn: HTMLButtonElement;
 
     let models: Partial<MLModel>[] = ['lgbm', 'catboost', 'xgboost', 'gbr'];
@@ -29,7 +31,11 @@
         }
     };
     combine_all_y_transformations_and_scaling();
+
     let ytys: string[] = ['None-None'];
+    let scheduler_running = false;
+    let cancelScheduler = false;
+    let progress_percent = 0;
 
     const scheduler = async () => {
         if (!compute_btn) {
@@ -52,112 +58,167 @@
         }
         let update_time = 500;
         let recycle_time = 1000;
-        for (const model of models) {
-            for (const embedder of embedders) {
-                for (const cl of clean) {
-                    for (const mode of modes) {
-                        for (const available_ytys of ytys) {
-                            const [yt, ys] = available_ytys.split('-');
+        scheduler_running = true;
+        cancelScheduler = false;
+        const total_length = models.length * embedders.length * clean.length * modes.length * ytys.length;
+        progress_percent = 0;
 
-                            $ytransformation = yt;
-                            await sleep(update_time);
+        try {
+            for (const model of models) {
+                if (cancelScheduler) break;
+                for (const embedder of embedders) {
+                    if (cancelScheduler) break;
+                    for (const cl of clean) {
+                        if (cancelScheduler) break;
+                        for (const mode of modes) {
+                            if (cancelScheduler) break;
+                            for (const available_ytys of ytys) {
+                                if (cancelScheduler) break;
+                                const [yt, ys] = available_ytys.split('-');
 
-                            $yscaling = ys;
-                            await sleep(update_time);
+                                $ytransformation = yt;
+                                await sleep(update_time);
 
-                            if (yt === 'None' && ys === 'None') {
-                                $enable_y_transformation_and_scaling = false;
-                            } else {
-                                $enable_y_transformation_and_scaling = true;
-                            }
-                            await sleep(update_time);
+                                $yscaling = ys;
+                                await sleep(update_time);
 
-                            $model = model;
-                            await sleep(update_time);
-
-                            $embedding = embedder;
-                            await sleep(update_time);
-
-                            $cleanlab.active = JSON.parse(cl);
-                            await sleep(update_time);
-
-                            if (mode === 'best_params') {
-                                if (!load_best_params_button) {
-                                    toast.error('Error: Load best params button not found');
-                                    return;
+                                if (yt === 'None' && ys === 'None') {
+                                    $enable_y_transformation_and_scaling = false;
+                                } else {
+                                    $enable_y_transformation_and_scaling = true;
                                 }
-                                console.warn('loading best params');
-                                load_best_params_button.click();
-                            } else if (mode === 'default') {
-                                console.warn('setting default params');
-                                $default_parameter_mode = true;
+                                await sleep(update_time);
+
+                                $model = model;
+                                await sleep(update_time);
+
+                                $embedding = embedder;
+                                await sleep(update_time);
+
+                                $cleanlab.active = JSON.parse(cl);
+                                await sleep(update_time);
+
+                                if (mode === 'best_params') {
+                                    if (!load_best_params_button) {
+                                        toast.error('Error: Load best params button not found');
+                                        return;
+                                    }
+                                    console.warn('loading best params');
+                                    load_best_params_button.click();
+                                } else if (mode === 'default') {
+                                    console.warn('setting default params');
+                                    $default_parameter_mode = true;
+                                }
+                                await sleep(update_time);
+
+                                const pkl_file = (await $current_pretrained_file) + '.pkl';
+                                const pkl_file_exists = await fs.exists(pkl_file);
+                                const pkl_filename = await path.basename(pkl_file);
+                                console.log(`file exists: ${pkl_filename}: ${pkl_file_exists}`);
+                                if (skip_file_if_exists && pkl_file_exists) {
+                                    console.warn('file exists. skipping...', pkl_filename);
+                                    progress_percent += 100 / total_length;
+                                    continue;
+                                }
+                                console.log({
+                                    $model,
+                                    $embedding,
+                                    cl: $cleanlab.active,
+                                    mode,
+                                    yt,
+                                    ys,
+                                });
+                                compute_btn.click();
+                                await sleep(recycle_time);
+                                progress_percent += 100 / total_length;
                             }
-                            await sleep(update_time);
-                            console.log({
-                                $model,
-                                $embedding,
-                                cl: $cleanlab.active,
-                                mode,
-                                yt,
-                                ys,
-                            });
-                            compute_btn.click();
-                            await sleep(recycle_time);
                         }
                     }
                 }
             }
+        } finally {
+            scheduler_running = false;
+            cancelScheduler = false;
+            console.timeEnd('scheduler finished');
         }
-        console.timeEnd('scheduler finished');
     };
 
     let scheduler_dialog: HTMLDialogElement;
+    const stopScheduler = () => {
+        cancelScheduler = true;
+        console.warn('Cancelling scheduler...');
+    };
+    let skip_file_if_exists = true;
     // $: scheduler_dialog?.showModal();
 </script>
 
 <button
-    class="btn btn-sm btn-warning"
+    class="btn btn-sm {scheduler_running ? 'btn-error' : 'btn-warning'}"
     on:click={async () => {
-        scheduler_dialog?.showModal();
-    }}>Scheduler</button
+        if (scheduler_running) {
+            stopScheduler();
+        } else {
+            scheduler_dialog?.showModal();
+        }
+    }}
 >
+    {#if scheduler_running}
+        <span class="loading loading-dots loading-sm"></span>
+        <span>Cancel Scheduler ({Number(progress_percent.toFixed(2))} %)</span>
+    {:else}
+        <span>Scheduler</span>
+    {/if}
+</button>
+
 <dialog bind:this={scheduler_dialog} class="modal">
     <div class="modal-box bg-orange-400 w-11/12 max-w-5xl">
         <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
         </form>
         <h3 class="text-lg font-bold">Scheduler</h3>
-        <div class="grid content-baseline overflow-auto h-[500px]">
-            <span class="text-md">Models</span>
-            <Set chips={model_names} let:chip filter bind:selected={models}>
-                <Chip {chip} touch>
-                    <Text>{chip}</Text>
-                </Chip>
-            </Set>
-            <span class="text-md">Embedders</span>
-            <Set chips={embeddings} let:chip filter bind:selected={embedders}>
-                <Chip {chip} touch>
-                    <Text>{chip}</Text>
-                </Chip>
-            </Set>
-            <span class="text-md">Data clean</span>
-            <Set chips={['true', 'false']} let:chip filter bind:selected={clean}>
-                <Chip {chip} touch>
-                    <Text>{chip}</Text>
-                </Chip>
-            </Set>
-            <span class="text-md">Modes</span>
-            <Set chips={['default', 'best_params']} let:chip filter bind:selected={modes}>
-                <Chip {chip} touch>
-                    <Text>{chip}</Text>
-                </Chip>
-            </Set>
-            <span class="text-md">ytransformation-yscaling</span>
-            <Set chips={available_ytys} let:chip filter bind:selected={ytys}>
-                <Chip {chip} touch>
-                    <Text>{chip}</Text>
-                </Chip>
-            </Set>
+
+        <div class="grid content-baseline gap-2 overflow-auto h-[500px]">
+            <Checkbox bind:value={skip_file_if_exists} label="Skip if file exists" />
+            <div class="grid border border-solid border-black rounded px-1 mr-2">
+                <span class="text-md">Models</span>
+                <Set chips={model_names} let:chip filter bind:selected={models}>
+                    <Chip {chip} touch>
+                        <Text>{chip}</Text>
+                    </Chip>
+                </Set>
+            </div>
+            <div class="grid border border-solid border-black rounded px-1 mr-2">
+                <span class="text-md">Embedders</span>
+                <Set chips={embeddings} let:chip filter bind:selected={embedders}>
+                    <Chip {chip} touch>
+                        <Text>{chip}</Text>
+                    </Chip>
+                </Set>
+            </div>
+            <div class="grid border border-solid border-black rounded px-1 mr-2">
+                <span class="text-md">Data clean</span>
+                <Set chips={['true', 'false']} let:chip filter bind:selected={clean}>
+                    <Chip {chip} touch>
+                        <Text>{chip}</Text>
+                    </Chip>
+                </Set>
+            </div>
+            <div class="grid border border-solid border-black rounded px-1 mr-2">
+                <span class="text-md">Modes</span>
+                <Set chips={['default', 'best_params']} let:chip filter bind:selected={modes}>
+                    <Chip {chip} touch>
+                        <Text>{chip}</Text>
+                    </Chip>
+                </Set>
+            </div>
+            <div class="grid border border-solid border-black rounded px-1 mr-2">
+                <span class="text-md">ytransformation-yscaling</span>
+                <Set chips={available_ytys} let:chip filter bind:selected={ytys}>
+                    <Chip {chip} touch>
+                        <Text>{chip}</Text>
+                    </Chip>
+                </Set>
+            </div>
         </div>
 
         <div class="modal-action">
@@ -165,8 +226,10 @@
                 class="btn btn-sm btn-warning"
                 on:click={async () => {
                     await scheduler();
-                }}>Submit</button
+                }}
             >
+                Submit
+            </button>
         </div>
     </div>
 </dialog>
