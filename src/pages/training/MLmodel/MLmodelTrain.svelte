@@ -3,7 +3,7 @@
     import { NPARTITIONS, use_dask } from '$lib/stores/system';
     import Accordion from '@smui-extra/accordion';
     import { copyText } from 'svelte-copy';
-    import { embedd_savefile_path, embedding, use_PCA } from '../embedding/stores';
+    import { embedd_savefile_path, embedding, embeddings, use_PCA } from '../embedding/stores';
     import { current_training_data_file } from '../training_file/plot-analysis/stores';
     import {
         loaded_df_columns,
@@ -58,10 +58,13 @@
         y_transform,
         ytransformation,
         yscaling,
+        model_names,
     } from './stores';
     import TrainingFilePanel from './TrainingFilePanel.svelte';
     import { parse_fine_tuned_values } from './utils';
     import { CheckCheck, TriangleAlert } from 'lucide-svelte/icons';
+    import Chip, { Set, Text } from '@smui/chips';
+    import Scheduler from './Scheduler.svelte';
 
     export let id: string = 'ml_model-train-container';
     export let display: string = 'none';
@@ -185,6 +188,7 @@
 
         return clonedValues;
     };
+
     const fit_function = async () => {
         if (!$loaded_df_columns.includes($training_column_name_X)) {
             toast.error('Column X not found in the loaded file. Please select a valid column name.');
@@ -334,62 +338,6 @@
     };
 
     let compute_btn: HTMLButtonElement;
-    const models = ['lgbm', 'catboost', 'xgboost', 'gbr'] as const;
-    const embedders = ['mol2vec', 'VICGAE'] as const;
-    const clean = [false, true] as const;
-    const modes = ['default', 'best_params'] as const;
-    // const models = ['lgbm'] as const;
-    // const embedders = ['mol2vec'] as const;
-    // const clean = [false] as const;
-    // const modes = ['default'] as const;
-
-    const scheduler = async () => {
-        if (!compute_btn) {
-            toast.error('Error: Compute button not found');
-            return;
-        }
-        console.warn('Scheduler running');
-        console.time('scheduler');
-        const load_best_params_button = document.getElementById('load_best_params_button') as HTMLButtonElement;
-        for (const model of models) {
-            for (const embedder of embedders) {
-                for (const cl of clean) {
-                    for (const mode of modes) {
-                        $model = model;
-                        await sleep(500);
-                        $embedding = embedder;
-                        await sleep(500);
-                        $cleanlab.active = cl;
-                        await sleep(500);
-
-                        if (mode === 'best_params') {
-                            if (!load_best_params_button) {
-                                toast.error('Error: Load best params button not found');
-                                return;
-                            }
-                            console.warn('loading best params');
-                            load_best_params_button.click();
-                        } else if (mode === 'default') {
-                            console.warn('setting default params');
-                            $default_parameter_mode = true;
-                        }
-                        await sleep(500);
-                        console.log({
-                            $model,
-                            $embedding,
-                            cl: $cleanlab.active,
-                            mode,
-                        });
-                        compute_btn.click();
-                        await sleep(1000);
-                    }
-                }
-            }
-        }
-        console.timeEnd('scheduler');
-    };
-    // $ytransformation = 'yeo_johnson';
-    // $yscaling = 'StandardScaler';
 </script>
 
 <div {id} style:display class="grid content-start gap-2">
@@ -426,13 +374,9 @@
             Copy training data info
         </button>
         <Dashboard url="http://localhost:8080" name="Optuna-dashboard" />
-        <button
-            class="btn btn-sm btn-warning"
-            on:click={async () => {
-                await scheduler();
-            }}>Scheduler</button
-        >
+        <Scheduler {compute_btn} />
     </div>
+
     {#await $current_pretrained_file then value}
         {@const filename = value + '.pkl'}
         {#await fs.exists(filename) then file_exists}
