@@ -5,8 +5,11 @@
         available_transformations,
         cleanlab,
         default_parameter_mode,
+        enable_y_transformation_and_scaling,
         model,
         model_names,
+        yscaling,
+        ytransformation,
     } from './stores';
     import { embedding, embeddings } from '../embedding/stores';
     export let compute_btn: HTMLButtonElement;
@@ -15,8 +18,18 @@
     let embedders: Partial<Embedding>[] = ['mol2vec', 'VICGAE'];
     let clean = ['true', 'false'];
     let modes = ['default', 'best_params'];
-    let ytransformations_selected: string[] = ['None'];
-    let yscaling_selected: string[] = ['None'];
+
+    let available_ytys: string[] = [];
+
+    const combine_all_y_transformations_and_scaling = async () => {
+        for (const yt of available_transformations) {
+            for (const ys of available_scalers) {
+                available_ytys = [...available_ytys, `${yt}-${ys}`];
+            }
+        }
+    };
+    combine_all_y_transformations_and_scaling();
+    let ytys: string[] = ['None-None'];
 
     const scheduler = async () => {
         if (!compute_btn) {
@@ -34,43 +47,70 @@
         }
 
         scheduler_dialog.close();
+        if (ytys.length === 0) {
+            ytys = ['None-None'];
+        }
+        let update_time = 500;
+        let recycle_time = 1000;
         for (const model of models) {
             for (const embedder of embedders) {
                 for (const cl of clean) {
                     for (const mode of modes) {
-                        $model = model;
-                        await sleep(500);
-                        $embedding = embedder;
-                        await sleep(500);
-                        $cleanlab.active = JSON.parse(cl);
-                        await sleep(500);
+                        for (const available_ytys of ytys) {
+                            const [yt, ys] = available_ytys.split('-');
 
-                        if (mode === 'best_params') {
-                            if (!load_best_params_button) {
-                                toast.error('Error: Load best params button not found');
-                                return;
+                            $ytransformation = yt;
+                            await sleep(update_time);
+
+                            $yscaling = ys;
+                            await sleep(update_time);
+
+                            if (yt === 'None' && ys === 'None') {
+                                $enable_y_transformation_and_scaling = false;
+                            } else {
+                                $enable_y_transformation_and_scaling = true;
                             }
-                            console.warn('loading best params');
-                            load_best_params_button.click();
-                        } else if (mode === 'default') {
-                            console.warn('setting default params');
-                            $default_parameter_mode = true;
+                            await sleep(update_time);
+
+                            $model = model;
+                            await sleep(update_time);
+
+                            $embedding = embedder;
+                            await sleep(update_time);
+
+                            $cleanlab.active = JSON.parse(cl);
+                            await sleep(update_time);
+
+                            if (mode === 'best_params') {
+                                if (!load_best_params_button) {
+                                    toast.error('Error: Load best params button not found');
+                                    return;
+                                }
+                                console.warn('loading best params');
+                                load_best_params_button.click();
+                            } else if (mode === 'default') {
+                                console.warn('setting default params');
+                                $default_parameter_mode = true;
+                            }
+                            await sleep(update_time);
+                            console.log({
+                                $model,
+                                $embedding,
+                                cl: $cleanlab.active,
+                                mode,
+                                yt,
+                                ys,
+                            });
+                            compute_btn.click();
+                            await sleep(recycle_time);
                         }
-                        await sleep(500);
-                        console.log({
-                            $model,
-                            $embedding,
-                            cl: $cleanlab.active,
-                            mode,
-                        });
-                        // compute_btn.click();
-                        await sleep(1000);
                     }
                 }
             }
         }
         console.timeEnd('scheduler finished');
     };
+
     let scheduler_dialog: HTMLDialogElement;
     // $: scheduler_dialog?.showModal();
 </script>
@@ -82,7 +122,7 @@
     }}>Scheduler</button
 >
 <dialog bind:this={scheduler_dialog} class="modal">
-    <div class="modal-box bg-orange-400">
+    <div class="modal-box bg-orange-400 w-11/12 max-w-5xl">
         <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
         </form>
@@ -112,18 +152,12 @@
                     <Text>{chip}</Text>
                 </Chip>
             </Set>
-            <!-- <span class="text-md">ytransformation</span>
-            <Set chips={available_transformations} let:chip filter bind:selected={ytransformations_selected}>
+            <span class="text-md">ytransformation-yscaling</span>
+            <Set chips={available_ytys} let:chip filter bind:selected={ytys}>
                 <Chip {chip} touch>
                     <Text>{chip}</Text>
                 </Chip>
             </Set>
-            <span class="text-md">yscaling</span>
-            <Set chips={available_scalers} let:chip filter bind:selected={yscaling_selected}>
-                <Chip {chip} touch>
-                    <Text>{chip}</Text>
-                </Chip>
-            </Set> -->
         </div>
 
         <div class="modal-action">
