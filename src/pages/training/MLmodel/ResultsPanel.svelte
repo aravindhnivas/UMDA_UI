@@ -165,7 +165,7 @@
     const get_pretrained_file = async (name: Promise<string> | string) => {
         let pretrained_file = await name;
 
-        console.log(pretrained_file);
+        console.warn(await path.basename(pretrained_file));
         if (pretrained_file.endsWith('.pkl')) {
             pretrained_file = pretrained_file.replace('.pkl', '');
         }
@@ -316,6 +316,8 @@
             directory: string,
             parentName = '',
         ): Promise<Array<{ name: string; pkl_file: string }>> => {
+            console.log('Fetching all pkl files from directory');
+            console.log(directory);
             const files = await fs.readDir(directory);
             const results: Array<{ name: string; pkl_file: string }> = [];
 
@@ -348,7 +350,6 @@
                             ...subdirResult,
                             name: `${name}: ${subdir.name}`,
                         });
-                        // result_names[name][subdir.name] = {};
                         result_names[fname][name].childrens = {
                             ...result_names[fname][name].childrens,
                             [subdir.name]: {
@@ -401,6 +402,7 @@
                 const subdir_results = await searchSubdir(processedSubdirsPath, entry.name);
                 results.push(...subdir_results);
             }
+            console.log('result_names: ', result_names);
             return results;
         };
         return getAllPklFiles(dir);

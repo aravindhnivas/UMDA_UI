@@ -56,6 +56,8 @@
         seed,
         enable_y_transformation_and_scaling,
         y_transform,
+        ytransformation,
+        yscaling,
     } from './stores';
     import TrainingFilePanel from './TrainingFilePanel.svelte';
     import { parse_fine_tuned_values } from './utils';
@@ -330,6 +332,64 @@
             toast.error('Error: Model not saved');
         }
     };
+
+    let compute_btn: HTMLButtonElement;
+    const models = ['lgbm', 'catboost', 'xgboost', 'gbr'] as const;
+    const embedders = ['mol2vec', 'VICGAE'] as const;
+    const clean = [false, true] as const;
+    const modes = ['default', 'best_params'] as const;
+    // const models = ['lgbm'] as const;
+    // const embedders = ['mol2vec'] as const;
+    // const clean = [false] as const;
+    // const modes = ['default'] as const;
+
+    const scheduler = async () => {
+        if (!compute_btn) {
+            toast.error('Error: Compute button not found');
+            return;
+        }
+        console.warn('Scheduler running');
+        console.time('scheduler');
+        const load_best_params_button = document.getElementById('load_best_params_button') as HTMLButtonElement;
+        for (const model of models) {
+            for (const embedder of embedders) {
+                for (const cl of clean) {
+                    for (const mode of modes) {
+                        $model = model;
+                        await sleep(500);
+                        $embedding = embedder;
+                        await sleep(500);
+                        $cleanlab.active = cl;
+                        await sleep(500);
+
+                        if (mode === 'best_params') {
+                            if (!load_best_params_button) {
+                                toast.error('Error: Load best params button not found');
+                                return;
+                            }
+                            console.warn('loading best params');
+                            load_best_params_button.click();
+                        } else if (mode === 'default') {
+                            console.warn('setting default params');
+                            $default_parameter_mode = true;
+                        }
+                        await sleep(500);
+                        console.log({
+                            $model,
+                            $embedding,
+                            cl: $cleanlab.active,
+                            mode,
+                        });
+                        compute_btn.click();
+                        await sleep(1000);
+                    }
+                }
+            }
+        }
+        console.timeEnd('scheduler');
+    };
+    // $ytransformation = 'yeo_johnson';
+    // $yscaling = 'StandardScaler';
 </script>
 
 <div {id} style:display class="grid content-start gap-2">
@@ -345,7 +405,13 @@
         </Accordion>
     </div>
     <div class="flex m-auto gap-4">
-        <Loadingbtn name="Begin training" callback={fit_function} subprocess={true} on:result={onResult} />
+        <Loadingbtn
+            bind:btn={compute_btn}
+            name="Begin training"
+            callback={fit_function}
+            subprocess={true}
+            on:result={onResult}
+        />
         <button
             class="flex btn btn-sm btn-outline"
             on:click={async () => {
@@ -354,11 +420,18 @@
                 const { args } = data;
                 copyText(JSON.stringify(args, null, 4));
                 toast.success('copied to clipboard');
+                // compute_btn.click();
             }}
         >
             Copy training data info
         </button>
         <Dashboard url="http://localhost:8080" name="Optuna-dashboard" />
+        <button
+            class="btn btn-sm btn-warning"
+            on:click={async () => {
+                await scheduler();
+            }}>Scheduler</button
+        >
     </div>
     {#await $current_pretrained_file then value}
         {@const filename = value + '.pkl'}

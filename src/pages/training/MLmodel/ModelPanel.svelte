@@ -208,6 +208,7 @@
                     </button>
                     <button
                         class="btn btn-sm btn-outline"
+                        id="load_best_params_button"
                         on:click={async () => {
                             const main_dir = await $current_training_processed_data_directory;
                             const loc = await path.join(
