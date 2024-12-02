@@ -342,6 +342,11 @@
                 if (!(await fs.exists(dirPath))) return results;
                 const subdirs = (await fs.readDir(dirPath)).filter(f => f.isDirectory);
 
+                // Initialize the parent structure if it doesn't exist
+                if (!result_names[fname][name]) {
+                    result_names[fname][name] = { pkl: '', childrens: {} };
+                }
+
                 for (const subdir of subdirs) {
                     const subdirPath = await path.join(dirPath, subdir.name);
                     const subdirResult = await processDirForPkl(subdirPath, subdir.name);
@@ -350,13 +355,24 @@
                             ...subdirResult,
                             name: `${name}: ${subdir.name}`,
                         });
-                        result_names[fname][name].childrens = {
-                            ...result_names[fname][name].childrens,
-                            [subdir.name]: {
-                                pkl: subdirResult.pkl_file,
-                                childrens: [],
-                            },
+
+                        // Initialize subdir structure
+                        result_names[fname][name].childrens[subdir.name] = {
+                            pkl: subdirResult.pkl_file,
+                            childrens: {},
                         };
+
+                        // result_names[fname][name].childrens = {
+                        //     ...result_names[fname][name].childrens,
+                        //     [subdir.name]: {
+                        //         pkl: subdirResult.pkl_file,
+                        //         childrens: [],
+                        //     },
+                        // };
+                    } else {
+                        console.warn(fname, name);
+                        console.error('No pkl file found in');
+                        console.warn(subdirPath);
                     }
                     const subsubdirs = (await fs.readDir(subdirPath)).filter(f => f.isDirectory);
                     for (const subsubdir of subsubdirs) {
@@ -367,14 +383,27 @@
                                 ...subsubdirResult,
                                 name: `${name}: ${subdir.name}: ${subsubdir.name}`,
                             });
-                            // result_names[name][subdir.name][subsubdir.name] = {};
-                            result_names[fname][name].childrens[subdir.name].childrens = {
-                                ...result_names[fname][name].childrens[subdir.name].childrens,
-                                [subsubdir.name]: {
+
+                            // Safely access and update nested structure
+                            const parentChild = result_names[fname][name].childrens[subdir.name];
+                            if (parentChild) {
+                                parentChild.childrens[subsubdir.name] = {
                                     pkl: subsubdirResult.pkl_file,
-                                    childrens: [],
-                                },
-                            };
+                                    childrens: {},
+                                };
+                            }
+
+                            // result_names[fname][name].childrens[subdir.name].childrens = {
+                            //     ...result_names[fname][name].childrens[subdir.name].childrens,
+                            //     [subsubdir.name]: {
+                            //         pkl: subsubdirResult.pkl_file,
+                            //         childrens: [],
+                            //     },
+                            // };
+                        } else {
+                            console.warn(fname, name, subdir.name);
+                            console.error('No pkl file found in');
+                            console.warn(subsubdirPath);
                         }
                     }
                 }
@@ -395,6 +424,10 @@
                         pkl: mainDirResult.pkl_file,
                         childrens: {},
                     };
+                } else {
+                    console.log(fname, entry.name);
+                    console.error('No pkl file found in');
+                    console.warn(currentPath);
                 }
 
                 // Check processed_subdirs if they exist
@@ -402,11 +435,18 @@
                 const subdir_results = await searchSubdir(processedSubdirsPath, entry.name);
                 results.push(...subdir_results);
             }
-            console.log('result_names: ', result_names);
             return results;
         };
-        return getAllPklFiles(dir);
+        try {
+            console.log('result_names: ', result_names);
+            const output = await getAllPklFiles(dir);
+            return output;
+        } catch (error) {
+            toast.error('Error fetching pkl files: ' + error);
+            return [];
+        }
     };
+
     let toggle_embedder_plots = {} as Record<string, boolean>;
     const get_valid_dirs = async (name: Promise<string>) => {
         const root_dir = await name;
