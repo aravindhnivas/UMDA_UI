@@ -15,15 +15,10 @@
     import { embedding, embeddings } from '../embedding/stores';
     import Checkbox from '$lib/components/Checkbox.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
+
     export let compute_btn: HTMLButtonElement;
 
-    let models: Partial<MLModel>[] = ['lgbm', 'catboost', 'xgboost', 'gbr'];
-    let embedders: Partial<Embedding>[] = ['mol2vec', 'VICGAE'];
-    let clean = ['true', 'false'];
-    let modes = ['default', 'best_params'];
-
     let available_ytys: string[] = [];
-
     const combine_all_y_transformations_and_scaling = async () => {
         for (const yt of available_transformations) {
             for (const ys of available_scalers) {
@@ -33,15 +28,21 @@
     };
     combine_all_y_transformations_and_scaling();
 
-    let ytys: string[] = ['None-None'];
+    const models = localWritable<Partial<MLModel>[]>('models_selector', ['lgbm', 'catboost', 'xgboost', 'gbr']);
+    const embedders = localWritable<Partial<Embedding>[]>('embedders_selector', ['mol2vec', 'VICGAE']);
+    const clean_mode = localWritable('clean_mode_selector', ['true', 'false']);
+    const modes = localWritable('modes_selector', ['default', 'best_params']);
+    const ytys = localWritable<string[]>('ytys_selector', ['None-None']);
+
+    const variable_update_time = localWritable('variable_update_time', 500);
+    const next_cycle_time = localWritable('next_cycle_time', 1000);
+    $: total_iterations = $models.length * $embedders.length * $clean_mode.length * $modes.length * $ytys.length;
+    $: total_sleep_time = (7 * $variable_update_time + $next_cycle_time) * total_iterations;
+    $: total_sleep_time_in_seconds = total_sleep_time / 1000;
+
     let scheduler_running = false;
     let cancelScheduler = false;
     let progress_percent = 0;
-    const variable_update_time = localWritable('variable_update_time', 500);
-    const next_cycle_time = localWritable('next_cycle_time', 1000);
-    $: total_iterations = models.length * embedders.length * clean.length * modes.length * ytys.length;
-    $: total_sleep_time = (7 * $variable_update_time + $next_cycle_time) * total_iterations;
-    $: total_sleep_time_in_seconds = total_sleep_time / 1000;
 
     const scheduler = async () => {
         if (!compute_btn) {
@@ -53,31 +54,30 @@
         const load_best_params_button = document.getElementById('load_best_params_button') as HTMLButtonElement;
 
         // raise error if none of the arrays are of length 2
-        if (models.length !== 2 && embedders.length !== 2 && clean.length !== 2 && modes.length !== 2) {
+        if ($models.length !== 2 && $embedders.length !== 2 && $clean_mode.length !== 2 && $modes.length !== 2) {
             toast.error('Error: At least one of the arrays must have a length of 2');
             return;
         }
 
         scheduler_dialog.close();
-        if (ytys.length === 0) {
-            ytys = ['None-None'];
+        if ($ytys.length === 0) {
+            $ytys = ['None-None'];
         }
 
         scheduler_running = true;
         cancelScheduler = false;
-        const total_length = models.length * embedders.length * clean.length * modes.length * ytys.length;
         progress_percent = 0;
 
         try {
-            for (const model of models) {
+            for (const model of $models) {
                 if (cancelScheduler) break;
-                for (const embedder of embedders) {
+                for (const embedder of $embedders) {
                     if (cancelScheduler) break;
-                    for (const cl of clean) {
+                    for (const cl of $clean_mode) {
                         if (cancelScheduler) break;
-                        for (const mode of modes) {
+                        for (const mode of $modes) {
                             if (cancelScheduler) break;
-                            for (const available_ytys of ytys) {
+                            for (const available_ytys of $ytys) {
                                 if (cancelScheduler) break;
                                 const [yt, ys] = available_ytys.split('-');
 
@@ -123,7 +123,7 @@
                                 if (skip_file_if_exists && pkl_file_exists) {
                                     console.warn('file exists. skipping...', pkl_filename);
                                     await sleep($next_cycle_time);
-                                    progress_percent += 100 / total_length;
+                                    progress_percent += 100 / total_iterations;
                                     continue;
                                 }
                                 console.log({
@@ -136,7 +136,7 @@
                                 });
                                 compute_btn.click();
                                 await sleep($next_cycle_time);
-                                progress_percent += 100 / total_length;
+                                progress_percent += 100 / total_iterations;
                             }
                         }
                     }
@@ -184,9 +184,7 @@
         </form>
         <h3 class="text-lg font-bold">
             <span>Scheduler</span>
-            <span class="badge badge-xs badge-info"
-                >{models.length * embedders.length * clean.length * modes.length * ytys.length}</span
-            >
+            <span class="badge badge-xs badge-info">{total_iterations}</span>
         </h3>
 
         <div class="grid content-baseline gap-2 overflow-auto h-[500px]">
@@ -208,9 +206,9 @@
             <div class="grid border border-solid border-black rounded px-1 mr-2">
                 <div class="flex justify-between pt-2">
                     <span class="text-md">Models</span>
-                    <span class="badge badge-sm">{models.length}</span>
+                    <span class="badge badge-sm">{$models.length}</span>
                 </div>
-                <Set chips={model_names} let:chip filter bind:selected={models}>
+                <Set chips={model_names} let:chip filter bind:selected={$models}>
                     <Chip {chip} touch>
                         <Text>{chip}</Text>
                     </Chip>
@@ -219,9 +217,9 @@
             <div class="grid border border-solid border-black rounded px-1 mr-2">
                 <div class="flex justify-between pt-2">
                     <span>Embedders</span>
-                    <span class="badge badge-sm">{embedders.length}</span>
+                    <span class="badge badge-sm">{$embedders.length}</span>
                 </div>
-                <Set chips={embeddings} let:chip filter bind:selected={embedders}>
+                <Set chips={embeddings} let:chip filter bind:selected={$embedders}>
                     <Chip {chip} touch>
                         <Text>{chip}</Text>
                     </Chip>
@@ -230,9 +228,9 @@
             <div class="grid border border-solid border-black rounded px-1 mr-2">
                 <div class="flex justify-between pt-2">
                     <span>Data clean</span>
-                    <span class="badge badge-sm">{clean.length}</span>
+                    <span class="badge badge-sm">{$clean_mode.length}</span>
                 </div>
-                <Set chips={['true', 'false']} let:chip filter bind:selected={clean}>
+                <Set chips={['true', 'false']} let:chip filter bind:selected={$clean_mode}>
                     <Chip {chip} touch>
                         <Text>{chip}</Text>
                     </Chip>
@@ -241,9 +239,9 @@
             <div class="grid border border-solid border-black rounded px-1 mr-2">
                 <div class="flex justify-between pt-2">
                     <span>Modes</span>
-                    <span class="badge badge-sm">{modes.length}</span>
+                    <span class="badge badge-sm">{$modes.length}</span>
                 </div>
-                <Set chips={['default', 'best_params']} let:chip filter bind:selected={modes}>
+                <Set chips={['default', 'best_params']} let:chip filter bind:selected={$modes}>
                     <Chip {chip} touch>
                         <Text>{chip}</Text>
                     </Chip>
@@ -252,9 +250,9 @@
             <div class="grid border border-solid border-black rounded px-1 mr-2">
                 <div class="flex justify-between pt-2">
                     <span>ytransformation-yscaling</span>
-                    <span class="badge badge-sm">{ytys.length}</span>
+                    <span class="badge badge-sm">{$ytys.length}</span>
                 </div>
-                <Set chips={available_ytys} let:chip filter bind:selected={ytys}>
+                <Set chips={available_ytys} let:chip filter bind:selected={$ytys}>
                     <Chip {chip} touch>
                         <Text>{chip}</Text>
                     </Chip>
