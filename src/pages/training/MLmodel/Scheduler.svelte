@@ -156,7 +156,7 @@
     };
 
     let skip_file_if_exists = true;
-    $: scheduler_dialog?.showModal();
+    // $: scheduler_dialog?.showModal();
 </script>
 
 <button
