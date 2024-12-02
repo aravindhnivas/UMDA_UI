@@ -156,7 +156,7 @@
     };
 
     let skip_file_if_exists = true;
-    // $: scheduler_dialog?.showModal();
+    $: scheduler_dialog?.showModal();
 </script>
 
 <button
@@ -187,22 +187,17 @@
             <span class="badge badge-xs badge-info">{total_iterations}</span>
         </h3>
 
-        <div class="grid content-baseline gap-2 overflow-auto h-[500px]">
-            <div class="flex-gap items-end">
-                <Checkbox bind:value={skip_file_if_exists} label="Skip if file exists" />
-                <CustomInput
-                    label="Variable update time (ms)"
-                    bind:value={$variable_update_time}
-                    type="number"
-                    min="100"
-                />
-                <CustomInput label="Next cycle time (ms)" bind:value={$next_cycle_time} type="number" min="100" />
-                <!-- Total computation time -->
-                <div>
-                    <span>Scheduling time:</span>
-                    <span class="badge badge-xs badge-info">{total_sleep_time_in_seconds} s</span>
-                </div>
+        <div class="flex-gap items-end">
+            <Checkbox bind:value={skip_file_if_exists} label="Skip if file exists" />
+            <CustomInput label="Variable update time (ms)" bind:value={$variable_update_time} type="number" min="100" />
+            <CustomInput label="Next cycle time (ms)" bind:value={$next_cycle_time} type="number" min="100" />
+            <div>
+                <span>Scheduling time:</span>
+                <span class="badge badge-xs badge-info">{total_sleep_time_in_seconds} s</span>
             </div>
+        </div>
+
+        <div class="grid mt-2 content-baseline gap-2 overflow-auto h-[500px]">
             <div class="grid border border-solid border-black rounded px-1 mr-2">
                 <div class="flex justify-between pt-2">
                     <span class="text-md">Models</span>
