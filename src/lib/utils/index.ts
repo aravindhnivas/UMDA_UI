@@ -243,3 +243,16 @@ function getSignificantDigitPosition(uncertainty: number): number {
 export function formatWithUncertainty(result: RoundingResult): string {
     return `${result.value} (${result.uncertainty})`;
 }
+
+export const read_csv = async (file: string) => {
+    if (!(await fs.exists(file))) return { columns: [], data: [] };
+    const contents = await fs.readTextFile(file);
+    if (!contents) return { columns: [], data: [] };
+    const lines = contents.split('\n');
+    const columns = lines[0].split(',').filter(f => f.length > 0);
+    const data = lines
+        .slice(1)
+        .map(line => line.split(','))
+        .filter(f => f.length === columns.length);
+    return { columns, data };
+};

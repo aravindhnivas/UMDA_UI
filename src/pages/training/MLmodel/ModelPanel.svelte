@@ -24,7 +24,12 @@
     import CustomTabs from '$lib/components/CustomTabs.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
     import { embedd_savefile, embedding, embeddings } from '../embedding/stores';
-    import { current_training_processed_data_directory, ROOT_DIR } from '../training_file/plot-analysis/stores';
+    import {
+        best_metrics_loc,
+        current_training_processed_data_directory,
+        metrics_loc,
+        ROOT_DIR,
+    } from '../training_file/plot-analysis/stores';
 
     let savedfile: string;
     let uploadedfile: { fullname: string; name: string; model: string } | null = null;
@@ -169,8 +174,10 @@
     }
 
     const set_root_dir = async (name: Promise<string>) => {
-        const dir = await name;
-        ROOT_DIR.set(dir);
+        $ROOT_DIR = await name;
+        $metrics_loc = await path.join($ROOT_DIR, 'metrics');
+        $best_metrics_loc = await path.join($metrics_loc, 'best_metrics');
+
         console.warn('ROOT_DIR');
         console.warn($ROOT_DIR);
     };

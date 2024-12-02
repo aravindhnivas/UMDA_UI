@@ -41,6 +41,8 @@ export const current_training_processed_data_directory = derived(
 );
 
 export const ROOT_DIR = writable('');
+export const metrics_loc = writable('');
+export const best_metrics_loc = writable('');
 
 export const current_analysis_file = derived(
     current_post_analysis_files_directory,

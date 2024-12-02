@@ -1,8 +1,9 @@
 <script lang="ts">
     import { Loadingbtn } from '$lib/components';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
-    import { ROOT_DIR } from '$pages/training/training_file/plot-analysis/stores';
+    import { best_metrics_loc, ROOT_DIR } from '$pages/training/training_file/plot-analysis/stores';
     import { current_model_pkl_files, cv_fold, model } from '../stores';
+    import { read_csv } from '$lib/utils';
 
     const columns = ['Mode', 'Embedder', 'Data shape', 'R2', 'MSE', 'RMSE', 'MAE'];
 
