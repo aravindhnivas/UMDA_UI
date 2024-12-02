@@ -1,5 +1,4 @@
 <script lang="ts">
-    import CustomSelect from '$lib/components/CustomSelect.svelte';
     import { read_csv } from '$lib/utils';
     import { best_metrics_loc } from '$pages/training/training_file/plot-analysis/stores';
 
@@ -26,33 +25,43 @@
 
     let columns: string[] = [];
     let data: string[][] = [];
-    $: read_current_csv_file(selected_csv_file);
     $: fetch_all_csv_files($best_metrics_loc);
+    $: read_current_csv_file(selected_csv_file);
 </script>
 
-<CustomSelect bind:value={selected_csv_file} items={csv_filenames} label="Select CSV file" />
-
-<!-- {JSON.stringify(columns)} -->
+<div class="flex flex-wrap gap-2">
+    {#each csv_filenames as csv (csv)}
+        <button
+            class="btn btn-sm btn-outline"
+            class:btn-active={selected_csv_file === csv}
+            on:click={() => {
+                selected_csv_file = csv;
+            }}>{csv}</button
+        >
+    {/each}
+</div>
 
 <div class="overflow-x-auto w-full" style="height: 500px;">
-    <table class="table bg-base-100">
-        <thead>
-            <tr>
-                <th></th>
-                {#each columns as column}
-                    <th>{@html column}</th>
-                {/each}
-            </tr>
-        </thead>
-        <tbody>
-            {#each data as row, index (row)}
-                <tr class="hover:bg-base-200">
-                    <th>{index}</th>
-                    {#each row as val, i ([...row, i, index])}
-                        <td class="select-text">{val}</td>
+    {#if data.length > 0}
+        <table class="table bg-base-100">
+            <thead>
+                <tr>
+                    <th></th>
+                    {#each columns as column}
+                        <th>{@html column}</th>
                     {/each}
                 </tr>
-            {/each}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {#each data as row, index (row)}
+                    <tr class="hover:bg-base-200">
+                        <th>{index}</th>
+                        {#each row as val, i ([...row, i, index])}
+                            <td class="select-text">{val}</td>
+                        {/each}
+                    </tr>
+                {/each}
+            </tbody>
+        </table>
+    {/if}
 </div>
