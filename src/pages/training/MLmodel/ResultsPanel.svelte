@@ -492,7 +492,7 @@
                                             {#each Object.entries(parents) as [parent, parentData] (parentData.pkl)}
                                                 {@const name = `${embedder}: ${parent}`}
                                                 <div class="breadcrumbs text-sm">
-                                                    <ul>
+                                                    <ul class="flex gap-2 flex-wrap">
                                                         <li>
                                                             ({$current_model_pkl_files[embedder].filter(f =>
                                                                 f.name.startsWith(parent),
