@@ -160,9 +160,8 @@
         cancelScheduler = true;
         console.warn('Cancelling scheduler...');
     };
-
     let skip_file_if_exists = true;
-    // $: scheduler_dialog?.showModal();
+    $: scheduler_dialog?.showModal();
 </script>
 
 <button
@@ -265,6 +264,7 @@
         <div class="modal-action">
             <button
                 class="btn btn-sm btn-warning"
+                class:btn-disabled={scheduler_running || total_iterations === 0}
                 on:click={async () => {
                     await scheduler();
                 }}
