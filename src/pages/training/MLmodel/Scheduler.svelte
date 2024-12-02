@@ -52,6 +52,11 @@
         }
         console.warn('Scheduler running');
         console.time('scheduler finished');
+        if (total_iterations === 0) {
+            toast.error('Error: Total iterations is 0');
+            return;
+        }
+
         const load_best_params_button = document.getElementById('load_best_params_button') as HTMLButtonElement;
 
         // raise error if none of the arrays are of length 2
@@ -184,10 +189,7 @@
         <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
         </form>
-        <h3 class="text-lg font-bold">
-            <span>Scheduler</span>
-            <span class="badge badge-xs badge-info">{total_iterations}</span>
-        </h3>
+        <h3 class="text-lg font-bold">Scheduler</h3>
 
         <div class="flex-gap items-end">
             <Checkbox bind:value={skip_file_if_exists} label="Skip if file exists" />
@@ -195,7 +197,9 @@
             <CustomInput label="Next cycle time (ms)" bind:value={$next_cycle_time} type="number" min="100" />
             <div>
                 <span>Scheduling time:</span>
-                <span class="badge badge-xs badge-info">{total_sleep_time_in_seconds} s</span>
+                <span class="badge badge-xs badge-info" class:badge-error={total_iterations === 0}
+                    >{total_sleep_time_in_seconds} s</span
+                >
             </div>
         </div>
 
@@ -203,7 +207,7 @@
             <div class="grid border border-solid border-black rounded px-1 mr-2">
                 <div class="flex justify-between pt-2">
                     <span class="text-md">Models</span>
-                    <span class="badge badge-sm">{$models.length}</span>
+                    <span class="badge badge-sm" class:badge-error={$models.length === 0}>{$models.length}</span>
                 </div>
                 <Set chips={model_names} let:chip filter bind:selected={$models}>
                     <Chip {chip} touch>
@@ -214,7 +218,7 @@
             <div class="grid border border-solid border-black rounded px-1 mr-2">
                 <div class="flex justify-between pt-2">
                     <span>Embedders</span>
-                    <span class="badge badge-sm">{$embedders.length}</span>
+                    <span class="badge badge-sm" class:badge-error={$embedders.length === 0}>{$embedders.length}</span>
                 </div>
                 <Set chips={embeddings} let:chip filter bind:selected={$embedders}>
                     <Chip {chip} touch>
@@ -225,7 +229,8 @@
             <div class="grid border border-solid border-black rounded px-1 mr-2">
                 <div class="flex justify-between pt-2">
                     <span>Data clean</span>
-                    <span class="badge badge-sm">{$clean_mode.length}</span>
+                    <span class="badge badge-sm" class:badge-error={$clean_mode.length === 0}>{$clean_mode.length}</span
+                    >
                 </div>
                 <Set chips={['true', 'false']} let:chip filter bind:selected={$clean_mode}>
                     <Chip {chip} touch>
@@ -236,7 +241,7 @@
             <div class="grid border border-solid border-black rounded px-1 mr-2">
                 <div class="flex justify-between pt-2">
                     <span>Modes</span>
-                    <span class="badge badge-sm">{$modes.length}</span>
+                    <span class="badge badge-sm" class:badge-error={$modes.length === 0}>{$modes.length}</span>
                 </div>
                 <Set chips={['default', 'best_params']} let:chip filter bind:selected={$modes}>
                     <Chip {chip} touch>
@@ -247,7 +252,7 @@
             <div class="grid border border-solid border-black rounded px-1 mr-2">
                 <div class="flex justify-between pt-2">
                     <span>ytransformation-yscaling</span>
-                    <span class="badge badge-sm">{$ytys.length}</span>
+                    <span class="badge badge-sm" class:badge-error={$ytys.length === 0}>{$ytys.length}</span>
                 </div>
                 <Set chips={available_ytys} let:chip filter bind:selected={$ytys}>
                     <Chip {chip} touch>
