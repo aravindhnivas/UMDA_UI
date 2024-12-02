@@ -4,6 +4,7 @@
     import { best_metrics_loc, ROOT_DIR } from '$pages/training/training_file/plot-analysis/stores';
     import { current_model_pkl_files, cv_fold, model } from '../stores';
     import { read_csv } from '$lib/utils';
+    import CustomInput from '$lib/components/CustomInput.svelte';
 
     const columns = ['Mode', 'Embedder', 'Data shape', 'R2', 'MSE', 'RMSE', 'MAE'];
 
@@ -57,6 +58,8 @@
                 metric_rows = [...metric_rows, [name, embedder, X_data_shape, r2, mse, rmse, mae]];
             }
         }
+
+        filtered_metric_rows = structuredClone([...metric_rows]);
         file_read = true;
     };
 
@@ -71,14 +74,14 @@
     }
 
     const compute_metric = (file_read: boolean) => {
-        if (!(file_read && best_metric_choice && metric_rows.length > 0)) return;
+        if (!(file_read && best_metric_choice && filtered_metric_rows.length > 0)) return;
         console.warn('computing metric');
         let best_metric_val: number | undefined = undefined;
         let best_metric_std: number | undefined = undefined;
 
         best_metric_row = -1;
 
-        metric_rows.forEach((row, ind) => {
+        filtered_metric_rows.forEach((row, ind) => {
             const { value: r2, std: r2_std } = extractValueAndStd(row[3]);
             const { value: mse, std: mse_std } = extractValueAndStd(row[4]);
             const { value: rmse, std: rmse_std } = extractValueAndStd(row[5]);
@@ -148,6 +151,8 @@
         await fs.writeTextFile(await path.join(loc, `${$model}_metrics.csv`), content);
         toast.success('Metrics exported successfully');
     };
+    let search_key = '';
+    let filtered_metric_rows: string[][] = [];
 </script>
 
 <div class="flex-gap items-end">
@@ -185,6 +190,17 @@
     />
 </div>
 
+<CustomInput
+    bind:value={search_key}
+    placeholder="Search"
+    on:change={() => {
+        console.log(search_key);
+        filtered_metric_rows = metric_rows.filter(row =>
+            row.some(val => val.toLocaleLowerCase().includes(search_key.toLocaleLowerCase())),
+        );
+    }}
+/>
+
 <div class="overflow-x-auto w-full" style="height: 500px;">
     <table class="table bg-base-100">
         <thead>
@@ -196,7 +212,7 @@
             </tr>
         </thead>
         <tbody>
-            {#each metric_rows as mrow, index (mrow)}
+            {#each filtered_metric_rows as mrow, index (mrow)}
                 {@const best_row = best_metric_row === index}
                 <tr class={best_row ? '' : 'hover:bg-base-200'} class:bg-success={best_row}>
                     <th>{index}</th>
