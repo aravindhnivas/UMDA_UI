@@ -14,6 +14,7 @@
     } from './stores';
     import { embedding, embeddings } from '../embedding/stores';
     import Checkbox from '$lib/components/Checkbox.svelte';
+    import CustomInput from '$lib/components/CustomInput.svelte';
     export let compute_btn: HTMLButtonElement;
 
     let models: Partial<MLModel>[] = ['lgbm', 'catboost', 'xgboost', 'gbr'];
@@ -36,6 +37,11 @@
     let scheduler_running = false;
     let cancelScheduler = false;
     let progress_percent = 0;
+    const variable_update_time = localWritable('variable_update_time', 500);
+    const next_cycle_time = localWritable('next_cycle_time', 1000);
+    $: total_iterations = models.length * embedders.length * clean.length * modes.length * ytys.length;
+    $: total_sleep_time = (7 * $variable_update_time + $next_cycle_time) * total_iterations;
+    $: total_sleep_time_in_seconds = total_sleep_time / 1000;
 
     const scheduler = async () => {
         if (!compute_btn) {
@@ -56,8 +62,7 @@
         if (ytys.length === 0) {
             ytys = ['None-None'];
         }
-        let update_time = 500;
-        let recycle_time = 1000;
+
         scheduler_running = true;
         cancelScheduler = false;
         const total_length = models.length * embedders.length * clean.length * modes.length * ytys.length;
@@ -77,26 +82,26 @@
                                 const [yt, ys] = available_ytys.split('-');
 
                                 $ytransformation = yt;
-                                await sleep(update_time);
+                                await sleep($variable_update_time);
 
                                 $yscaling = ys;
-                                await sleep(update_time);
+                                await sleep($variable_update_time);
 
                                 if (yt === 'None' && ys === 'None') {
                                     $enable_y_transformation_and_scaling = false;
                                 } else {
                                     $enable_y_transformation_and_scaling = true;
                                 }
-                                await sleep(update_time);
+                                await sleep($variable_update_time);
 
                                 $model = model;
-                                await sleep(update_time);
+                                await sleep($variable_update_time);
 
                                 $embedding = embedder;
-                                await sleep(update_time);
+                                await sleep($variable_update_time);
 
                                 $cleanlab.active = JSON.parse(cl);
-                                await sleep(update_time);
+                                await sleep($variable_update_time);
 
                                 if (mode === 'best_params') {
                                     if (!load_best_params_button) {
@@ -109,7 +114,7 @@
                                     console.warn('setting default params');
                                     $default_parameter_mode = true;
                                 }
-                                await sleep(update_time);
+                                await sleep($variable_update_time);
 
                                 const pkl_file = (await $current_pretrained_file) + '.pkl';
                                 const pkl_file_exists = await fs.exists(pkl_file);
@@ -117,6 +122,7 @@
                                 console.log(`file exists: ${pkl_filename}: ${pkl_file_exists}`);
                                 if (skip_file_if_exists && pkl_file_exists) {
                                     console.warn('file exists. skipping...', pkl_filename);
+                                    await sleep($next_cycle_time);
                                     progress_percent += 100 / total_length;
                                     continue;
                                 }
@@ -129,7 +135,7 @@
                                     ys,
                                 });
                                 compute_btn.click();
-                                await sleep(recycle_time);
+                                await sleep($next_cycle_time);
                                 progress_percent += 100 / total_length;
                             }
                         }
@@ -148,6 +154,7 @@
         cancelScheduler = true;
         console.warn('Cancelling scheduler...');
     };
+
     let skip_file_if_exists = true;
     // $: scheduler_dialog?.showModal();
 </script>
@@ -175,12 +182,34 @@
         <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
         </form>
-        <h3 class="text-lg font-bold">Scheduler</h3>
+        <h3 class="text-lg font-bold">
+            <span>Scheduler</span>
+            <span class="badge badge-xs badge-info"
+                >{models.length * embedders.length * clean.length * modes.length * ytys.length}</span
+            >
+        </h3>
 
         <div class="grid content-baseline gap-2 overflow-auto h-[500px]">
-            <Checkbox bind:value={skip_file_if_exists} label="Skip if file exists" />
+            <div class="flex-gap items-end">
+                <Checkbox bind:value={skip_file_if_exists} label="Skip if file exists" />
+                <CustomInput
+                    label="Variable update time (ms)"
+                    bind:value={$variable_update_time}
+                    type="number"
+                    min="100"
+                />
+                <CustomInput label="Next cycle time (ms)" bind:value={$next_cycle_time} type="number" min="100" />
+                <!-- Total computation time -->
+                <div>
+                    <span>Scheduling time:</span>
+                    <span class="badge badge-xs badge-info">{total_sleep_time_in_seconds} s</span>
+                </div>
+            </div>
             <div class="grid border border-solid border-black rounded px-1 mr-2">
-                <span class="text-md">Models</span>
+                <div class="flex justify-between pt-2">
+                    <span class="text-md">Models</span>
+                    <span class="badge badge-sm">{models.length}</span>
+                </div>
                 <Set chips={model_names} let:chip filter bind:selected={models}>
                     <Chip {chip} touch>
                         <Text>{chip}</Text>
@@ -188,7 +217,10 @@
                 </Set>
             </div>
             <div class="grid border border-solid border-black rounded px-1 mr-2">
-                <span class="text-md">Embedders</span>
+                <div class="flex justify-between pt-2">
+                    <span>Embedders</span>
+                    <span class="badge badge-sm">{embedders.length}</span>
+                </div>
                 <Set chips={embeddings} let:chip filter bind:selected={embedders}>
                     <Chip {chip} touch>
                         <Text>{chip}</Text>
@@ -196,7 +228,10 @@
                 </Set>
             </div>
             <div class="grid border border-solid border-black rounded px-1 mr-2">
-                <span class="text-md">Data clean</span>
+                <div class="flex justify-between pt-2">
+                    <span>Data clean</span>
+                    <span class="badge badge-sm">{clean.length}</span>
+                </div>
                 <Set chips={['true', 'false']} let:chip filter bind:selected={clean}>
                     <Chip {chip} touch>
                         <Text>{chip}</Text>
@@ -204,7 +239,10 @@
                 </Set>
             </div>
             <div class="grid border border-solid border-black rounded px-1 mr-2">
-                <span class="text-md">Modes</span>
+                <div class="flex justify-between pt-2">
+                    <span>Modes</span>
+                    <span class="badge badge-sm">{modes.length}</span>
+                </div>
                 <Set chips={['default', 'best_params']} let:chip filter bind:selected={modes}>
                     <Chip {chip} touch>
                         <Text>{chip}</Text>
@@ -212,7 +250,10 @@
                 </Set>
             </div>
             <div class="grid border border-solid border-black rounded px-1 mr-2">
-                <span class="text-md">ytransformation-yscaling</span>
+                <div class="flex justify-between pt-2">
+                    <span>ytransformation-yscaling</span>
+                    <span class="badge badge-sm">{ytys.length}</span>
+                </div>
                 <Set chips={available_ytys} let:chip filter bind:selected={ytys}>
                     <Chip {chip} touch>
                         <Text>{chip}</Text>
