@@ -143,9 +143,8 @@
     <button
         {id}
         bind:this={btn}
-        class:running={loading}
         class:btn-disabled={server_loading}
-        class="btn btn-sm btn-outline ld-ext-right w-max join-item"
+        class="btn btn-sm btn-outline w-max join-item"
         on:click={run_callback}
         on:pyEvent
         on:pyEventClosed
@@ -153,6 +152,9 @@
         on:pyEventStdout
         on:pyEventSuccess
     >
+        {#if loading}
+            <span class="loading loading-dots loading-sm"></span>
+        {/if}
         {name}
         {#if $redis_server_mode && subprocess}
             <CalendarCheck size="20" />
@@ -163,7 +165,6 @@
         {:else if process_count > 0}
             <div class="badge">{process_count}</div>
         {/if}
-        <div class="ld ld-ring ld-spin" style="color: antiquewhite;"></div>
     </button>
     {#if source && server_loading}
         <button

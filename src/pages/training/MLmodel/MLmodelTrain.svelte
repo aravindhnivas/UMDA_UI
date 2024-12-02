@@ -352,7 +352,9 @@
             <ResultsPanel {plot_data_ready} {data_file} />
         </Accordion>
     </div>
+
     <div class="flex m-auto gap-4">
+        <Scheduler {compute_btn} />
         <Loadingbtn
             bind:btn={compute_btn}
             name="Begin training"
@@ -374,7 +376,6 @@
             Copy training data info
         </button>
         <Dashboard url="http://localhost:8080" name="Optuna-dashboard" />
-        <Scheduler {compute_btn} />
     </div>
 
     {#await $current_pretrained_file then value}

@@ -15,6 +15,7 @@
     import { embedding, embeddings } from '../embedding/stores';
     import Checkbox from '$lib/components/Checkbox.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
+    import { CalendarCheck } from 'lucide-svelte/icons';
 
     export let compute_btn: HTMLButtonElement;
 
@@ -174,6 +175,7 @@
         <span>Cancel Scheduler ({Number(progress_percent.toFixed(2))} %)</span>
     {:else}
         <span>Scheduler</span>
+        <CalendarCheck size="20" />
     {/if}
 </button>
 
