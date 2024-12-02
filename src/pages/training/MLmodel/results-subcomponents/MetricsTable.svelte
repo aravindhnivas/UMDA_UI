@@ -162,11 +162,23 @@
     <Loadingbtn
         name="Export all models (.csv)"
         callback={async () => {
+            const metrics_loc = await path.join($ROOT_DIR, 'metrics');
+
+            // fetch all .csv files
+            const files = await fs.readDir(metrics_loc);
+            console.log(files);
+            const saved_csv_files = files.filter(
+                file => file.isFile && file.name.endsWith('.csv') && file.name !== 'all_metrics.csv',
+            );
+            console.log(saved_csv_files);
+            if (saved_csv_files.length === 0) {
+                toast.error('No files to export');
+                return;
+            }
+
             return {
                 pyfile: 'training.export_all_metrics',
-                args: {
-                    metrics_loc: await path.join($ROOT_DIR, 'metrics'),
-                },
+                args: { metrics_loc },
             };
         }}
     />
