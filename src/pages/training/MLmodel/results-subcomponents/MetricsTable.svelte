@@ -192,9 +192,9 @@
 
 <CustomInput
     bind:value={search_key}
-    placeholder="Search"
+    placeholder="Search from {metric_rows.length} rows"
+    helper={filtered_metric_rows.length > 0 ? `Showing ${filtered_metric_rows.length} rows` : 'No rows found'}
     on:change={() => {
-        console.log(search_key);
         filtered_metric_rows = metric_rows.filter(row =>
             row.some(val => val.toLocaleLowerCase().includes(search_key.toLocaleLowerCase())),
         );
