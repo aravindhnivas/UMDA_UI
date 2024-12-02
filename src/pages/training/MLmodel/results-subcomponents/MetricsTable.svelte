@@ -2,7 +2,6 @@
     import CustomSelect from '$lib/components/CustomSelect.svelte';
     import { ROOT_DIR } from '$pages/training/training_file/plot-analysis/stores';
     import { current_model_pkl_files, cv_fold, model } from '../stores';
-    // import { roundToUncertainty } from '$lib/utils';
 
     const columns = ['Mode', 'Embedder', 'Data shape', 'R2', 'MSE', 'RMSE', 'MAE'];
 
@@ -41,7 +40,6 @@
                 const results_contents = await readJSON<Record<string, any>>(results_file);
                 const data_shapes = results_contents?.data_shapes;
                 let X_data_shape = data_shapes.X ? `${data_shapes.X[0]} x ${data_shapes.X[1]}` : 'N/A';
-                // console.log(file_read, 'X_data_shape', X_data_shape);
 
                 // use sigfig_value from computed file
                 if (!('sigfig_value' in stats.test.r2)) {
@@ -54,11 +52,6 @@
                 const rmse = stats.test.rmse.sigfig_value ?? 'N/A';
                 const mae = stats.test.mae.sigfig_value ?? 'N/A';
 
-                // compute uncertainty from std
-                // const { formattedString: r2 } = roundToUncertainty(stats.test.r2.mean, stats.test.r2.std);
-                // const { formattedString: mse } = roundToUncertainty(stats.test.mse.mean, stats.test.mse.std);
-                // const { formattedString: rmse } = roundToUncertainty(stats.test.rmse.mean, stats.test.rmse.std);
-                // const { formattedString: mae } = roundToUncertainty(stats.test.mae.mean, stats.test.mae.std);
                 metric_rows = [...metric_rows, [name, embedder, X_data_shape, r2, mse, rmse, mae]];
             }
         }
