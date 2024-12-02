@@ -498,7 +498,7 @@
                             >
                         {/each}
                     </div>
-                    {#if active_tab !== 'Best Metrics (Overall)'}
+                    <div class="grid gap-2" class:hidden={active_tab === 'Best Metrics (Overall)'} transition:fade>
                         <div class="flex-gap my-2">
                             <button
                                 class="btn btn-sm"
@@ -684,7 +684,7 @@
                                 </button>
                             </div>
                         {/if}
-                    {/if}
+                    </div>
                 </div>
                 <div class="grid gap-2" class:hidden={active_tab !== 'Metrics Table'} transition:fade>
                     <MetricsTable />
