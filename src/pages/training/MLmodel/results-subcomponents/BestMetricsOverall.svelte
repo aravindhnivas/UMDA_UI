@@ -17,7 +17,7 @@
         const csv_file = await path.join($best_metrics_loc, filename);
         if (!(await fs.exists(csv_file))) return;
         const contents = await read_csv(csv_file);
-        console.log(contents);
+        // console.log(contents);
         if (!contents) return;
         data = contents.data;
         columns = contents.columns;
@@ -36,7 +36,7 @@
             class:btn-active={selected_csv_file === csv}
             on:click={() => {
                 selected_csv_file = csv;
-            }}>{csv}</button
+            }}>{csv.replace('.csv', '')}</button
         >
     {/each}
 </div>
