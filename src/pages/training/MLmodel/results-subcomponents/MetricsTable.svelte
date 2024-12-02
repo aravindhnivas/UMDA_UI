@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { Loadingbtn } from '$lib/components';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
     import { ROOT_DIR } from '$pages/training/training_file/plot-analysis/stores';
     import { current_model_pkl_files, cv_fold, model } from '../stores';
@@ -155,7 +156,20 @@
         items={['r2', 'mse', 'rmse', 'mae']}
         on:change={() => compute_metric(file_read)}
     />
+
     <button class="btn btn-sm btn-outline" on:click={async () => await export_to_csv()}>Export (.csv)</button>
+
+    <Loadingbtn
+        name="Export all models (.csv)"
+        callback={async () => {
+            return {
+                pyfile: 'training.export_all_metrics',
+                args: {
+                    metrics_loc: await path.join($ROOT_DIR, 'metrics'),
+                },
+            };
+        }}
+    />
 </div>
 
 <div class="overflow-x-auto w-full" style="height: 500px;">
