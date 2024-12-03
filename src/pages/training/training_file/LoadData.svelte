@@ -103,8 +103,9 @@
             return;
         }
         try {
-            const loaded_state = JSON.parse(loaded_state_file);
-            console.log(loaded_state);
+            const loaded_state = safeJsonParse<LoadedTrainingState>(loaded_state_file);
+            if (!loaded_state) throw new Error('Invalid state file. Please check the file content');
+            // console.log(loaded_state);
             $training_column_name_X = loaded_state.training_column_name_X;
             $training_column_name_y = loaded_state.training_column_name_y;
             $training_column_name_index = loaded_state.training_column_name_index;
@@ -116,7 +117,6 @@
             $use_filtered_data_for_training = loaded_state.use_filtered_data_for_training;
             $filtered_dir = loaded_state.filtered_dir;
             toast.success('State loaded');
-            // throw new Error('Not implemented');
         } catch (error) {
             toast.error(error);
         }
