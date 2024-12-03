@@ -116,14 +116,13 @@
             $use_filtered_data_for_training = loaded_state.use_filtered_data_for_training;
             $filtered_dir = loaded_state.filtered_dir;
             toast.success('State loaded');
+            // throw new Error('Not implemented');
         } catch (error) {
-            toast.error('Error loading state file');
+            toast.error(error);
         }
     };
 
     const reset_state = () => {
-        // $training_column_name_X = '';
-        // $training_column_name_index = '';
         $training_column_name_y = '';
         $loaded_df_columns = [];
         auto_fetch_columns = false;
@@ -138,8 +137,6 @@
         await load_state();
         $training_state_loaded = true;
     };
-
-    onMount(auto_load_state);
     $: if ($training_file.filename) auto_load_state();
 </script>
 
