@@ -14,6 +14,20 @@ export const embedd_savefile_path = derived(
     },
 );
 
+export const processed_df = derived(
+    [embedd_savefile, current_training_processed_data_directory],
+    async ([$embedd_savefile, $current_training_processed_data_directory]) => {
+        const training_dirname = await $current_training_processed_data_directory;
+        const final_processed_file = await path.join(
+            training_dirname,
+            'embedded_vectors',
+            `processed_${$embedd_savefile}`,
+            'processed_df.parquet',
+        );
+        return final_processed_file;
+    },
+);
+
 export const use_PCA = localWritable('use_PCA', false);
 
 export const model_and_pipeline_files = localWritable<{

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { current_training_data_file } from '../training_file/plot-analysis/stores';
-    import { embedd_savefile_path } from './stores';
+    import { embedd_savefile_path, processed_df } from './stores';
     import { training_column_name_X, training_column_name_y } from '../training_file/stores';
     import { RefreshCcw, ExternalLink } from 'lucide-svelte/icons';
 
@@ -13,20 +13,28 @@
         { name: 'Embedded vector file', key: 'embedded_file' },
         { name: 'Train X', key: 'columnX' },
         { name: 'Train y', key: 'columnY' },
+        { name: 'Final processed file', key: 'final_processed_file' },
     ];
 
     let metadata: { data_shape: number[]; invalid_smiles: number } | null = null;
 
     let loaded_files: LoadedInfosFile;
-    const refresh_data = async (tfile: Promise<string>, vfile: Promise<string>, columnX: string, columnY: string) => {
+    const refresh_data = async (
+        tfile: Promise<string>,
+        vfile: Promise<string>,
+        columnX: string,
+        columnY: string,
+        processed_df: Promise<string>,
+    ) => {
         metadata = null;
         loaded_files = {
             training_file: { value: '', valid: false, basename: '' },
             embedded_file: { value: '', valid: false, basename: '' },
             columnX: { value: '', valid: false, basename: '' },
             columnY: { value: '', valid: false, basename: '' },
+            final_processed_file: { value: '', valid: false, basename: '' },
         };
-        const [_training_file, _embedded_file] = await Promise.all([tfile, vfile]);
+        const [_training_file, _embedded_file, _processed_df] = await Promise.all([tfile, vfile, processed_df]);
 
         const vector_metadata_file = _embedded_file.replace('.npy', '.metadata.json');
         if (!(await fs.exists(vector_metadata_file))) return loaded_files;
@@ -45,6 +53,12 @@
         };
         loaded_files.columnX = { value: columnX, valid: columnX !== '', basename: columnX };
         loaded_files.columnY = { value: columnY, valid: columnY !== '', basename: columnY };
+
+        loaded_files.final_processed_file = {
+            value: _processed_df,
+            valid: await fs.exists(_processed_df),
+            basename: await path.basename(_processed_df),
+        };
         dispatch('refresh', loaded_files);
         return loaded_files;
     };
@@ -73,7 +87,7 @@
 </div>
 
 {#key refresh}
-    {#await refresh_data($current_training_data_file, $embedd_savefile_path, $training_column_name_X, $training_column_name_y) then loaded_files}
+    {#await refresh_data($current_training_data_file, $embedd_savefile_path, $training_column_name_X, $training_column_name_y, $processed_df) then loaded_files}
         <div class="grid gap-2 grid-cols-4 items-center">
             {#each items as { name, key }}
                 {@const { value, valid } = loaded_files[key]}
