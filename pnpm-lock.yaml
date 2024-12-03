@@ -35,6 +35,9 @@ importers:
       '@tauri-apps/plugin-websocket':
         specifier: ~2
         version: 2.0.0
+      hyparquet:
+        specifier: ^1.6.3
+        version: 1.6.3
       lucide-svelte:
         specifier: 0.453.0
         version: 0.453.0(svelte@4.2.19)
@@ -1304,6 +1307,9 @@ packages:
 
   hover.css@2.3.2:
     resolution: {integrity: sha512-eXch700vfcoSSAcEcU154lTHBYQy2cjGT+yJZtkKWxASBBiPVkqYOdMAa0sz4cYj2YIrl1FRE2s5O4EgOaIpig==}
+
+  hyparquet@1.6.3:
+    resolution: {integrity: sha512-JwD3bcRueKs7/0iQG8xyJxh6OAXSQdzh0dJkMtzQPSDOTuvoKniDgdOPB9oXGspbUhp5c9uW6coqYiFddKJ+cw==}
 
   idb-keyval@6.2.1:
     resolution: {integrity: sha512-8Sb3veuYCyrZL+VBt9LJfZjLUPWVvqn8tG28VqYNFCo43KHcKuq+b4EiXGeuaLAQWL2YmyDgMp2aSpH9JHsEQg==}
@@ -3721,6 +3727,8 @@ snapshots:
       function-bind: 1.1.2
 
   hover.css@2.3.2: {}
+
+  hyparquet@1.6.3: {}
 
   idb-keyval@6.2.1: {}
 
