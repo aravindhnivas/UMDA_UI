@@ -1,5 +1,6 @@
 <script lang="ts">
     import Lockbutton from './Lockbutton.svelte';
+    import { CircleHelp } from 'lucide-svelte/icons';
 
     export let id: string = getID(5);
     export let value: string | number;
@@ -8,6 +9,7 @@
     export let helperHighlight: string = '';
     export let lock: boolean | null = null;
     export let disabled = false;
+    export let hoverHelper: string = '';
 
     let className = '';
     export { className as class };
@@ -17,9 +19,14 @@
 
 <div class="grid gap-1 {className}">
     {#if label}
-        <span class="text-xs {element_disabled ? 'text-gray-600/75' : ''}">
-            {label}
-        </span>
+        <div class="flex-gap {element_disabled ? 'text-gray-600/75' : ''}">
+            <span class="text-xs">{label}</span>
+            {#if hoverHelper}
+                <span aria-label={hoverHelper} data-cooltipz-dir="top" data-cooltipz-size="medium">
+                    <CircleHelp size="16" />
+                </span>
+            {/if}
+        </div>
     {/if}
 
     <div class="flex items-center gap-2">

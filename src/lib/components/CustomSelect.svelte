@@ -1,6 +1,6 @@
 <script lang="ts">
     import CustomInput from './CustomInput.svelte';
-    import { UnlockKeyhole, LockKeyhole } from 'lucide-svelte/icons';
+    import { UnlockKeyhole, LockKeyhole, CircleHelp } from 'lucide-svelte/icons';
 
     export let label: string = '';
     export let value: string;
@@ -12,6 +12,7 @@
     export let enable_use_input = false;
     export let enabled_lock_mode = false;
     export let lock = false;
+    export let hoverHelper: string = '';
 
     let className = '';
     export { className as class };
@@ -50,7 +51,15 @@
         <div class="flex flex-col gap-1 {className}">
             <div class="flex gap-1 items-center">
                 {#if label}
-                    <span class="text-xs pl-1 {element_disabled ? 'text-gray-600/75' : ''}">{label}</span>
+                    <!-- <span class="text-xs pl-1 {element_disabled ? 'text-gray-600/75' : ''}">{label}</span> -->
+                    <div class="flex-gap {element_disabled ? 'text-gray-600/75' : ''}">
+                        <span class="text-xs">{label}</span>
+                        {#if hoverHelper}
+                            <span aria-label={hoverHelper} data-cooltipz-dir="top" data-cooltipz-size="medium">
+                                <CircleHelp size="16" />
+                            </span>
+                        {/if}
+                    </div>
                 {/if}
             </div>
             <div class="join">
