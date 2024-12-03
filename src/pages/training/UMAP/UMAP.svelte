@@ -63,13 +63,29 @@
             },
         };
     }
+    let reading_parquet = false;
 
     const read_parquet = async (filename: string) => {
+        if (!(await fs.exists(filename))) {
+            toast.error('File does not exist');
+            return;
+        }
+        reading_parquet = true;
         const buffer = await fs.readFile(filename);
         const arrayBuffer = new Uint8Array(buffer).buffer;
+
+        if (arrayBuffer.byteLength === 0) {
+            toast.error('Empty file');
+            reading_parquet = false;
+            return;
+        }
         await parquetRead({
             file: arrayBuffer,
-            onComplete: data => console.log(data),
+            onComplete: data => {
+                // console.log(data);
+                console.log('File read successfully', data.length, data[0]);
+                reading_parquet = false;
+            },
         });
     };
 </script>
@@ -79,11 +95,17 @@
     <LoadedFileInfos on:refresh={e => (loaded_files = e.detail)} />
     <div class="flex-gap">
         <button
-            class=" btn btn-sm"
+            class="btn btn-sm"
+            class:btn-disabled={reading_parquet}
             on:click={async () => {
                 await read_parquet(loaded_files.final_processed_file.value);
-            }}>Read Parquet file</button
+            }}
         >
+            <span>Read Parquet file</span>
+            {#if reading_parquet}
+                <span class="loading loading-dots loading-sm"></span>
+            {/if}
+        </button>
     </div>
     <div class="divider"></div>
 
