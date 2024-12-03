@@ -6,7 +6,7 @@
 // biome-ignore lint: disable
 export {}
 declare global {
-  const Toaster: typeof import('svelte-sonner')['Toaster']
+  const Toaster: typeof import('$lib/utils/toast')['Toaster']
   const afterUpdate: typeof import('svelte')['afterUpdate']
   const arch: typeof import('$lib/utils/index')['arch']
   const axios: typeof import('axios')['default']
@@ -59,7 +59,7 @@ declare global {
   const slide: typeof import('svelte/transition')['slide']
   const tempdir: typeof import('$lib/utils/index')['tempdir']
   const tick: typeof import('svelte')['tick']
-  const toast: typeof import('svelte-sonner')['toast']
+  const toast: typeof import('$lib/utils/toast')['toast']
   const typeSafeObjectKeys: typeof import('$lib/utils/index')['typeSafeObjectKeys']
   const writable: typeof import('svelte/store')['writable']
   const writeJSON: typeof import('$lib/utils/index')['writeJSON']
