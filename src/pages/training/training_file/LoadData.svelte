@@ -96,14 +96,10 @@
     };
 
     const load_state = async () => {
-        if (!(await fs.exists($training_file.filename))) return toast.error('Training file not found');
-        const loaded_state_file = await fs.readTextFile(`${$training_save_directory}/training_file_state.json`);
-        if (!fs.exists(`${$training_save_directory}/training_file_state.json`)) {
-            toast.error('No state file found');
-            return;
-        }
         try {
-            const loaded_state = safeJsonParse<LoadedTrainingState>(loaded_state_file);
+            if (!(await fs.exists($training_file.filename))) return toast.error('Training file not found');
+            const filename = await path.join($training_save_directory, 'training_file_state.json');
+            const loaded_state = await readJSON<LoadedTrainingState>(filename);
             if (!loaded_state) throw new Error('Invalid state file. Please check the file content');
             // console.log(loaded_state);
             $training_column_name_X = loaded_state.training_column_name_X;
