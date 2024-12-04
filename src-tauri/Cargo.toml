@@ -32,6 +32,7 @@ tauri-plugin-dialog = "2"
 tauri-plugin-os = "2"
 tauri-plugin-process = "2"
 tauri-plugin-shell = "2"
+tauri-plugin-log = "2"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem

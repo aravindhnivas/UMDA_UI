@@ -23,7 +23,8 @@
       "allow": [
         "**",
         "$APPLOCALDATA/**",
-        "$RESOURCE/**"
+        "$RESOURCE/**",
+        "$APPLOG/**"
       ]
     },
     "core:window:allow-create",
@@ -130,6 +131,14 @@
     "os:default",
     "process:default",
     "websocket:default",
-    "shell:default"
+    "shell:default",
+    "log:default",
+    "log:allow-log",
+    "log:allow-debug",
+    "log:allow-info",
+    "log:allow-warn",
+    "log:allow-error",
+    "log:allow-trace",
+    "log:allow-logger"
   ]
 }
