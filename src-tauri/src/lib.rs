@@ -3,6 +3,7 @@
 
 use portpicker::pick_unused_port;
 use tauri_plugin_window_state;
+use tauri_plugin_log::{Target, TargetKind};
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -22,17 +23,11 @@ fn get_sysinfo() -> (u64, usize) {
     (total_memory, cpu_count)
 }
 
-// use tauri::Manager;
-// #[derive(Clone, serde::Serialize)]
-// struct Payload {
-//     args: Vec<String>,
-//     cwd: String,
-// }
 
-fn main() {
-    // let devtools = devtools::init();
-
+#[cfg_attr(mobile, tauri::mobile_entry_point)]
+pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_log::Builder::new().build())
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_os::init())
@@ -41,13 +36,16 @@ fn main() {
         .plugin(tauri_plugin_updater::Builder::new().build())
         .invoke_handler(tauri::generate_handler![get_tcp_port, get_sysinfo])
         .plugin(tauri_plugin_window_state::Builder::default().build())
-        // .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
-        //     println!("{}, {argv:?}, {cwd}", app.package_info().name);
-        //     app.emit_all("single-instance", Payload { args: argv, cwd })
-        //         .unwrap();
-        // }))
         .plugin(tauri_plugin_websocket::init())
-        // .plugin(devtools)
+        .plugin(
+            tauri_plugin_log::Builder::new()
+                // .target(tauri_plugin_log::Target::new(
+                //     tauri_plugin_log::TargetKind::LogDir {
+                //     file_name: Some("logs".to_string()),
+                //     },
+                // ))
+                .build()
+        )
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
