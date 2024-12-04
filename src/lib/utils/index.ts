@@ -107,8 +107,7 @@ export const safeJsonParse = <T>(str: string) => {
         const jsonValue: T = JSON.parse(str);
         return jsonValue;
     } catch (error) {
-        console.error(error);
-        if (error instanceof Error) toast.error(error?.message);
+        toast.error(error);
         return undefined;
     }
 };
@@ -118,17 +117,12 @@ export const safeJsonStringify = (obj: any) => {
         const jsonString: string = JSON.stringify(obj);
         return jsonString;
     } catch (error) {
-        console.error(error);
-        if (error instanceof Error) toast.error(error?.message);
+        toast.error(error);
         return undefined;
     }
 };
 
 export const readJSON = async <T>(file: string) => {
-    if (!file) {
-        console.error('File not specified');
-        return undefined;
-    }
     if (!(await fs.exists(file))) {
         console.error(`File not found: ${file}`);
         return undefined;
