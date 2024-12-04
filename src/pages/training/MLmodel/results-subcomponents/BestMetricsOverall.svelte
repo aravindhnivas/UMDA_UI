@@ -26,7 +26,7 @@
     let columns: string[] = [];
     let data: string[][] = [];
     $: fetch_all_csv_files($best_metrics_loc);
-    $: read_current_csv_file(selected_csv_file);
+    $: selected_csv_file && read_current_csv_file(selected_csv_file);
 </script>
 
 <div class="flex flex-wrap gap-2">
