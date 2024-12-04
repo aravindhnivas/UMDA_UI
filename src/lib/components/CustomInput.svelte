@@ -22,7 +22,7 @@
         <div class="flex-gap {element_disabled ? 'text-gray-600/75' : ''}">
             <span class="text-xs">{label}</span>
             {#if hoverHelper}
-                <span aria-label={hoverHelper} data-cooltipz-dir="top" data-cooltipz-size="medium">
+                <span aria-label={hoverHelper} data-cooltipz-dir="right" data-cooltipz-size="medium">
                     <CircleHelp size="16" />
                 </span>
             {/if}
