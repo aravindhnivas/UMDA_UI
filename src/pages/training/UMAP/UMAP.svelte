@@ -34,7 +34,7 @@
     let random_state_locked: boolean = false;
     let scale_embedding = false;
     let use_cleaned_data = false;
-
+    let annotate_clusters = false;
     let dbscan_eps: number = 0.5;
     let dbscan_min_samples: number = 5;
 
@@ -56,7 +56,7 @@
                 umap_metric,
                 n_jobs,
                 scale_embedding,
-                // use_cleaned_data,
+                annotate_clusters,
                 label_issues_file: use_cleaned_data ? label_issues_file : null,
                 processed_df_file: loaded_files.final_processed_file.value,
                 columnX: loaded_files.columnX.value,
@@ -128,7 +128,8 @@
             label="min_dist"
             hoverHelper={params_description.min_dist}
             helperHighlight="default: 0.1"
-            step="0.01"
+            step="0.1"
+            min="0.1"
         />
         <CustomInput
             bind:value={n_components}
@@ -167,6 +168,8 @@
             type="number"
             label="eps"
             helperHighlight="default: 0.5"
+            min="0.1"
+            step="0.1"
             hoverHelper={'Maximum distance between two points for them to be considered neighbors'}
         />
         <CustomInput
@@ -176,6 +179,7 @@
             helperHighlight="default: 5"
             hoverHelper={'Minimum number of points required to form a dense region (cluster)'}
         />
+        <Checkbox bind:value={annotate_clusters} label="Annotate clusters" />
     </div>
 
     <div class="m-auto">
