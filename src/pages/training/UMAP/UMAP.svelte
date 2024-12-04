@@ -1,6 +1,7 @@
 <script lang="ts">
+    import { cleanlab } from './../MLmodel/stores';
     import { umap_metrics } from './stores';
-    import { parquetMetadata, parquetRead } from 'hyparquet';
+    import { parquetRead } from 'hyparquet';
     import Checkbox from '$lib/components/Checkbox.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
@@ -44,6 +45,8 @@
             return;
         }
 
+        const vec_processed_dir = await path.dirname(loaded_files.final_processed_file.value);
+        const label_issues_file = await path.join(vec_processed_dir, `label_issues_${$cleanlab.model}.parquet`);
         return {
             pyfile: 'training.umap',
             args: {
@@ -53,7 +56,8 @@
                 umap_metric,
                 n_jobs,
                 scale_embedding,
-                use_cleaned_data,
+                // use_cleaned_data,
+                label_issues_file: use_cleaned_data ? label_issues_file : null,
                 processed_df_file: loaded_files.final_processed_file.value,
                 columnX: loaded_files.columnX.value,
                 dbscan_eps,
@@ -158,8 +162,20 @@
 
     <div class="text-md">DBSCAN Clustering</div>
     <div class="flex-gap">
-        <CustomInput bind:value={dbscan_eps} type="number" label="eps" helperHighlight="default: 0.5" />
-        <CustomInput bind:value={dbscan_min_samples} type="number" label="min_samples" helperHighlight="default: 5" />
+        <CustomInput
+            bind:value={dbscan_eps}
+            type="number"
+            label="eps"
+            helperHighlight="default: 0.5"
+            hoverHelper={'Maximum distance between two points for them to be considered neighbors'}
+        />
+        <CustomInput
+            bind:value={dbscan_min_samples}
+            type="number"
+            label="min_samples"
+            helperHighlight="default: 5"
+            hoverHelper={'Minimum number of points required to form a dense region (cluster)'}
+        />
     </div>
 
     <div class="m-auto">
