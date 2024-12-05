@@ -1,24 +1,17 @@
 <script lang="ts">
     import { cleanlab } from './../MLmodel/stores';
     import { umap_metrics } from './stores';
-    import { parquetRead } from 'hyparquet';
     import Checkbox from '$lib/components/Checkbox.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import LoadedFileInfos from '../embedding/LoadedFileInfos.svelte';
+    import SaveAndLoadState from '$lib/components/SaveAndLoadState.svelte';
 
     export let id: string = 'umap-embedder-container';
     export let display: string = 'none';
 
     let loaded_files: LoadedInfosFile;
-
-    let n_neighbors: number = 15;
-    let min_dist: number = 0.1;
-    let n_components: number = 2;
-    let n_jobs: number = -1;
-    let umap_metric: string = 'euclidean';
-    let random_state: number = 42;
 
     const params_description: Record<keyof UMAPParams, string> = {
         n_neighbors:
@@ -30,13 +23,6 @@
         metric: 'The metric to use when calculating distance between instances in a feature array.',
         random_state: 'The seed used by the random number generator. If random_state is used, n_jobs will be ignored.',
     };
-
-    let random_state_locked: boolean = false;
-    let scale_embedding = false;
-    let use_cleaned_data = false;
-    let annotate_clusters = false;
-    let dbscan_eps: number = 0.5;
-    let dbscan_min_samples: number = 5;
 
     async function compute_umap_embedding() {
         console.log('UMAP embedding');
@@ -50,80 +36,67 @@
         return {
             pyfile: 'training.umap',
             args: {
-                n_neighbors,
-                min_dist,
-                n_components,
-                umap_metric,
-                n_jobs,
-                scale_embedding,
-                annotate_clusters,
-                label_issues_file: use_cleaned_data ? label_issues_file : null,
+                n_neighbors: params.n_neighbors,
+                min_dist: params.min_dist,
+                n_components: params.n_components,
+                umap_metric: params.umap_metric,
+                n_jobs: params.n_jobs,
+                scale_embedding: params.scale_embedding,
+                annotate_clusters: params.annotate_clusters,
+                label_issues_file: params.use_cleaned_data ? label_issues_file : null,
                 processed_df_file: loaded_files.final_processed_file.value,
                 columnX: loaded_files.columnX.value,
-                dbscan_eps,
-                dbscan_min_samples,
-                random_state: random_state_locked ? null : random_state,
+                dbscan_eps: params.dbscan_eps,
+                dbscan_min_samples: params.dbscan_min_samples,
+                random_state: params.random_state_locked ? null : params.random_state,
                 training_filename: loaded_files.training_file.basename,
             },
         };
     }
-    let reading_parquet = false;
 
-    const read_parquet = async (filename: string) => {
-        if (!(await fs.exists(filename))) {
-            toast.error('File does not exist');
-            return;
-        }
-        reading_parquet = true;
-        const buffer = await fs.readFile(filename);
-        const arrayBuffer = new Uint8Array(buffer).buffer;
-
-        if (arrayBuffer.byteLength === 0) {
-            toast.error('Empty file');
-            reading_parquet = false;
-            return;
-        }
-        await parquetRead({
-            file: arrayBuffer,
-            onComplete: data => {
-                // console.log(data);
-                console.log('File read successfully', data.length, data[0]);
-                reading_parquet = false;
-            },
-        });
+    let params = {
+        n_neighbors: 15,
+        min_dist: 0.1,
+        n_components: 2,
+        n_jobs: -1,
+        umap_metric: 'euclidean',
+        random_state: 42,
+        scale_embedding: true,
+        use_cleaned_data: false,
+        annotate_clusters: true,
+        dbscan_eps: 0.5,
+        dbscan_min_samples: 5,
+        random_state_locked: false,
     };
+    const default_params = structuredClone(params);
+    let umap_loc: string = '';
+
+    const get_umap_loc = async (processed_df_file: string) => {
+        if (!processed_df_file) return;
+        const dir = await path.dirname(processed_df_file);
+        umap_loc = await path.join(dir, 'umap');
+        if (!(await fs.exists(umap_loc))) await fs.mkdir(umap_loc);
+    };
+    $: get_umap_loc(loaded_files?.final_processed_file?.value);
 </script>
 
 <div class="grid content-start gap-2" {id} style:display>
     <h2>UMAP - embedder</h2>
-    <LoadedFileInfos on:refresh={e => (loaded_files = e.detail)} />
-    <div class="flex-gap">
-        <button
-            class="btn btn-sm"
-            class:btn-disabled={reading_parquet}
-            on:click={async () => {
-                await read_parquet(loaded_files.final_processed_file.value);
-            }}
-        >
-            <span>Read Parquet file</span>
-            {#if reading_parquet}
-                <span class="loading loading-dots loading-sm"></span>
-            {/if}
-        </button>
-    </div>
-    <div class="divider"></div>
 
+    <LoadedFileInfos on:refresh={e => (loaded_files = e.detail)} />
+    <div class="divider"></div>
+    <SaveAndLoadState loc={umap_loc} {default_params} bind:params unique_ext={'.umap.json'} />
     <div class="text-xl">Basic UMAP Parameters</div>
     <div class="flex-gap items-start">
         <CustomInput
-            bind:value={n_neighbors}
+            bind:value={params.n_neighbors}
             type="number"
             label="n_neighbors"
             hoverHelper={params_description.n_neighbors}
             helperHighlight="default: 15"
         />
         <CustomInput
-            bind:value={min_dist}
+            bind:value={params.min_dist}
             type="number"
             label="min_dist"
             hoverHelper={params_description.min_dist}
@@ -132,39 +105,39 @@
             min="0.1"
         />
         <CustomInput
-            bind:value={n_components}
+            bind:value={params.n_components}
             type="number"
             label="n_components"
             hoverHelper={params_description.n_components}
             helperHighlight="default: 2"
         />
         <CustomSelect
-            bind:value={umap_metric}
+            bind:value={params.umap_metric}
             label="metric"
             items={umap_metrics}
             hoverHelper={params_description.metric}
             helperHighlight="default: euclidean"
         />
-        <CustomInput bind:value={n_jobs} type="number" label="n_jobs" hoverHelper={params_description.n_jobs} />
+        <CustomInput bind:value={params.n_jobs} type="number" label="n_jobs" hoverHelper={params_description.n_jobs} />
         <CustomInput
-            bind:value={random_state}
+            bind:value={params.random_state}
             type="number"
             label="random_state"
             hoverHelper={params_description.random_state}
             helperHighlight="default: 42"
-            bind:lock={random_state_locked}
+            bind:lock={params.random_state_locked}
         />
     </div>
 
     <div class="flex-gap">
-        <Checkbox bind:value={scale_embedding} label="Scale embedding" />
-        <Checkbox bind:value={use_cleaned_data} label="Use cleaned data" />
+        <Checkbox bind:value={params.scale_embedding} label="Scale embedding" />
+        <Checkbox bind:value={params.use_cleaned_data} label="Use cleaned data" />
     </div>
 
     <div class="text-md">DBSCAN Clustering</div>
     <div class="flex-gap">
         <CustomInput
-            bind:value={dbscan_eps}
+            bind:value={params.dbscan_eps}
             type="number"
             label="eps"
             helperHighlight="default: 0.5"
@@ -173,13 +146,13 @@
             hoverHelper={'Maximum distance between two points for them to be considered neighbors'}
         />
         <CustomInput
-            bind:value={dbscan_min_samples}
+            bind:value={params.dbscan_min_samples}
             type="number"
             label="min_samples"
             helperHighlight="default: 5"
             hoverHelper={'Minimum number of points required to form a dense region (cluster)'}
         />
-        <Checkbox bind:value={annotate_clusters} label="Annotate clusters" />
+        <Checkbox bind:value={params.annotate_clusters} label="Annotate clusters" />
     </div>
 
     <div class="m-auto">

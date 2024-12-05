@@ -1,4 +1,29 @@
 import { all_params_lock_status, model, fine_tuned_values, default_fine_tuned_values } from './stores';
+// import { parquetRead } from 'hyparquet';
+// let reading_parquet = false;
+// const read_parquet = async (filename: string) => {
+//     if (!(await fs.exists(filename))) {
+//         toast.error('File does not exist');
+//         return;
+//     }
+//     reading_parquet = true;
+//     const buffer = await fs.readFile(filename);
+//     const arrayBuffer = new Uint8Array(buffer).buffer;
+
+//     if (arrayBuffer.byteLength === 0) {
+//         toast.error('Empty file');
+//         reading_parquet = false;
+//         return;
+//     }
+//     await parquetRead({
+//         file: arrayBuffer,
+//         onComplete: data => {
+//             // console.log(data);
+//             console.log('File read successfully', data.length, data[0]);
+//             reading_parquet = false;
+//         },
+//     });
+// };
 
 export function parse_fine_tuned_values() {
     let clonedFineTunedValues: Record<string, any> = {};

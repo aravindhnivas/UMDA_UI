@@ -114,7 +114,7 @@ export const safeJsonParse = <T>(str: string) => {
 
 export const safeJsonStringify = (obj: any) => {
     try {
-        const jsonString: string = JSON.stringify(obj);
+        const jsonString: string = JSON.stringify(obj, null, 2);
         return jsonString;
     } catch (error) {
         toast.error(error);
@@ -171,6 +171,7 @@ export const writeJSON = async (file: string, data: any, append: boolean = false
     const jsonString = safeJsonStringify(data);
     if (jsonString) {
         await fs.writeTextFile(file, jsonString);
+        toast.success(`Data saved to ${file}`);
     }
 };
 interface RoundingResult {

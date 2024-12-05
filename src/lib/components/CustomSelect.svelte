@@ -85,7 +85,7 @@
                         {/each}
                     {/if}
                 </select>
-                <slot name="post-within" />
+                <slot name="post-within" {lock} />
                 {#if enabled_lock_mode}
                     <button class="btn btn-sm btn-square btn-outline join-item" on:click={() => (lock = !lock)}>
                         {#if lock}
