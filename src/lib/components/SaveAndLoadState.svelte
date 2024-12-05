@@ -28,7 +28,7 @@
                 class="btn btn-sm btn-square btn-outline join-item"
                 on:click={async () => await get_all_items_in_loc(loc)}
             >
-                <RefreshCcw size="18" />
+                <RefreshCcw size="20" />
             </button>
         </svelte:fragment>
     </CustomSelect>
