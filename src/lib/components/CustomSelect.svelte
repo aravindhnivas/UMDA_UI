@@ -1,6 +1,6 @@
 <script lang="ts">
     import CustomInput from './CustomInput.svelte';
-    import { UnlockKeyhole, LockKeyhole, CircleHelp } from 'lucide-svelte/icons';
+    import { UnlockKeyhole, LockKeyhole, CircleHelp, Pencil, PencilOff } from 'lucide-svelte/icons';
 
     export let label: string = '';
     export let value: string;
@@ -46,7 +46,18 @@
             bind:lock
             {enabled_lock_mode}
             {disabled}
-        />
+        >
+            <svelte:fragment slot="post-input-within">
+                <button
+                    class="join-item"
+                    on:click={() => {
+                        use_input = !use_input;
+                    }}
+                >
+                    <PencilOff size="20" />
+                </button>
+            </svelte:fragment>
+        </CustomInput>
     {:else}
         <div class="flex flex-col gap-1 {className}">
             <div class="flex gap-1 items-center">
@@ -62,7 +73,18 @@
                     </div>
                 {/if}
             </div>
+
             <div class="join">
+                {#if enable_use_input}
+                    <button
+                        class="btn btn-sm btn-square btn-outline join-item"
+                        on:click={() => {
+                            use_input = !use_input;
+                        }}
+                    >
+                        <Pencil size="20" />
+                    </button>
+                {/if}
                 <slot name="pre-within" {lock} />
                 <select
                     class="select select-sm select-bordered join-item {element_disabled ? 'bg-gray-600/25' : ''}"
@@ -86,6 +108,7 @@
                     {/if}
                 </select>
                 <slot name="post-within" {lock} />
+
                 {#if enabled_lock_mode}
                     <button class="btn btn-sm btn-square btn-outline join-item" on:click={() => (lock = !lock)}>
                         {#if lock}
