@@ -21,7 +21,7 @@
     $: loc && get_all_items_in_loc(loc, false);
 </script>
 
-<div class="flex-gap items-end">
+<div class="flex-gap items-end ml-auto border border-solid border-black p-1 rounded">
     <CustomSelect label="filename" bind:value={filename} {items} enable_use_input>
         <svelte:fragment slot="pre-within">
             <button
