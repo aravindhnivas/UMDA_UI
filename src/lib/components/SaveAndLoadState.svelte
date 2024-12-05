@@ -10,11 +10,15 @@
     let filename: string = 'default';
     let items: string[] = [];
 
-    const get_all_items_in_loc = async () => {
+    const get_all_items_in_loc = async (loc: string, log = true) => {
+        if (!loc) return;
         const files = await fs.readDir(loc);
         items = files.filter(f => f.isFile && f.name.endsWith(unique_ext)).map(f => f.name.replace(unique_ext, ''));
-        toast.success('Items loaded');
+        if (items.length > 0) filename ||= items[0];
+        if (log) toast.success('UMAP loaded');
     };
+
+    $: loc && get_all_items_in_loc(loc, false);
 </script>
 
 <div class="flex-gap items-end">
@@ -22,7 +26,7 @@
         <svelte:fragment slot="pre-within">
             <button
                 class="btn btn-sm btn-square btn-outline join-item"
-                on:click={async () => await get_all_items_in_loc()}
+                on:click={async () => await get_all_items_in_loc(loc)}
             >
                 <RefreshCcw size="18" />
             </button>
@@ -53,6 +57,7 @@
         on:click={async () => {
             const file = await path.join(loc, `${filename}${unique_ext}`);
             await writeJSON(file, params);
+            await get_all_items_in_loc(loc);
         }}
     >
         <Save />
