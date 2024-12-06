@@ -1,6 +1,6 @@
 [package]
 name = "umda_ui"
-version = "3.1.2"
+version = "3.1.3"
 description = "An interative user-interface for UMDA"
 authors = ["A. N. Marimuthu"]
 license = "MIT"
