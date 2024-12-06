@@ -4,7 +4,6 @@
     "beforeBuildCommand": "pnpm build",
     "frontendDist": "../dist",
     "devUrl": "http://localhost:1420",
-    "withGlobalTauri": true
   },
   "bundle": {
     "active": true,
