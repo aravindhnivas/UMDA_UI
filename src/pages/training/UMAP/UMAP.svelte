@@ -66,7 +66,7 @@
         };
     }
 
-    const get_save_fname = async (params: Record<string, string | number | boolean>) => {
+    const get_save_fname = async (params: UMAP_DBSCAN_Cluster_PARAMS) => {
         const extname = await path.extname(loaded_files.training_file.basename);
         save_fname = loaded_files.training_file.basename.replace(`.${extname}`, '');
         if (params.scale_embedding) save_fname += '_scaled';
@@ -95,7 +95,7 @@
         plotly_data_file = res;
     });
 
-    let params: Record<string, string | number | boolean> = {
+    let params: UMAP_DBSCAN_Cluster_PARAMS = {
         n_neighbors: 15,
         min_dist: 0.1,
         n_components: 2,
