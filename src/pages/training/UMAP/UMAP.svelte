@@ -7,6 +7,7 @@
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import LoadedFileInfos from '../embedding/LoadedFileInfos.svelte';
     import SaveAndLoadState from '$lib/components/SaveAndLoadState.svelte';
+    import Plot from 'svelte-plotly.js';
 
     export let id: string = 'umap-embedder-container';
     export let display: string = 'none';
@@ -50,11 +51,41 @@
                 dbscan_min_samples: params.dbscan_min_samples,
                 random_state: params.random_state_locked ? null : params.random_state,
                 training_filename: loaded_files.training_file.basename,
+                fig_title: params.fig_title,
             },
         };
     }
 
-    let params = {
+    const get_save_fname = async (params: Record<string, string | number | boolean>) => {
+        const extname = await path.extname(loaded_files.training_file.basename);
+        save_fname = loaded_files.training_file.basename.replace(`.${extname}`, '');
+        if (params.scale_embedding) save_fname += '_scaled';
+        if (!params.random_state_locked) save_fname += `_random_state_${params.random_state}`;
+        save_fname += `_umap_${params.n_neighbors}_${params.min_dist}_${params.n_components}`;
+        save_fname += `_cluster_eps_${params.dbscan_eps}_min_samples_${params.dbscan_min_samples}`;
+        return save_fname;
+    };
+
+    const get_umap_dir = async (file: string, cleaned: boolean) => {
+        const processed_dir = await path.dirname(file);
+        umap_dir = await path.join(processed_dir, 'umap');
+        if (cleaned) {
+            umap_dir = await path.join(umap_dir, `cleaned_label_issues_${$cleanlab.model}`);
+        }
+        return umap_dir;
+    };
+
+    let save_fname: string = '';
+    $: loaded_files?.training_file?.basename && get_save_fname(params);
+    let umap_dir: string = '';
+    $: loaded_files?.final_processed_file?.value &&
+        get_umap_dir(loaded_files.final_processed_file.value, params.use_cleaned_data);
+
+    $: path.join(umap_dir, `[plotly_data]_${save_fname}.json`).then(res => {
+        plotly_data_file = res;
+    });
+
+    let params: Record<string, string | number | boolean> = {
         n_neighbors: 15,
         min_dist: 0.1,
         n_components: 2,
@@ -67,8 +98,11 @@
         dbscan_eps: 0.5,
         dbscan_min_samples: 5,
         random_state_locked: false,
+        fig_title: '',
     };
+
     const default_params = structuredClone(params);
+
     let umap_loc: string = '';
 
     const get_umap_loc = async (processed_df_file: string) => {
@@ -78,6 +112,30 @@
         if (!(await fs.exists(umap_loc))) await fs.mkdir(umap_loc);
     };
     $: get_umap_loc(loaded_files?.final_processed_file?.value);
+
+    let plotly_data: Plotly.Data[];
+    let plotly_layout: Plotly.Layout;
+    let plotly_data_file: string = '';
+
+    const plot_from_json = async (data_json_file: string) => {
+        if (!(await fs.exists(data_json_file))) return;
+        const contents = await readJSON<{ data: Plotly.Data[]; layout: Plotly.Layout }>(data_json_file);
+        if (!contents) return;
+        const { data, layout } = contents;
+        plotly_data = data;
+        plotly_layout = layout;
+        // return { data, layout };
+    };
+
+    const onResult = async (e: CustomEvent) => {
+        console.log(e.detail);
+        const { dataFromPython } = e.detail;
+        if (!dataFromPython) return;
+        plotly_data_file = dataFromPython.plotly_data_file;
+        const contents = await readJSON<{ data: Plotly.Data[]; layout: Plotly.Layout }>(plotly_data_file);
+        if (!contents) return;
+        // plot_from_json(plotly_data_file);
+    };
 </script>
 
 <div class="grid content-start gap-2" {id} style:display>
@@ -86,7 +144,9 @@
     <LoadedFileInfos on:refresh={e => (loaded_files = e.detail)} />
     <div class="divider"></div>
     <SaveAndLoadState loc={umap_loc} {default_params} bind:params unique_ext={'.umap.json'} />
+
     <div class="text-xl">Basic UMAP Parameters</div>
+
     <div class="flex-gap items-start">
         <CustomInput
             bind:value={params.n_neighbors}
@@ -135,7 +195,7 @@
     </div>
 
     <div class="text-md">DBSCAN Clustering</div>
-    <div class="flex-gap">
+    <div class="flex-gap items-start">
         <CustomInput
             bind:value={params.dbscan_eps}
             type="number"
@@ -152,10 +212,31 @@
             helperHighlight="default: 5"
             hoverHelper={'Minimum number of points required to form a dense region (cluster)'}
         />
+    </div>
+
+    <div class="flex-gap">
+        <CustomInput bind:value={params.fig_title} label="title" helper={'Figure title'} />
         <Checkbox bind:value={params.annotate_clusters} label="Annotate clusters" />
     </div>
 
-    <div class="m-auto">
-        <Loadingbtn callback={compute_umap_embedding} subprocess={true} />
+    <div class="flex-gap m-auto">
+        <Loadingbtn callback={compute_umap_embedding} subprocess={true} on:result={onResult} />
+        <button
+            class="btn btn-sm btn-outline"
+            on:click={async () => {
+                const file_exists = await fs.exists(plotly_data_file);
+                console.log(plotly_data_file);
+                console.log(file_exists);
+                if (!file_exists) return toast.error('Plot not available');
+                await plot_from_json(plotly_data_file);
+            }}>{plotly_data_file ? 'Plot ready' : 'Plot not available'}</button
+        >
     </div>
+
+    <div style="height: 800px;">
+        {#if plotly_data && plotly_layout}
+            <Plot data={plotly_data} layout={plotly_layout} fillParent={true} debounce={250} />
+        {/if}
+    </div>
+    <div class="divider"></div>
 </div>

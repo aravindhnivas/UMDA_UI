@@ -4,5 +4,5 @@ interface UMAPParams {
     n_components: number;
     n_jobs: number;
     metric: string;
-    random_state?: number;
+    random_state: number;
 }
