@@ -102,7 +102,6 @@
     };
 
     const default_params = structuredClone(params);
-
     let umap_loc: string = '';
 
     const get_umap_loc = async (processed_df_file: string) => {
@@ -111,6 +110,7 @@
         umap_loc = await path.join(dir, 'umap');
         if (!(await fs.exists(umap_loc))) await fs.mkdir(umap_loc);
     };
+
     $: get_umap_loc(loaded_files?.final_processed_file?.value);
 
     let plotly_data: Plotly.Data[];
@@ -124,7 +124,6 @@
         const { data, layout } = contents;
         plotly_data = data;
         plotly_layout = layout;
-        // return { data, layout };
     };
 
     const onResult = async (e: CustomEvent) => {
@@ -134,7 +133,7 @@
         plotly_data_file = dataFromPython.plotly_data_file;
         const contents = await readJSON<{ data: Plotly.Data[]; layout: Plotly.Layout }>(plotly_data_file);
         if (!contents) return;
-        // plot_from_json(plotly_data_file);
+        plot_from_json(plotly_data_file);
     };
 </script>
 
@@ -225,8 +224,6 @@
             class="btn btn-sm btn-outline"
             on:click={async () => {
                 const file_exists = await fs.exists(plotly_data_file);
-                console.log(plotly_data_file);
-                console.log(file_exists);
                 if (!file_exists) return toast.error('Plot not available');
                 await plot_from_json(plotly_data_file);
             }}>{plotly_data_file ? 'Plot ready' : 'Plot not available'}</button
