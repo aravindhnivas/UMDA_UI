@@ -38,7 +38,7 @@
     const variable_update_time = localWritable('variable_update_time', 500);
     const next_cycle_time = localWritable('next_cycle_time', 1000);
     $: total_iterations = $models.length * $embedders.length * $clean_mode.length * $modes.length * $ytys.length;
-    $: total_sleep_time = (7 * $variable_update_time + $next_cycle_time) * total_iterations;
+    $: total_sleep_time = (7 * Number($variable_update_time) + Number($next_cycle_time)) * total_iterations;
     $: total_sleep_time_in_seconds = total_sleep_time / 1000;
 
     let scheduler_running = false;
