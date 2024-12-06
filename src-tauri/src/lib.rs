@@ -27,7 +27,15 @@ fn get_sysinfo() -> (u64, usize) {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
-        .plugin(tauri_plugin_log::Builder::new().build())
+        .plugin(
+            tauri_plugin_log::Builder::new()
+            .target(tauri_plugin_log::Target::new(
+                        tauri_plugin_log::TargetKind::LogDir {
+                        file_name: Some("logs".to_string()),
+                        },
+                    ))
+            .build()
+        )
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_os::init())
@@ -37,15 +45,6 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![get_tcp_port, get_sysinfo])
         .plugin(tauri_plugin_window_state::Builder::default().build())
         .plugin(tauri_plugin_websocket::init())
-        .plugin(
-            tauri_plugin_log::Builder::new()
-                // .target(tauri_plugin_log::Target::new(
-                //     tauri_plugin_log::TargetKind::LogDir {
-                //     file_name: Some("logs".to_string()),
-                //     },
-                // ))
-                .build()
-        )
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

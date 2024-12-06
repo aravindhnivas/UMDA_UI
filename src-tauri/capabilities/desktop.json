@@ -16,7 +16,6 @@
     "process:default",
     "websocket:default",
     "shell:default",
-    "log:default",
-    "log:allow-trace"
+    "log:default"
   ]
 }
