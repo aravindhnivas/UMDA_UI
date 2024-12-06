@@ -32,8 +32,18 @@
             return;
         }
 
+        if (!(await fs.exists(loaded_files.final_processed_file.value))) {
+            toast.error('Processed file not found');
+            return;
+        }
+
         const vec_processed_dir = await path.dirname(loaded_files.final_processed_file.value);
         const label_issues_file = await path.join(vec_processed_dir, `label_issues_${$cleanlab.model}.parquet`);
+        if (params.use_cleaned_data && !(await fs.exists(label_issues_file))) {
+            toast.error('Label issues file not found. Or Turn off "Use cleaned data"');
+            return;
+        }
+
         return {
             pyfile: 'training.umap',
             args: {
@@ -226,8 +236,16 @@
                 const file_exists = await fs.exists(plotly_data_file);
                 if (!file_exists) return toast.error('Plot not available');
                 await plot_from_json(plotly_data_file);
-            }}>{plotly_data_file ? 'Plot ready' : 'Plot not available'}</button
+            }}
         >
+            {#await fs.exists(plotly_data_file) then value}
+                {#if value}
+                    <span>Plot ready</span>
+                {:else}
+                    <span>Plot not available</span>
+                {/if}
+            {/await}
+        </button>
     </div>
 
     <div style="height: 800px;">
