@@ -19,7 +19,7 @@
   },
   "productName": "umda_ui",
   "mainBinaryName": "umda_ui",
-  "version": "3.1.3",
+  "version": "3.1.4",
   "identifier": "com.umdaui.dev",
   "plugins": {
     "updater": {
