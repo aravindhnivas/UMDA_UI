@@ -2,11 +2,13 @@
     import { RAM_SIZE, CPU_COUNT } from '$lib/stores/system';
     import { pyVersion, umdapyVersion } from '$lib/pyserver/stores';
     import Layout from './comp/Layout.svelte';
+    // import {logger} from '$lib/utils/logger';
 
     onMount(async () => {
-        console.log('About page mounted');
+        logger.info('About page mounted');
         system_info.platform = await platform();
         system_info.arch = await arch();
+        logger.info(JSON.stringify(system_info));
     });
 
     const system_info = {

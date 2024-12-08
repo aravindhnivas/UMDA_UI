@@ -41,6 +41,7 @@ declare global {
   const linspace: typeof import('lodash-es')['range']
   const listen: typeof import('$lib/utils/index')['listen']
   const localWritable: typeof import('@macfja/svelte-persistent-store')['localWritable']
+  const logger: typeof import('$lib/utils/logger')['logger']
   const oO: typeof import('@zmotivat0r/o0')['oO']
   const onDestroy: typeof import('svelte')['onDestroy']
   const onMount: typeof import('svelte')['onMount']

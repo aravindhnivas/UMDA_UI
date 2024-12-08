@@ -3,7 +3,7 @@
 
 use portpicker::pick_unused_port;
 use tauri_plugin_window_state;
-use tauri_plugin_log::{Target, TargetKind};
+use tauri_plugin_log;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -29,6 +29,7 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(
             tauri_plugin_log::Builder::new()
+            .level(log::LevelFilter::Info)
             .target(tauri_plugin_log::Target::new(
                         tauri_plugin_log::TargetKind::LogDir {
                         file_name: Some("logs".to_string()),
