@@ -32,6 +32,7 @@ export default defineConfig(async () => ({
                     '@zmotivat0r/o0': ['oO'],
                     // 'svelte-sonner': ['toast', 'Toaster'],
                     '$lib/utils/toast': ['toast', 'Toaster'],
+                    // '$lib/utils/logger': [['logger', 'console']],
                     '$lib/utils/logger': ['logger'],
                     '@macfja/svelte-persistent-store': ['localWritable'],
                     '$lib/pyserver/computePy': [['default', 'computePy']],

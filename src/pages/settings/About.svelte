@@ -2,7 +2,6 @@
     import { RAM_SIZE, CPU_COUNT } from '$lib/stores/system';
     import { pyVersion, umdapyVersion } from '$lib/pyserver/stores';
     import Layout from './comp/Layout.svelte';
-    // import {logger} from '$lib/utils/logger';
 
     onMount(async () => {
         logger.info('About page mounted');

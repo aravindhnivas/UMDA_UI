@@ -14,6 +14,7 @@ declare global {
   const blur: typeof import('svelte/transition')['blur']
   const checkUpdate: typeof import('$lib/utils/index')['checkUpdate']
   const computePy: typeof import('$lib/pyserver/computePy')['default']
+  const console: typeof import('$lib/utils/logger')['logger']
   const createEventDispatcher: typeof import('svelte')['createEventDispatcher']
   const crossfade: typeof import('svelte/transition')['crossfade']
   const derived: typeof import('svelte/store')['derived']
