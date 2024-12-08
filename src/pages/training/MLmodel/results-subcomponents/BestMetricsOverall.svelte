@@ -1,6 +1,7 @@
 <script lang="ts">
     import { read_csv } from '$lib/utils';
     import { best_metrics_loc } from '$pages/training/training_file/plot-analysis/stores';
+    import { ExternalLink } from 'lucide-svelte/icons';
 
     let csv_filenames: string[] = [];
     let selected_csv_file: string = '';
@@ -31,6 +32,17 @@
     $: fetch_all_csv_files($best_metrics_loc);
     $: read_current_csv_file($best_metrics_loc, selected_csv_file);
 </script>
+
+<div class="flex-gap border border-solid border-black p-1">
+    <div class="text-sm">{$best_metrics_loc}</div>
+    <button
+        class="btn btn-sm btn-outline"
+        on:click={async () => {
+            if (!(await fs.exists($best_metrics_loc))) return toast.error('Folder does not exist');
+            await shell.open($best_metrics_loc);
+        }}>Open Folder <ExternalLink size="20" /></button
+    >
+</div>
 
 <div class="flex flex-wrap gap-2">
     {#each csv_filenames as csv (csv)}
