@@ -9,15 +9,18 @@
         if (!(await fs.exists(loc))) return;
         const csv_files = await fs.readDir(loc);
         csv_filenames = csv_files.map(file => file.name);
-
         selected_csv_file ||= csv_filenames[0];
+
+        data = [];
+        columns = [];
     };
 
-    const read_current_csv_file = async (filename: string) => {
-        const csv_file = await path.join($best_metrics_loc, filename);
+    const read_current_csv_file = async (loc: string, filename: string) => {
+        if (!filename) return;
+        if (!(await fs.exists(loc))) return;
+        const csv_file = await path.join(loc, filename);
         if (!(await fs.exists(csv_file))) return;
         const contents = await read_csv(csv_file);
-        // console.log(contents);
         if (!contents) return;
         data = contents.data;
         columns = contents.columns;
@@ -26,7 +29,7 @@
     let columns: string[] = [];
     let data: string[][] = [];
     $: fetch_all_csv_files($best_metrics_loc);
-    $: selected_csv_file && read_current_csv_file(selected_csv_file);
+    $: read_current_csv_file($best_metrics_loc, selected_csv_file);
 </script>
 
 <div class="flex flex-wrap gap-2">
