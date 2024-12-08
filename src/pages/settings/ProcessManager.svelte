@@ -7,7 +7,7 @@
     import { initializeSocket } from '$lib/websocket/utils';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
-    import { CircleX } from 'lucide-svelte/icons';
+    import { Trash2 } from 'lucide-svelte/icons';
 
     $: if ($socket_connection_status !== 'connected' && $pyServerReady && $redis_server_mode) {
         initializeSocket();
@@ -58,12 +58,12 @@
 
     <div style="overflow-y: auto; max-height: 500px;">
         <div class="grid gap-2">
-            <button class="ml-auto btn btn-sm btn-error" on:click={() => ($jobStatus = {})}
-                >Clear <CircleX size="20" /></button
+            <button class="m-auto btn btn-sm btn-error" on:click={() => ($jobStatus = {})}
+                >Clear <Trash2 size="20" /></button
             >
             {#each Object.entries($jobStatus) as [jobId, status]}
                 <!-- {#if status.status !== 'completed'} -->
-                <div class="grid border border-black p-2 gap-1">
+                <div class="grid border border-black p-2 gap-1 mr-5">
                     <div class="text-lg font-bold">Job: {jobId}</div>
                     <div>
                         <pre>Status: {status.status}</pre>
