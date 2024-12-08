@@ -11,7 +11,12 @@
                     <div class="max-w-md">
                         <h1 class="text-5xl font-bold">UMDA - UI</h1>
                         <p class="py-6">Unsupervised Molecule Discovery in Astrophysics - User Interface</p>
-                        <button class="btn btn-sm btn-outline">Get Started</button>
+                        <button
+                            class="btn btn-sm btn-outline"
+                            on:click={() => {
+                                logger.info('Get Started button clicked');
+                            }}>Get Started</button
+                        >
                     </div>
                 </div>
             </div>
