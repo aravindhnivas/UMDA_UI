@@ -86,6 +86,19 @@ export function initializeSocket() {
         remove_job_from_status(data.job_id, 30000);
     });
 
+    // job_cancelled
+    $socket.on('job_cancelled', (data: any) => {
+        console.log('Job cancelled:', data);
+        // Alert.info(data.message);
+        // toast.error(`Job cancelled: ${data.job_id}`);
+
+        jobStatus.update(status => ({
+            ...status,
+            [data.job_id]: { status: 'cancelled', message: data.message, done: true },
+        }));
+        remove_job_from_status(data.job_id);
+    });
+
     // Error handling
     $socket.on('error', (error: any) => {
         console.error('WebSocket error:', error);

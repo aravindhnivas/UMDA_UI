@@ -1,20 +1,38 @@
 <script lang="ts">
     import { redis_server_mode, pyServerReady, pyServerURL } from '$lib/pyserver/stores';
     import { jobStatus, socket, socket_connection_status } from '$lib/websocket/stores';
+    import { redis_job_controller } from '$lib/pyserver/computefromServer';
     import Layout from './comp/Layout.svelte';
     import Dashboard from '$pages/settings/dashboards/Dashboard.svelte';
     import { initializeSocket } from '$lib/websocket/utils';
+    import Loadingbtn from '$lib/components/Loadingbtn.svelte';
+    import CustomInput from '$lib/components/CustomInput.svelte';
+    import { CircleX } from 'lucide-svelte/icons';
 
     $: if ($socket_connection_status !== 'connected' && $pyServerReady && $redis_server_mode) {
         initializeSocket();
     }
     onDestroy(() => $socket?.disconnect());
-    // $: console.log($socket_connection_status);
+
+    let wait_time = 1;
 </script>
 
 <Layout id="Process-Manager" class="pl-5">
     <h1>Process-Manager</h1>
-
+    <div class="flex-gap items-end">
+        <CustomInput bind:value={wait_time} label="Wait Time (s)" type="number" />
+        <Loadingbtn
+            subprocess={true}
+            callback={() => {
+                return {
+                    pyfile: 'wait_timer',
+                    args: {
+                        wait_time: Number(wait_time),
+                    },
+                };
+            }}
+        />
+    </div>
     <div class="flex gap-2 my-2">
         <button
             class="btn btn-sm btn-outline"
@@ -39,15 +57,44 @@
     {/if}
 
     <div style="overflow-y: auto; max-height: 500px;">
-        <button class="btn btn-sm btn-error" on:click={() => ($jobStatus = {})}>Clear</button>
-        {#each Object.entries($jobStatus) as [jobId, status]}
-            {#if status.status !== 'completed'}
-                <div class="job-status">
-                    <h3>Job: {jobId}</h3>
-                    <p>Status: {status.status}</p>
+        <div class="grid gap-2">
+            <button class="ml-auto btn btn-sm btn-error" on:click={() => ($jobStatus = {})}
+                >Clear <CircleX size="20" /></button
+            >
+            {#each Object.entries($jobStatus) as [jobId, status]}
+                <!-- {#if status.status !== 'completed'} -->
+                <div class="grid border border-black p-2 gap-1">
+                    <div class="text-lg font-bold">Job: {jobId}</div>
+                    <div>
+                        <pre>Status: {status.status}</pre>
+                    </div>
+
+                    <div class="flex-gap">
+                        {#if status.status === 'completed'}
+                            <button
+                                class="btn btn-sm btn-success"
+                                on:click={async () => {
+                                    const data = await redis_job_controller(jobId, 'job_result');
+                                    if (!data) return;
+                                    console.warn(data.result);
+                                }}>Show result</button
+                            >
+                        {/if}
+                        {#if status.status === 'running'}
+                            <button
+                                class="btn btn-sm btn-error"
+                                on:click={async () => {
+                                    const data = await redis_job_controller(jobId, 'cancel_job');
+                                    if (!data) return;
+                                    console.warn(data.message);
+                                }}>Cancel job</button
+                            >
+                        {/if}
+                    </div>
                 </div>
-            {/if}
-        {/each}
+                <!-- {/if} -->
+            {/each}
+        </div>
     </div>
 </Layout>
 
@@ -71,12 +118,5 @@
     .error {
         background-color: #f8d7da;
         color: #721c24;
-    }
-
-    .job-status {
-        margin: 1rem 0;
-        padding: 1rem;
-        border: 1px solid #ddd;
-        border-radius: 0.25rem;
     }
 </style>
