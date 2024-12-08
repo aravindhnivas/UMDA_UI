@@ -35,6 +35,7 @@ pub fn run() {
                         file_name: Some("logs".to_string()),
                         },
                     ))
+            .max_file_size(50_000 /* bytes */)
             .build()
         )
         .plugin(tauri_plugin_shell::init())
