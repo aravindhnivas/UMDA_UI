@@ -39,8 +39,6 @@
 
     let process_count = 0;
     let activate_socket = false;
-    // $: console.warn({ id, $socket_connection_status });
-    // $: if ($redis_server_mode && $socket_connection_status === 'connected' && !activate_socket) {
     $: if ($redis_server_mode && job_id.length > 0 && !activate_socket) {
         $socket.on('job_result', async (data: any) => {
             if (job_id.includes(data.job_id)) {
@@ -48,18 +46,16 @@
                     { data },
                     `Job result received from python server via websocket connection 🚀 for ${pyfile}`,
                 );
-                // job_id = job_id.filter(id => id !== data.job_id);
+                job_id = job_id.filter(id => id !== data.job_id);
                 // setTimeout(() => {
                 //     job_id = job_id.filter(id => id !== data.job_id);
                 // }, 5000);
                 await tick();
-                // dispatch('result', data.result);
                 dispatch('result', { dataFromPython: data.result, pyfile, args });
                 console.warn('result event dispatched');
             }
             activate_socket = true;
         });
-        // activate_socket = true;
         console.warn('Socket event listener activated', id);
     }
 
