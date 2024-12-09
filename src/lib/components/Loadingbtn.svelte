@@ -39,6 +39,7 @@
 
     let process_count = 0;
     let activate_socket = false;
+    $: if ($socket_connection_status === 'disconnected') activate_socket = false;
     $: if ($redis_server_mode && job_id.length > 0 && !activate_socket) {
         $socket.on('job_result', async (data: any) => {
             if (job_id.includes(data.job_id)) {
