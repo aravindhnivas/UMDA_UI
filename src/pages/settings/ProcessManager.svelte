@@ -7,7 +7,7 @@
     import { initializeSocket } from '$lib/websocket/utils';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
     import CustomInput from '$lib/components/CustomInput.svelte';
-    import { Trash2 } from 'lucide-svelte/icons';
+    import { Trash2, XCircle } from 'lucide-svelte/icons';
 
     $: if ($socket_connection_status !== 'connected' && $pyServerReady && $redis_server_mode) {
         initializeSocket();
@@ -56,15 +56,34 @@
         <div class="status-indicator error">Connection error</div>
     {/if}
 
+    {#if Object.keys($jobStatus).length > 0}
+        <button
+            class="m-auto btn btn-sm btn-error"
+            on:click={() => {
+                $jobStatus = Object.fromEntries(
+                    Object.entries($jobStatus).filter(([_jobId, status]) => status.status !== 'completed'),
+                );
+            }}
+        >
+            Clear all <Trash2 size="20" />
+        </button>
+    {/if}
+
     <div style="overflow-y: auto; max-height: 500px;">
         <div class="grid gap-2">
-            <button class="m-auto btn btn-sm btn-error" on:click={() => ($jobStatus = {})}
-                >Clear <Trash2 size="20" /></button
-            >
             {#each Object.entries($jobStatus) as [jobId, status]}
-                <!-- {#if status.status !== 'completed'} -->
                 <div class="grid border border-black p-2 gap-1 mr-5">
-                    <div class="text-lg font-bold">Job: {jobId}</div>
+                    <div class="flex items-center justify-between">
+                        <div class="text-lg font-bold">Job: {jobId}</div>
+                        <button
+                            class="btn btn-xs btn-error"
+                            on:click={() => {
+                                $jobStatus = Object.fromEntries(
+                                    Object.entries($jobStatus).filter(([id, _status]) => id !== jobId),
+                                );
+                            }}>Close <XCircle size="20" /></button
+                        >
+                    </div>
                     <div>
                         <pre>Status: {status.status}</pre>
                     </div>
@@ -80,7 +99,7 @@
                                 }}>Show result</button
                             >
                         {/if}
-                        {#if status.status === 'running'}
+                        {#if status.status !== 'completed'}
                             <button
                                 class="btn btn-sm btn-error"
                                 on:click={async () => {
@@ -92,7 +111,6 @@
                         {/if}
                     </div>
                 </div>
-                <!-- {/if} -->
             {/each}
         </div>
     </div>
