@@ -5,12 +5,11 @@ import { Alert } from '$utils/stores';
 
 function remove_job_from_status(job_id: string, timeout: number = 600000) {
     setTimeout(() => {
-        console.log(get(jobStatus));
+        console.warn('Job removed from status:', job_id, get(jobStatus));
         jobStatus.update(status => {
             delete status[job_id];
             return status;
         });
-        console.warn('Job removed from status:', job_id, get(jobStatus));
     }, timeout);
 }
 
@@ -53,7 +52,6 @@ export function initializeSocket() {
         console.log('Job queued:', data);
         jobStatus.update(status => ({
             ...status,
-            // [data.job_id]: { status: 'queued', ...data },
             [data.job_id]: { status: 'queued' },
         }));
     });
@@ -62,7 +60,6 @@ export function initializeSocket() {
         console.log('Job started:', data);
         jobStatus.update(status => ({
             ...status,
-            // [data.job_id]: { status: 'running', ...data },
             [data.job_id]: { status: 'running' },
         }));
     });
@@ -86,12 +83,8 @@ export function initializeSocket() {
         remove_job_from_status(data.job_id, 30000);
     });
 
-    // job_cancelled
     $socket.on('job_cancelled', (data: any) => {
         console.log('Job cancelled:', data);
-        // Alert.info(data.message);
-        // toast.error(`Job cancelled: ${data.job_id}`);
-
         jobStatus.update(status => ({
             ...status,
             [data.job_id]: { status: 'cancelled', message: data.message, done: true },
@@ -99,7 +92,6 @@ export function initializeSocket() {
         remove_job_from_status(data.job_id);
     });
 
-    // Error handling
     $socket.on('error', (error: any) => {
         console.error('WebSocket error:', error);
         socket_connection_status.set('error');

@@ -3,10 +3,11 @@
     import { pyServerReady, redis_server_mode } from '$lib/pyserver/stores';
     import { jobStatus, socket, socket_connection_status } from '$lib/websocket/stores';
     import type { CancelTokenSource } from 'axios';
-    import { X, Server, Cpu, CalendarCheck } from 'lucide-svelte/icons';
+    import { X, Server, Cpu } from 'lucide-svelte/icons';
     import computefromServer from '$lib/pyserver/computefromServer';
     import computefromSubprocess from '$lib/pyserver/computefromSubprocess';
     import { serverInfo } from '$pages/settings/utils/stores';
+    import SchedularTrack from './SchedularTrack.svelte';
 
     type Callback = { pyfile: string; args: Record<string, any> } | undefined;
 
@@ -27,42 +28,45 @@
         const data = $jobStatus[id];
         return { id, ...data };
     });
+    // $: console.log({ current_jobs });
 
     $: queued_jobs = current_jobs.filter(job => job && job.status === 'queued');
     $: running_jobs = current_jobs.filter(job => job && job.status === 'running');
     // $: completed_jobs = current_jobs.filter(job => job.status === 'completed');
     // $: failed_jobs = current_jobs.filter(job => job.status === 'error');
-
     $: redis_process_count = running_jobs.length + queued_jobs.length;
     $: redis_loading = redis_process_count > 0;
 
     let process_count = 0;
     let activate_socket = false;
-
-    $: if ($redis_server_mode && $socket_connection_status === 'connected' && !activate_socket) {
+    // $: console.warn({ id, $socket_connection_status });
+    // $: if ($redis_server_mode && $socket_connection_status === 'connected' && !activate_socket) {
+    $: if ($redis_server_mode && job_id.length > 0 && !activate_socket) {
         $socket.on('job_result', async (data: any) => {
             if (job_id.includes(data.job_id)) {
                 console.warn(
                     { data },
                     `Job result received from python server via websocket connection 🚀 for ${pyfile}`,
                 );
-                job_id = job_id.filter(id => id !== data.job_id);
+                // job_id = job_id.filter(id => id !== data.job_id);
+                // setTimeout(() => {
+                //     job_id = job_id.filter(id => id !== data.job_id);
+                // }, 5000);
                 await tick();
                 // dispatch('result', data.result);
                 dispatch('result', { dataFromPython: data.result, pyfile, args });
                 console.warn('result event dispatched');
             }
+            activate_socket = true;
         });
-        activate_socket = true;
-    } else if ($socket_connection_status !== 'disconnected') {
-        activate_socket = false;
+        // activate_socket = true;
+        console.warn('Socket event listener activated', id);
     }
 
     let source: CancelTokenSource;
     let pyfile: string;
     let args: Record<string, any>;
     let server_loading = false;
-    // let subprocess_loading = false;
     $: subprocess_loading = process_count > 0;
 
     const run_callback = async (e: Event) => {
@@ -156,16 +160,24 @@
             <span class="loading loading-dots loading-sm"></span>
         {/if}
         {name}
-        {#if $redis_server_mode && subprocess}
+        <!-- {#if $redis_server_mode && subprocess}
             <CalendarCheck size="20" />
-        {/if}
+        {/if} -->
 
-        {#if $redis_server_mode && redis_process_count > 0}
+        <!-- {#if $redis_server_mode && redis_process_count > 0}
             <div class="badge">{redis_process_count}</div>
         {:else if process_count > 0}
             <div class="badge">{process_count}</div>
+        {/if} -->
+        {#if process_count > 0}
+            <div class="badge">{process_count}</div>
         {/if}
     </button>
+
+    {#if $redis_server_mode && subprocess}
+        <SchedularTrack bind:job_id />
+    {/if}
+
     {#if source && server_loading}
         <button
             class="btn btn-sm btn-error join-item"

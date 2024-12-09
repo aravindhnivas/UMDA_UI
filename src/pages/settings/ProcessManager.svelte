@@ -19,20 +19,23 @@
 
 <Layout id="Process-Manager" class="pl-5">
     <h1>Process-Manager</h1>
-    <div class="flex-gap items-end">
-        <CustomInput bind:value={wait_time} label="Wait Time (s)" type="number" />
-        <Loadingbtn
-            subprocess={true}
-            callback={() => {
-                return {
-                    pyfile: 'wait_timer',
-                    args: {
-                        wait_time: Number(wait_time),
-                    },
-                };
-            }}
-        />
-    </div>
+    {#if import.meta.env.DEV}
+        <div class="flex-gap items-end">
+            <CustomInput bind:value={wait_time} label="Wait Time (s)" type="number" />
+            <Loadingbtn
+                subprocess={true}
+                callback={() => {
+                    return {
+                        pyfile: 'wait_timer',
+                        args: {
+                            wait_time: Number(wait_time),
+                        },
+                    };
+                }}
+            />
+        </div>
+    {/if}
+
     <div class="flex gap-2 my-2">
         <button
             class="btn btn-sm btn-outline"
@@ -56,7 +59,7 @@
         <div class="status-indicator error">Connection error</div>
     {/if}
 
-    {#if Object.keys($jobStatus).length > 0}
+    <!-- {#if Object.keys($jobStatus).length > 0}
         <button
             class="m-auto btn btn-sm btn-error"
             on:click={() => {
@@ -113,7 +116,7 @@
                 </div>
             {/each}
         </div>
-    </div>
+    </div> -->
 </Layout>
 
 <style>
