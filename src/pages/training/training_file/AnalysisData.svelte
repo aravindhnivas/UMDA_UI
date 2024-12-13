@@ -41,7 +41,7 @@
     let duplicates: number = 0;
     let deduplicated_filename = '';
     const onRemoveDuplicatesOnXColumn = (e: CustomEvent) => {
-        console.log(e.detail);
+        // console.log(e.detail);
         const { dataFromPython } = e.detail as {
             dataFromPython: {
                 deduplicated_filename: string;
@@ -76,31 +76,31 @@
             return;
         }
 
-        console.log(
+        console.warn({
             $structuralDistributionFilter,
             $elementalDistributionFilter,
             $sizeDistributionFilter,
             $YDistributionFilter,
-        );
+        });
 
         let min_atomic_number = null;
         if (!$sizeDistributionFilter.min_atomic_number.lock) {
-            min_atomic_number = $sizeDistributionFilter.min_atomic_number.value;
+            min_atomic_number = Number($sizeDistributionFilter.min_atomic_number.value);
         }
 
         let max_atomic_number = null;
         if (!$sizeDistributionFilter.max_atomic_number.lock) {
-            max_atomic_number = $sizeDistributionFilter.max_atomic_number.value;
+            max_atomic_number = Number($sizeDistributionFilter.max_atomic_number.value);
         }
 
         let size_count_threshold = null;
         if (!$sizeDistributionFilter.count_threshold.lock) {
-            size_count_threshold = $sizeDistributionFilter.count_threshold.value;
+            size_count_threshold = Number($sizeDistributionFilter.count_threshold.value);
         }
 
         let elemental_count_threshold = null;
         if (!$elementalDistributionFilter.count_threshold.lock) {
-            elemental_count_threshold = $elementalDistributionFilter.count_threshold.value;
+            elemental_count_threshold = Number($elementalDistributionFilter.count_threshold.value);
         }
 
         const filter_elements = $elementalDistributionFilter.filter_elements;
@@ -135,7 +135,6 @@
         const pyfile = 'training.check_duplicates_on_x_column';
         return { pyfile, args };
     };
-    // let filtered_filename = 'topelements';
     setContext('MolecularAnalysis', MolecularAnalysis);
     setContext('ApplyFilterForMolecularAnalysis', ApplyFilterForMolecularAnalysis);
 </script>
@@ -149,18 +148,6 @@
             callback={() => CheckDuplicatesOnXColumn()}
             on:result={onRemoveDuplicatesOnXColumn}
         />
-        <!-- <Loadingbtn
-            name="Begin full analysis"
-            subprocess={true}
-            callback={() => MolecularAnalysis('all')}
-        />
-        <Loadingbtn
-            name="Apply Xdata filters"
-            subprocess={true}
-            callback={() => ApplyFilterForMolecularAnalysis()}
-            on:result={e => console.log(e.detail)}
-        />
-        <CustomInput bind:value={filtered_filename} label="Enter filter name" /> -->
     </div>
 
     {#if duplicates > 0}
