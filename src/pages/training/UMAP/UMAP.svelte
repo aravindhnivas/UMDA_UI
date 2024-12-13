@@ -118,7 +118,8 @@
         if (!processed_df_file) return;
         const dir = await path.dirname(processed_df_file);
         umap_loc = await path.join(dir, 'umap');
-        if (!(await fs.exists(umap_loc))) await fs.mkdir(umap_loc);
+        // if (!(await fs.exists(umap_loc))) await fs.mkdir(umap_loc);
+        if (!(await fs.exists(umap_loc))) return;
     };
 
     $: get_umap_loc(loaded_files?.final_processed_file?.value);

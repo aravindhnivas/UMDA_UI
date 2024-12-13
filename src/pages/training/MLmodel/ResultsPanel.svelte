@@ -518,88 +518,91 @@
                                 <div>
                                     {#each Object.entries(result_names) as [category, parents] (category)}
                                         {@const embedder = category.replace('_embeddings', '')}
-                                        <div>
-                                            <div class="flex-gap">
-                                                <h2 class="text-xl font-semibold">
-                                                    {embedder} Plots ({$current_model_pkl_files[embedder].length})
-                                                </h2>
-                                                <button
-                                                    class="btn btn-xs"
-                                                    on:click={() => {
-                                                        toggle_embedder_plots[category] =
-                                                            !toggle_embedder_plots[category];
-                                                    }}
-                                                >
-                                                    {toggle_embedder_plots[category] ? 'Hide' : 'Show'}
-                                                </button>
-                                            </div>
-                                            {#if toggle_embedder_plots[category]}
-                                                {#each Object.entries(parents) as [parent, parentData] (parentData.pkl)}
-                                                    {@const name = `${embedder}: ${parent}`}
-                                                    <div class="breadcrumbs text-sm">
-                                                        <ul class="flex gap-2 flex-wrap">
-                                                            <li>
-                                                                ({$current_model_pkl_files[embedder].filter(f =>
-                                                                    f.name.startsWith(parent),
-                                                                ).length})
-                                                            </li>
-                                                            <!-- Parent -->
-                                                            <li>
-                                                                <button
-                                                                    class="btn btn-xs btn-outline"
-                                                                    class:btn-active={plotted_pkl_file ===
-                                                                        parentData.pkl}
-                                                                    on:click={() => plot_from_pkl(parentData.pkl, name)}
-                                                                >
-                                                                    {parent}
-                                                                </button>
-                                                            </li>
-
-                                                            <!-- Children -->
-                                                            {#if Object.keys(parentData.childrens).length > 0}
-                                                                <li class="join">
-                                                                    {#each Object.entries(parentData.childrens) as [child, childData]}
-                                                                        {@const name = `${embedder}: ${parent}: ${child}`}
-                                                                        <button
-                                                                            class="btn btn-xs btn-outline join-item"
-                                                                            class:btn-active={plotted_pkl_file ===
-                                                                                childData.pkl}
-                                                                            on:click={() =>
-                                                                                plot_from_pkl(childData.pkl, name)}
-                                                                        >
-                                                                            {child}
-                                                                        </button>
-                                                                    {/each}
+                                        {#if $current_model_pkl_files[embedder].length > 0}
+                                            <div>
+                                                <div class="flex-gap">
+                                                    <h2 class="text-xl font-semibold">
+                                                        {embedder} Plots ({$current_model_pkl_files[embedder].length})
+                                                    </h2>
+                                                    <button
+                                                        class="btn btn-xs"
+                                                        on:click={() => {
+                                                            toggle_embedder_plots[category] =
+                                                                !toggle_embedder_plots[category];
+                                                        }}
+                                                    >
+                                                        {toggle_embedder_plots[category] ? 'Hide' : 'Show'}
+                                                    </button>
+                                                </div>
+                                                {#if toggle_embedder_plots[category]}
+                                                    {#each Object.entries(parents) as [parent, parentData] (parentData.pkl)}
+                                                        {@const name = `${embedder}: ${parent}`}
+                                                        <div class="breadcrumbs text-sm">
+                                                            <ul class="flex gap-2 flex-wrap">
+                                                                <li>
+                                                                    ({$current_model_pkl_files[embedder].filter(f =>
+                                                                        f.name.startsWith(parent),
+                                                                    ).length})
                                                                 </li>
-                                                            {/if}
+                                                                <!-- Parent -->
+                                                                <li>
+                                                                    <button
+                                                                        class="btn btn-xs btn-outline"
+                                                                        class:btn-active={plotted_pkl_file ===
+                                                                            parentData.pkl}
+                                                                        on:click={() =>
+                                                                            plot_from_pkl(parentData.pkl, name)}
+                                                                    >
+                                                                        {parent}
+                                                                    </button>
+                                                                </li>
 
-                                                            <!-- Grandchildren -->
-                                                            {#each Object.entries(parentData.childrens) as [child, childData]}
-                                                                {#if childData.childrens && Object.keys(childData.childrens).length > 0}
+                                                                <!-- Children -->
+                                                                {#if Object.keys(parentData.childrens).length > 0}
                                                                     <li class="join">
-                                                                        {#each Object.entries(childData.childrens) as [grandchild, grandchildData]}
-                                                                            {@const name = `${embedder}: ${parent}: ${child}: ${grandchild}`}
+                                                                        {#each Object.entries(parentData.childrens) as [child, childData]}
+                                                                            {@const name = `${embedder}: ${parent}: ${child}`}
                                                                             <button
                                                                                 class="btn btn-xs btn-outline join-item"
                                                                                 class:btn-active={plotted_pkl_file ===
-                                                                                    grandchildData.pkl}
+                                                                                    childData.pkl}
                                                                                 on:click={() =>
-                                                                                    plot_from_pkl(
-                                                                                        grandchildData.pkl,
-                                                                                        name,
-                                                                                    )}
+                                                                                    plot_from_pkl(childData.pkl, name)}
                                                                             >
-                                                                                {child}: {grandchild}
+                                                                                {child}
                                                                             </button>
                                                                         {/each}
                                                                     </li>
                                                                 {/if}
-                                                            {/each}
-                                                        </ul>
-                                                    </div>
-                                                {/each}
-                                            {/if}
-                                        </div>
+
+                                                                <!-- Grandchildren -->
+                                                                {#each Object.entries(parentData.childrens) as [child, childData]}
+                                                                    {#if childData.childrens && Object.keys(childData.childrens).length > 0}
+                                                                        <li class="join">
+                                                                            {#each Object.entries(childData.childrens) as [grandchild, grandchildData]}
+                                                                                {@const name = `${embedder}: ${parent}: ${child}: ${grandchild}`}
+                                                                                <button
+                                                                                    class="btn btn-xs btn-outline join-item"
+                                                                                    class:btn-active={plotted_pkl_file ===
+                                                                                        grandchildData.pkl}
+                                                                                    on:click={() =>
+                                                                                        plot_from_pkl(
+                                                                                            grandchildData.pkl,
+                                                                                            name,
+                                                                                        )}
+                                                                                >
+                                                                                    {child}: {grandchild}
+                                                                                </button>
+                                                                            {/each}
+                                                                        </li>
+                                                                    {/if}
+                                                                {/each}
+                                                            </ul>
+                                                        </div>
+                                                    {/each}
+                                                {/if}
+                                            </div>
+                                        {/if}
                                     {/each}
                                 </div>
                             {/await}

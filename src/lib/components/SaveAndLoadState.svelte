@@ -11,7 +11,7 @@
     let items: string[] = [];
 
     const get_all_items_in_loc = async (loc: string, log = true) => {
-        if (!loc) return;
+        if (!(await fs.exists(loc))) return;
         const files = await fs.readDir(loc);
         items = files.filter(f => f.isFile && f.name.endsWith(unique_ext)).map(f => f.name.replace(unique_ext, ''));
         if (items.length > 0) filename ||= items[0];
