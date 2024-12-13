@@ -371,9 +371,9 @@
                         //     },
                         // };
                     } else {
-                        console.warn(fname, name);
-                        console.error('No pkl file found in');
-                        console.warn(subdirPath);
+                        // console.warn(fname, name);
+                        // console.error('No pkl file found in');
+                        // console.warn(subdirPath);
                     }
                     const subsubdirs = (await fs.readDir(subdirPath)).filter(f => f.isDirectory);
                     for (const subsubdir of subsubdirs) {
@@ -402,9 +402,9 @@
                             //     },
                             // };
                         } else {
-                            console.warn(fname, name, subdir.name);
-                            console.error('No pkl file found in');
-                            console.warn(subsubdirPath);
+                            // console.warn(fname, name, subdir.name);
+                            // console.error('No pkl file found in');
+                            // console.warn(subsubdirPath);
                         }
                     }
                 }
@@ -426,9 +426,9 @@
                         childrens: {},
                     };
                 } else {
-                    console.log(fname, entry.name);
-                    console.error('No pkl file found in');
-                    console.warn(currentPath);
+                    // console.log(fname, entry.name);
+                    // console.error('No pkl file found in');
+                    // console.warn(currentPath);
                 }
 
                 // Check processed_subdirs if they exist
