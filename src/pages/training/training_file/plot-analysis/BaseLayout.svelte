@@ -6,6 +6,7 @@
 
     export let name: AnalysisItemsType;
     export let hidden: boolean = false;
+    let csv_file: string = '';
 
     const MolecularAnalysis = getContext<MolecularAnalysisFunction>('MolecularAnalysis');
     const dispatch = createEventDispatcher();
@@ -35,10 +36,14 @@
     let recheck_files = false;
     onMount(async () => {
         recheck_files = !recheck_files;
+        csv_file = await path.join(await $current_post_analysis_files_directory, name + '.csv');
     });
 </script>
 
 <div class="grid gap-2 items-end" class:hidden>
+    {#await fs.exists(csv_file) then value}
+        <div class="text-sm {value ? 'bg-success' : 'bg-error'}">{csv_file}</div>
+    {/await}
     <div class="flex justify-between">
         <div class="flex gap-2 items-end">
             <Loadingbtn
