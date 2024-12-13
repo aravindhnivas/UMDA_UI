@@ -20,7 +20,10 @@
     const GetData = getContext<(name: string) => Promise<{ x: number[]; y: number[] }>>('GetData');
 
     const plot_data = async () => {
-        const { x, y } = await GetData(`${name}.csv`);
+        const data = await GetData(`${name}.csv`);
+        if (!data) return;
+
+        const { x, y } = data;
 
         min_atomic_number = x[0];
         max_atomic_number = x?.at(-1) ?? 0;

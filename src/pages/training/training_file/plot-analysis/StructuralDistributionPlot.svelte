@@ -16,7 +16,10 @@
     const GetData = getContext<(name: string) => Promise<{ x: string[]; y: number[] }>>('GetData');
 
     const plot_data = async () => {
-        const { x, y } = await GetData(`${name}.csv`);
+        const data = await GetData(`${name}.csv`);
+        if (!data) return;
+
+        const { x, y } = data;
 
         choices = x;
         await tick();
