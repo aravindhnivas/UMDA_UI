@@ -15,38 +15,38 @@ importers:
         specifier: ^2.1.0
         version: 2.1.0
       '@tauri-apps/plugin-dialog':
-        specifier: ~2.0.1
-        version: 2.0.1
+        specifier: ~2.2.0
+        version: 2.2.0
       '@tauri-apps/plugin-fs':
-        specifier: ~2.0.3
-        version: 2.0.3
+        specifier: ~2.2.0
+        version: 2.2.0
       '@tauri-apps/plugin-log':
-        specifier: ~2.0.1
-        version: 2.0.1
+        specifier: ~2.2.0
+        version: 2.2.0
       '@tauri-apps/plugin-os':
-        specifier: ~2
-        version: 2.0.0
+        specifier: ~2.2.0
+        version: 2.2.0
       '@tauri-apps/plugin-process':
-        specifier: ~2
-        version: 2.0.0
+        specifier: ~2.2.0
+        version: 2.2.0
       '@tauri-apps/plugin-shell':
-        specifier: ~2.0.1
-        version: 2.0.1
+        specifier: ~2.2.0
+        version: 2.2.0
       '@tauri-apps/plugin-updater':
-        specifier: ~2
-        version: 2.0.0
+        specifier: ~2.3.0
+        version: 2.3.0
       '@tauri-apps/plugin-websocket':
-        specifier: ~2
-        version: 2.0.0
+        specifier: ~2.2.0
+        version: 2.2.0
       hyparquet:
-        specifier: ^1.6.3
-        version: 1.6.3
+        specifier: ^1.6.4
+        version: 1.6.4
       lucide-svelte:
-        specifier: 0.453.0
-        version: 0.453.0(svelte@4.2.19)
+        specifier: 0.468.0
+        version: 0.468.0(svelte@4.2.19)
       plotly.js-dist-min:
-        specifier: ^2.35.2
-        version: 2.35.2
+        specifier: ^2.35.3
+        version: 2.35.3
       smiles-drawer:
         specifier: ^2.1.7
         version: 2.1.7
@@ -59,7 +59,7 @@ importers:
         version: 2.4.2(svelte@4.2.19)
       '@modyfi/vite-plugin-yaml':
         specifier: ^1.1.0
-        version: 1.1.0(rollup@4.22.5)(vite@5.4.11(@types/node@22.0.2)(sass@1.82.0))
+        version: 1.1.0(rollup@4.22.5)(vite@5.4.11(@types/node@22.0.2)(sass@1.83.0))
       '@smui-extra/accordion':
         specifier: ^7.0.0
         version: 7.0.0(svelte@4.2.19)(typescript@5.7.2)
@@ -77,7 +77,7 @@ importers:
         version: 3.0.1
       '@sveltejs/vite-plugin-svelte':
         specifier: ^3.1.2
-        version: 3.1.2(svelte@4.2.19)(vite@5.4.11(@types/node@22.0.2)(sass@1.82.0))
+        version: 3.1.2(svelte@4.2.19)(vite@5.4.11(@types/node@22.0.2)(sass@1.83.0))
       '@tailwindcss/typography':
         specifier: ^0.5.15
         version: 0.5.15(tailwindcss@3.4.16)
@@ -103,8 +103,8 @@ importers:
         specifier: ^1.7.9
         version: 1.7.9
       cooltipz-css:
-        specifier: ^2.3.0
-        version: 2.3.0(sass@1.82.0)
+        specifier: ^2.3.1
+        version: 2.3.1(sass@1.83.0)
       daisyui:
         specifier: 4.12.10
         version: 4.12.10(postcss@8.4.49)
@@ -127,8 +127,8 @@ importers:
         specifier: ^3.3.2
         version: 3.3.2(prettier@3.4.2)(svelte@4.2.19)
       sass:
-        specifier: ^1.82.0
-        version: 1.82.0
+        specifier: ^1.83.0
+        version: 1.83.0
       socket.io-client:
         specifier: ^4.8.1
         version: 4.8.1
@@ -137,7 +137,7 @@ importers:
         version: 4.2.19
       svelte-check:
         specifier: ^3.8.6
-        version: 3.8.6(postcss-load-config@4.0.2(postcss@8.4.49))(postcss@8.4.49)(sass@1.82.0)(svelte@4.2.19)
+        version: 3.8.6(postcss-load-config@4.0.2(postcss@8.4.49))(postcss@8.4.49)(sass@1.83.0)(svelte@4.2.19)
       svelte-copy:
         specifier: ^1.4.2
         version: 1.4.2(svelte@4.2.19)
@@ -173,7 +173,7 @@ importers:
         version: 0.18.6(rollup@4.22.5)
       vite:
         specifier: ^5.4.11
-        version: 5.4.11(@types/node@22.0.2)(sass@1.82.0)
+        version: 5.4.11(@types/node@22.0.2)(sass@1.83.0)
 
 packages:
 
@@ -925,29 +925,29 @@ packages:
     engines: {node: '>= 10'}
     hasBin: true
 
-  '@tauri-apps/plugin-dialog@2.0.1':
-    resolution: {integrity: sha512-fnUrNr6EfvTqdls/ufusU7h6UbNFzLKvHk/zTuOiBq01R3dTODqwctZlzakdbfSp/7pNwTKvgKTAgl/NAP/Z0Q==}
+  '@tauri-apps/plugin-dialog@2.2.0':
+    resolution: {integrity: sha512-6bLkYK68zyK31418AK5fNccCdVuRnNpbxquCl8IqgFByOgWFivbiIlvb79wpSXi0O+8k8RCSsIpOquebusRVSg==}
 
-  '@tauri-apps/plugin-fs@2.0.3':
-    resolution: {integrity: sha512-3Xv9cg5krj/2gSo1HFn9GbKUE0keh+DMx7O+hQeSzg1T4yGY5Fv/+yBISmrPa2j9thi3qcjgPj8PnMH4rbl/Dw==}
+  '@tauri-apps/plugin-fs@2.2.0':
+    resolution: {integrity: sha512-+08mApuONKI8/sCNEZ6AR8vf5vI9DXD4YfrQ9NQmhRxYKMLVhRW164vdW5BSLmMpuevftpQ2FVoL9EFkfG9Z+g==}
 
-  '@tauri-apps/plugin-log@2.0.1':
-    resolution: {integrity: sha512-zFT3S/Q5liMKIjPPdUZL8aNbjvhHvyfkhuqct3/MQ6/7rk4ODstcUPu320KJBjZrNNH/UM+kaQBGrioIwtmP/Q==}
+  '@tauri-apps/plugin-log@2.2.0':
+    resolution: {integrity: sha512-g6CsQAR1lsm5ABSZZxpM/iCn86GrMDTTlhj7GPkZkYBRSm3+WczfOAl7SV7HDn77tOKCzhZffwI5uHfRoHutrw==}
 
-  '@tauri-apps/plugin-os@2.0.0':
-    resolution: {integrity: sha512-M7hG/nNyQYTJxVG/UhTKhp9mpXriwWzrs9mqDreB8mIgqA3ek5nHLdwRZJWhkKjZrnDT4v9CpA9BhYeplTlAiA==}
+  '@tauri-apps/plugin-os@2.2.0':
+    resolution: {integrity: sha512-HszbCdbisMlu5QhCNAN8YIWyz2v33abAWha6+uvV2CKX8P5VSct/y+kEe22JeyqrxCnWlQ3DRx7s49Byg7/0EA==}
 
-  '@tauri-apps/plugin-process@2.0.0':
-    resolution: {integrity: sha512-OYzi0GnkrF4NAnsHZU7U3tjSoP0PbeAlO7T1Z+vJoBUH9sFQ1NSLqWYWQyf8hcb3gVWe7P1JggjiskO+LST1ug==}
+  '@tauri-apps/plugin-process@2.2.0':
+    resolution: {integrity: sha512-uypN2Crmyop9z+KRJr3zl71OyVFgTuvHFjsJ0UxxQ/J5212jVa5w4nPEYjIewcn8bUEXacRebwE6F7owgrbhSw==}
 
-  '@tauri-apps/plugin-shell@2.0.1':
-    resolution: {integrity: sha512-akU1b77sw3qHiynrK0s930y8zKmcdrSD60htjH+mFZqv5WaakZA/XxHR3/sF1nNv9Mgmt/Shls37HwnOr00aSw==}
+  '@tauri-apps/plugin-shell@2.2.0':
+    resolution: {integrity: sha512-iC3Ic1hLmasoboG7BO+7p+AriSoqAwKrIk+Hpk+S/bjTQdXqbl2GbdclghI4gM32X0bls7xHzIFqhRdrlvJeaA==}
 
-  '@tauri-apps/plugin-updater@2.0.0':
-    resolution: {integrity: sha512-N0cl71g7RPr7zK2Fe5aoIwzw14NcdLcz7XMGFWZVjprsqgDRWoxbnUkknyCQMZthjhGkppCd/wN2MIsUz+eAhQ==}
+  '@tauri-apps/plugin-updater@2.3.0':
+    resolution: {integrity: sha512-qdzyZEUN69FZQ/nRx51fBub10tT6wffJl3DLVo9q922Gvw8Wk++rZhoD9eethPlZYbog/7RGgT8JkrfLh5BKAg==}
 
-  '@tauri-apps/plugin-websocket@2.0.0':
-    resolution: {integrity: sha512-O2qRxZCljd4g+ceJhW7LfgQr+fg0fBBiAaLiMopoKL6TXKMnhBHOenp4nZ5/MoVTr77OQIDNO6Jp/c1YwiRVtQ==}
+  '@tauri-apps/plugin-websocket@2.2.0':
+    resolution: {integrity: sha512-OJ9rSkoDq1X6iKOUWJWbT3eIE09v+7q3YOB7YsCtYzR+u/5wADvjtp5eOEvn0YCmHbokYAZHyUO2QZHmTGPO5A==}
 
   '@tsconfig/svelte@5.0.4':
     resolution: {integrity: sha512-BV9NplVgLmSi4mwKzD8BD/NQ8erOY/nUE/GpgWe2ckx+wIQF5RyRirn/QsSSCPeulVpc3RA/iJt6DpfTIZps0Q==}
@@ -1111,8 +1111,8 @@ packages:
   confbox@0.1.8:
     resolution: {integrity: sha512-RMtmw0iFkeR4YV+fUOSucriAQNb9g8zFR52MWCtl+cCZOFRNL6zeB395vPzFhEjjn4fMxXudmELnl/KF/WrK6w==}
 
-  cooltipz-css@2.3.0:
-    resolution: {integrity: sha512-lB5mN5euKmVH/G4r9W80qUFxDsHpU7lactEVQ2W+EWMrI5SYxw5AQn09IDtuGn0+h4Ou72bvUL8FUpX8jLdyyQ==}
+  cooltipz-css@2.3.1:
+    resolution: {integrity: sha512-bHnPNPBX+uv+mcfA8N9m1IXM6ZPlzsdr/t5OGm7U3QdZ2ZAQiej16meDb/SCJcWCw4k9+kF8KSNfrAhrjg1tNA==}
     engines: {node: '>=14'}
     peerDependencies:
       sass: 1.x
@@ -1314,8 +1314,8 @@ packages:
   hover.css@2.3.2:
     resolution: {integrity: sha512-eXch700vfcoSSAcEcU154lTHBYQy2cjGT+yJZtkKWxASBBiPVkqYOdMAa0sz4cYj2YIrl1FRE2s5O4EgOaIpig==}
 
-  hyparquet@1.6.3:
-    resolution: {integrity: sha512-JwD3bcRueKs7/0iQG8xyJxh6OAXSQdzh0dJkMtzQPSDOTuvoKniDgdOPB9oXGspbUhp5c9uW6coqYiFddKJ+cw==}
+  hyparquet@1.6.4:
+    resolution: {integrity: sha512-/jmKyRXz/fL9WD4InQCdq9n8S+x7v+EeigwwSjFc3Tr6iijgSYMA0FTltwz4wEBR/q8vAYfhlXymhaRBnp6pJQ==}
 
   idb-keyval@6.2.1:
     resolution: {integrity: sha512-8Sb3veuYCyrZL+VBt9LJfZjLUPWVvqn8tG28VqYNFCo43KHcKuq+b4EiXGeuaLAQWL2YmyDgMp2aSpH9JHsEQg==}
@@ -1415,8 +1415,8 @@ packages:
     resolution: {integrity: sha512-9hp3Vp2/hFQUiIwKo8XCeFVnrg8Pk3TYNPIR7tJADKi5YfcF7vEaK7avFHTlSy3kOKYaJQaalfEo6YuXdceBOQ==}
     engines: {node: 14 || >=16.14}
 
-  lucide-svelte@0.453.0:
-    resolution: {integrity: sha512-K+eE2ZeE00ThIEbAmZB3Hq0sVS+1ZLj+7nqtJvN0Xrh/KZnfnEChG+do80sctqXQEE+iG1dA2T+5fVcJS1awfA==}
+  lucide-svelte@0.468.0:
+    resolution: {integrity: sha512-n0ecAFtCY5LEeL+PJ1Xj4n3c2gzj8tMpak0KMGnvoSJEjCsCnRB0mekBtJZAo7beyynW9Qj5Um1KfMBAeTNplw==}
     peerDependencies:
       svelte: ^3 || ^4 || ^5.0.0-next.42
 
@@ -1565,8 +1565,8 @@ packages:
   pkg-types@1.2.1:
     resolution: {integrity: sha512-sQoqa8alT3nHjGuTjuKgOnvjo4cljkufdtLMnO2LBP/wRwuDlo1tkaEdMxCRhyGRPacv/ztlZgDPm2b7FAmEvw==}
 
-  plotly.js-dist-min@2.35.2:
-    resolution: {integrity: sha512-oWDTf2kYOmTtEw3epeeSBdfH/H3OSktF0suST9oI6fIgKfbyd4MT7TPh8+CVzdHYllYon24Q0HI1hZjOnLqk6g==}
+  plotly.js-dist-min@2.35.3:
+    resolution: {integrity: sha512-sz2HLP8gkysLx/BanM2PtJTtZ1PLPwdHwMWNri2YxLBy3IOeuDsVQtlmWa4hoK3j/fi4naaD3uZJqH5ozM3zGg==}
 
   plotly.js-dist@2.35.2:
     resolution: {integrity: sha512-zbKfz7jXGcLGoyPJxjGrKLttPiqvsEjIMHON/dEU/mnOJ+/yYoEctEEQ3qp5zQmvoovw1L47kCsQpq/GTbejBA==}
@@ -1672,8 +1672,8 @@ packages:
   sander@0.5.1:
     resolution: {integrity: sha512-3lVqBir7WuKDHGrKRDn/1Ye3kwpXaDOMsiRP1wd6wpZW56gJhsbp5RqQpA6JG/P+pkXizygnr1dKR8vzWaVsfA==}
 
-  sass@1.82.0:
-    resolution: {integrity: sha512-j4GMCTa8elGyN9A7x7bEglx0VgSpNUG4W4wNedQ33wSMdnkqQCT8HTwOaVSV4e6yQovcu/3Oc4coJP/l0xhL2Q==}
+  sass@1.83.0:
+    resolution: {integrity: sha512-qsSxlayzoOjdvXMVLkzF84DJFc2HZEL/rFyGIKbbilYtAvlCxyuzUeff9LawTn4btVnLKg75Z8MMr1lxU1lfGw==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
@@ -2645,12 +2645,12 @@ snapshots:
       '@material/theme': 14.0.0
       tslib: 2.8.1
 
-  '@modyfi/vite-plugin-yaml@1.1.0(rollup@4.22.5)(vite@5.4.11(@types/node@22.0.2)(sass@1.82.0))':
+  '@modyfi/vite-plugin-yaml@1.1.0(rollup@4.22.5)(vite@5.4.11(@types/node@22.0.2)(sass@1.83.0))':
     dependencies:
       '@rollup/pluginutils': 5.1.0(rollup@4.22.5)
       js-yaml: 4.1.0
       tosource: 2.0.0-alpha.3
-      vite: 5.4.11(@types/node@22.0.2)(sass@1.82.0)
+      vite: 5.4.11(@types/node@22.0.2)(sass@1.83.0)
     transitivePeerDependencies:
       - rollup
 
@@ -3266,26 +3266,26 @@ snapshots:
 
   '@sveltejs/svelte-virtual-list@3.0.1': {}
 
-  '@sveltejs/vite-plugin-svelte-inspector@2.1.0(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.11(@types/node@22.0.2)(sass@1.82.0)))(svelte@4.2.19)(vite@5.4.11(@types/node@22.0.2)(sass@1.82.0))':
+  '@sveltejs/vite-plugin-svelte-inspector@2.1.0(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.11(@types/node@22.0.2)(sass@1.83.0)))(svelte@4.2.19)(vite@5.4.11(@types/node@22.0.2)(sass@1.83.0))':
     dependencies:
-      '@sveltejs/vite-plugin-svelte': 3.1.2(svelte@4.2.19)(vite@5.4.11(@types/node@22.0.2)(sass@1.82.0))
+      '@sveltejs/vite-plugin-svelte': 3.1.2(svelte@4.2.19)(vite@5.4.11(@types/node@22.0.2)(sass@1.83.0))
       debug: 4.3.4
       svelte: 4.2.19
-      vite: 5.4.11(@types/node@22.0.2)(sass@1.82.0)
+      vite: 5.4.11(@types/node@22.0.2)(sass@1.83.0)
     transitivePeerDependencies:
       - supports-color
 
-  '@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.11(@types/node@22.0.2)(sass@1.82.0))':
+  '@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.11(@types/node@22.0.2)(sass@1.83.0))':
     dependencies:
-      '@sveltejs/vite-plugin-svelte-inspector': 2.1.0(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.11(@types/node@22.0.2)(sass@1.82.0)))(svelte@4.2.19)(vite@5.4.11(@types/node@22.0.2)(sass@1.82.0))
+      '@sveltejs/vite-plugin-svelte-inspector': 2.1.0(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.11(@types/node@22.0.2)(sass@1.83.0)))(svelte@4.2.19)(vite@5.4.11(@types/node@22.0.2)(sass@1.83.0))
       debug: 4.3.4
       deepmerge: 4.3.1
       kleur: 4.1.5
       magic-string: 0.30.10
       svelte: 4.2.19
       svelte-hmr: 0.16.0(svelte@4.2.19)
-      vite: 5.4.11(@types/node@22.0.2)(sass@1.82.0)
-      vitefu: 0.2.5(vite@5.4.11(@types/node@22.0.2)(sass@1.82.0))
+      vite: 5.4.11(@types/node@22.0.2)(sass@1.83.0)
+      vitefu: 0.2.5(vite@5.4.11(@types/node@22.0.2)(sass@1.83.0))
     transitivePeerDependencies:
       - supports-color
 
@@ -3342,35 +3342,35 @@ snapshots:
       '@tauri-apps/cli-win32-ia32-msvc': 2.1.0
       '@tauri-apps/cli-win32-x64-msvc': 2.1.0
 
-  '@tauri-apps/plugin-dialog@2.0.1':
+  '@tauri-apps/plugin-dialog@2.2.0':
     dependencies:
       '@tauri-apps/api': 2.1.1
 
-  '@tauri-apps/plugin-fs@2.0.3':
+  '@tauri-apps/plugin-fs@2.2.0':
     dependencies:
       '@tauri-apps/api': 2.1.1
 
-  '@tauri-apps/plugin-log@2.0.1':
+  '@tauri-apps/plugin-log@2.2.0':
     dependencies:
       '@tauri-apps/api': 2.1.1
 
-  '@tauri-apps/plugin-os@2.0.0':
+  '@tauri-apps/plugin-os@2.2.0':
     dependencies:
       '@tauri-apps/api': 2.1.1
 
-  '@tauri-apps/plugin-process@2.0.0':
+  '@tauri-apps/plugin-process@2.2.0':
     dependencies:
       '@tauri-apps/api': 2.1.1
 
-  '@tauri-apps/plugin-shell@2.0.1':
+  '@tauri-apps/plugin-shell@2.2.0':
     dependencies:
       '@tauri-apps/api': 2.1.1
 
-  '@tauri-apps/plugin-updater@2.0.0':
+  '@tauri-apps/plugin-updater@2.3.0':
     dependencies:
       '@tauri-apps/api': 2.1.1
 
-  '@tauri-apps/plugin-websocket@2.0.0':
+  '@tauri-apps/plugin-websocket@2.2.0':
     dependencies:
       '@tauri-apps/api': 2.1.1
 
@@ -3529,9 +3529,9 @@ snapshots:
 
   confbox@0.1.8: {}
 
-  cooltipz-css@2.3.0(sass@1.82.0):
+  cooltipz-css@2.3.1(sass@1.83.0):
     optionalDependencies:
-      sass: 1.82.0
+      sass: 1.83.0
 
   cross-spawn@7.0.3:
     dependencies:
@@ -3730,7 +3730,7 @@ snapshots:
 
   hover.css@2.3.2: {}
 
-  hyparquet@1.6.3: {}
+  hyparquet@1.6.4: {}
 
   idb-keyval@6.2.1: {}
 
@@ -3810,7 +3810,7 @@ snapshots:
 
   lru-cache@10.2.2: {}
 
-  lucide-svelte@0.453.0(svelte@4.2.19):
+  lucide-svelte@0.468.0(svelte@4.2.19):
     dependencies:
       svelte: 4.2.19
 
@@ -3940,7 +3940,7 @@ snapshots:
       mlly: 1.7.3
       pathe: 1.1.2
 
-  plotly.js-dist-min@2.35.2: {}
+  plotly.js-dist-min@2.35.3: {}
 
   plotly.js-dist@2.35.2: {}
 
@@ -4056,7 +4056,7 @@ snapshots:
       mkdirp: 0.5.6
       rimraf: 2.7.1
 
-  sass@1.82.0:
+  sass@1.83.0:
     dependencies:
       chokidar: 4.0.1
       immutable: 5.0.3
@@ -4155,14 +4155,14 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
-  svelte-check@3.8.6(postcss-load-config@4.0.2(postcss@8.4.49))(postcss@8.4.49)(sass@1.82.0)(svelte@4.2.19):
+  svelte-check@3.8.6(postcss-load-config@4.0.2(postcss@8.4.49))(postcss@8.4.49)(sass@1.83.0)(svelte@4.2.19):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
       chokidar: 3.6.0
       picocolors: 1.0.0
       sade: 1.8.1
       svelte: 4.2.19
-      svelte-preprocess: 5.1.4(postcss-load-config@4.0.2(postcss@8.4.49))(postcss@8.4.49)(sass@1.82.0)(svelte@4.2.19)(typescript@5.7.2)
+      svelte-preprocess: 5.1.4(postcss-load-config@4.0.2(postcss@8.4.49))(postcss@8.4.49)(sass@1.83.0)(svelte@4.2.19)(typescript@5.7.2)
       typescript: 5.7.2
     transitivePeerDependencies:
       - '@babel/core'
@@ -4241,7 +4241,7 @@ snapshots:
       plotly.js-dist: 2.35.2
       svelte: 4.2.19
 
-  svelte-preprocess@5.1.4(postcss-load-config@4.0.2(postcss@8.4.49))(postcss@8.4.49)(sass@1.82.0)(svelte@4.2.19)(typescript@5.7.2):
+  svelte-preprocess@5.1.4(postcss-load-config@4.0.2(postcss@8.4.49))(postcss@8.4.49)(sass@1.83.0)(svelte@4.2.19)(typescript@5.7.2):
     dependencies:
       '@types/pug': 2.0.10
       detect-indent: 6.1.0
@@ -4252,7 +4252,7 @@ snapshots:
     optionalDependencies:
       postcss: 8.4.49
       postcss-load-config: 4.0.2(postcss@8.4.49)
-      sass: 1.82.0
+      sass: 1.83.0
       typescript: 5.7.2
 
   svelte-sonner@0.3.28(svelte@4.2.19):
@@ -4391,7 +4391,7 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  vite@5.4.11(@types/node@22.0.2)(sass@1.82.0):
+  vite@5.4.11(@types/node@22.0.2)(sass@1.83.0):
     dependencies:
       esbuild: 0.21.5
       postcss: 8.4.49
@@ -4399,11 +4399,11 @@ snapshots:
     optionalDependencies:
       '@types/node': 22.0.2
       fsevents: 2.3.3
-      sass: 1.82.0
+      sass: 1.83.0
 
-  vitefu@0.2.5(vite@5.4.11(@types/node@22.0.2)(sass@1.82.0)):
+  vitefu@0.2.5(vite@5.4.11(@types/node@22.0.2)(sass@1.83.0)):
     optionalDependencies:
-      vite: 5.4.11(@types/node@22.0.2)(sass@1.82.0)
+      vite: 5.4.11(@types/node@22.0.2)(sass@1.83.0)
 
   webpack-virtual-modules@0.6.2: {}
 
