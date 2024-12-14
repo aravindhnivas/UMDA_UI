@@ -52,7 +52,6 @@
     }
     $: if (!$elementalDistributionFilter.count_threshold.lock && count_threshold !== null)
         $elementalDistributionFilter.count_threshold.value = count_threshold;
-    // $: console.log($filter_conditions_for_smiles_file);
 </script>
 
 <BaseLayout {name} hidden={$active_tab !== name} on:plot={plot_data}>

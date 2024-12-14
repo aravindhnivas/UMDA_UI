@@ -1,12 +1,13 @@
 <script lang="ts">
     import {
         current_post_analysis_files_directory,
+        current_training_data_file,
         filtered_dir,
         use_filtered_data_for_training,
     } from './plot-analysis/stores';
     import { load_analysis_dir, training_file } from './stores';
     import CustomSelect from '$lib/components/CustomSelect.svelte';
-    import { RefreshCcw, ExternalLink, AlertCircle } from 'lucide-svelte/icons';
+    import { RefreshCcw, ExternalLink } from 'lucide-svelte/icons';
     import { onMount } from 'svelte';
     import { Checkbox } from '$lib/components';
 
@@ -42,22 +43,35 @@
     onMount(async () => {
         await fetch_analysis_dir({ warn: false });
     });
+
+    const get_essential_files = async (name: Promise<string>, tfile: Promise<string>) => {
+        const training_file = await tfile;
+        const analysis_dir = await name;
+        return {
+            analysis_dir,
+            training_file,
+        };
+    };
 </script>
 
 <div class="divider"></div>
 
-{#await $current_post_analysis_files_directory then filedir}
-    <div class="flex gap-1 items-center">
-        <div role="alert" class="alert alert-info">
-            <AlertCircle />
-            <span>{filedir}</span>
+{#await get_essential_files($current_post_analysis_files_directory, $current_training_data_file) then { analysis_dir, training_file }}
+    <div class="grid gap-2">
+        <div class="flex-gap">
+            <div class="text-sm">Analysis dir:</div>
+            <div class="text-sm">{analysis_dir}</div>
+            <button
+                class="btn btn-sm btn-outline"
+                on:click={async () => {
+                    await shell.open(analysis_dir);
+                }}>Open Folder <ExternalLink size="20" /></button
+            >
         </div>
-        <button
-            class="btn btn-sm btn-outline"
-            on:click={async () => {
-                await shell.open(filedir);
-            }}><ExternalLink size="20" /></button
-        >
+        <div class="flex-gap">
+            <div class="text-sm">Training_file:</div>
+            <div class="text-sm">{training_file}</div>
+        </div>
     </div>
 {/await}
 

@@ -7,6 +7,7 @@
         sizeDistributionFilter,
         current_analysis_file,
         YDistributionFilter,
+        current_training_data_file,
     } from './plot-analysis/stores';
     import { training_column_name_X, training_file, index_column_valid, training_column_name_index } from './stores';
     import Loadingbtn from '$lib/components/Loadingbtn.svelte';
@@ -21,10 +22,14 @@
     ) => {
         console.log('MolecularAnalysis', { $filtered_dir });
         const analysis_file = await $current_analysis_file;
+        console.log('Analysis file');
+        console.warn(analysis_file);
+
         return {
             pyfile: 'training.molecular_analysis',
             args: {
-                filename: $training_file.filename,
+                // filename: $training_file.filename,
+                filename: await $current_training_data_file,
                 filetype: $training_file.filetype,
                 key: $training_file.key,
                 use_dask: $use_dask,
