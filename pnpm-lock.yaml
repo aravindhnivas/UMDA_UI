@@ -54,9 +54,6 @@ importers:
       '@loadingio/loading.css':
         specifier: ^3.2.1
         version: 3.2.1
-      '@macfja/svelte-persistent-store':
-        specifier: ^2.4.2
-        version: 2.4.2(svelte@4.2.19)
       '@modyfi/vite-plugin-yaml':
         specifier: ^1.1.0
         version: 1.1.0(rollup@4.22.5)(vite@5.4.11(@types/node@22.0.2)(sass@1.83.0))
@@ -147,6 +144,9 @@ importers:
       svelte-material-ui:
         specifier: ^7.0.0
         version: 7.0.0(svelte@4.2.19)(typescript@5.7.2)
+      svelte-persisted-store:
+        specifier: ^0.12.0
+        version: 0.12.0(svelte@4.2.19)
       svelte-plotly.js:
         specifier: 1.0.0
         version: 1.0.0(plotly.js-dist@2.35.2)(svelte@4.2.19)
@@ -354,14 +354,6 @@ packages:
   '@loadingio/loading.css@3.2.1':
     resolution: {integrity: sha512-46JkEUe37EQWrCUNV2Cl0rCiCv/3MzI68ZwcjpQJw6RQriH4yQMghlbEWkTGYmj8lTdlPTNKxsPOXNhDA5kNxg==}
     engines: {node: '>=10.14.1', npm: '>=6.4.1'}
-
-  '@macfja/serializer@1.1.2':
-    resolution: {integrity: sha512-kqEg3Zu5/g3ivdeb+jP4rBVVdmtKXVsRwH+x9KdM2Y7d2mKLq54g+YLSgTQ4KwJvWmyHFvRq0ouX5Dr4H1Hw3Q==}
-
-  '@macfja/svelte-persistent-store@2.4.2':
-    resolution: {integrity: sha512-ZAcWJcCnfZDIiy77Aoj9KQ6qDt6UmRZgUM3UHjmOY1IRf0SirDl1WgBFlVUMynRLERy4/EgZtWPqAMnh3cbCRA==}
-    peerDependencies:
-      svelte: ^3.0 || ^4.0 || ^5.0
 
   '@material/animation@14.0.0':
     resolution: {integrity: sha512-VlYSfUaIj/BBVtRZI8Gv0VvzikFf+XgK0Zdgsok5c1v5DDnNz5tpB8mnGrveWz0rHbp1X4+CWLKrTwNmjrw3Xw==}
@@ -1058,9 +1050,6 @@ packages:
     resolution: {integrity: sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==}
     engines: {node: '>=8'}
 
-  browser-cookies@1.2.0:
-    resolution: {integrity: sha512-cg2WuoOJo+F+g2XjEaP8nmeRp1vDHjt7sqpKJMsTNXKrpyIBNVslYJeehvs6FEddj8usV2+qyRSBEX244yN5/g==}
-
   browserslist@4.24.0:
     resolution: {integrity: sha512-Rmb62sR1Zpjql25eSanFGEhAxcFwfA1K0GuQcLoaJBAcENegrQut3hYdhXFF1obQfiDyqIW/cLM5HSJ/9k884A==}
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
@@ -1316,9 +1305,6 @@ packages:
 
   hyparquet@1.6.4:
     resolution: {integrity: sha512-/jmKyRXz/fL9WD4InQCdq9n8S+x7v+EeigwwSjFc3Tr6iijgSYMA0FTltwz4wEBR/q8vAYfhlXymhaRBnp6pJQ==}
-
-  idb-keyval@6.2.1:
-    resolution: {integrity: sha512-8Sb3veuYCyrZL+VBt9LJfZjLUPWVvqn8tG28VqYNFCo43KHcKuq+b4EiXGeuaLAQWL2YmyDgMp2aSpH9JHsEQg==}
 
   immutable@5.0.3:
     resolution: {integrity: sha512-P8IdPQHq3lA1xVeBRi5VPqUm5HDgKnx0Ru51wZz5mjxHr5n3RWhjIpOFU7ybkUxfB+5IToy+OLaHYDBIWsv+uw==}
@@ -1692,16 +1678,6 @@ packages:
     resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
     engines: {node: '>=14'}
 
-  sjcl-bit-array@1.0.0:
-    resolution: {integrity: sha512-xoR134YJa7AHToLqCWuLYGpAdcBuLbSgwXe9c5HTIN4vr5TILXO/jVF8pLeXDhC7JTOvpmXUkiOupawVNTZVdQ==}
-
-  sjcl-codec-hex@1.0.0:
-    resolution: {integrity: sha512-lBBjqky1BEH+WZdABR/iSl2Pu3HO8n8r2D7nkzYLZfcR9ke4kUGMvO0ztRkla5oi4Esbc9pOlBtyGeMjYOU0ng==}
-
-  sjcl-es@2.0.0:
-    resolution: {integrity: sha512-P8O+4pAt95XqmTlvvPdbmBggjAgSE0LQnhSEYUKYKepN176b/8K9zcVrrqhuLu5EUQyeCYy/56J9FzxvzvMavg==}
-    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
-
   smiles-drawer@2.1.7:
     resolution: {integrity: sha512-gApm5tsWrAYDkjbGYQb5OhwIyHvtM2kIO40DfATaOV0DPm0wA63yn4Ow7us27BT49lDdU9busCOPN9fpyonzaA==}
 
@@ -1780,6 +1756,12 @@ packages:
 
   svelte-material-ui@7.0.0:
     resolution: {integrity: sha512-j8vT8zX8ekQ8MNBAvU9q/okQrXCYrJSxoDH06PQNCYrbNrTYzqKa+Fb9KSEGTaqs4PXi9aqjn687ykCiGqbPmQ==}
+
+  svelte-persisted-store@0.12.0:
+    resolution: {integrity: sha512-BdBQr2SGSJ+rDWH8/aEV5GthBJDapVP0GP3fuUCA7TjYG5ctcB+O9Mj9ZC0+Jo1oJMfZUd1y9H68NFRR5MyIJA==}
+    engines: {node: '>=0.14'}
+    peerDependencies:
+      svelte: ^3.48.0 || ^4 || ^5
 
   svelte-plotly.js@1.0.0:
     resolution: {integrity: sha512-JRF0IwW74l2n8Opf3iEfSdDn9896Lrxlga8zzXxeVuFqx1lnwUyk/dDaIiw+VVo0FgF0cg83Aruqes3QyhdnAw==}
@@ -2104,17 +2086,6 @@ snapshots:
       '@jridgewell/sourcemap-codec': 1.4.15
 
   '@loadingio/loading.css@3.2.1': {}
-
-  '@macfja/serializer@1.1.2': {}
-
-  '@macfja/svelte-persistent-store@2.4.2(svelte@4.2.19)':
-    dependencies:
-      '@macfja/serializer': 1.1.2
-      browser-cookies: 1.2.0
-      idb-keyval: 6.2.1
-      sjcl-codec-hex: 1.0.0
-      sjcl-es: 2.0.0
-      svelte: 4.2.19
 
   '@material/animation@14.0.0':
     dependencies:
@@ -3472,8 +3443,6 @@ snapshots:
     dependencies:
       fill-range: 7.1.1
 
-  browser-cookies@1.2.0: {}
-
   browserslist@4.24.0:
     dependencies:
       caniuse-lite: 1.0.30001664
@@ -3731,8 +3700,6 @@ snapshots:
   hover.css@2.3.2: {}
 
   hyparquet@1.6.4: {}
-
-  idb-keyval@6.2.1: {}
 
   immutable@5.0.3: {}
 
@@ -4074,14 +4041,6 @@ snapshots:
 
   signal-exit@4.1.0: {}
 
-  sjcl-bit-array@1.0.0: {}
-
-  sjcl-codec-hex@1.0.0:
-    dependencies:
-      sjcl-bit-array: 1.0.0
-
-  sjcl-es@2.0.0: {}
-
   smiles-drawer@2.1.7:
     dependencies:
       chroma-js: 2.4.2
@@ -4232,6 +4191,10 @@ snapshots:
     transitivePeerDependencies:
       - svelte
       - typescript
+
+  svelte-persisted-store@0.12.0(svelte@4.2.19):
+    dependencies:
+      svelte: 4.2.19
 
   svelte-plotly.js@1.0.0(plotly.js-dist@2.35.2)(svelte@4.2.19):
     dependencies:

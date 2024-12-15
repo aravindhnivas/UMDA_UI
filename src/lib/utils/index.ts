@@ -34,30 +34,6 @@ export const git_url = {
     },
 };
 
-export const browse_folder = async (
-    {
-        directory,
-        multiple,
-        filters,
-    }: {
-        directory?: boolean;
-        multiple?: boolean;
-        filters?: string[];
-    } = { directory: true, multiple: false, filters: undefined },
-) => {
-    const opts: dialog.OpenDialogOptions = {
-        directory,
-        multiple,
-    };
-
-    if (filters) {
-        opts.filters = filters?.map(ext => ({ name: ext, extensions: [ext] }));
-    }
-    const result = await dialog.open(opts);
-    if (!result) return '';
-    return result;
-};
-
 export function validateInput(event: KeyboardEvent) {
     const input = event.target as HTMLInputElement;
     const key = event.key as string;
@@ -174,71 +150,6 @@ export const writeJSON = async (file: string, data: any, append: boolean = false
         toast.success(`Data saved to ${file}`);
     }
 };
-interface RoundingResult {
-    value: string;
-    uncertainty: string;
-    roundedValue: number;
-    roundedUncertainty: number;
-    decimalPlaces: number;
-}
-
-class ValidationError extends Error {
-    constructor(message: string) {
-        super(message);
-        this.name = 'ValidationError';
-    }
-}
-
-export function roundToUncertainty(value: number, uncertainty: number): RoundingResult {
-    // Input validation
-    if (!Number.isFinite(value) || !Number.isFinite(uncertainty)) {
-        throw new ValidationError('Both value and uncertainty must be finite numbers');
-    }
-    if (uncertainty <= 0) {
-        throw new ValidationError('Uncertainty must be positive');
-    }
-
-    // Find significant digits and rounding position
-    const position = getSignificantDigitPosition(uncertainty);
-    const decimalPlaces = position < 0 ? -position : 0;
-    const roundingFactor = Math.pow(10, decimalPlaces);
-
-    // Round values
-    const roundedValue = Math.round(value * roundingFactor) / roundingFactor;
-    const roundedUncertainty = Math.round(uncertainty * roundingFactor);
-
-    // Format output strings
-    const valueStr = decimalPlaces > 0 ? roundedValue.toFixed(decimalPlaces) : roundedValue.toString();
-    const uncertaintyStr = roundedUncertainty.toString();
-
-    return {
-        value: valueStr,
-        uncertainty: uncertaintyStr,
-        roundedValue,
-        roundedUncertainty,
-        decimalPlaces,
-    };
-}
-
-function getSignificantDigitPosition(uncertainty: number): number {
-    if (uncertainty >= 1) {
-        return Math.floor(Math.log10(uncertainty));
-    }
-
-    const uncertaintyStr = uncertainty.toString();
-    const match = uncertaintyStr.match(/[1-9]/);
-    if (!match || match.index === undefined) {
-        throw new ValidationError('Invalid uncertainty value');
-    }
-
-    const decimalIndex = uncertaintyStr.indexOf('.');
-    return decimalIndex === -1 ? 0 : -(match.index - decimalIndex);
-}
-
-export function formatWithUncertainty(result: RoundingResult): string {
-    return `${result.value} (${result.uncertainty})`;
-}
-
 export const read_csv = async (file: string) => {
     if (!(await fs.exists(file))) return { columns: [], data: [] };
     const contents = await fs.readTextFile(file);
