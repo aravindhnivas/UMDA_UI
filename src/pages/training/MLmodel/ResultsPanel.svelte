@@ -24,6 +24,7 @@
     import OptunaGridPlots from './results-subcomponents/OptunaGridPlots.svelte';
     import MetricsTable from './results-subcomponents/MetricsTable.svelte';
     import BestMetricsOverall from './results-subcomponents/BestMetricsOverall.svelte';
+    import { active_item } from '$pages/training/stores';
 
     export let data_file: string;
     export let plot_data_ready = false;
@@ -178,7 +179,9 @@
         return { datfile, resultsfile, learning_curve_file, cv_scores_file };
     };
 
+    // $: $active_item == 'ML_Model' && get_pretrained_file($current_pretrained_file);
     $: get_pretrained_file($current_pretrained_file);
+
     $: if (plot_data_ready && data_file) {
         console.log('Plotting from datfile', data_file);
         on_plot_data_ready(data_file);
@@ -485,215 +488,221 @@
 <CustomPanel open={true} title="Results - {$model.toLocaleUpperCase()} Regressor">
     <div class="grid gap-2">
         <CustomTabs class="bordered" tabs={model_names.map(model => ({ tab: model }))} bind:active={$model} />
-        {#await $current_pretrained_file then _}
-            {#key plot_data_ready}
-                <div class="grid gap-2" transition:fade>
-                    <div role="tablist" class="tabs tabs-boxed w-max">
-                        {#each tab_names as item}
-                            <button
-                                role="tab"
-                                class="tab"
-                                class:tab-active={item === active_tab}
-                                on:click={() => (active_tab = item)}>{item}</button
-                            >
-                        {/each}
-                    </div>
-                    <div class="grid gap-2" class:hidden={active_tab === 'Best Metrics (Overall)'} transition:fade>
-                        <div class="flex-gap my-2">
-                            <button
-                                class="btn btn-sm"
-                                on:click={() => (reload_available_plots = !reload_available_plots)}
-                            >
-                                <span>Reload</span>
-                                <RefreshCcw size="20" />
-                            </button>
-                            <span>
-                                All available plots for {$model.toLocaleUpperCase()} model. Click on the respective buttons
-                                to plot.
-                            </span>
+        {#if $active_item == 'ML_Model'}
+            {#await $current_pretrained_file then _}
+                {#key plot_data_ready}
+                    <div class="grid gap-2" transition:fade>
+                        <div role="tablist" class="tabs tabs-boxed w-max">
+                            {#each tab_names as item}
+                                <button
+                                    role="tab"
+                                    class="tab"
+                                    class:tab-active={item === active_tab}
+                                    on:click={() => (active_tab = item)}>{item}</button
+                                >
+                            {/each}
                         </div>
+                        <div class="grid gap-2" class:hidden={active_tab === 'Best Metrics (Overall)'} transition:fade>
+                            <div class="flex-gap my-2">
+                                <button
+                                    class="btn btn-sm"
+                                    on:click={() => (reload_available_plots = !reload_available_plots)}
+                                >
+                                    <span>Reload</span>
+                                    <RefreshCcw size="20" />
+                                </button>
+                                <span>
+                                    All available plots for {$model.toLocaleUpperCase()} model. Click on the respective buttons
+                                    to plot.
+                                </span>
+                            </div>
 
-                        {#key reload_available_plots}
-                            {#await get_valid_dirs($current_training_processed_data_directory) then result_names}
-                                <div>
-                                    {#each Object.entries(result_names) as [category, parents] (category)}
-                                        {@const embedder = category.replace('_embeddings', '')}
-                                        {#if $current_model_pkl_files[embedder].length > 0}
-                                            <div>
-                                                <div class="flex-gap">
-                                                    <h2 class="text-xl font-semibold">
-                                                        {embedder} Plots ({$current_model_pkl_files[embedder].length})
-                                                    </h2>
-                                                    <button
-                                                        class="btn btn-xs"
-                                                        on:click={() => {
-                                                            toggle_embedder_plots[category] =
-                                                                !toggle_embedder_plots[category];
-                                                        }}
-                                                    >
-                                                        {toggle_embedder_plots[category] ? 'Hide' : 'Show'}
-                                                    </button>
-                                                </div>
-                                                {#if toggle_embedder_plots[category]}
-                                                    {#each Object.entries(parents) as [parent, parentData] (parentData.pkl)}
-                                                        {@const name = `${embedder}: ${parent}`}
-                                                        <div class="breadcrumbs text-sm">
-                                                            <ul class="flex gap-2 flex-wrap">
-                                                                <li>
-                                                                    ({$current_model_pkl_files[embedder].filter(f =>
-                                                                        f.name.startsWith(parent),
-                                                                    ).length})
-                                                                </li>
-                                                                <!-- Parent -->
-                                                                <li>
-                                                                    <button
-                                                                        class="btn btn-xs btn-outline"
-                                                                        class:btn-active={plotted_pkl_file ===
-                                                                            parentData.pkl}
-                                                                        on:click={() =>
-                                                                            plot_from_pkl(parentData.pkl, name)}
-                                                                    >
-                                                                        {parent}
-                                                                    </button>
-                                                                </li>
-
-                                                                <!-- Children -->
-                                                                {#if Object.keys(parentData.childrens).length > 0}
-                                                                    <li class="join">
-                                                                        {#each Object.entries(parentData.childrens) as [child, childData]}
-                                                                            {@const name = `${embedder}: ${parent}: ${child}`}
-                                                                            <button
-                                                                                class="btn btn-xs btn-outline join-item"
-                                                                                class:btn-active={plotted_pkl_file ===
-                                                                                    childData.pkl}
-                                                                                on:click={() =>
-                                                                                    plot_from_pkl(childData.pkl, name)}
-                                                                            >
-                                                                                {child}
-                                                                            </button>
-                                                                        {/each}
+                            {#key reload_available_plots}
+                                {#await get_valid_dirs($current_training_processed_data_directory) then result_names}
+                                    <div>
+                                        {#each Object.entries(result_names) as [category, parents] (category)}
+                                            {@const embedder = category.replace('_embeddings', '')}
+                                            {#if $current_model_pkl_files[embedder].length > 0}
+                                                <div>
+                                                    <div class="flex-gap">
+                                                        <h2 class="text-xl font-semibold">
+                                                            {embedder} Plots ({$current_model_pkl_files[embedder]
+                                                                .length})
+                                                        </h2>
+                                                        <button
+                                                            class="btn btn-xs"
+                                                            on:click={() => {
+                                                                toggle_embedder_plots[category] =
+                                                                    !toggle_embedder_plots[category];
+                                                            }}
+                                                        >
+                                                            {toggle_embedder_plots[category] ? 'Hide' : 'Show'}
+                                                        </button>
+                                                    </div>
+                                                    {#if toggle_embedder_plots[category]}
+                                                        {#each Object.entries(parents) as [parent, parentData] (parentData.pkl)}
+                                                            {@const name = `${embedder}: ${parent}`}
+                                                            <div class="breadcrumbs text-sm">
+                                                                <ul class="flex gap-2 flex-wrap">
+                                                                    <li>
+                                                                        ({$current_model_pkl_files[embedder].filter(f =>
+                                                                            f.name.startsWith(parent),
+                                                                        ).length})
                                                                     </li>
-                                                                {/if}
+                                                                    <!-- Parent -->
+                                                                    <li>
+                                                                        <button
+                                                                            class="btn btn-xs btn-outline"
+                                                                            class:btn-active={plotted_pkl_file ===
+                                                                                parentData.pkl}
+                                                                            on:click={() =>
+                                                                                plot_from_pkl(parentData.pkl, name)}
+                                                                        >
+                                                                            {parent}
+                                                                        </button>
+                                                                    </li>
 
-                                                                <!-- Grandchildren -->
-                                                                {#each Object.entries(parentData.childrens) as [child, childData]}
-                                                                    {#if childData.childrens && Object.keys(childData.childrens).length > 0}
+                                                                    <!-- Children -->
+                                                                    {#if Object.keys(parentData.childrens).length > 0}
                                                                         <li class="join">
-                                                                            {#each Object.entries(childData.childrens) as [grandchild, grandchildData]}
-                                                                                {@const name = `${embedder}: ${parent}: ${child}: ${grandchild}`}
+                                                                            {#each Object.entries(parentData.childrens) as [child, childData]}
+                                                                                {@const name = `${embedder}: ${parent}: ${child}`}
                                                                                 <button
                                                                                     class="btn btn-xs btn-outline join-item"
                                                                                     class:btn-active={plotted_pkl_file ===
-                                                                                        grandchildData.pkl}
+                                                                                        childData.pkl}
                                                                                     on:click={() =>
                                                                                         plot_from_pkl(
-                                                                                            grandchildData.pkl,
+                                                                                            childData.pkl,
                                                                                             name,
                                                                                         )}
                                                                                 >
-                                                                                    {child}: {grandchild}
+                                                                                    {child}
                                                                                 </button>
                                                                             {/each}
                                                                         </li>
                                                                     {/if}
-                                                                {/each}
-                                                            </ul>
-                                                        </div>
-                                                    {/each}
-                                                {/if}
-                                            </div>
-                                        {/if}
-                                    {/each}
-                                </div>
-                            {/await}
-                        {/key}
 
-                        <div class="flex my-2 gap-4 items-end">
-                            <CustomInput
-                                bind:value={significant_digits}
-                                label="significant_digits"
-                                type="number"
-                                min="0"
-                                max="10"
-                            />
-                            <CustomSelect
-                                bind:value={current_cv_fold}
-                                items={available_cv_folds}
-                                label="CV Folds"
-                                on:change={() => {
-                                    if (!$results?.[$model]) return;
-                                    $results[$model].cv_fold = Number(current_cv_fold);
-                                    $results[$model].cv_scores = cv_scores_data[current_cv_fold];
-                                }}
-                            />
-
-                            <div class="flex-gap" class:hidden={active_tab !== 'Plots'}>
-                                <Checkbox bind:value={show_plot} label="Show plots" />
-                                <Checkbox
-                                    bind:value={$include_training_file_in_plot}
-                                    label="Plot training data"
-                                    on:change={include_training_plot_if_required}
-                                />
-                            </div>
-                        </div>
-
-                        {#if active_tab === 'Plots'}
-                            {#await get_pretrained_file($current_pretrained_file) then { datfile }}
-                                <FileExists name={datfile} let:basename={datfilename}>
-                                    <div class="grid grid-cols-[4fr_1fr] items-center gap-4">
-                                        <div class="alert text-sm alert-success p-1">
-                                            <CheckCheck />
-                                            <span>
-                                                Locally saved computed results are available to plot ({current_dat_file ||
-                                                    datfilename})
-                                            </span>
-                                        </div>
-                                        <button
-                                            class="btn btn-sm btn-outline"
-                                            on:click={async () => {
-                                                plotted_pkl_file = '';
-                                                plotted_dirname = '';
-                                                await plot_from_datfile();
-                                            }}>Current plot</button
-                                        >
+                                                                    <!-- Grandchildren -->
+                                                                    {#each Object.entries(parentData.childrens) as [child, childData]}
+                                                                        {#if childData.childrens && Object.keys(childData.childrens).length > 0}
+                                                                            <li class="join">
+                                                                                {#each Object.entries(childData.childrens) as [grandchild, grandchildData]}
+                                                                                    {@const name = `${embedder}: ${parent}: ${child}: ${grandchild}`}
+                                                                                    <button
+                                                                                        class="btn btn-xs btn-outline join-item"
+                                                                                        class:btn-active={plotted_pkl_file ===
+                                                                                            grandchildData.pkl}
+                                                                                        on:click={() =>
+                                                                                            plot_from_pkl(
+                                                                                                grandchildData.pkl,
+                                                                                                name,
+                                                                                            )}
+                                                                                    >
+                                                                                        {child}: {grandchild}
+                                                                                    </button>
+                                                                                {/each}
+                                                                            </li>
+                                                                        {/if}
+                                                                    {/each}
+                                                                </ul>
+                                                            </div>
+                                                        {/each}
+                                                    {/if}
+                                                </div>
+                                            {/if}
+                                        {/each}
                                     </div>
-                                    <svelte:fragment slot="else">
-                                        <div class="alert text-sm alert-warning p-1">
-                                            <span>Locally saved computed results are not available to plot</span>
-                                        </div>
-                                    </svelte:fragment>
-                                </FileExists>
-                            {/await}
-                        {/if}
+                                {/await}
+                            {/key}
 
-                        <div class="grid gap-2">
-                            <ResultsStats {significant_digits} />
-                        </div>
-
-                        {#if plotted_pkl_file}
-                            <span class="badge">{plotted_dirname}</span>
-                            <div class="grid grid-cols-[1fr_auto] gap-1 items-center">
-                                <span class="alert p-1 text-sm text-wrap break-all my-1">
-                                    ...{plotted_pkl_file.replace($ROOT_DIR + path.sep(), '')}
-                                </span>
-                                <button
-                                    class="btn btn-sm btn-outline"
-                                    on:click={async () => {
-                                        await shell.open(await path.dirname(plotted_pkl_file));
+                            <div class="flex my-2 gap-4 items-end">
+                                <CustomInput
+                                    bind:value={significant_digits}
+                                    label="significant_digits"
+                                    type="number"
+                                    min="0"
+                                    max="10"
+                                />
+                                <CustomSelect
+                                    bind:value={current_cv_fold}
+                                    items={available_cv_folds}
+                                    label="CV Folds"
+                                    on:change={() => {
+                                        if (!$results?.[$model]) return;
+                                        $results[$model].cv_fold = Number(current_cv_fold);
+                                        $results[$model].cv_scores = cv_scores_data[current_cv_fold];
                                     }}
-                                >
-                                    <span>Open folder</span>
-                                    <ExternalLink size="20" />
-                                </button>
+                                />
+
+                                <div class="flex-gap" class:hidden={active_tab !== 'Plots'}>
+                                    <Checkbox bind:value={show_plot} label="Show plots" />
+                                    <Checkbox
+                                        bind:value={$include_training_file_in_plot}
+                                        label="Plot training data"
+                                        on:change={include_training_plot_if_required}
+                                    />
+                                </div>
                             </div>
-                        {/if}
+
+                            {#if active_tab === 'Plots'}
+                                {#await get_pretrained_file($current_pretrained_file) then { datfile }}
+                                    <FileExists name={datfile} let:basename={datfilename}>
+                                        <div class="grid grid-cols-[4fr_1fr] items-center gap-4">
+                                            <div class="alert text-sm alert-success p-1">
+                                                <CheckCheck />
+                                                <span>
+                                                    Locally saved computed results are available to plot ({current_dat_file ||
+                                                        datfilename})
+                                                </span>
+                                            </div>
+                                            <button
+                                                class="btn btn-sm btn-outline"
+                                                on:click={async () => {
+                                                    plotted_pkl_file = '';
+                                                    plotted_dirname = '';
+                                                    await plot_from_datfile();
+                                                }}>Current plot</button
+                                            >
+                                        </div>
+                                        <svelte:fragment slot="else">
+                                            <div class="alert text-sm alert-warning p-1">
+                                                <span>Locally saved computed results are not available to plot</span>
+                                            </div>
+                                        </svelte:fragment>
+                                    </FileExists>
+                                {/await}
+                            {/if}
+
+                            <div class="grid gap-2">
+                                <ResultsStats {significant_digits} />
+                            </div>
+
+                            {#if plotted_pkl_file}
+                                <span class="badge">{plotted_dirname}</span>
+                                <div class="grid grid-cols-[1fr_auto] gap-1 items-center">
+                                    <span class="alert p-1 text-sm text-wrap break-all my-1">
+                                        ...{plotted_pkl_file.replace($ROOT_DIR + path.sep(), '')}
+                                    </span>
+                                    <button
+                                        class="btn btn-sm btn-outline"
+                                        on:click={async () => {
+                                            await shell.open(await path.dirname(plotted_pkl_file));
+                                        }}
+                                    >
+                                        <span>Open folder</span>
+                                        <ExternalLink size="20" />
+                                    </button>
+                                </div>
+                            {/if}
+                        </div>
                     </div>
-                </div>
-                <div class="grid gap-2" class:hidden={active_tab !== 'Metrics Table'} transition:fade>
-                    <MetricsTable />
-                </div>
-            {/key}
-        {/await}
+                    <div class="grid gap-2" class:hidden={active_tab !== 'Metrics Table'} transition:fade>
+                        <MetricsTable />
+                    </div>
+                {/key}
+            {/await}
+        {/if}
         <div class="grid gap-2" class:hidden={active_tab !== 'Plots'} transition:fade>
             {#if show_plot}
                 <ResultsPlots />
