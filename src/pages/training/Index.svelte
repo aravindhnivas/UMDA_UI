@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { active_item } from './stores';
     import Page from '$lib/layouts/Page.svelte';
     import { Pane } from 'svelte-splitpanes';
     import { Embedding, Mol2VecTrain, VICGAETrain, PCATrain, MLmodelTrain, TrainingFile } from '.';
@@ -6,7 +7,7 @@
     import MlPredictions from './predictions/MlPredictions.svelte';
     import UMAP from './UMAP/UMAP.svelte';
 
-    const active_item = localWritable('active_item_main_training_page', 'Mol2Vec');
+    // const active_item = localWritable('active_item_main_training_page', 'Mol2Vec');
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
