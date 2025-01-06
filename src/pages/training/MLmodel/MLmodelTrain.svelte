@@ -56,14 +56,10 @@
         seed,
         enable_y_transformation_and_scaling,
         y_transform,
-        ytransformation,
-        yscaling,
-        model_names,
     } from './stores';
     import TrainingFilePanel from './TrainingFilePanel.svelte';
     import { parse_fine_tuned_values } from './utils';
     import { CheckCheck, TriangleAlert } from 'lucide-svelte/icons';
-    import Chip, { Set, Text } from '@smui/chips';
     import Scheduler from './Scheduler.svelte';
 
     export let id: string = 'ml_model-train-container';
