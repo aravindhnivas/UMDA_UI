@@ -8,6 +8,7 @@
     import LoadedFileInfos from '../embedding/LoadedFileInfos.svelte';
     import SaveAndLoadState from '$lib/components/SaveAndLoadState.svelte';
     import Plot from 'svelte-plotly.js';
+    import { embedding, embeddings } from '../embedding/stores';
 
     export let id: string = 'umap-embedder-container';
     export let display: string = 'none';
@@ -154,6 +155,8 @@
     <LoadedFileInfos on:refresh={e => (loaded_files = e.detail)} />
     <div class="divider"></div>
     <SaveAndLoadState loc={umap_loc} {default_params} bind:params unique_ext={'.umap.json'} />
+
+    <CustomSelect bind:value={$embedding} items={embeddings} label="Embedder" />
 
     <div class="text-xl">Basic UMAP Parameters</div>
 
