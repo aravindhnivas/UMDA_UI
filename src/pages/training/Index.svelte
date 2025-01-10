@@ -2,7 +2,7 @@
     import { active_item } from './stores';
     import Page from '$lib/layouts/Page.svelte';
     import { Pane } from 'svelte-splitpanes';
-    import { Embedding, Mol2VecTrain, VICGAETrain, PCATrain, MLmodelTrain, TrainingFile } from '.';
+    import { Embedding, Mol2VecTrain, VICGAETrain, PCATrain, MLmodelTrain, TrainingFile, MolecularAnalysis } from '.';
     import { ConstructionIcon } from 'lucide-svelte/icons';
     import MlPredictions from './predictions/MlPredictions.svelte';
     import UMAP from './UMAP/UMAP.svelte';
@@ -35,6 +35,9 @@
                         </ul>
                     </details>
                 </li>
+                <li on:click={() => ($active_item = 'Molecular_analysis')}>
+                    <span class:active={$active_item == 'Molecular_analysis'}>Molecular Analysis</span>
+                </li>
                 <li on:click={() => ($active_item = 'training_file')}>
                     <span class:active={$active_item == 'training_file'}>Training File</span>
                 </li>
@@ -57,6 +60,7 @@
                 <Mol2VecTrain display={$active_item.toLowerCase() === 'mol2vec' ? '' : 'none'} />
                 <VICGAETrain display={$active_item.toLowerCase() === 'vicgae' ? '' : 'none'} />
                 <PCATrain display={$active_item.toLowerCase() === 'pca' ? '' : 'none'} />
+                <MolecularAnalysis display={$active_item.toLowerCase() === 'molecular_analysis' ? '' : 'none'} />
                 <TrainingFile display={$active_item.toLowerCase() === 'training_file' ? '' : 'none'} />
                 <Embedding display={$active_item.toLowerCase() === 'embedding' ? '' : 'none'} />
                 <MLmodelTrain display={$active_item.toLowerCase() === 'ml_model' ? '' : 'none'} />

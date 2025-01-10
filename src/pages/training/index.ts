@@ -6,3 +6,4 @@ export { default as MLmodelTrain } from './MLmodel/MLmodelTrain.svelte';
 export { default as PCATrain } from './PCA/PCATrain.svelte';
 export { default as TrainingFile } from './training_file/TrainingFile.svelte';
 export { default as UMAP } from './UMAP/UMAP.svelte';
+export { default as MolecularAnalysis } from './Molecular_analysis/MolecularAnalysis.svelte';
