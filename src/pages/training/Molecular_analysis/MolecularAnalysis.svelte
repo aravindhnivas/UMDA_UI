@@ -13,14 +13,14 @@
 
     const all_properties = [
         'basic_properties',
-        'aromaticity',
-        'chain_information',
-        'functional_groups',
-        'heterocyclicity',
-        'physicochemical_properties',
         'ring_information',
+        'chain_information',
+        'aromaticity',
+        'functional_groups',
+        'physicochemical_properties',
+        'heterocyclicity',
     ];
-    let selected_properties: string[] = ['basic_properties', 'chain_information'];
+    let selected_properties: string[] = ['basic_properties', 'ring_information', 'chain_information'];
 
     let full_analysis: Record<string, any> = {};
 
