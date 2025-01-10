@@ -11,7 +11,10 @@
                 <div class="text-xl font-bold">{prop}</div>
                 <ul>
                     {#each Object.keys(full_analysis[prop]) as key (`${prop}-${key}`)}
-                        <li>{key}: {full_analysis[prop][key]}</li>
+                        {@const inactive = full_analysis[prop][key] == 0}
+                        <li class:font-bold={!inactive} class:text-gray-600={inactive}>
+                            {key}: {full_analysis[prop][key]}
+                        </li>
                     {/each}
                 </ul>
             </div>
