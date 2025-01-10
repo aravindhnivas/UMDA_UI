@@ -55,7 +55,8 @@
             compute_btn?.click();
         }}
     />
-    <Molecule bind:smiles show_controls={true} />
+
+    <Molecule bind:smiles show_controls={false} />
 
     <div class="divider"></div>
     <div class="m-auto">
