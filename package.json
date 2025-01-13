@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^2.2.0",
-    "@tauri-apps/cli": "^2.2.2",
+    "@tauri-apps/cli": "^2.2.4",
     "@tauri-apps/plugin-dialog": "~2.2.0",
     "@tauri-apps/plugin-fs": "~2.2.0",
     "@tauri-apps/plugin-log": "~2.2.0",
@@ -50,7 +50,7 @@
     "lodash-es": "^4.17.21",
     "postcss": "^8.4.49",
     "prettier": "^3.4.2",
-    "prettier-plugin-svelte": "^3.3.2",
+    "prettier-plugin-svelte": "^3.3.3",
     "sass": "^1.83.1",
     "socket.io-client": "^4.8.1",
     "svelte": "^4.2.19",
